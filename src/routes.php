@@ -2,11 +2,14 @@
 
 Route::get('/', function()
 {
-    $which = 'Story';
+    $which = 'People';
     $id = CNP::getScapeId($which);
     $name = CNP::getScapeName($id);
-    return "Howdy, World! The id of a " . $name . " is " . $id;
-	return View::make('hello');
+    $story = new DemocracyApps\CNP\Models\Denizen("First Settler", $id);
+    $story->save();
+    return "Howdy, World! The id of our first settler is ". $story->getID();
+    return View::make('hello');
+
 });
 
 
