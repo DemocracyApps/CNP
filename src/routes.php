@@ -12,4 +12,6 @@ Route::get('/', function()
 
 });
 
+Route::get('/fb', 'DemocracyApps\CNP\Controllers\LoginController@fbLogin');
+
 
