@@ -2,7 +2,8 @@
 
 use DemocracyApps\CNP\Models as Cnpm;
 
-$str = file_get_contents("../src/cnp.json");
+$fileName = base_path()."/src/cnp.json";
+$str = file_get_contents($fileName);
 
 $str = json_minify($str);
 
