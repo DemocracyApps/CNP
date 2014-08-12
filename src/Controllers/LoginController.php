@@ -67,10 +67,11 @@ class LoginController extends BaseController {
             $message = 'Your unique facebook user id is: ' . $result['id'] . ' and your name is ' . $result['name'];
             echo $message. "<br/>";
 
-            if (User::where('facebookid', '=', $result['id'])) {
-            }
+//            if (User::where('facebookid', '=', $result['id'])) {
+//            }
             //Var_dump
             //display whole array().
+            $xx = \Input::all();
             dd($result);
         }
         // if not ask for permission first
