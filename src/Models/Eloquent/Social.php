@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Models;
+namespace DemocracyApps\CNP\Models\Eloquent;
 
 class Social extends \Eloquent {
 

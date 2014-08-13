@@ -15,10 +15,10 @@ class CreateRelationTypesTable extends Migration {
 		Schema::create('relation_types', function(Blueprint $table)
 		{
 			$table->increments('id');
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('allowedfrom')->nullable();
             $table->string('allowedto')->nullable();
-            $table->integer('inverse');
+            $table->integer('inverse')->nullable();
 			$table->timestamps();
 		});
 	}

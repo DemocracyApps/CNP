@@ -15,4 +15,5 @@ Route::get('/', function()
 Route::get('/fb', 'DemocracyApps\CNP\Controllers\LoginController@fbLogin');
 Route::get('/tw', 'DemocracyApps\CNP\Controllers\LoginController@twitLogin');
 
+Route::resource('relationtypes', 'DemocracyApps\CNP\Controllers\RelationTypesController');
 
