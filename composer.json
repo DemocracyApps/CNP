@@ -1,8 +1,8 @@
 {
-	"name": "laravel/laravel",
-	"description": "The Laravel Framework.",
-	"keywords": ["framework", "laravel"],
-	"license": "MIT",
+	"name": "DemocracyApps/CNP",
+	"description": "Community Narratives Platform",
+	"keywords": ["platform", "democracyapps", "cnp"],
+	"license": "GPL-3.0",
 	"require": {
 		"laravel/framework": "4.2.*",
 	        "artdarek/oauth-4-laravel": "dev-master"
