@@ -28,7 +28,7 @@ return array(
 	|
 	*/
 
-	'model' => 'User',
+	'model' => 'DemocracyApps\CNP\Models\Eloquent\User',
 
 	/*
 	|--------------------------------------------------------------------------
