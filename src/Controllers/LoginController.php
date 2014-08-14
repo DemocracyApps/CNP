@@ -4,6 +4,43 @@ namespace DemocracyApps\CNP\Controllers;
 
 class LoginController extends BaseController {
 
+    public function login() {
+        return \View::make('login');
+    }
+
+    public function home() {
+        \Log::info("Yup, here in the home function of the controller");
+        return \View::make('home');
+    }
+
+    private function loadOrCreateUser ($socialId, $userName, $socialName, $socialNetwork, $accessToken) 
+    {
+        $socialProfile = \DemocracyApps\CNP\Models\Eloquent\Social::whereSocialid($socialId)->first();
+        if (empty($socialProfile)) { // We must create a new user
+            $person = new \DemocracyApps\CNP\Models\Person($userName);
+            $person->save();
+            
+            $user = new \DemocracyApps\CNP\Models\Eloquent\User;
+            $user->name = $userName;
+            $user->denizenid = $person->getId();
+            $user->save();
+
+            $socialProfile = new \DemocracyApps\CNP\Models\Eloquent\Social();
+            $socialProfile->socialid = $socialId;
+            $socialProfile->type=$socialNetwork;
+            $socialProfile->username = $socialName;
+            $socialProfile->userid = $user->id;
+            \Log::info("Created a new user with id ".$user->id);
+        }
+        else {
+            $user = \DemocracyApps\CNP\Models\Eloquent\User::findOrFail($socialProfile->userid)->first();
+            \Log::info("Found existing user with id ".$user->id);
+        }
+        $socialProfile->access_token = $accessToken;
+        $socialProfile->save();
+        return $user;
+    }
+
     public function twitLogin() {
 
         // get data from input
@@ -14,7 +51,6 @@ class LoginController extends BaseController {
         $tw = \OAuth::consumer( 'Twitter' );
 
         // check if code is valid
-
         // if code is provided get user data and sign in
         if ( !empty( $token ) && !empty( $verify ) ) {
 
@@ -64,15 +100,23 @@ class LoginController extends BaseController {
             // Send a request with it
             $result = json_decode( $fb->request( '/me' ), true );
 
-            $message = 'Your unique facebook user id is: ' . $result['id'] . ' and your name is ' . $result['name'];
+            $user = $this->loadOrCreateUser($result['id'], $result['name'], $result['name'],
+                                            "facebook", $token->getAccessToken());
+/*
+            $message = 'Your FB user id is: ' . $result['id'] . ' and your name is ' . $result['name'];
+            
             echo $message. "<br/>";
+            $message = 'And your CNP user id is '.$user->id;
+            echo $message. "<br/>";
+            
 
-//            if (User::where('facebookid', '=', $result['id'])) {
-//            }
-            //Var_dump
-            //display whole array().
             $xx = \Input::all();
             dd($result);
+*/
+            \Log::info("About to log in");
+            \Auth::login($user);
+            \Log::info("Logged in");
+            return \Redirect::to('/home');
         }
         // if not ask for permission first
         else {

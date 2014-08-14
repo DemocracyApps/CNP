@@ -21,6 +21,10 @@ class Denizen extends ModelBase
         return $this->id;
     }
 
+    public function getName() {
+        return $this->name;
+    }
+
     public function save() {
         if ($this->id == null) {
             $this->id = DB::table(self::$tableName)->insertGetId(
