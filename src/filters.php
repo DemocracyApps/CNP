@@ -46,7 +46,6 @@ Route::filter('auth', function()
 			return Redirect::guest('login');
 		}
 	}
-    Log::info("Authenticated user in filter auth");
 });
 
 

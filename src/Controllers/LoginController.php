@@ -9,7 +9,6 @@ class LoginController extends BaseController {
     }
 
     public function home() {
-        \Log::info("Yup, here in the home function of the controller");
         return \View::make('home');
     }
 
@@ -59,14 +58,10 @@ class LoginController extends BaseController {
 
             // Send a request with it
             $result = json_decode( $tw->request( 'account/verify_credentials.json' ), true );
-
-            $message = 'Your unique Twitter user id is: ' . $result['id'] . ' and your name is ' . $result['name'];
-            echo $message. "<br/>";
-
-            //Var_dump
-            //display whole array().
-            dd($result);
-
+            $user = $this->loadOrCreateUser($result['id'], $result['name'], $result['screen_name'],
+                                            "twitter", $token->getAccessToken());
+            \Auth::login($user);
+            return \Redirect::to('/home');
         }
         // if not ask for permission first
         else {
@@ -102,20 +97,7 @@ class LoginController extends BaseController {
 
             $user = $this->loadOrCreateUser($result['id'], $result['name'], $result['name'],
                                             "facebook", $token->getAccessToken());
-/*
-            $message = 'Your FB user id is: ' . $result['id'] . ' and your name is ' . $result['name'];
-            
-            echo $message. "<br/>";
-            $message = 'And your CNP user id is '.$user->id;
-            echo $message. "<br/>";
-            
-
-            $xx = \Input::all();
-            dd($result);
-*/
-            \Log::info("About to log in");
             \Auth::login($user);
-            \Log::info("Logged in");
             return \Redirect::to('/home');
         }
         // if not ask for permission first
