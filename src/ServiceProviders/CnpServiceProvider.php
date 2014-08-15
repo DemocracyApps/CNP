@@ -1,9 +1,9 @@
 <?php
-namespace DemocracyApps\CNP\Providers;
+namespace DemocracyApps\CNP\ServiceProviders;
 
 use Illuminate\Support\ServiceProvider;
 
-class CnpProvider extends ServiceProvider
+class CnpServiceProvider extends ServiceProvider
 {
     /**
      * Register the service provider.
@@ -13,7 +13,7 @@ class CnpProvider extends ServiceProvider
     public function register() 
     {
         $this->app['cnp'] = $this->app->share(function ($app) {
-            return new Cnp($this->app);
+            return new \DemocracyApps\CNP\Utility\Cnp($this->app);
         });
     }
 }

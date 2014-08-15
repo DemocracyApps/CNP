@@ -1,9 +1,9 @@
 <?php
-namespace DemocracyApps\CNP\Providers;
+namespace DemocracyApps\CNP\Facades;
 
 use Illuminate\Support\Facades\Facade as BaseFacade;
 
-class CnpFacade extends BaseFacade
+class Cnp extends BaseFacade
 {
 /**
  * Get the registered name of the component.

@@ -5,8 +5,17 @@ Route::get('/home', array(
     'uses'   => 'DemocracyApps\CNP\Controllers\LoginController@home'
 ));
 
+Route::resource('relationtypes', 'DemocracyApps\CNP\Controllers\RelationTypesController');
+Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
+
 Route::get('/', function()
 {
+
+    $which = 'People';
+    $id = CNP::getScapeId($which);
+    $name = CNP::getScapeName($id);
+    return 'Scape ' . $name . ' ID = ' . $id;
+
     $data = array();
     if (Auth::check()) {
         $data = Auth::user();
@@ -15,15 +24,6 @@ Route::get('/', function()
     else {
         return Redirect::to('/login');
     }
-/*
-    $which = 'People';
-    $id = CNP::getScapeId($which);
-    $name = CNP::getScapeName($id);
-    $story = new DemocracyApps\CNP\Models\Denizen("First Settler", $id);
-    $story->save();
-    return "Howdy, World! The id of our first settler is ". $story->getID();
-    return View::make('hello');
-*/
 });
 
 Route::get('/login', function() {
@@ -39,5 +39,4 @@ Route::get('/loginfb', 'DemocracyApps\CNP\Controllers\LoginController@fbLogin');
 Route::get('/logintw', 'DemocracyApps\CNP\Controllers\LoginController@twitLogin');
 //Route::get('login', 'DemocracyApps\CNP\Controllers\LoginController@login');
 
-Route::resource('relationtypes', 'DemocracyApps\CNP\Controllers\RelationTypesController');
 

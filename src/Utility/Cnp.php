@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Providers;
+namespace DemocracyApps\CNP\Utility;
 use DemocracyApps\CNP\Models as Cnpm;
 
 use Illuminate\Container\Container;    

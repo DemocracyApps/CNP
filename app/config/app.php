@@ -122,7 +122,7 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-        'DemocracyApps\CNP\Providers\CnpProvider',
+        'DemocracyApps\CNP\ServiceProviders\CnpServiceProvider',
         'Artdarek\OAuth\OAuthServiceProvider',
 	),
 
@@ -190,7 +190,7 @@ return array(
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
-        'CNP'               => 'DemocracyApps\CNP\Providers\CnpFacade',
+        'CNP'               => 'DemocracyApps\CNP\Facades\Cnp',
         'OAuth'             => 'Artdarek\OAuth\Facade\OAuth',
 	),
 
