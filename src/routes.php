@@ -11,6 +11,9 @@ Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
 Route::get('/', function()
 {
 
+    //$person = \DemocracyApps\CNP\Models\Person::find(4);
+    $person = \DemocracyApps\CNP\Models\Person::all();
+    dd($person);
     $which = 'People';
     $id = CNP::getScapeId($which);
     $name = CNP::getScapeName($id);

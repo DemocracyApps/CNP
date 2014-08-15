@@ -93,6 +93,7 @@ require_once base_path().'/src/vendor/JSON.minify/minify.json.php'; // Needed by
 require_once base_path().'/src/routes.php';
 require_once base_path().'/src/providers.php';
 require_once base_path().'/src/filters.php';
+require_once base_path().'/src/initializers.php';
 //require_once base_path().'/src/observers.php';
 //require_once base_path().'/src/helpers.php';
 

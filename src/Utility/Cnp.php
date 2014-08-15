@@ -15,22 +15,22 @@ class Cnp {
      *
      * @var Illuminate\Container\Container
      */
-    protected $container;
+    protected $app;
 
     /**
      * Allow a container instance to be set via constructor.
      *
-     * @param mixed $container
+     * @param mixed $app
      */
-    public function __construct($container = null)
+    public function __construct($app = null)
     {
         // If the container isn't provided...
-        if (!$container instanceof Container) {
+        if (!$app instanceof Container) {
             // ... use an instance of the illuminate container.
-            $container = new Container;
+            $app = new Container;
         }
-        // Set the container property.
-        $this->container = $container;
+        // Set the app property.
+        $this->app = $app;
     }
 
     /**

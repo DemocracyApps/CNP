@@ -3,7 +3,7 @@ namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Models as DAModel;
 
-class StoriesController extends \BaseController {
+class StoriesController extends BaseController {
     protected $story;
 
     public function __construct(DAModel\Story $story)
@@ -18,7 +18,8 @@ class StoriesController extends \BaseController {
 	 */
 	public function index()
 	{
-        $stories = DAModel\Story
+        $stories = DAModel\Story::all();
+        return $stories;
 	}
 
 
@@ -29,7 +30,7 @@ class StoriesController extends \BaseController {
 	 */
 	public function create()
 	{
-		//
+        return \View::make('stories.create');
 	}
 
 
