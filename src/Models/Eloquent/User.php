@@ -34,6 +34,16 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
         return $this->name;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getDenizenId()
+    {
+        return $this->denizenid;
+    }
+
     public function getRememberToken()
     {
         return $this->remember_token;

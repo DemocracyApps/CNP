@@ -29,11 +29,9 @@ class LoginController extends BaseController {
             $socialProfile->type=$socialNetwork;
             $socialProfile->username = $socialName;
             $socialProfile->userid = $user->id;
-            \Log::info("Created a new user with id ".$user->id);
         }
         else {
             $user = \DemocracyApps\CNP\Models\Eloquent\User::findOrFail($socialProfile->userid)->first();
-            \Log::info("Found existing user with id ".$user->id);
         }
         $socialProfile->access_token = $accessToken;
         $socialProfile->save();
@@ -61,7 +59,7 @@ class LoginController extends BaseController {
             $user = $this->loadOrCreateUser($result['id'], $result['name'], $result['screen_name'],
                                             "twitter", $token->getAccessToken());
             \Auth::login($user);
-            return \Redirect::to('/home');
+            return \Redirect::to('stories');
         }
         // if not ask for permission first
         else {
@@ -77,7 +75,6 @@ class LoginController extends BaseController {
     }
 
     public function fbLogin() {
-
         // get data from input
         $code = \Input::get( 'code' );
 
@@ -88,7 +85,6 @@ class LoginController extends BaseController {
 
         // if code is provided get user data and sign in
         if ( !empty( $code ) ) {
-
             // This was a callback request from facebook, get the token
             $token = $fb->requestAccessToken( $code );
 
@@ -98,7 +94,7 @@ class LoginController extends BaseController {
             $user = $this->loadOrCreateUser($result['id'], $result['name'], $result['name'],
                                             "facebook", $token->getAccessToken());
             \Auth::login($user);
-            return \Redirect::to('/home');
+            return \Redirect::intended('stories');
         }
         // if not ask for permission first
         else {

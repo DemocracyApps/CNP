@@ -52,6 +52,11 @@
 <body>
 
   @yield('content')
-
+<br/>
+@if (\Auth::check())
+<a href="http://cnp.dev/logout">Log Out</a>
+@else
+<a href="http://cnp.dev/login">Log In</a>
+@endif
 </body>
 </html>

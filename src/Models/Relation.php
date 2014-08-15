@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB as DB;
 class Relation extends ModelBase 
 {
     static $tableName = 'relations';
+    static $relTypesTableName = 'relation_types';
     protected $id = null;
     protected $fromId = null;
     protected $toId = null;
@@ -14,6 +15,16 @@ class Relation extends ModelBase
         $this->fromId = $from;
         $this->toId   = $to;
         $this->relationId = $type;
+    }
+
+    public static function createRelationPair($fromId, $toId, $relationName) 
+    {
+        $relation = array();
+        $relRecord = DB::table(self::$relTypesTableName)->where('name',$relationName)->first();
+        $relation[] = new static ($fromId, $toId, $relRecord->{'id'});
+        $inverse = $relRecord->{'inverse'}?$relRecord->{'inverse'}:$relRecord->{'id'};
+        $relation[] = new static ($toId, $fromId, $inverse);
+        return $relation;
     }
 
     public function getId() {

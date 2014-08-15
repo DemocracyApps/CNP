@@ -19,7 +19,7 @@ class StoriesController extends BaseController {
 	public function index()
 	{
         $stories = DAModel\Story::all();
-        return $stories;
+        return \View::make('stories.index')->with('stories', $stories);
 	}
 
 
@@ -30,7 +30,13 @@ class StoriesController extends BaseController {
 	 */
 	public function create()
 	{
-        return \View::make('stories.create');
+        if (\Auth::check()) {
+            return \View::make('stories.create');
+        }
+        else {
+            //return "Not logged 
+            return \Redirect::to('/login');
+        }
 	}
 
 
@@ -41,7 +47,24 @@ class StoriesController extends BaseController {
 	 */
 	public function store()
 	{
-		//
+        $input = \Input::all();
+        $rules = ['name'=>'required', 'content'=>'required'];
+        $validator = \Validator::make($input, $rules);
+        if ($validator->fails()) {
+            return \Redirect::back()->withInput()->withErrors($validator->messages());
+        }
+        $this->story->setName($input['name']);
+        $this->story->setContent($input['content']);
+        $this->story->save();
+        $user = DAModel\Eloquent\User::find(\Auth::user()->getId());
+        $person = DAModel\Person::find($user->getDenizenId());
+        $relations = DAModel\Relation::createRelationPair($person->getId(), $this->story->getId(),
+                                                          "CreatorOf");
+        foreach($relations as $relation) {
+            $relation->save();
+        }
+        return var_dump($relations);
+
 	}
 
 

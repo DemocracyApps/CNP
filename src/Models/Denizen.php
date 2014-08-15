@@ -21,15 +21,33 @@ abstract class Denizen extends ModelBase
 
     abstract static public function initialize();
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function save() {
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    public function save()
+    {
         if ($this->id == null) {
             $this->id = DB::table(self::$tableName)->insertGetId(
                 array(
@@ -95,7 +113,7 @@ abstract class Denizen extends ModelBase
             $d = DB::table(self::$tableName)->where('scape', '=', static::$classScapeId)->get();
         }
 
-        $result = null;
+        $result = array();
 
         foreach ($d as $data) {
             $item = new static($data->name);
