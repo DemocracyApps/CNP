@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-<h1>All the Stories</h1>
+<h1>We Have the Stories</h1>
 
 	<ul>
 	@foreach($stories as $story)
