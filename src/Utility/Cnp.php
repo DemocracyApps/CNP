@@ -41,7 +41,7 @@ class Cnp {
         $this->configuration = $cfg;
 
         // Load information on scapes
-        $arr = $cfg['scapes'];
+        $arr = $cfg['denizenTypes'];
         foreach ($arr as $scapeSpec) {
             $scape = new Cnpm\Scape ($scapeSpec['id'], $scapeSpec['name']);
             $this->scapesByName[strtolower($scape->getName())] = $scape;

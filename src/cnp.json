@@ -4,10 +4,14 @@
     "version": "0.1",
     // Do not change the IDs of the scapes in a production environment - 
     // they may only be changed prior to initialization (and why would you?).
-    "scapes": [ 
-	{"name":"Place",  "id":"1"},
-	{"name":"People", "id":"2"},
-	{"name":"Story",  "id":"3"}
+    "denizenTypes": [
+	{"name":"Place",       "id":"1"},
+	{"name":"People",      "id":"2"},
+	{"name":"Story",       "id":"3"},
+	{"name":"Tag",         "id":"4"},
+    {"name":"Scape",       "id":"5"},
+	{"name":"Government",  "id":"6"},
+	{"name":"Business",    "id":"7"}
     ],
     "silly": "32"
 }
