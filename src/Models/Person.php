@@ -14,7 +14,7 @@ class Person extends Denizen
     static public function initialize() 
     {
         if (static::$classScapeId < 0) {
-            static::$classScapeId = \CNP::getScapeId('People');
+            static::$classScapeId = \CNP::getDenizenTypeId('People');
         }
     }
 }

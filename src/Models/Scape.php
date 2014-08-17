@@ -2,23 +2,26 @@
 
 namespace DemocracyApps\CNP\Models;
 
-class Scape extends ModelBase
+/**
+ * 
+ */
+class Scape extends Denizen
 {
-    protected $id = null;
-    protected $name = null;
+    static      $classScapeId = -1;
+    static      $userDenizenType = 0;
+    protected   $user;
 
-    function __construct ($id, $nm) 
+    function __construct ($nm) {
+        parent::__construct($nm, static::$classScapeId, 0);
+    }
+
+ 
+    static public function initialize() 
     {
-        $this->id = $id;
-        $this->name = $nm;
-    }
-
-    public function getId() {
-        return strval($this->id);
-    }
-
-    public function getName() {
-        return $this->name;
+        if (static::$classScapeId < 0) {
+            static::$classScapeId = \CNP::getDenizenTypeId('Scape');
+        }
     }
 }
+
 

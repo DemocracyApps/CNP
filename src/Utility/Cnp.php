@@ -7,8 +7,8 @@ use Illuminate\Container\Container;
 class Cnp {
     private $configuration = null;
 
-    protected $scapesByName = array();
-    protected $scapesById = array();
+    protected $denizenTypesByName = array();
+    protected $denizenTypesById = array();
 
     /**
      * Container instance used to resolve classes.
@@ -40,32 +40,32 @@ class Cnp {
     public function loadConfiguration ($cfg) {
         $this->configuration = $cfg;
 
-        // Load information on scapes
+        // Load information on DenizenTypes
         $arr = $cfg['denizenTypes'];
-        foreach ($arr as $scapeSpec) {
-            $scape = new Cnpm\Scape ($scapeSpec['id'], $scapeSpec['name']);
-            $this->scapesByName[strtolower($scape->getName())] = $scape;
-            $this->scapesById[$scape->getId()] = $scape;
+        foreach ($arr as $denizenTypeSpec) {
+            $denizenType = new Cnpm\DenizenType ($denizenTypeSpec['id'], $denizenTypeSpec['name']);
+            $this->denizenTypesByName[strtolower($denizenType->getName())] = $denizenType;
+            $this->denizenTypesById[$denizenType->getId()] = $denizenType;
         }
     }
 
     /**
      *
-     * Scape-related functions
+     * DenizenType-related functions
      *
      */
-    public function getScapeId ($name) {
+    public function getDenizenTypeId ($name) {
         $nm = strtolower($name);
-        if (array_key_exists($nm, $this->scapesByName)) {
-            return $this->scapesByName[$nm]->getId();
+        if (array_key_exists($nm, $this->denizenTypesByName)) {
+            return $this->denizenTypesByName[$nm]->getId();
         }
-        throw new \OutOfBoundsException('Unknown scape ' . $name);
+        throw new \OutOfBoundsException('Unknown Denizen Type ' . $name);
     }
 
-    public function getScapeName ($id) {
-        if (array_key_exists($id, $this->scapesById)) {
-            return $this->scapesById[$id]->getName();
+    public function getDenizenTypeName ($id) {
+        if (array_key_exists($id, $this->denizenTypesById)) {
+            return $this->denizenTypesById[$id]->getName();
         }
-        throw new \OutOfBoundsException('Unknown scape ' . $name);
+        throw new \OutOfBoundsException('Unknown Denizen Type ' . $name);
     }
 }

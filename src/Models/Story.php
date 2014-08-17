@@ -8,13 +8,13 @@ class Story extends Denizen
     protected $author;
 
     function __construct ($nm=null) {
-        parent::__construct($nm, \CNP::getScapeId('Story'), self::$storyDenizenType);
+        parent::__construct($nm, \CNP::getDenizenTypeId('Story'), self::$storyDenizenType);
     }
 
     static public function initialize() 
     {
         if (static::$classScapeId < 0) {
-            static::$classScapeId = \CNP::getScapeId('Story');
+            static::$classScapeId = \CNP::getDenizenTypeId('Story');
         }
     }
 

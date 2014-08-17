@@ -15,8 +15,8 @@ Route::get('/', function()
     $person = \DemocracyApps\CNP\Models\Person::all();
     dd($person);
     $which = 'People';
-    $id = CNP::getScapeId($which);
-    $name = CNP::getScapeName($id);
+    $id = CNP::getDenizenTypeId($which);
+    $name = CNP::getDenizenTypeName($id);
     return 'Scape ' . $name . ' ID = ' . $id;
 
     $data = array();
