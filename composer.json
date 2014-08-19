@@ -6,8 +6,10 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 	        "artdarek/oauth-4-laravel": "dev-master",
-	        "components/normalize.css": "dev-master"
-	},
+	        "components/normalize.css": "dev-master",
+	        "lamb/laravel-postgis-database": "dev-master",
+	        "laracasts/utilities": "~1.0"
+		},
 	"autoload": {
 		"classmap": [
 			"app/database/migrations",
