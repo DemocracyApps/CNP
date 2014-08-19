@@ -3,7 +3,7 @@ namespace DemocracyApps\CNP\Models;
 use Illuminate\Support\Facades\DB as DB;
 use Illuminate\Support\Collection;
 
-abstract class Denizen extends ModelBase
+class Denizen extends ModelBase
 {
     static    $classScapeId = -1;
     static $tableName = 'denizens';
@@ -19,7 +19,10 @@ abstract class Denizen extends ModelBase
         $this->scapeId = $sId;
     }
 
-    abstract static public function initialize();
+    static public function initialize()
+    {
+        
+    }
 
     public function getId()
     {

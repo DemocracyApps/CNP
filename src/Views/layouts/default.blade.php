@@ -46,6 +46,11 @@
             border-bottom: 1px solid #333333;
             border-left: 1px solid #CCCCCC;
         }
+        .red {
+        	background-color: #ff0000;
+        	width: 500px;
+        	height:100px;
+        }
 	</style>
 	@yield('header')
 </head>
@@ -53,10 +58,14 @@
 
   @yield('content')
 <br/>
+<br/>
+
+<div>
 @if (\Auth::check())
 <a href="http://cnp.dev/logout">Log Out</a>
 @else
 <a href="http://cnp.dev/login">Log In</a>
 @endif
+</div>
 </body>
 </html>

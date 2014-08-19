@@ -8,6 +8,9 @@ Route::get('/home', array(
 Route::resource('relationtypes', 'DemocracyApps\CNP\Controllers\RelationTypesController');
 Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
 
+Route::get('/map', 'DemocracyApps\CNP\Controllers\MapController@show');
+Route::get('/map/test', 'DemocracyApps\CNP\Controllers\MapController@test');
+
 Route::get('/', function()
 {
 
