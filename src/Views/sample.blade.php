@@ -18,9 +18,6 @@
 
 <script>
 
-// var map = L.mapbox.map('map', 'ejaxon.ipga8le2')
-//                   .setView([35.58, -82.5558], 13); // AVL coordinates
-
 var map = L.mapbox.map('map', 'ejaxon.ipga8le2')
                   .setView([{{$start[0]}}, {{$start[1]}}], 13); // AVL coordinates
 
