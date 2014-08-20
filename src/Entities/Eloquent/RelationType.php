@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Models\Eloquent;
+namespace DemocracyApps\CNP\Entities\Eloquent;
 
 class RelationType extends \Eloquent {
 

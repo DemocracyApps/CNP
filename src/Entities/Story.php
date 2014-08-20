@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Models;
+namespace DemocracyApps\CNP\Entities;
 
 class Story extends Denizen 
 {

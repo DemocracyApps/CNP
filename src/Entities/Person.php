@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Models;
+namespace DemocracyApps\CNP\Entities;
 
 class Person extends Denizen 
 {
@@ -14,7 +14,7 @@ class Person extends Denizen
     static public function initialize() 
     {
         if (static::$classScapeId < 0) {
-            static::$classScapeId = \CNP::getDenizenTypeId('People');
+            static::$classScapeId = \CNP::getDenizenTypeId('Person');
         }
     }
 }

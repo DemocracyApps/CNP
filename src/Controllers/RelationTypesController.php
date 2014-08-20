@@ -2,7 +2,7 @@
 
 namespace DemocracyApps\CNP\Controllers;
 
-use \DemocracyApps\CNP\Models\Eloquent as DAEloquent;
+use \DemocracyApps\CNP\Entities\Eloquent as DAEloquent;
 
 class RelationTypesController extends BaseController
 {
@@ -22,7 +22,7 @@ class RelationTypesController extends BaseController
 	 */
     public function index()
     {
-        $relationtypes = \DemocracyApps\CNP\Models\Eloquent\RelationType::all()->sortBy('id');
+        $relationtypes = \DemocracyApps\CNP\Entities\Eloquent\RelationType::all()->sortBy('id');
         return \View::make('relationtypes.index')->with('relationtypes',$relationtypes);
     }
 

@@ -123,6 +123,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
         'Artdarek\OAuth\OAuthServiceProvider',
+        'Laracasts\Utilities\UtilitiesServiceProvider',
         'DemocracyApps\CNP\ServiceProviders\CnpServiceProvider',
 	),
 

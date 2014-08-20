@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Models\Eloquent;
+namespace DemocracyApps\CNP\Entities\Eloquent;
 
 use Illuminate\Auth\UserTrait as UserTrait;
 use Illuminate\Auth\UserInterface as UserInterface;

@@ -1,6 +1,6 @@
 <?php
 namespace DemocracyApps\CNP\Utility;
-use DemocracyApps\CNP\Models as Cnpm;
+use DemocracyApps\CNP\Entities as Cnpm;
 
 use Illuminate\Container\Container;    
 

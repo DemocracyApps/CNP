@@ -1,8 +1,8 @@
 <?php
 
-namespace DemocracyApps\CNP\Models;
+namespace DemocracyApps\CNP\Entities;
 
-class DenizenType extends ModelBase
+class DenizenType
 {
     protected $id = null;
     protected $name = null;

@@ -1,12 +1,12 @@
 <?php
 namespace DemocracyApps\CNP\Controllers;
 
-use \DemocracyApps\CNP\Models as DAModel;
+use \DemocracyApps\CNP\Entities as DAEntity;
 
 class StoriesController extends BaseController {
     protected $story;
 
-    public function __construct(DAModel\Story $story)
+    public function __construct(DAEntity\Story $story)
     {
         $this->story = $story;
     }
@@ -18,7 +18,7 @@ class StoriesController extends BaseController {
 	 */
 	public function index()
 	{
-        $stories = DAModel\Story::all();
+        $stories = DAEntity\Story::all();
         return \View::make('stories.index')->with('stories', $stories);
 	}
 
@@ -56,9 +56,9 @@ class StoriesController extends BaseController {
         $this->story->setName($input['name']);
         $this->story->setContent($input['content']);
         $this->story->save();
-        $user = DAModel\Eloquent\User::find(\Auth::user()->getId());
-        $person = DAModel\Person::find($user->getDenizenId());
-        $relations = DAModel\Relation::createRelationPair($person->getId(), $this->story->getId(),
+        $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
+        $person = DAEntity\Person::find($user->getDenizenId());
+        $relations = DAEntity\Relation::createRelationPair($person->getId(), $this->story->getId(),
                                                           "CreatorOf");
         foreach($relations as $relation) {
             $relation->save();

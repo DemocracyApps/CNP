@@ -14,8 +14,8 @@ Route::get('/map/test', 'DemocracyApps\CNP\Controllers\MapController@test');
 Route::get('/', function()
 {
 
-    //$person = \DemocracyApps\CNP\Models\Person::find(4);
-    $person = \DemocracyApps\CNP\Models\Person::all();
+    //$person = \DemocracyApps\CNP\Entities\Person::find(4);
+    $person = \DemocracyApps\CNP\Entities\Person::all();
     dd($person);
     $which = 'People';
     $id = CNP::getDenizenTypeId($which);

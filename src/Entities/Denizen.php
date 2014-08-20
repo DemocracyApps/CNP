@@ -1,9 +1,9 @@
 <?php
-namespace DemocracyApps\CNP\Models;
+namespace DemocracyApps\CNP\Entities;
 use Illuminate\Support\Facades\DB as DB;
 use Illuminate\Support\Collection;
 
-class Denizen extends ModelBase
+class Denizen
 {
     static    $classScapeId = -1;
     static $tableName = 'denizens';

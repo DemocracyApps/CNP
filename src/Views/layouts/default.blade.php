@@ -55,6 +55,7 @@
 	@yield('header')
 </head>
 <body>
+	@include('layouts.partials.datarider');
 
   @yield('content')
 <br/>

@@ -1,8 +1,8 @@
 <?php
-namespace DemocracyApps\CNP\Models;
+namespace DemocracyApps\CNP\Entities;
 use Illuminate\Support\Facades\DB as DB;
 
-class Relation extends ModelBase 
+class Relation 
 {
     static $tableName = 'relations';
     static $relTypesTableName = 'relation_types';

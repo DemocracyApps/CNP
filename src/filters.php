@@ -1,5 +1,5 @@
 <?php 
-use DemocracyApps\CNP\Models\Eloquent\User as User;
+use DemocracyApps\CNP\Entities\Eloquent\User as User;
 /*
 |--------------------------------------------------------------------------
 | Application & Route Filters

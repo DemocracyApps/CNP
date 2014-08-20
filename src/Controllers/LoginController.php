@@ -14,24 +14,24 @@ class LoginController extends BaseController {
 
     private function loadOrCreateUser ($socialId, $userName, $socialName, $socialNetwork, $accessToken) 
     {
-        $socialProfile = \DemocracyApps\CNP\Models\Eloquent\Social::whereSocialid($socialId)->first();
+        $socialProfile = \DemocracyApps\CNP\Entities\Eloquent\Social::whereSocialid($socialId)->first();
         if (empty($socialProfile)) { // We must create a new user
-            $person = new \DemocracyApps\CNP\Models\Person($userName);
+            $person = new \DemocracyApps\CNP\Entities\Person($userName);
             $person->save();
             
-            $user = new \DemocracyApps\CNP\Models\Eloquent\User;
+            $user = new \DemocracyApps\CNP\Entities\Eloquent\User;
             $user->name = $userName;
             $user->denizenid = $person->getId();
             $user->save();
 
-            $socialProfile = new \DemocracyApps\CNP\Models\Eloquent\Social();
+            $socialProfile = new \DemocracyApps\CNP\Entities\Eloquent\Social();
             $socialProfile->socialid = $socialId;
             $socialProfile->type=$socialNetwork;
             $socialProfile->username = $socialName;
             $socialProfile->userid = $user->id;
         }
         else {
-            $user = \DemocracyApps\CNP\Models\Eloquent\User::findOrFail($socialProfile->userid)->first();
+            $user = \DemocracyApps\CNP\Entities\Eloquent\User::findOrFail($socialProfile->userid)->first();
         }
         $socialProfile->access_token = $accessToken;
         $socialProfile->save();

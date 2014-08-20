@@ -1,0 +1,12 @@
+{
+    "relationTypes": [
+	{"name":"Link"},
+    {"name":"CreatedBy", "allowedTo":"Person", "inverse":"CreatorOf"},
+    {"name":"CreatorOf", "allowedFrom":"Person", "inverse":"CreatedBy"},
+    {"name":"Tags", "allowedFrom":"Tag", "inverse":"IsTaggedBy"},
+    {"name":"IsTaggedBy", "allowedTo":"Tag", "inverse":"Tags"},
+    {"name":"References", "inverse":"IsReferencedBy"},
+    {"name":"IsReferencedBy", "inverse":"References"}
+    ],
+    "silly": "32"
+}

@@ -17,9 +17,14 @@
 <div id='map'/>
 
 <script>
+console.log(DemocracyApps.start[0]);
 
+// var map = L.mapbox.map('map', 'ejaxon.ipga8le2')
+//                  .setView([{{$start[0]}}, {{$start[1]}}], 13); // AVL coordinates
+
+// The coordinate array is in DemocracyApps.coords
 var map = L.mapbox.map('map', 'ejaxon.ipga8le2')
-                  .setView([{{$start[0]}}, {{$start[1]}}], 13); // AVL coordinates
+                  .setView([DemocracyApps.start[0], DemocracyApps.start[1]], 13); // AVL coordinates
 
 </script>
 </div>

@@ -1,6 +1,6 @@
 <?php
 
-use DemocracyApps\CNP\Models as Cnpm;
+use DemocracyApps\CNP\Entities as Cnpm;
 
 $fileName = base_path()."/src/cnp.json";
 $str = file_get_contents($fileName);

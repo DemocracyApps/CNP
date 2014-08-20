@@ -1,6 +1,6 @@
 <?php
 
-namespace DemocracyApps\CNP\Models;
+namespace DemocracyApps\CNP\Entities;
 
 /**
  * 
