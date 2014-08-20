@@ -37,6 +37,58 @@ class RelationType extends \Eloquent {
      */
     public $messages;
 
+    /**
+     * Initialize relation_types table with standard relation types from config file
+     * @param  array $config json_decoded array of array of RelationType specs
+     */
+    public static function initDB($config) 
+    {
+        $allRelationTypes = array();
+        $rtArray = $config['relationTypes'];
+        $counter = 101;
+        foreach ($rtArray as $rtSpec) {
+            $rt = new RelationType;
+            //$rt->id = $counter++;
+            $rt->name = $rtSpec['name'];
+            if (array_key_exists('allowedTo', $rtSpec)) {
+                $list = explode(",", $rtSpec['allowedTo']);
+                $to = null;
+                foreach ($list as $item) {
+                    $id = \CNP::getDenizenTypeId($item);
+                    $to = ($to)?$to.",".$id:$id;
+                }
+                $rt->allowedto = $to;
+            }            
+            if (array_key_exists('allowedFrom', $rtSpec)) {
+                $list = explode(",", $rtSpec['allowedFrom']);
+                $from = null;
+                foreach ($list as $item) {
+                    $id = \CNP::getDenizenTypeId($item);
+                    $from = ($from)?$from.",".$id:$id;
+                }
+                $rt->allowedto = $from;
+            }
+            $rt->save();
+            $inverse = null;
+            if (array_key_exists('inverse', $rtSpec)) {
+                $inverse = $rtSpec['inverse'];
+            }
+            $allRelationTypes[$rt->name] = array('object' => $rt, 'inverse' => $inverse);
+        }
+        foreach ($allRelationTypes as $item) {
+            if ($item['inverse']) {
+                $rt = $item['object'];
+                $inverse = $item['inverse'];
+                $inv = $allRelationTypes[$inverse]['object'];
+                $rt->inverse = $inv->id;
+                $inv->inverse = $rt->$id;
+                $rt->save();
+            }
+        }
+//        $output = json_encode($allRelationTypes);
+//        dd($output);
+    }
+
     public function getName() {
         return $this->name;
     }
