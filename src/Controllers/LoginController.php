@@ -16,11 +16,14 @@ class LoginController extends BaseController {
     {
         $socialProfile = \DemocracyApps\CNP\Entities\Eloquent\Social::whereSocialid($socialId)->first();
         if (empty($socialProfile)) { // We must create a new user
-            $person = new \DemocracyApps\CNP\Entities\Person($userName);
-            $person->save();
             
             $user = new \DemocracyApps\CNP\Entities\Eloquent\User;
             $user->name = $userName;
+            $user->save();
+
+            $person = new \DemocracyApps\CNP\Entities\Person($userName, $user->getId());
+            $person->save();
+
             $user->denizenid = $person->getId();
             $user->save();
 

@@ -1,5 +1,28 @@
 <?php 
 use DemocracyApps\CNP\Entities\Eloquent\User as User;
+
+/*
+|--------------------------------------------------------------------------
+| CNP Custom filters
+|--------------------------------------------------------------------------
+*/
+
+Route::filter('cnp.auth', function()
+{
+		Log::info("I am in cnp.auth");
+	if (Auth::guest()) {
+		return \Redirect::to('/login');
+	}
+});
+
+Route::filter('force.ssl', function()
+{
+	if ( ! Request::secure() 
+		&& strtolower(CNP::getConfigurationValue('apiRequiresSSL')) == 'true'
+		&& App::environment() != 'local') {
+		return Redirect::secure(Request::getRequestUri());
+	}
+});
 /*
 |--------------------------------------------------------------------------
 | Application & Route Filters
@@ -88,5 +111,8 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+
+
 
 

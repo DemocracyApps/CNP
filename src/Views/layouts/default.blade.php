@@ -1,72 +1,45 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>CNP</title>
 	<style>
-		@import url(//fonts.googleapis.com/css?family=Lato:700);
-
-		body {
-			margin:10px;
-			font-family:'Lato', sans-serif;
-			text-align:left;
-			color: #555;
-		}
         span.error {
           color: #f00;
         }
-
-		.welcome {
-			width: 300px;
-			height: 200px;
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			margin-left: -150px;
-			margin-top: -100px;
-		}
-
-		a, a:visited {
-			text-decoration:none;
-		}
-
-		h1 {
-			font-size: 32px;
-			margin: 16px 0 0 0;
-		}
-
-        .button {
-            font: bold 11px Arial;
-            text-decoration: none;
-            background-color: #EEEEEE;
-            color: #333333;
-            padding: 2px 6px 2px 6px;
-            border-top: 1px solid #CCCCCC;
-            border-right: 1px solid #333333;
-            border-bottom: 1px solid #333333;
-            border-left: 1px solid #CCCCCC;
+        .menu ul {
+          list-style: none;
+          margin-left: 0; 
+          padding-left: 0;
         }
-        .red {
-        	background-color: #ff0000;
-        	width: 500px;
-        	height:100px;
+        li.menu {
+          display: inline-block;
+          font-weight: bold;
+          width:100px;
         }
 	</style>
+  @include('includes.head')
 	@yield('header')
 </head>
 <body>
 	@include('layouts.partials.datarider')
 
-  @yield('content')
-<br/>
-<br/>
+	<div class="container">
+		<header class="row">
+			@include('includes.header')
+		</header>
 
-<div>
-@if (\Auth::check())
-<a href="http://cnp.dev/logout">Log Out</a>
-@else
-<a href="http://cnp.dev/login">Log In</a>
-@endif
-</div>
+		<div id="main" class="container">
+
+  			@yield('content')
+
+  		</div>
+
+  		@include('includes.lowermenu')
+
+  		<footer class="row">
+  			@include('includes.footer')
+  		</footer>
+  	</div>
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="/main.js"></script>
 </body>
 </html>

@@ -1,22 +1,22 @@
-<?php
-namespace DemocracyApps\CNP\Entities;
+<?php namespace DemocracyApps\CNP\Entities;
 use Illuminate\Support\Facades\DB as DB;
 use Illuminate\Support\Collection;
 
 class Denizen
 {
-    static    $classScapeId = -1;
+    static    $classDenizenType = -1;
     static $tableName = 'denizens';
-    protected $id = null;
-    protected $scapeId = null;
     protected $denizenType = null;
-    protected $name = null;
-    protected $content = null;
+    public $id = null;
+    public $scapeId = -1;
+    public $name = null;
+    public $content = null;
+    public $properties = null;
 
-    public function __construct($nm, $sId, $dtype=0) {
+    public function __construct($nm, $userid, $dtype=0) {
         $this->name = $nm;
+        $this->userid = $userid;
         $this->denizenType = $dtype;
-        $this->scapeId = $sId;
     }
 
     static public function initialize()
@@ -49,6 +49,21 @@ class Denizen
         return $this->content;
     }
 
+    public function setProperty ($propName, $propValue)
+    {
+        if (! $this->properties) $this->properties = [];
+        $this->properties[$propName] = $propValue;
+    }
+
+    public function getProperty ($propName)
+    {
+        $propValue = null;
+        if ($this->properties) {
+            $propValue = $this->properties->{$propName};
+        }
+        return $propValue;
+    }
+
     public function save()
     {
         if ($this->id == null) {
@@ -58,8 +73,10 @@ class Denizen
                     'scape'=> $this->scapeId,
                     'type' => $this->denizenType,
                     'content' => $this->content,
+                    'properties' => json_encode($this->properties),
                     'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s')
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'userid'     => $this->userid
                 )
             );
         }
@@ -72,7 +89,9 @@ class Denizen
                         'scape'=> $this->scapeId,
                         'type' => $this->denizenType,
                         'content' => $this->content,
-                        'updated_at' => date('Y-m-d H:i:s')
+                        'properties' => json_encode($this->properties),
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'userid'     => $this->userid
                     )
                 );
         }
@@ -81,7 +100,11 @@ class Denizen
     protected static function fill ($instance, $data) 
     {
         $instance->{'id'} = $data->id;
+        $instance->{'userid'} = $data->userid;
+        $instance->{'name'} = $data->name;
+        $instance->{'scapeId'} = $data->scape;
         $instance->{'content'} = $data->content;
+        $instance->{'properties'} = json_decode($data->properties);
     }
 
     /**
@@ -96,11 +119,12 @@ class Denizen
                   ->where('id', $id)->first();
         $result = null;
         if ($data != null) {
-            $result = new static($data->name);
+            $result = new static($data->name, $data->userid);
             self::fill($result, $data);
         }
         return $result;
     }
+
     /**
      * Find a denizen by its primary key
      *
@@ -109,17 +133,17 @@ class Denizen
      */
     public static function all () 
     {
-        if (static::$classScapeId <= 0) { // All Denizens
+        if (static::$classDenizenType <= 0) { // All Denizens
             $d = DB::table(self::$tableName)->get();
         }
         else { // Specific Denizen Type
-            $d = DB::table(self::$tableName)->where('scape', '=', static::$classScapeId)->get();
+            $d = DB::table(self::$tableName)->where('type', '=', static::$classDenizenType)->get();
         }
 
         $result = array();
 
         foreach ($d as $data) {
-            $item = new static($data->name);
+            $item = new static($data->name, $data->userid);
             self::fill($item,$data);
             $result[] = $item;
         }

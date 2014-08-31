@@ -68,4 +68,14 @@ class Cnp {
         }
         throw new \OutOfBoundsException('Unknown Denizen Type ' . $name);
     }
+
+    /**
+     * @string $name [Parameter name]
+     *
+     * @return  string or array
+     */
+    public function getConfigurationValue ($name) 
+    {
+        return $this->configuration[$name];
+    }
 }

@@ -19,6 +19,7 @@ class CreateDenizensTable extends Migration {
             $table->integer('type');
             $table->string('name');
             $table->text('content')->nullable();
+            $table->text('properties')->nullable();
             $table->timestamps();
 		});
 	}

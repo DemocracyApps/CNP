@@ -1,37 +1,47 @@
 <?php 
 
-Route::get('/home', array(
-    'before' => 'auth', 
-    'uses'   => 'DemocracyApps\CNP\Controllers\LoginController@home'
-));
+use \DemocracyApps\CNP\Entities as DAEntity;
 
-Route::resource('relationtypes', 'DemocracyApps\CNP\Controllers\RelationTypesController');
+/********************************
+ ********************************
+ *
+ * Default website routes
+ * 
+ ********************************
+ *********************************/
+
+Route::get('/test', function()
+{
+    return View::make('test');
+});
+
+Route::get('/', function()
+{
+    return Redirect::to('/stories');
+});
+
 Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
+
+Route::get('account', array('before' => 'cnp.auth', function()
+{
+    $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
+    $person = DAEntity\Person::find($user->getDenizenId());
+    $scapes = DAEntity\Story::all();
+
+
+    return View::make('account', array('user' => $user, 'person' => $person, 
+                      'scapes' => $scapes));
+}));
+
+Route::when('relationtypes*', 'cnp.auth');
+Route::resource('relationtypes','DemocracyApps\CNP\Controllers\RelationTypesController');
 
 Route::get('/map', 'DemocracyApps\CNP\Controllers\MapController@show');
 Route::get('/map/test', 'DemocracyApps\CNP\Controllers\MapController@test');
 
-Route::get('/', function()
-{
-
-    //$person = \DemocracyApps\CNP\Entities\Person::find(4);
-    $person = \DemocracyApps\CNP\Entities\Person::all();
-    dd($person);
-    $which = 'People';
-    $id = CNP::getDenizenTypeId($which);
-    $name = CNP::getDenizenTypeName($id);
-    return 'Scape ' . $name . ' ID = ' . $id;
-
-    $data = array();
-    if (Auth::check()) {
-        $data = Auth::user();
-        return View::make('home', array('data'=>$data));
-    }
-    else {
-        return Redirect::to('/login');
-    }
-});
-
+/********************************
+ ** Login/Logout
+ ********************************/
 Route::get('/login', function() {
     return View::make('login');
 });
@@ -43,6 +53,22 @@ Route::get('/logout', function() {
 
 Route::get('/loginfb', 'DemocracyApps\CNP\Controllers\LoginController@fbLogin');
 Route::get('/logintw', 'DemocracyApps\CNP\Controllers\LoginController@twitLogin');
-//Route::get('login', 'DemocracyApps\CNP\Controllers\LoginController@login');
+
+
+/********************************
+ ********************************
+ *
+ * API routes - filter enforces SSL if cnp.json has apiRequiresSsl=true
+ * 
+ ********************************
+ *********************************/
+
+Route::when('api/v1/*','force.ssl'); 
+
+Route::group(['prefix' => 'api/v1'], function () 
+    {
+        Route::resource('scapes', 'DemocracyApps\CNP\Controllers\ScapesController');
+    }
+);
 
 

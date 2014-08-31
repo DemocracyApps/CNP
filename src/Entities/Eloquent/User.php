@@ -58,4 +58,22 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
     {
         return 'remember_token';
     }
+
+    public function getApiKey($generate = null)
+    {
+        if ( ! $this->apikey && $generate) {
+            $hiddenValue = 71 * $this->id;
+            $this->apikey = rand().'.'.rand().'.92'.$hiddenValue.'37.'.rand();
+            $this->save();
+        }
+        return $this->apikey;
+    }
+
+    public static function getApiUser($key) 
+    {
+        $kArray = explode('.', $key);
+        if (sizeof($kArray) != 4) throw new \Exception("Invalid API key");
+        $hiddenId = substr($kArray[2], 2, -2);
+        return $hiddenId/71;        
+    }
 }

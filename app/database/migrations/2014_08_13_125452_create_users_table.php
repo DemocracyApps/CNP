@@ -16,9 +16,10 @@ class CreateUsersTable extends Migration {
 		{
 			$table->increments('id');
             $table->string('name', 255);
-            $table->bigInteger('denizenid')->unsigned()->unique();
+            $table->bigInteger('denizenid')->unsigned()->unique()->nullable();
             $table->foreign('denizenid')->references('id')->on('denizens');
             $table->string('email', 255)->nullable()->unique();
+            $table->string('apikey', 255)->nullable()->unique();
 			$table->timestamps();
 		});
 	}

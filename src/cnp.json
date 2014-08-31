@@ -13,5 +13,6 @@
 	{"name":"Government",  "id":"6"},
 	{"name":"Business",    "id":"7"}
     ],
+    "apiRequiresSSL": "false",
     "silly": "32"
 }
