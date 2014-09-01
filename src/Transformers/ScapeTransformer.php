@@ -6,7 +6,8 @@
 		return [
 		'id'  			=> $scape->getId(),
 		'name' 			=> $scape->getName(),
-		'accessibility' => $scape->getProperty('access')
+		'access' => $scape->getProperty('access'),
+		'content' => $scape->getContent()
 		];
 	}
 }

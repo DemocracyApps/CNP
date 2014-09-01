@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<style>
+  @include('includes.head')
+  <style>
         span.error {
           color: #f00;
         }
@@ -15,8 +16,15 @@
           font-weight: bold;
           width:100px;
         }
-	</style>
-  @include('includes.head')
+        table,th,td
+        {
+          border:1px solid black;
+        }
+        th,td
+        {
+          padding:10px;
+        }
+  </style>
 	@yield('header')
 </head>
 <body>

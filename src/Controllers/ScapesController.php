@@ -18,11 +18,9 @@ class ScapesController extends ApiController {
 	 */
 	public function index()
 	{
-		$scapes = DAEntity\Scape::all();
-		return $this->respond([
-			'data' => $this->scapeTransformer->transformCollection($scapes),
-			'errors' => NULL
-			]);
+    	$scapes = DAEntity\Scape::allUserDenizens(\Auth::id());
+    	$data = $this->scapeTransformer->transformCollection($scapes);
+		return $this->respondIndex('List of API user scapes', $data);
 	}
 
 	public function show ($id)
@@ -32,23 +30,20 @@ class ScapesController extends ApiController {
 			return $this->respondNotFound('Scape '.$id.' does not exist');
 		}
 		else {
-			return $this->respond([
-				'data' => $this->scapeTransformer->transform($scape)
-				]);
+			$data = $this->scapeTransformer->transform($scape);
+			return $this->respondIndex('Requested scape', $data);
 		}
 	}
 
 	public function create() 
 	{
     	\Session::put('CNP_RETURN_URL', \Request::server('HTTP_REFERER'));
-    	//dd(\Request::instance());
     	return \View::make('scapes.create');
 	}
 
 	private static function isApiCall ($uri)
 	{
 		$pos = strpos($uri, '/api');
-		\Log::info("The uri is ".$uri." and the pos is " . $pos);
 		$isAPI = false;
 		if ($pos !== false) {
 			$isAPI = true;
@@ -62,7 +57,6 @@ class ScapesController extends ApiController {
 		$params = [];
 		if ($isAPI) {
 			if (\Input::json() && sizeof(\Input::json()->all()) > 0) {
-				\Log::info(\Input::json()->all());
 				$data = \Input::json()->get('data');
 				$params = \Input::json()->get('params');
 			}
@@ -81,7 +75,6 @@ class ScapesController extends ApiController {
 	        if ($validator->fails()) {
 	        	if ($isAPI) {
 	        		return $this->respondFailedValidation(self::compactMessages($validator->messages()));
-	        		//return $this->respondFailedValidation($msgs);
 	        	}
 	        	else {
 	            	return \Redirect::back()->withInput()->withErrors($validator->messages());
@@ -105,11 +98,11 @@ class ScapesController extends ApiController {
 	        }
 
 	        if ($isAPI) {
-				return $this->respondCreated('Scape was successfully created');	        	
+				$data = $this->scapeTransformer->transform($this->scape);
+				return $this->respondCreated('Scape was successfully created', $data);	        	
 	        }
 	        else {
     			$returnURL = \Session::get('CNP_RETURN_URL');
-    			\Log::info("Let's move back to ".$returnURL);
     			\Session::forget('CNP_RETURN_URL');
     			if ( ! $returnURL) $returnURL = '/';
     			return \Redirect::to($returnURL);

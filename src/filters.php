@@ -9,7 +9,6 @@ use DemocracyApps\CNP\Entities\Eloquent\User as User;
 
 Route::filter('cnp.auth', function()
 {
-		Log::info("I am in cnp.auth");
 	if (Auth::guest()) {
 		return \Redirect::to('/login');
 	}

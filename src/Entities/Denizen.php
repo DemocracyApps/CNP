@@ -60,7 +60,7 @@ class Denizen
     {
         $propValue = null;
         if ($this->properties) {
-            $propValue = $this->properties->{$propName};
+            $propValue = $this->properties[$propName];
         }
         return $propValue;
     }
@@ -71,9 +71,7 @@ class Denizen
     }
     public function save()
     {
-        \Log::info("In save");
         if ($this->id == null) {
-            \Log::info("In first-time save with user id of " . $this->userid);
             $this->id = DB::table(self::$tableName)->insertGetId(
                 array(
                     'name' => $this->name,
@@ -111,7 +109,7 @@ class Denizen
         $instance->{'name'} = $data->name;
         $instance->{'scapeId'} = $data->scape;
         $instance->{'content'} = $data->content;
-        $instance->{'properties'} = json_decode($data->properties);
+        $instance->{'properties'} = (array) json_decode($data->properties);
     }
 
     /**

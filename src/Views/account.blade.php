@@ -5,7 +5,7 @@
 
 <div id="user-info">
   <h2>User Information</h2>
-  <table>
+  <table cellpadding="10">
     <tr>
       <th>Name:</th>  <td>{{$user->name}}</td>
     </tr>
@@ -17,11 +17,24 @@
 
 <div id="scape-list">
   <h2>Your Scapes</h2>
+  <table>
+    <tr>
+      <th> Name </th>
+      <th> Access </th>
+      <th> Content </th>
+      <th> ID </th>
     @foreach($scapes as $scape)
-    <li>{{ $scape->getId() }} {{ $scape->getName()}}</li>
-  @endforeach
-  </ul>
-    <br/>
+      <tr>
+        <th> {{ $scape->getName() }} </th>
+        <td> {{ $scape->getProperty('access') }} </td>
+        <td> {{ $scape->getContent() }} </td>
+        <td> {{ $scape->getId() }} </td>
+        <td> Edit </td>
+        <td> Delete </td>
+      </tr>
+    @endforeach
+  </table>
+  <br/>
         {{ Form::open(['route' => 'scapes.create', 'method' => 'get']) }}
            <div>
              {{ Form::submit('Add a Scape') }}
