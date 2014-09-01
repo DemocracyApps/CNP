@@ -15,13 +15,20 @@ Route::filter('cnp.auth', function()
 	}
 });
 
-Route::filter('force.ssl', function()
+Route::filter('api.ssl', function()
 {
 	if ( ! Request::secure() 
 		&& strtolower(CNP::getConfigurationValue('apiRequiresSSL')) == 'true'
 		&& App::environment() != 'local') {
 		return Redirect::secure(Request::getRequestUri());
 	}
+});
+
+Route::filter('api.key', function()
+{
+	// Format: apikey #.#.#.#
+	$auth = substr(trim(Request::header('authorization')), 7);
+	User::loginByApiKey($auth);
 });
 /*
 |--------------------------------------------------------------------------

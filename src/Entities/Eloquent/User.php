@@ -76,4 +76,13 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
         $hiddenId = substr($kArray[2], 2, -2);
         return $hiddenId/71;        
     }
+
+    public static function loginByApiKey($key)
+    {
+        $uid = self::getApiUser($key);
+        $user = User::find($uid);
+        if ($user) {
+            \Auth::login($user);
+        }
+    }
 }

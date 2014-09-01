@@ -62,12 +62,14 @@ Route::get('/logintw', 'DemocracyApps\CNP\Controllers\LoginController@twitLogin'
 /********************************
  ********************************
  *
- * API routes - filter enforces SSL if cnp.json has apiRequiresSsl=true
+ * API routes
  * 
  ********************************
  *********************************/
 
-Route::when('api/v1/*','force.ssl'); 
+Route::when('api/v1/*','force.ssl'); // Forces SSL if cnp.json has apiRequiresSsl=true
+
+Route::when('api/v1/*', 'api.key'); // Logs user in based on API key - see User.php
 
 Route::group(['prefix' => 'api/v1'], function () 
     {
