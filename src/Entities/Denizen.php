@@ -12,6 +12,7 @@ class Denizen
     public $name = null;
     public $content = null;
     public $properties = null;
+    public $userid = null;
 
     public function __construct($nm, $userid, $dtype=0) {
         $this->name = $nm;
@@ -64,9 +65,15 @@ class Denizen
         return $propValue;
     }
 
+    public function setUserId($uid) 
+    {
+        $this->userid = $uid;
+    }
     public function save()
     {
+        \Log::info("In save");
         if ($this->id == null) {
+            \Log::info("In first-time save with user id of " . $this->userid);
             $this->id = DB::table(self::$tableName)->insertGetId(
                 array(
                     'name' => $this->name,
@@ -125,8 +132,30 @@ class Denizen
         return $result;
     }
 
+
+    public static function allUserDenizens ($id) 
+    {
+        if (static::$classDenizenType <= 0) { // All Denizens
+            $d = DB::table(self::$tableName)->where('userid', '=', $id)->get();
+        }
+        else { // Specific Denizen Type
+            $d = DB::table(self::$tableName)->where('userid', '=', $id)
+                                            ->where('type', '=', static::$classDenizenType)
+                                            ->get();
+        }
+
+        $result = array();
+
+        foreach ($d as $data) {
+            $item = new static($data->name, $data->userid);
+            self::fill($item,$data);
+            $result[] = $item;
+        }
+        return $result;        
+    }
+
     /**
-     * Find a denizen by its primary key
+     * Find all denizens or all by type
      *
      * @param  mixed $id
      * @return array of static

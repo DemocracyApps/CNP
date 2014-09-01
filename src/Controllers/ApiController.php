@@ -27,6 +27,15 @@ class ApiController extends BaseController {
 		return \Response::json($data, $this->getStatusCode(), $headers);
 	}
 
+	protected static function compactMessages($messages) 
+	{
+		$msg = "";
+		foreach ($messages->all() as $message) {
+			$msg .= ' '.$message;
+		}
+		return $msg;
+	}
+
 	public function respondWithError($message) 
 	{
 		return $this->respond([
@@ -40,6 +49,11 @@ class ApiController extends BaseController {
 	public function respondNotFound ($message = 'Not Found')
 	{
 		return $this->setStatusCode(IResponse::HTTP_NOT_FOUND)->respondWithError($message);
+	}
+
+	public function respondFormatError ($message = "Bad format") 
+	{
+		return $this->setStatusCode(IResponse::HTTP_BAD_REQUEST)->respondWithError($message);
 	}
 
 	public function respondInternalError ($message = 'Internal Error')

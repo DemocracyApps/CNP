@@ -20,9 +20,10 @@ class LoginController extends BaseController {
             $user = new \DemocracyApps\CNP\Entities\Eloquent\User;
             $user->name = $userName;
             $user->save();
-
+            \Log::info("Got a user id of " . $user->getId());
             $person = new \DemocracyApps\CNP\Entities\Person($userName, $user->getId());
             $person->save();
+            \Log::info("Got a person id of " . $person->getId());
 
             $user->denizenid = $person->getId();
             $user->save();

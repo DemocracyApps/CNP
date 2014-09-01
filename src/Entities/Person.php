@@ -6,8 +6,8 @@ class Person extends Denizen
     static    $classDenizenType = -1;
     protected $user;
 
-    function __construct ($nm) {
-        parent::__construct($nm, static::$classDenizenType);
+    function __construct ($nm, $userid) {
+        parent::__construct($nm, $userid, static::$classDenizenType);
     }
 
     static public function initialize() 

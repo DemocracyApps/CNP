@@ -18,6 +18,8 @@ class StoriesController extends BaseController {
 	 */
 	public function index()
 	{
+		\Log::info("In stories controller index");
+		//var_dump(\Request::instance());
         $stories = DAEntity\Story::all();
         return \View::make('stories.index')->with('stories', $stories);
 	}

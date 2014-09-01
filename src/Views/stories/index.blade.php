@@ -14,4 +14,7 @@
              {{ Form::submit('Add a Story') }}
            </div>
         {{ Form::close() }}
+        <?php
+        \Log::info("Bottom of view make");
+        ?>
 @stop

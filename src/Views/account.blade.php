@@ -17,7 +17,17 @@
 
 <div id="scape-list">
   <h2>Your Scapes</h2>
-  <p>List user scapes here.</p>
+    @foreach($scapes as $scape)
+    <li>{{ $scape->getId() }} {{ $scape->getName()}}</li>
+  @endforeach
+  </ul>
+    <br/>
+        {{ Form::open(['route' => 'scapes.create', 'method' => 'get']) }}
+           <div>
+             {{ Form::submit('Add a Scape') }}
+           </div>
+        {{ Form::close() }}
+
 </div>
 <div id="api-info">
   <h2>API Access Information</h2>

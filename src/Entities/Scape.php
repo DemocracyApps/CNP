@@ -10,8 +10,8 @@ class Scape extends Denizen
     static      $classDenizenType = -1;
     protected   $user;
 
-    function __construct ($nm) {
-        parent::__construct($nm, static::$classDenizenType);
+    function __construct ($nm = null, $userid = null) {
+        parent::__construct($nm, $userid, static::$classDenizenType);
     }
 
  
@@ -19,7 +19,6 @@ class Scape extends Denizen
     {
         if (static::$classDenizenType < 0) {
             static::$classDenizenType = \CNP::getDenizenTypeId('Scape');
-            \Log::info("Setting denizen type id to " . static::$classDenizenType);
         }
     }
 }
