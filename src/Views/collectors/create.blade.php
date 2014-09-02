@@ -19,7 +19,7 @@
    </div>
    <div class="form-group">
       {{ Form::label('collector', 'Specification')}}
-      {{ Form::file('collector', ['class' => 'form-control'])}}
+      {{ Form::file('collector')}}
       <br/>
    </div>
    <div class="form-group">

@@ -17,31 +17,57 @@ class CollectorsController extends ApiController {
 		return \View::make('collectors.show', array('collector' => $collector));
 	}
 
-	public function uploadCollector()
+	public function update($id) 
 	{
-		$file = \Input::file('collector');
-		if ($file) {
-			$nm = $file->getClientOriginalName();
-			//$file->move(public_path().'/collectors', 'test.json');
-
-		    $contents = \File::get($file->getRealPath());
-			return "Hello ".$nm . " at " . $contents;
+		//dd(\Input::all());
+		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
+		if ($isAPI) {
+			throw new \Exception("API Collector update not yet implemented");
 		}
 		else {
-			return "Nothing";
+			$data = \Input::all();
 		}
+        $rules = ['name'=>'required'];
+        $validator = \Validator::make($data, $rules);
+        if ($validator->fails()) {
+        	if ($isAPI) {
+        		return $this->respondFailedValidation(Api::compactMessages($validator->messages()));
+        	}
+        	else {
+            	return \Redirect::back()->withInput()->withErrors($validator->messages());
+            }
+        }
+
+		$collector = DAEntity\Eloquent\Collector::find($id)->first();
+		$collector->name = $data['name'];
+		if (\Input::has('description')) $collector->description = $data['description'];
+		if (\Input::hasFile('specification')) {
+			$file = \Input::file('specification');
+		    $collector->specification = \File::get($file->getRealPath());
+		}
+        $collector->save();
+        if ($isAPI) {
+        }
+        else {
+			return \Redirect::to('/collectors/'.$collector->id);
+        }
+	}
+
+	public function edit($id) 
+	{
+		$collector = DAEntity\Eloquent\Collector::find($id)->first();
+    	return \View::make('collectors.edit', array('scape' => \Input::get('scape'), 
+    												'collector' => $collector));
 	}
 
 	public function create() 
 	{
     	\Session::put('CNP_RETURN_URL', \Request::server('HTTP_REFERER'));
-    	\Log::info("Setting return URL to " . \Request::server('HTTP_REFERER'));
     	return \View::make('collectors.create', array('scape' => \Input::get('scape')));
 	}
 
 	public function store()
 	{
-		\Log::info("Top of collectors.store");
 		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
 		$params = [];
 		if ($isAPI) {
