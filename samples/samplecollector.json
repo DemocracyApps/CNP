@@ -1,0 +1,52 @@
+{
+    "name": "Sample Collector Specification",
+    "version": "0.01",
+    "elements": [
+        {
+            "tag":"Element1",
+            "type":"text"
+        },
+        {
+            "tag":"Element2",
+            "required": false,
+            "type":"text"
+        },
+        {
+            "tag":"Element3",
+            "type":"text"
+        },
+        {
+            "tag":"Element4",
+            "type":"Person"
+        }
+    ],
+    "inputs": [
+        {
+            "type":"Person",
+            "tag":"Input1",
+            "required": true
+        },
+        {
+            "type":"Person",
+            "tag":"Input2",
+            "required": false
+        }
+    ],
+    "relations": [
+        {
+            "type": "Causes",
+            "from": "Element2",
+            "to":   "Element3"
+        },
+        {
+            "type": "Precedes",
+            "from": "Element2",
+            "to":   "Element3"
+        },
+        {
+            "type": "Impacts",
+            "from": "Element4",
+            "to":   "Input1"
+        }
+    ]
+}
