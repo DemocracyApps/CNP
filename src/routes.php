@@ -12,11 +12,6 @@ use \DemocracyApps\CNP\Entities as DAEntity;
 Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
           " and method " .\Request::server('REQUEST_METHOD'));
 
-Route::get('/test', function()
-{
-    return View::make('test');
-});
-
 Route::get('/', function()
 {
     return Redirect::to('/stories');
@@ -27,8 +22,8 @@ Route::resource('scapes', 'DemocracyApps\CNP\Controllers\ScapesController');
 Route::resource('collectors', 'DemocracyApps\CNP\Controllers\CollectorsController');
 
 
-Route::post('collector/upload', array('as' => 'collector.upload', 
-           'uses' => 'DemocracyApps\CNP\Controllers\ScapesController@uploadCollector'));
+// Route::post('collector/upload', array('as' => 'collector.upload', 
+//            'uses' => 'DemocracyApps\CNP\Controllers\ScapesController@uploadCollector'));
 
 
 Route::get('account', array('before' => 'cnp.auth', function()

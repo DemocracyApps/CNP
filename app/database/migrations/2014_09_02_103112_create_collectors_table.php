@@ -12,11 +12,14 @@ class CreateCollectorsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('create_collectors_table', function(Blueprint $table)
+		Schema::create('collectors', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('name');
-			$table->text('specification');
+			$table->string('description')->nullable();
+			$table->text('specification')->nullable();
+			$table->bigInteger('scape');
+			$table->foreign('scape')->references('id')->on('denizens');
 			$table->timestamps();
 		});
 	}
@@ -28,7 +31,7 @@ class CreateCollectorsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('create_collectors_table');
+		Schema::drop('collectors');
 	}
 
 }

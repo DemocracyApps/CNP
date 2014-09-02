@@ -23,16 +23,24 @@
   <table>
     <tr>
       <th> Name </th>
+      <th> Description </th>
       <th> ID </th>
+    </tr>
+    @foreach ($collectors as $collector)
+      <tr>
+        <th> {{ link_to("collectors/".$collector->id, $collector->name) }} </th>
+        <td> {{ $collector->description }} </td>
+        <td> {{ $collector->id }} </td>
+      </tr>    
+    @endforeach
   </table>
   <br/>
-        {{ Form::open(['route' => 'collector.upload', 'files' => true]) }}
-           <div>
-            {{ Form::file('collector')}}
-            {{ Form::submit('Upload a Collector') }}
-           </div>
-        {{ Form::close() }}
-
+  {{ Form::open(['route' => 'collectors.create', 'method' => 'get']) }}
+     <div>
+       {{ Form::hidden('scape', $scape->getId())}}
+       {{ Form::submit('Add a Collector') }}
+     </div>
+  {{ Form::close() }}
 </div>
 
 @stop

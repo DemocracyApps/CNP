@@ -1,6 +1,7 @@
 <?php namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
+use \DemocracyApps\CNP\Utility\Api as Api;
 
 class ScapesController extends ApiController {
 	protected $scape;
@@ -26,7 +27,8 @@ class ScapesController extends ApiController {
 	public function show ($id)
 	{
 		$scape = DAEntity\Scape::find($id);
-		$isAPI = \DemocracyApps\CNP\Utility\Api::isApiCall(\Request::server('REQUEST_URI'));
+		$collectors = DAEntity\Eloquent\Collector::where('scape', '=', $id)->get();
+		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
 		if ($isAPI) {
 			if (!$scape) {
 				return $this->respondNotFound('Scape '.$id.' does not exist');
@@ -37,23 +39,7 @@ class ScapesController extends ApiController {
 			}
 		}
 		else {
-			return \View::make('scapes.show', array('scape' => $scape));
-		}
-	}
-
-	public function uploadCollector()
-	{
-		$file = \Input::file('collector');
-		if ($file) {
-			$nm = $file->getClientOriginalName();
-			\Log::info("REal path = ".$file->getRealPath());
-			//$file->move(public_path().'/collectors', 'test.json');
-
-			    $contents = \File::get($file->getRealPath());
-			return "Hello ".$nm . " at " . $contents;
-		}
-		else {
-			return "Nothing";
+			return \View::make('scapes.show', array('scape' => $scape, 'collectors' => $collectors));
 		}
 	}
 
@@ -65,7 +51,7 @@ class ScapesController extends ApiController {
 
 	public function store()
 	{
-		$isAPI = \DemocracyApps\CNP\Utility\Api::isApiCall(\Request::server('REQUEST_URI'));
+		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
 		$params = [];
 		if ($isAPI) {
 			if (\Input::json() && sizeof(\Input::json()->all()) > 0) {
@@ -86,7 +72,7 @@ class ScapesController extends ApiController {
 	        $validator = \Validator::make($data, $rules);
 	        if ($validator->fails()) {
 	        	if ($isAPI) {
-	        		return $this->respondFailedValidation(self::compactMessages($validator->messages()));
+	        		return $this->respondFailedValidation(Api::compactMessages($validator->messages()));
 	        	}
 	        	else {
 	            	return \Redirect::back()->withInput()->withErrors($validator->messages());

@@ -1,18 +1,20 @@
 <?php namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
+use \DemocracyApps\CNP\Utility\Api as Api;
 
-class CollectorssController extends ApiController {
-	protected $scape;
+class CollectorsController extends ApiController {
+	protected $collector;
 
-	function __construct (DAEntity\Scape $scape) 
+	function __construct (DAEntity\Eloquent\Collector $collector) 
 	{
-		$this->scape 			= $scape;
+		$this->collector 			= $collector;
 	}
 
 	public function show ($id)
 	{
-
+		$collector = DAEntity\Eloquent\Collector::find($id);
+		return \View::make('collectors.show', array('collector' => $collector));
 	}
 
 	public function uploadCollector()
@@ -20,10 +22,9 @@ class CollectorssController extends ApiController {
 		$file = \Input::file('collector');
 		if ($file) {
 			$nm = $file->getClientOriginalName();
-			\Log::info("REal path = ".$file->getRealPath());
 			//$file->move(public_path().'/collectors', 'test.json');
 
-			    $contents = \File::get($file->getRealPath());
+		    $contents = \File::get($file->getRealPath());
 			return "Hello ".$nm . " at " . $contents;
 		}
 		else {
@@ -34,69 +35,57 @@ class CollectorssController extends ApiController {
 	public function create() 
 	{
     	\Session::put('CNP_RETURN_URL', \Request::server('HTTP_REFERER'));
-    	return \View::make('collectors.create');
+    	\Log::info("Setting return URL to " . \Request::server('HTTP_REFERER'));
+    	return \View::make('collectors.create', array('scape' => \Input::get('scape')));
 	}
 
 	public function store()
 	{
-		$isAPI = \DemocracyApps\CNP\Utility\Api::isApiCall(\Request::server('REQUEST_URI'));
+		\Log::info("Top of collectors.store");
+		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
 		$params = [];
 		if ($isAPI) {
-			if (\Input::json() && sizeof(\Input::json()->all()) > 0) {
-				$data = \Input::json()->get('data');
-				$params = \Input::json()->get('params');
-			}
-			else {
-				return $this->respondFormatError('Empty or invalid JSON body');
-			}
+			throw new \Exception("API Collector creation not yet implemented");
 		}
 		else {
 			$data = \Input::all();
 		}
-		$multi = array_key_exists('multi', $params)?$params['multi']:false;
 
-		if (! $multi) {
-	        $rules = ['name'=>'required', 'access'=>'required'];
-	        $validator = \Validator::make($data, $rules);
-	        if ($validator->fails()) {
-	        	if ($isAPI) {
-	        		return $this->respondFailedValidation(self::compactMessages($validator->messages()));
-	        	}
-	        	else {
-	            	return \Redirect::back()->withInput()->withErrors($validator->messages());
-	            }
-	        }
-	        // Validation OK, let's create the scape
-	        $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
+        $rules = ['name'=>'required'];
+        $validator = \Validator::make($data, $rules);
+        if ($validator->fails()) {
+        	if ($isAPI) {
+        		return $this->respondFailedValidation(Api::compactMessages($validator->messages()));
+        	}
+        	else {
+            	return \Redirect::back()->withInput()->withErrors($validator->messages());
+            }
+        }
+	        // Validation OK, let's create the collector
 
-	        $this->scape->setName($data['name']);
-	        $this->scape->setProperty('access', $data['access']);
-	        if ($data['content']) $this->scape->setContent($data['content']);
-	        $this->scape->setUserId($user->getId());
-	        $this->scape->save();
+        $this->collector->name = $data['name'];
+        $this->collector->scape = $data['scape'];
+        if ($data['description']) $this->collector->description = $data['description'];
 
-	        // Now let's create the relations with the creator Person
-	        $person = DAEntity\Person::find($user->getDenizenId());
-	        $relations = DAEntity\Relation::createRelationPair($person->getId(), $this->scape->getId(),
-	                                                          "CreatorOf");
-	        foreach($relations as $relation) {
-	            $relation->save();
-	        }
-
-	        if ($isAPI) {
-				$data = $this->scapeTransformer->transform($this->scape);
-				return $this->respondCreated('Scape was successfully created', $data);	        	
-	        }
-	        else {
-    			$returnURL = \Session::get('CNP_RETURN_URL');
-    			\Session::forget('CNP_RETURN_URL');
-    			if ( ! $returnURL) $returnURL = '/';
-    			return \Redirect::to($returnURL);
-	        }
+		// Now load in the file
+		$file = \Input::file('collector');
+		if ($file) {
+			$nm = $file->getClientOriginalName();
+			//$file->move(public_path().'/collectors', 'test.json');
+		    $this->collector->specification = \File::get($file->getRealPath());
 		}
-		else {
-			throw new \Exception("Scapes multi store not yet implemented");
-		}
+
+        $this->collector->save();
+
+        if ($isAPI) {
+        }
+        else {
+			$returnURL = \Session::get('CNP_RETURN_URL');
+			\Session::forget('CNP_RETURN_URL');
+			if ( ! $returnURL) $returnURL = '/';
+			\Log::info("Redirecting to " . $returnURL);
+			return \Redirect::to($returnURL);
+        }
 	}
 
 }

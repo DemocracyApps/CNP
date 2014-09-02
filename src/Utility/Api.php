@@ -11,4 +11,14 @@ class Api {
 		}
 		return $isAPI;
 	}
+
+	public static function compactMessages($messages) 
+	{
+		$msg = "";
+		foreach ($messages->all() as $message) {
+			$msg .= ' '.$message;
+		}
+		return $msg;
+	}
+
 }

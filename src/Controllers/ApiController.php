@@ -27,15 +27,6 @@ class ApiController extends BaseController {
 		return \Response::json($data, $this->getStatusCode(), $headers);
 	}
 
-	protected static function compactMessages($messages) 
-	{
-		$msg = "";
-		foreach ($messages->all() as $message) {
-			$msg .= ' '.$message;
-		}
-		return $msg;
-	}
-
 	public function respondWithError($message) 
 	{
 		return $this->respond([
