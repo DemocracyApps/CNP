@@ -20,7 +20,9 @@
       {{ Form::label('specification', 'Replace Specification')}}
       {{ Form::file('specification')}}
       <br/>
+      <span class="error">{{ $errors->first('fileerror') }}</span>
    </div>
+   <br/>
    <div class="form-group">
 	  {{ Form::submit('Update Collector', ['class' => 'btn btn-primary']) }}
    </div>

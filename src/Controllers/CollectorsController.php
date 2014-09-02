@@ -34,7 +34,7 @@ class CollectorsController extends ApiController {
         		return $this->respondFailedValidation(Api::compactMessages($validator->messages()));
         	}
         	else {
-            	return \Redirect::back()->withInput()->withErrors($validator->messages());
+            	return \Redirect::back()->withInput()->with('fileerror', null)->withErrors($validator->messages());
             }
         }
 
@@ -44,6 +44,11 @@ class CollectorsController extends ApiController {
 		if (\Input::hasFile('specification')) {
 			$file = \Input::file('specification');
 		    $collector->specification = \File::get($file->getRealPath());
+			$str = json_minify($collector->specification);
+			$cfig = json_decode($str, true);
+			if ( ! $cfig) {
+				return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
+			}
 		}
         $collector->save();
         if ($isAPI) {
@@ -57,7 +62,8 @@ class CollectorsController extends ApiController {
 	{
 		$collector = DAEntity\Eloquent\Collector::find($id)->first();
     	return \View::make('collectors.edit', array('scape' => \Input::get('scape'), 
-    												'collector' => $collector));
+    												'collector' => $collector,
+    												'fileerror' => null));
 	}
 
 	public function create() 
@@ -99,6 +105,11 @@ class CollectorsController extends ApiController {
 			$nm = $file->getClientOriginalName();
 			//$file->move(public_path().'/collectors', 'test.json');
 		    $this->collector->specification = \File::get($file->getRealPath());
+			$str = json_minify($this->collector->specification);
+			$cfig = json_decode($str, true);
+			if ( ! $cfig) {
+				return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
+			}
 		}
 
         $this->collector->save();
@@ -110,6 +121,7 @@ class CollectorsController extends ApiController {
 			\Session::forget('CNP_RETURN_URL');
 			if ( ! $returnURL) $returnURL = '/';
 			\Log::info("Redirecting to " . $returnURL);
+			return \Redirect::to('/collectors/'.$this->collector->id);
 			return \Redirect::to($returnURL);
         }
 	}

@@ -20,8 +20,10 @@
    <div class="form-group">
       {{ Form::label('collector', 'Specification')}}
       {{ Form::file('collector')}}
-      <br/>
+      
+      <span class="error">{{ $errors->first('fileerror') }}</span>
    </div>
+   <br/>
    <div class="form-group">
 	  {{ Form::submit('Create Collector', ['class' => 'btn btn-primary']) }}
    </div>
