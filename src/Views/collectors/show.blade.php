@@ -3,7 +3,8 @@
 @section('content')
 <h1>{{ $collector->name }} </h1>
 
-{{ link_to("collectors/".$collector->id."/edit", "Edit Collector") }}
+{{ link_to("collectors/".$collector->id."/edit", "Edit Collector") }} <br/>
+{{ link_to("scapes/".$collector->scape, "Return to Scape Page") }}
 
 <div>
   <h2>Collector Information</h2>

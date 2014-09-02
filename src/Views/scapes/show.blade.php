@@ -3,6 +3,8 @@
 @section('content')
 <h1>{{ $scape->getName() }} </h1>
 
+{{ link_to("/account", "Return to Account Page") }}
+
 <div>
   <h2>Scape Information</h2>
   <table>
