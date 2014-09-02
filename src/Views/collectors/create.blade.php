@@ -5,23 +5,25 @@
 
 {{ Form::open(['route' => 'collectors.store', 'files' => true]) }}
    {{ Form::hidden('scape', $scape)}}
-   <div>
+   <div class="form-group">
       {{ Form::label('name', 'Name: ') }}
-      {{ Form::input('text', 'name') }}
+      {{ Form::text('name', null, ['class' => 'form-control']) }}
       <br/>
       <span class="error">{{ $errors->first('name') }}</span>
    </div>
    <br/>
-   <div>
+   <div class="form-group">
       {{ Form::label('description', 'Description: ') }}
-      {{ Form::textarea('description') }}
+      {{ Form::textarea('description', null, ['class' => 'form-control']) }}
       <br/>
    </div>
-   <div>
-      {{ Form::file('collector')}}
+   <div class="form-group">
+      {{ Form::label('collector', 'Specification')}}
+      {{ Form::file('collector', ['class' => 'form-control'])}}
+      <br/>
    </div>
-   <div>
-	{{ Form::submit('Create') }}
+   <div class="form-group">
+	  {{ Form::submit('Create Collector', ['class' => 'btn btn-primary']) }}
    </div>
 {{ Form::close() }}
 

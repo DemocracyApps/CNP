@@ -35,7 +35,7 @@
   <br/>
         {{ Form::open(['route' => 'scapes.create', 'method' => 'get']) }}
            <div>
-             {{ Form::submit('Add a Scape') }}
+             {{ Form::submit('Add a Scape',['class' => 'btn btn-info']) }}
            </div>
         {{ Form::close() }}
 

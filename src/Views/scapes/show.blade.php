@@ -38,7 +38,7 @@
   {{ Form::open(['route' => 'collectors.create', 'method' => 'get']) }}
      <div>
        {{ Form::hidden('scape', $scape->getId())}}
-       {{ Form::submit('Add a Collector') }}
+       {{ Form::submit('Add a Collector', ['class' => 'btn btn-primary']) }}
      </div>
   {{ Form::close() }}
 </div>
