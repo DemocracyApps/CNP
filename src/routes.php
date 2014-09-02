@@ -24,6 +24,11 @@ Route::get('/', function()
 
 Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
 Route::resource('scapes', 'DemocracyApps\CNP\Controllers\ScapesController');
+Route::resource('collectors', 'DemocracyApps\CNP\Controllers\CollectorsController');
+
+
+Route::post('collector/upload', array('as' => 'collector.upload', 
+           'uses' => 'DemocracyApps\CNP\Controllers\ScapesController@uploadCollector'));
 
 
 Route::get('account', array('before' => 'cnp.auth', function()
@@ -46,7 +51,6 @@ Route::get('/map/test', 'DemocracyApps\CNP\Controllers\MapController@test');
  ** Login/Logout
  ********************************/
 Route::get('/login', function() {
-    Log::info("I'm in login");
     return View::make('login');
 });
 

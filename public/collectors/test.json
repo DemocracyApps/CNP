@@ -26,4 +26,6 @@ if (Schema::hasTable('app_state') && Schema::hasTable('relation_types')) {
 DemocracyApps\CNP\Entities\Person::initialize();
 DemocracyApps\CNP\Entities\Story::initialize();
 DemocracyApps\CNP\Entities\Scape::initialize();
+Log::info("Done with initializers");
+
 

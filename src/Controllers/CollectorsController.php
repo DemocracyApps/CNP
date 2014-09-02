@@ -2,43 +2,17 @@
 
 use \DemocracyApps\CNP\Entities as DAEntity;
 
-class ScapesController extends ApiController {
+class CollectorssController extends ApiController {
 	protected $scape;
-	protected $scapeTransformer;
 
-	function __construct (DAEntity\Scape $scape, 
-						  \DemocracyApps\CNP\Transformers\ScapeTransformer $scapeTransformer) 
+	function __construct (DAEntity\Scape $scape) 
 	{
 		$this->scape 			= $scape;
-		$this->scapeTransformer = $scapeTransformer;
-	}
-	/**
-	 * List all scapes
-	 * @return [] [description]
-	 */
-	public function index()
-	{
-    	$scapes = DAEntity\Scape::allUserDenizens(\Auth::id());
-    	$data = $this->scapeTransformer->transformCollection($scapes);
-		return $this->respondIndex('List of API user scapes', $data);
 	}
 
 	public function show ($id)
 	{
-		$scape = DAEntity\Scape::find($id);
-		$isAPI = \DemocracyApps\CNP\Utility\Api::isApiCall(\Request::server('REQUEST_URI'));
-		if ($isAPI) {
-			if (!$scape) {
-				return $this->respondNotFound('Scape '.$id.' does not exist');
-			}
-			else {
-				$data = $this->scapeTransformer->transform($scape);
-				return $this->respondIndex('Requested scape', $data);
-			}
-		}
-		else {
-			return \View::make('scapes.show', array('scape' => $scape));
-		}
+
 	}
 
 	public function uploadCollector()
@@ -60,7 +34,7 @@ class ScapesController extends ApiController {
 	public function create() 
 	{
     	\Session::put('CNP_RETURN_URL', \Request::server('HTTP_REFERER'));
-    	return \View::make('scapes.create');
+    	return \View::make('collectors.create');
 	}
 
 	public function store()

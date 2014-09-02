@@ -25,12 +25,10 @@
       <th> ID </th>
     @foreach($scapes as $scape)
       <tr>
-        <th> {{ $scape->getName() }} </th>
+        <th> {{ link_to("scapes/".$scape->getID(), $scape->getName()) }} </th>
         <td> {{ $scape->getProperty('access') }} </td>
         <td> {{ $scape->getContent() }} </td>
         <td> {{ $scape->getId() }} </td>
-        <td> Edit </td>
-        <td> Delete </td>
       </tr>
     @endforeach
   </table>
