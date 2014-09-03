@@ -1,0 +1,38 @@
+{
+    "name": "Sample Input Collector",
+    "version": "0.01",
+    "baseSpecificationId": 8,
+    "input": {
+	    "inputType": "csv-simple",
+	    "map": {
+	    	"skip": 1,
+	    	"columnMap": [
+	    		{
+	    			"column": 1,
+	    			"element": "Element1",
+	    			"columnType": "text"
+	    		},
+	    		{
+	    			"column": 2,
+	    			"element": "Element2",
+	    			"columnType": "quotedText"
+	    		},
+	    		{
+	    			"column": 4,
+	    			"element": "Person1",
+	    			"columnType": "text"
+	    		},
+	    		{
+	    			"column": 5,
+	    			"element": "Element3",
+	    			"columnType": "integer"
+	    		},
+	    		{
+	    			"column": 7,
+	    			"element": "Person2",
+	    			"columnType": "text"
+	    		}
+	    	]
+	    }
+    }
+}

@@ -16,19 +16,13 @@
             "type":"text"
         },
         {
-            "tag":"Element4",
-            "type":"Person"
-        }
-    ],
-    "inputs": [
-        {
+            "tag":"Person1",
             "type":"Person",
-            "tag":"Input1",
             "required": true
         },
         {
+            "tag":"Person2",
             "type":"Person",
-            "tag":"Input2",
             "required": false
         }
     ],
@@ -45,8 +39,8 @@
         },
         {
             "type": "Impacts",
-            "from": "Element4",
-            "to":   "Input1"
+            "from": "Element3",
+            "to":   "Person1"
         }
     ]
 }
