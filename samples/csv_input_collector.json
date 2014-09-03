@@ -1,5 +1,5 @@
 {
-    "name": "Sample Input Collector",
+    "name": "Sample CSV Input Collector",
     "version": "0.01",
     "baseSpecificationId": 8,
     "input": {
