@@ -33,6 +33,7 @@
         <th> {{ link_to("collectors/".$collector->id, $collector->name) }} </th>
         <td> {{ $collector->description }} </td>
         <td> {{ $collector->id }} </td>
+        <td> <a href="/stories/create?spec={{$collector->id}}">Use</a></td>
       </tr>    
     @endforeach
   </table>

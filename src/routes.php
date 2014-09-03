@@ -21,11 +21,6 @@ Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
 Route::resource('scapes', 'DemocracyApps\CNP\Controllers\ScapesController');
 Route::resource('collectors', 'DemocracyApps\CNP\Controllers\CollectorsController');
 
-
-// Route::post('collector/upload', array('as' => 'collector.upload', 
-//            'uses' => 'DemocracyApps\CNP\Controllers\ScapesController@uploadCollector'));
-
-
 Route::get('account', array('before' => 'cnp.auth', function()
 {
     $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());

@@ -19,7 +19,6 @@ class StoriesController extends BaseController {
 	public function index()
 	{
 		\Log::info("In stories controller index");
-		//var_dump(\Request::instance());
         $stories = DAEntity\Story::all();
         return \View::make('stories.index')->with('stories', $stories);
 	}
@@ -32,13 +31,14 @@ class StoriesController extends BaseController {
 	 */
 	public function create()
 	{
-        if (\Auth::check()) {
-            return \View::make('stories.create');
-        }
-        else {
-            //return "Not logged 
-            return \Redirect::to('/login');
-        }
+		if (\Auth::guest()) {
+            return \Redirect::to('/login');			
+		}
+		$type = \Input::get('type')?\Input::get('type'):'single';
+		$spec = \Input::get('spec')?\Input::get('spec'):'default';
+		if ($type == 'single' && $spec == 'default') {
+        	return \View::make('stories.create');
+    	}
 	}
 
 
