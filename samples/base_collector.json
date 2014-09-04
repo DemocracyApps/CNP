@@ -3,11 +3,11 @@
     "version": "0.01",
     "elements": [
         {
-            "tag":"Element1",
+            "tag":"Title",
             "type":"text"
         },
         {
-            "tag":"Element2",
+            "tag":"Story",
             "required": false,
             "type":"text"
         },

@@ -1,7 +1,7 @@
 {
-    "name": "Sample CSV Input Collector",
+    "name": "Global Giving CSV Input Collector",
     "version": "0.01",
-    "baseSpecificationId": 8,
+    "baseSpecificationId": 11,
     "input": {
 	    "inputType": "csv-simple",
 	    "map": {
@@ -9,27 +9,26 @@
 	    	"columnMap": [
 	    		{
 	    			"column": 3,
+	    			"use":"title",
 	    			"element": "Title",
 	    			"columnType": "text"
 	    		},
 	    		{
 	    			"column": 2,
-	    			"element": "Element2",
-	    			"columnType": "text"
-	    		},
-	    		{
-	    			"column": 4,
-	    			"element": "Person1",
+	    			"use":"element",
+	    			"element": "Story",
 	    			"columnType": "text"
 	    		},
 	    		{
 	    			"column": 5,
-	    			"element": "Element3",
-	    			"columnType": "integer"
+	    			"use":"element",
+	    			"element": "Topic",
+	    			"columnType": "text"
 	    		},
 	    		{
-	    			"column": 7,
-	    			"element": "Person2",
+	    			"column": 4,
+	    			"use":"element",
+	    			"element": "Organization",
 	    			"columnType": "text"
 	    		}
 	    	]
