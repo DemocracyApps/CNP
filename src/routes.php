@@ -51,6 +51,7 @@ Route::get('/logout', function() {
 
 Route::get('/loginfb', 'DemocracyApps\CNP\Controllers\LoginController@fbLogin');
 Route::get('/logintw', 'DemocracyApps\CNP\Controllers\LoginController@twitLogin');
+Route::get('/logincheat', 'DemocracyApps\CNP\Controllers\LoginController@cheatLogin');
 
 
 /********************************
