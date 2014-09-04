@@ -1,7 +1,7 @@
 {
     "name": "Global Giving CSV Input Collector",
     "version": "0.01",
-    "baseSpecificationId": 11,
+    "baseSpecificationId": 1,
     "input": {
 	    "inputType": "csv-simple",
 	    "map": {
