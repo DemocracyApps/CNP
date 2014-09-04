@@ -19,6 +19,9 @@ class Collector extends \Eloquent {
 	public static function getFullSpecification ($id)
 	{
     	$collector = Collector::find($id);
+        if (! $collector ) {
+            throw new Exception ("Collector specification " . $id . " not found.");
+        }
     	if ($collector) $spec = json_decode($collector->specification, true);
     	if (array_key_exists('baseSpecificationId', $spec)) {
     		$tmpspec = self::getFullSpecification($spec['baseSpecificationId']);
