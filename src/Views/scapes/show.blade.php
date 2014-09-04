@@ -27,6 +27,7 @@
       <th> Name </th>
       <th> Description </th>
       <th> ID </th>
+      <th> Use Link </th>
     </tr>
     @foreach ($collectors as $collector)
       <tr>

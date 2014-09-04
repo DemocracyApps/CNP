@@ -7,10 +7,10 @@
   <h2>User Information</h2>
   <table cellpadding="10">
     <tr>
-      <th>Name:</th>  <td>{{$user->name}}</td>
+      <td><b>Name:</b></td>  <td>{{$user->name}}</td>
     </tr>
     <tr>
-      <th>Email:</th>  <td>{{$user->email}}</td>
+      <td><b>Email:</b></td>  <td>{{$user->email}}</td>
     </tr>
   </table>
 </div>
@@ -25,7 +25,7 @@
       <th> ID </th>
     @foreach($scapes as $scape)
       <tr>
-        <th> {{ link_to("scapes/".$scape->getID(), $scape->getName()) }} </th>
+        <td> {{ link_to("scapes/".$scape->getID(), $scape->getName()) }} </td>
         <td> {{ $scape->getProperty('access') }} </td>
         <td> {{ $scape->getContent() }} </td>
         <td> {{ $scape->getId() }} </td>
