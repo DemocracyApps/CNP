@@ -21,8 +21,11 @@
         table#short-table th, table#short-table td {
           border:1px solid black; padding:10px;
         }
-        table#long-table th, table#long-tabletd {
+        table#long-table th, table#long-table td {
           border:1px solid black; padding:3px;
+        }
+        table#simple-table, table#simple-table th, table#simple-table td {
+          border:0px solid white; padding:3px;
         }
   </style>
 	@yield('header')
