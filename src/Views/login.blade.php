@@ -8,4 +8,8 @@
 <p>
   <a class="button" href="{{url('logintw')}}"><i class="icon-facebook"></i> Login with Twitter</a>
 </p>
+
+<p>
+	<a class="button" href="{{url('logincheat')}}">Login by Cheating</a>
+</p>
 @stop
