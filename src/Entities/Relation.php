@@ -6,15 +6,45 @@ class Relation
 {
     static $tableName = 'relations';
     static $relTypesTableName = 'relation_types';
-    protected $id = null;
-    protected $fromId = null;
-    protected $toId = null;
-    protected $relationId = null;
+    public $id = null;
+    public $fromId = null;
+    public $toId = null;
+    public $relationId = null;
 
     function __construct($from, $to, $type) {
         $this->fromId = $from;
         $this->toId   = $to;
         $this->relationId = $type;
+    }
+
+    protected static function fill ($instance, $data) 
+    {
+        $instance->{'id'} = $data->id;
+        $instance->{'fromId'} = $data->fromid;
+        $instance->{'toId'} = $data->toid;
+        $instance->{'relationId'} = $data->relationid;
+    }
+
+    public static function getRelatedDenizens ($fromId, $relationName) 
+    {
+        $relId = null;
+        $relRecord = DB::table(self::$relTypesTableName)->where('name',$relationName)->first();
+        if ($relRecord) $relId = $relRecord->{'id'};
+        if ($relId) {
+            $d = DB::table(self::$tableName)->where('fromid', $fromId)->where('relationid', $relId)->get();
+        }
+        else {
+            $d = DB::table(self::$tableName)->where('fromid', $fromId)->get();
+        }
+
+        $denizens = array();
+
+        foreach ($d as $data) {
+            $denizen = Denizen::find($data->toid);
+            $denizens[] = $denizen;
+        }
+
+        return $denizens;
     }
 
     public static function createRelationPair($fromId, $toId, $relationName) 
