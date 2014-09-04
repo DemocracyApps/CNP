@@ -21,12 +21,21 @@
   @if (sizeof($elements) > 0)
     <h3>Story Elements</h3>
     <table>
-      <th>Name</th><th>Content</th><th>Relations</th>
+      <th>Name</th><th>Content</th><th style="width:30%;">Relations</th>
       @foreach ($elements as $element)
         <tr>
-          <td>{{$element->name}}</td>
+          <td>{{$element->name}} ({{$element->id}})</td>
           <td>{{$element->content}} </td>
-          <td>Umm</td>
+          <td>
+            <table style="border:none;" class="simple-table">
+              @foreach ($relations[$element->id] as $rel)
+                <tr>
+                  <td style="border:none;"> {{ $rel[0] }} </td>
+                  <td style="border:none;"> {{ $rel[1] }} </td>
+                </tr>
+              @endforeach
+            </table>
+          </td>
         </tr>
       @endforeach
     </table>

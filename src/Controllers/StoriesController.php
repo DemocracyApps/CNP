@@ -33,8 +33,30 @@ class StoriesController extends BaseController {
 	{
         $story = DAEntity\Story::find($id);
         $elements = DAEntity\Relation::getRelatedDenizens($id, "HasPart");
+        $elementRelations = array();
+        $denizens = array();
+        $denizens[$story->id] = $story;
+        $count = 0;
+        foreach ($elements as $element) { // Get the relations
+        	if ( ! array_key_exists($element->id, $denizens)) $denizens[$element->id] = $element;
+        	$relations = DAEntity\Relation::getRelations($element->id);
+        	//if ($element->type != 3) dd($relations);
+        	++$count;
+        	$elementRelations[$element->id] = array();
+        	foreach ($relations as $relation) {
+        		$to = $relation->toId;
+        		$relType = DAEntity\Eloquent\RelationType::find($relation->relationId);
+        		$relationName = $relType->name;
+        		if ( ! array_key_exists($to, $denizens)) {
+        			$denizens[$to] = DAEntity\Denizen::find($to);
+        		}
+       			$elementRelations[$element->id][] = array($relationName, 
+       													  $denizens[$to]->name . " (".$denizens[$to]->id.")");
+        	}
+        }
 
-        return \View::make('stories.show', array('story' => $story, 'elements' => $elements));
+        return \View::make('stories.show', array('story' => $story, 'elements' => $elements,
+        										 'relations' => $elementRelations));
 	}
 
 
