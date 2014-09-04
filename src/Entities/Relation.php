@@ -47,6 +47,21 @@ class Relation
         return $denizens;
     }
 
+    public static function getRelations ($fromId) 
+    {
+        $d = DB::table(self::$tableName)->where('fromid', $fromId)->get();
+
+        $relations = array();
+
+        foreach ($d as $data) {
+            $item = new static($data->fromid, $data->toid, $data->relationid);
+            self::fill($item,$data);
+            $relations[] = $item;
+        }
+
+        return $relations;
+    }
+
     public static function createRelationPair($fromId, $toId, $relationName) 
     {
         $relation = array();
