@@ -105,6 +105,7 @@ class Denizen
     protected static function fill ($instance, $data) 
     {
         $instance->{'id'} = $data->id;
+        $instance->{'type'} = $data->type;
         $instance->{'userid'} = $data->userid;
         $instance->{'name'} = $data->name;
         $instance->{'scapeId'} = $data->scape;
