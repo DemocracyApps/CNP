@@ -12,7 +12,7 @@
         {"name":"References", "inverse":"IsReferencedBy"},
         {"name":"IsReferencedBy", "inverse":"References"},
         {"name":"IsPartOf", "inverse":"HasPart"},
-        {"name":"HasPart", "inverse":"IsPartOf"}
+        {"name":"HasPart", "inverse":"IsPartOf"},
         {"name":"Causes", "inverse":"IsCausedBy"},
         {"name":"IsCausedBy", "inverse":"Causes"}
     ],
