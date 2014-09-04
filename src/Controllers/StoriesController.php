@@ -118,7 +118,7 @@ class StoriesController extends BaseController {
     		\Log::info("Skipping a line");
     	}
 		$count = 0;
-		while ( ! feof($myfile) && $count < 2) {
+		while ( ! feof($myfile) ) {
 			$line = fgetcsv($myfile);
 			$elementsIn = array();
 			$denizens = array();
