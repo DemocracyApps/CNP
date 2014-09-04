@@ -1,12 +1,20 @@
 {
+    // See DemocracyApps\CNP\Entities\Eloquent\RelationType.php 
+    // These serve to initialize the DB on first run. If you need to
+    // add to a production system, add here (for future installs) and
+    // add via /relationtypes route.
     "relationTypes": [
-	{"name":"Link"},
-    {"name":"CreatedBy", "allowedTo":"Person", "inverse":"CreatorOf"},
-    {"name":"CreatorOf", "allowedFrom":"Person", "inverse":"CreatedBy"},
-    {"name":"Tags", "allowedFrom":"Tag", "inverse":"IsTaggedBy"},
-    {"name":"IsTaggedBy", "allowedTo":"Tag", "inverse":"Tags"},
-    {"name":"References", "inverse":"IsReferencedBy"},
-    {"name":"IsReferencedBy", "inverse":"References"}
+        {"name":"Link"},
+        {"name":"CreatedBy", "allowedTo":"Person", "inverse":"CreatorOf"},
+        {"name":"CreatorOf", "allowedFrom":"Person", "inverse":"CreatedBy"},
+        {"name":"Tags", "allowedFrom":"Tag", "inverse":"IsTaggedBy"},
+        {"name":"IsTaggedBy", "allowedTo":"Tag", "inverse":"Tags"},
+        {"name":"References", "inverse":"IsReferencedBy"},
+        {"name":"IsReferencedBy", "inverse":"References"},
+        {"name":"IsPartOf", "inverse":"HasPart"},
+        {"name":"HasPart", "inverse":"IsPartOf"}
+        {"name":"Causes", "inverse":"IsCausedBy"},
+        {"name":"IsCausedBy", "inverse":"Causes"}
     ],
     "silly": "32"
 }
