@@ -19,7 +19,6 @@ class CollectorsController extends ApiController {
 
 	public function update($id) 
 	{
-		//dd(\Input::all());
 		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
 		if ($isAPI) {
 			throw new \Exception("API Collector update not yet implemented");
@@ -38,7 +37,7 @@ class CollectorsController extends ApiController {
             }
         }
 
-		$collector = DAEntity\Eloquent\Collector::find($id)->first();
+		$collector = DAEntity\Eloquent\Collector::find($id);
 		$collector->name = $data['name'];
 		if (\Input::has('description')) $collector->description = $data['description'];
 		if (\Input::hasFile('specification')) {
@@ -60,7 +59,7 @@ class CollectorsController extends ApiController {
 
 	public function edit($id) 
 	{
-		$collector = DAEntity\Eloquent\Collector::find($id)->first();
+		$collector = DAEntity\Eloquent\Collector::find($id);
     	return \View::make('collectors.edit', array('scape' => \Input::get('scape'), 
     												'collector' => $collector,
     												'fileerror' => null));
