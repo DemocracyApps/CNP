@@ -23,6 +23,20 @@ class StoriesController extends BaseController {
         return \View::make('stories.index')->with('stories', $stories);
 	}
 
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function show($id)
+	{
+        $story = DAEntity\Story::find($id);
+        $elements = DAEntity\Relation::getRelatedDenizens($id, "HasPart");
+
+        return \View::make('stories.show', array('story' => $story, 'elements' => $elements));
+	}
+
 
 	/**
 	 * Show the form for creating a new resource.
@@ -43,7 +57,6 @@ class StoriesController extends BaseController {
     	if ( ! $spec ) return "StoriesController.create - no such spec";
 
     	return \View::make('stories.csvUpload', array('spec' => $spec));
-    	return "We are operating according to the spec: " . $spec->name;
 	}
 
 
@@ -186,19 +199,6 @@ class StoriesController extends BaseController {
 		
         return \Redirect::to('stories');			
 	}
-
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
 
 	/**
 	 * Show the form for editing the specified resource.
