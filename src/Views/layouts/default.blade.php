@@ -14,15 +14,15 @@
         li.menu {
           display: inline-block;
           font-weight: bold;
-          width:100px;
         }
-        table,th,td
-        {
-          border:1px solid black;
+        table th, table td {
+          border:1px solid black; padding:10px;
         }
-        th,td
-        {
-          padding:10px;
+        table#short-table th, table#short-table td {
+          border:1px solid black; padding:10px;
+        }
+        table#long-table th, table#long-tabletd {
+          border:1px solid black; padding:3px;
         }
   </style>
 	@yield('header')
@@ -39,14 +39,14 @@
 
   			@yield('content')
 
-  		</div>
-
-  		@include('includes.lowermenu')
-
-  		<footer class="row">
-  			@include('includes.footer')
-  		</footer>
   	</div>
+
+  	@include('includes.lowermenu')
+
+  	<footer class="row">
+  		@include('includes.footer')
+  	</footer>
+  </div>
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 </body>
 </html>
