@@ -59,7 +59,6 @@ class StoriesController extends BaseController {
         										 'relations' => $elementRelations));
 	}
 
-
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -75,12 +74,38 @@ class StoriesController extends BaseController {
         	return \View::make('stories.create'); // For now ...
     	}
     	// Ok, we're here, which means we're operating according to a spec. Hoo, boy.
-    	$spec = DAEntity\Eloquent\Collector::find($spec);
+    	$collector = DAEntity\Eloquent\Collector::find($spec);
+    	if ( ! $collector ) return "StoriesController.create - no such spec";
+        $spec = DAEntity\Eloquent\Collector::getFullSpecification($spec);
     	if ( ! $spec ) return "StoriesController.create - no such spec";
+    	if ( ! array_key_exists('input', $spec)) return "StoriesController.create - no input spec";
+    	$inputSpec = $spec['input'];
+    	$inputType = $inputSpec['inputType'];
 
-    	return \View::make('stories.csvUpload', array('spec' => $spec));
+    	if ($inputType == 'csv-simple') {
+	    	return \View::make('stories.csvUpload', array('spec' => $collector));
+    	}
+    	elseif ($inputType == 'auto-interactive') {
+    		return self::autoBuildInteractiveInput($collector, $inputSpec);
+    	}
+    	else {
+    		return "Unknown input type " . $inputType;
+    	}
 	}
 
+	protected static function autoBuildInteractiveInput(DAEntity\Eloquent\Collector $collector, $inputSpec)
+	{
+        $driverId = \Input::get('driverId');
+        if ($driverId){
+            $driver = DAEntity\Eloquent\CollectorAutoInputter::find($driverId);
+        }
+        else {
+            $driver = new DAEntity\Eloquent\CollectorAutoInputter;
+            $driver->initialize($inputSpec);
+            $driver->save();
+        }
+		return "Oh, boy!";
+	}
 
 	/**
 	 * Store a newly created resource in storage.
