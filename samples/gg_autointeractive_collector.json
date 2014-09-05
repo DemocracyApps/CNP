@@ -44,7 +44,7 @@
     			"prompt":"What is this story about? Separate topics with commas."
     		},
     		{
-    			"tag":"tags",
+    			"tag":"organization",
     			"use":"element",
     			"element": "Organization",
     			"type":"text",
