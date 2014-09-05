@@ -86,7 +86,8 @@ class StoriesController extends BaseController {
 	    	return \View::make('stories.csvUpload', array('spec' => $collector));
     	}
     	elseif ($inputType == 'auto-interactive') {
-    		return self::autoBuildInteractiveInput($collector, $inputSpec);
+    		$driver = self::autoBuildInteractiveInput($collector, $inputSpec);
+            return \View::make('stories.autoinput', array('spec' => $collector, 'driver' => $driver));
     	}
     	else {
     		return "Unknown input type " . $inputType;
@@ -95,16 +96,17 @@ class StoriesController extends BaseController {
 
 	protected static function autoBuildInteractiveInput(DAEntity\Eloquent\Collector $collector, $inputSpec)
 	{
-        $driverId = \Input::get('driverId');
+        $driverId = \Input::get('driver');
         if ($driverId){
             $driver = DAEntity\Eloquent\CollectorAutoInputter::find($driverId);
+            $driver->reInitialize();
         }
         else {
             $driver = new DAEntity\Eloquent\CollectorAutoInputter;
             $driver->initialize($inputSpec);
             $driver->save();
         }
-		return "Oh, boy!";
+		return $driver;
 	}
 
 	/**

@@ -16,7 +16,7 @@ class CreateCollectorAutoInputsTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('userid');
-			$table->date('expires');
+			$table->dateTime('expires');
 			$table->text('driver')->nullable();
 			$table->timestamps();
 		});

@@ -7,6 +7,10 @@ class CollectorAutoInputter extends \Eloquent {
     protected $table = 'collector_auto_inputs';
     protected $runDriver = null;
 
+    public function reInitialize()
+    {
+        $this->runDriver = json_decode($this->driver, true);
+    }
     public function initialize($inputSpec) 
     {
         $this->userid = \Auth::user()->getId();
@@ -49,6 +53,23 @@ class CollectorAutoInputter extends \Eloquent {
             }
         }
         $this->driver = json_encode($this->runDriver);
+    }
+
+    public function getNextInput()
+    {
+        $d = &$this->runDriver;
+        $resultName = $d['current'];
+        $result = null;
+        if ($resultName) {
+            $result = $d['map'][$resultName];
+            $next = null;
+            $d['last'] = $d['current'];
+            $d['current'] = null;
+            if ($result['next']) $d['current'] = $result['next'];
+        }
+        $this->driver = json_encode($this->runDriver);
+
+        return $result;
     }
 }
 
