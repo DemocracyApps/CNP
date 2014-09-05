@@ -4,7 +4,52 @@
     "baseSpecificationId": 1,
     "input": {
 	    "inputType": "auto-interactive",
-	    "map": {
-	    }
+    	/*
+    	 * The simplest thing is just a linear sequence of inputs that map to elements.
+    	 * However, we can then begin to add complications:
+    	 *   - Provide a "next" link
+    	 *   - Provide a set of "next" links that depend on the person's input
+    	 *   - Create input elements that appear if some previous input has a particular value
+    	 */
+    	/*
+    	 * For the auto-interactive input type, the map is just a sequence of individual input specifications.
+    	 * By default, we'll just put them on a page, one after another, followed at the end by a "Submit" button.
+    	 *
+    	 * Paging occurs in 2 ways. First is simple to insert a pagebreak element. The second is to do any kind
+    	 * of computed next link, in which case we can't know what comes next until the user answers. That will also
+    	 * automatically generate a page break.
+    	 */
+	    "map": [ // just an array of inputs
+            {
+    			"tag":"story",
+    			"use":"element",
+    			"element":"Story",
+    			"type":"textarea",
+    			"prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community."
+    		},
+    		{
+    			"type":"pagebreak"
+    		},
+    		{
+    			"tag":"title",
+    			"use":"title",
+    			"type":"text",
+    			"prompt":"Give your story a title"
+    		},
+    		{
+    			"tag":"tags",
+    			"use":"element",
+    			"element": "Topic",
+    			"type":"text",
+    			"prompt":"What is this story about? Separate topics with commas."
+    		},
+    		{
+    			"tag":"tags",
+    			"use":"element",
+    			"element": "Organization",
+    			"type":"text",
+    			"prompt":"Name the organization or group most involved in what happened."
+    		}
+	   ]
     }
 }
