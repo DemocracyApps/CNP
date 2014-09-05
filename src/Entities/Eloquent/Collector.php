@@ -22,7 +22,8 @@ class Collector extends \Eloquent {
         if (! $collector ) {
             throw new Exception ("Collector specification " . $id . " not found.");
         }
-    	if ($collector) $spec = json_decode($collector->specification, true);
+        $spec = json_minify($collector->specification);
+        $spec = json_decode($spec, true);
     	if (array_key_exists('baseSpecificationId', $spec)) {
     		$tmpspec = self::getFullSpecification($spec['baseSpecificationId']);
     		if ( ! array_key_exists('input', $spec) && array_key_exists('input', $tmpspec)) {
