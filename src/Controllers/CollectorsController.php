@@ -11,6 +11,14 @@ class CollectorsController extends ApiController {
 		$this->collector 			= $collector;
 	}
 
+	public function destroy ($id)
+	{
+		$collector = DAEntity\Eloquent\Collector::find($id);
+		$scape = $collector->scape;
+		$collector->delete();
+		return \Redirect::to('/scapes/'.$scape);
+	}
+
 	public function show ($id)
 	{
 		$collector = DAEntity\Eloquent\Collector::find($id);

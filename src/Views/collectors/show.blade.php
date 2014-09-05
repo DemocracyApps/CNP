@@ -3,8 +3,17 @@
 @section('content')
 <h1>{{ $collector->name }} </h1>
 
-{{ link_to("collectors/".$collector->id."/edit", "Edit Collector") }} <br/>
+{{ Form::open(array('route' => array('collectors.edit', $collector->id), 'method' => 'get', 
+                                            'style' => 'display:inline-block')) }}
+  <button type="submit" href="{{ URL::route('collectors.edit', $collector->id) }}" class="btn btn-info btn-mini">Edit</button>
+{{ Form::close() }}
+{{ Form::open(array('route' => array('collectors.destroy', $collector->id), 'method' => 'delete',
+                                            'style' => 'display:inline-block')) }}
+  <button type="submit" href="{{ URL::route('collectors.destroy', $collector->id) }}" class="btn btn-danger btn-mini">Delete</button>
+{{ Form::close() }}
+
 {{ link_to("scapes/".$collector->scape, "Return to Scape Page") }}
+<br/>
 
 <div>
   <h2>Collector Information</h2>
@@ -16,7 +25,7 @@
       <th>Scape:</th>  <td>{{$collector->scape}}</td>
     </tr>
     <tr>
-      <th>Description:</th>  <td>{{$collector->description}}</td>
+      <th>Description:</th>  <td>{{$collector->description}}</td
     </tr>
   </table>
 </div>

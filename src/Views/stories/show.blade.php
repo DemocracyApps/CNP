@@ -21,7 +21,7 @@
   @if (sizeof($elements) > 0)
     <h3>Story Elements</h3>
     <table>
-      <th>Name</th><th>Content</th><th style="width:30%;">Relations</th>
+      <th style="width:12%;">Name</th><th>Content</th><th style="width:30%;">Relations</th>
       @foreach ($elements as $element)
         <tr>
           <td>{{$element->name}} ({{$element->id}})</td>
