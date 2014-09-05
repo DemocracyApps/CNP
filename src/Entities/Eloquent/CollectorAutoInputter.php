@@ -14,29 +14,40 @@ class CollectorAutoInputter extends \Eloquent {
 
         $this->runDriver = array();
         $this->runDriver['start'] = $this->runDriver['current'] = null;
-        $map = $this->runDriver['map'] = array();
-        dd($inputSpec);
+
+        $this->runDriver['map'] = array();
+        $previous = null;
+
         for ($i = 0, $size = count($inputSpec['map']); $i<$size; ++$i) {
-            $item = $input['map'][$i];
-            $item['prev'] = ($i>0)?$item[$i-1]:null;
-            $item['next'] = ($i == $size-1)?null:$item[$i-1];
+            $item = $inputSpec['map'][$i];
+            $item['prev'] = $item['next'] = null;
             $item['pagebreak'] = false;
+
             if (array_key_exists('tag', $item)) {
+                $ptag = null;
                 $tag = $item['tag'];
-                $map[$tag] = $item;
-                if ($map['current'] == null) $map['current'] = $tag;
-                if ($map['start'] == null)   $map['start'] = $tag;
+
+                // If this is the first real item, set start AND current to it.
+                if ($this->runDriver['current'] == null) $this->runDriver['current'] = $tag;
+                if ($this->runDriver['start'] == null)   $this->runDriver['start']   = $tag;
+
+                if ($previous) {
+                    $previous['next'] = $tag;
+                    $item['prev'] = $previous['tag'];
+                }
+
+                $this->runDriver['map'][$tag] = $item;
+                $previous = &$this->runDriver['map'][$tag];
 
                 // If next item is contingent, set
                 //    $item['pagebreak'] = true;
             }
             else {
                 if ($item['type'] == 'pagebreak') {
-                    if ($item['prev']) $item['prev']['pagebreak'] = true;
+                    if ($previous) $previous['pagebreak'] = true;
                 }
             }
         }
-        dd($this->runDriver);
         $this->driver = json_encode($this->runDriver);
     }
 }
