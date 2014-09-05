@@ -10,7 +10,6 @@
 	    		{
 	    			"column": 3,
 	    			"use":"title",
-	    			"element": "Title",
 	    			"columnType": "text"
 	    		},
 	    		{
