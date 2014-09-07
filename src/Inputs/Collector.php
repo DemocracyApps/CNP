@@ -230,7 +230,7 @@ class Collector extends \Eloquent {
             $tag = $espec['tag'];
             if (array_key_exists($tag, $elementsIn)) {
                 $className = '\\DemocracyApps\\CNP\Entities\\'.$espec['type'];
-                if (!class_exists($className)) return "No class " . $className;
+                if (!class_exists($className)) throw new \Exception("No class " . $className);
                 $denizen = new $className($tag, \Auth::user()->getId());
                 $denizen->scapeId = $scape;
                 $denizen->content = $elementsIn[$tag];
