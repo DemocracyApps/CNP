@@ -20,7 +20,6 @@ class StoriesController extends BaseController {
 	 */
 	public function index()
 	{
-		\Log::info("In stories controller index");
         $stories = DAEntity\Story::all();
         return \View::make('stories.index')->with('stories', $stories);
 	}
@@ -72,16 +71,14 @@ class StoriesController extends BaseController {
             return \Redirect::to('/login');			
 		}
 
+        if ( ! \Input::has('collector')) throw new \Exception("No collector id specified.");
 
-		$collectorId = \Input::get('collector');
-        if ( ! $collectorId ) {
-            return "No collector specified";
-        }
+    	$collector = Collector::find(\Input::get('collector'));
+    	if ( ! $collector ) throw new \Exception("Collector ".\Input::get('collector'). " not found.");
 
-    	$collector = Collector::find($collectorId);
-    	if ( ! $collector ) return "StoriesController.create - no such spec";
         $spec = $collector->getFullSpecification();
-    	if ( ! array_key_exists('input', $spec)) return "StoriesController.create - no input spec";
+        if ( ! $collector->validForInput()) throw new \Exception("Collector ".$collectorId . " not valid for input.");
+
     	$inputSpec = $spec['input'];
     	$inputType = $inputSpec['inputType'];
         \Log::info("Input type is " . $inputType);
@@ -110,24 +107,27 @@ class StoriesController extends BaseController {
             return \Redirect::to('/login');			
 		}
         $input = \Input::all();
-		$spec = \Input::get('collector');
-        $collector = Collector::find($spec);
-        $spec = $collector->getFullSpecification($spec);
-        if ( ! $spec ) return "StoriesController.create - no such spec";
-        $inputSpec = $spec['input'];
-        $inputType = $inputSpec['inputType'];
+
+        $collector = Collector::find(\Input::get('collector'));
+        if ( ! $collector->validateInput($input)) {
+            return \Redirect::back()->withInput()->withErrors($collector->messages());
+        }
+
+        $spec = $collector->getFullSpecification();
+
+        $inputType = $collector->getInputType();
         \Log::info("Input type is " . $inputType);
         if ($inputType == 'csv-simple') {
-            return self::processCsvInput($input, $collector, $spec);
+            self::processCsvInput($input, $collector);
         }
         elseif ($inputType == 'auto-interactive') {
-            $driver = self::buildAutoInteractiveInput($collector, $inputSpec);
+            $driver = self::buildAutoInteractiveInput($collector);
             $driverId = null;
             if ($driver) $driverId = $driver->id;
             $driver->extractSubmittedValues($input);
             if ($driver->inputDone()) {
                 $values = $driver['runDriver']['map'];
-                $view = self::processAutoInput($input, $collector, $driver, $spec);
+                $view = self::processAutoInput($input, $collector, $driver);
                 $driver->delete();
                 return $view;
             }
@@ -141,7 +141,7 @@ class StoriesController extends BaseController {
         return \Redirect::to('/stories');
     }
 
-    protected static function buildAutoInteractiveInput(Collector $collector, $inputSpec)
+    protected static function buildAutoInteractiveInput(Collector $collector)
     {
         $driverId = \Input::get('driver');
         if ($driverId){
@@ -153,7 +153,7 @@ class StoriesController extends BaseController {
         }
         else {
             $driver = new CollectorAutoInputter;
-            $driver->initialize($inputSpec);
+            $driver->initialize($collector->getInputSpec());
             $driver->save();
         }
         return $driver;
@@ -209,11 +209,11 @@ class StoriesController extends BaseController {
         }
 
     }
-    private function processAutoInput($input, $collector, $driver, $spec) {
+    private function processAutoInput($input, $collector, $driver) {
         $scape = $collector->scape;
-        $inputSpec = $spec['input'];
-        $elementsSpec = $spec['elements'];
-        $relationsSpec = $spec['relations'];
+        $inputSpec = $collector->getInputSpec();
+        $elementsSpec = $collector->getElementsSpec();
+        $relationsSpec = $collector->getRelationsSpec();
         $map = $inputSpec['map'];
         $values = $driver['runDriver']['map'];
 
@@ -248,13 +248,8 @@ class StoriesController extends BaseController {
     }
 
 
-    private function processCsvInput($input, $collector, $spec) 
+    private function processCsvInput($input, $collector) 
     {
-        $rules = ['csv'=>'required'];
-        $validator = \Validator::make($input, $rules);
-        if ($validator->fails()) {
-            return \Redirect::back()->withInput()->withErrors($validator->messages());
-        }
         ini_set("auto_detect_line_endings", true); // Deal with Mac line endings
 
 		$file = \Input::file('csv');
@@ -262,10 +257,9 @@ class StoriesController extends BaseController {
 
 		$scape = $collector->scape;
 
-
-    	$inputSpec = $spec['input'];
-    	$elementsSpec = $spec['elements'];
-    	$relationsSpec = $spec['relations'];
+        $inputSpec = $collector->getInputSpec();
+        $elementsSpec = $collector->getElementsSpec();
+        $relationsSpec = $collector->getRelationsSpec();
 
     	$map = $inputSpec['map'];
     	if (! $map) return "No map!";
