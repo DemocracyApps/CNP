@@ -2,7 +2,7 @@
 namespace DemocracyApps\CNP\Inputs;
 
 class Collector extends \Eloquent {
-
+    protected $fullSpecification = null;
 
 	/**
 	 * The database table used by the model.
@@ -11,32 +11,32 @@ class Collector extends \Eloquent {
 	 */
 	protected $table = 'collectors';
 
-	/**
-	 * Recursively read in and merge specs
-	 * @param  integer $id  ID of the end of the spec chain
-	 * @return StdClass    Merged specification object
-	 */
-	public static function getFullSpecification ($id)
-	{
-    	$collector = Collector::find($id);
-        if (! $collector ) {
-            throw new \Exception ("Collector specification " . $id . " not found.");
-        }
-        $spec = json_minify($collector->specification);
+    protected function resolveFullSpecification ()
+    {
+        $spec = json_minify($this->specification);
         $spec = json_decode($spec, true);
-    	if (array_key_exists('baseSpecificationId', $spec)) {
-    		$tmpspec = self::getFullSpecification($spec['baseSpecificationId']);
-    		if ( ! array_key_exists('input', $spec) && array_key_exists('input', $tmpspec)) {
-    			$spec['input'] = $tmpspec['input'];
-    		}
-    		if ( ! array_key_exists('elements', $spec) && array_key_exists('elements', $tmpspec)) {
-    			$spec['elements'] = $tmpspec['elements'];
-    		}
-    		if ( ! array_key_exists('relations', $spec) && array_key_exists('relations', $tmpspec)) {
-    			$spec['relations'] = $tmpspec['relations'];
-    		}
-    	}
-    	return $spec;
+        if (array_key_exists('baseSpecificationId', $spec)) {
+            $nextCollector = Collector::find($spec['baseSpecificationId']);
+            $tmpspec = $nextCollector->resolveFullSpecification($spec['baseSpecificationId']);
+            if ( ! array_key_exists('input', $spec) && array_key_exists('input', $tmpspec)) {
+                $spec['input'] = $tmpspec['input'];
+            }
+            if ( ! array_key_exists('elements', $spec) && array_key_exists('elements', $tmpspec)) {
+                $spec['elements'] = $tmpspec['elements'];
+            }
+            if ( ! array_key_exists('relations', $spec) && array_key_exists('relations', $tmpspec)) {
+                $spec['relations'] = $tmpspec['relations'];
+            }
+        }
+        return $spec;
+    }
+
+	public function getFullSpecification ()
+	{
+        if ( ! $this->fullSpecification) {
+            $this->fullSpecification = $this->resolveFullSpecification();
+        }
+    	return $this->fullSpecification;
 	}
 
 }

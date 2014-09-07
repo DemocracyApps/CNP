@@ -72,13 +72,12 @@ class StoriesController extends BaseController {
             return \Redirect::to('/login');			
 		}
 
-        //dd(\Request::instance());
 
-		$specId = \Input::get('spec')?\Input::get('spec'):'default';
+		$collectorId = \Input::get('spec')?\Input::get('spec'):'default';
 
-    	$collector = Collector::find($specId);
+    	$collector = Collector::find($collectorId);
     	if ( ! $collector ) return "StoriesController.create - no such spec";
-        $spec = Collector::getFullSpecification($specId);
+        $spec = $collector->getFullSpecification($collectorId);
     	if ( ! $spec ) return "StoriesController.create - no such spec";
     	if ( ! array_key_exists('input', $spec)) return "StoriesController.create - no input spec";
     	$inputSpec = $spec['input'];
@@ -98,24 +97,6 @@ class StoriesController extends BaseController {
     	}
 	}
 
-	protected static function buildAutoInteractiveInput(Collector $collector, $inputSpec)
-	{
-        $driverId = \Input::get('driver');
-        if ($driverId){
-            $driver = CollectorAutoInputter::find($driverId);
-            if ( ! $driver) {
-                dd("No damn driver " . $driverId);
-            }
-            $driver->reInitialize();
-        }
-        else {
-            $driver = new CollectorAutoInputter;
-            $driver->initialize($inputSpec);
-            $driver->save();
-        }
-		return $driver;
-	}
-
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -129,7 +110,7 @@ class StoriesController extends BaseController {
         $input = \Input::all();
 		$spec = \Input::get('spec');
         $collector = Collector::find($spec);
-        $spec = Collector::getFullSpecification($spec);
+        $spec = $collector->getFullSpecification($spec);
         if ( ! $spec ) return "StoriesController.create - no such spec";
         $inputSpec = $spec['input'];
         $inputType = $inputSpec['inputType'];
@@ -156,6 +137,24 @@ class StoriesController extends BaseController {
             return "Unknown input type " . $inputType;
         }
         return \Redirect::to('/stories');
+    }
+
+    protected static function buildAutoInteractiveInput(Collector $collector, $inputSpec)
+    {
+        $driverId = \Input::get('driver');
+        if ($driverId){
+            $driver = CollectorAutoInputter::find($driverId);
+            if ( ! $driver) {
+                dd("No damn driver " . $driverId);
+            }
+            $driver->reInitialize();
+        }
+        else {
+            $driver = new CollectorAutoInputter;
+            $driver->initialize($inputSpec);
+            $driver->save();
+        }
+        return $driver;
     }
 
     private function processInput ($data, $elementsSpec, $relationsSpec, $scape)
