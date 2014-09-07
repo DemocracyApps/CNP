@@ -74,12 +74,14 @@ class CollectorAutoInputter extends \Eloquent {
             $this->driver = json_encode($this->runDriver);
             $this->save();
         }
+        \Log::info("Saved it out: ". $this->driver);
     }
 
     public function extractSubmittedValues($input)
     {
         foreach ($this->runDriver['expecting'] as $item) {
-            $map = $this->runDriver['map'];
+            $map = &$this->runDriver['map'];
+            \Log::info("Stored value for " . $item . " as " . $input[$item]);
             $map[$item]['value'] = $input[$item];
         }
         $this->runDriver['expecting'] = array();

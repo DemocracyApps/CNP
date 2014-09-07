@@ -89,7 +89,6 @@ class StoriesController extends BaseController {
     		$driver = self::buildAutoInteractiveInput($collector, $inputSpec);
             $driverId = null;
             if ($driver) $driverId = $driver->id;
-            \Log::info("Off to view with driver id = " . $driverId);
             return \View::make('stories.autoinput', array('spec' => $collector, 'driver' => $driver));
     	}
     	else {
@@ -111,7 +110,6 @@ class StoriesController extends BaseController {
             $driver = new DAEntity\Eloquent\CollectorAutoInputter;
             $driver->initialize($inputSpec);
             $driver->save();
-            \Log::info("The Driver ID is " . $driver->id);
         }
 		return $driver;
 	}
@@ -143,20 +141,102 @@ class StoriesController extends BaseController {
             if ($driver) $driverId = $driver->id;
             $driver->extractSubmittedValues($input);
             if ($driver->inputDone()) {
-                \Log::info("Let's save this puppy.");
-                dd($driver);
-                return("Saving ...");
+                $values = $driver['runDriver']['map'];
+                return self::processAutoInput($input, $collector, $driver, $spec);
             }
             else {
-                \Log::info("Off to view with driver id = " . $driverId);
                 return \View::make('stories.autoinput', array('spec' => $collector, 'driver' => $driver));
             }
         }
         else {
             return "Unknown input type " . $inputType;
         }
-        return \Redirect::to('stories');
+        return \Redirect::to('/stories');
     }
+
+    private function processInput ($data, $elementsSpec, $relationsSpec, $scape)
+    {
+        $denizens = array();
+
+        $title = $data['title'];
+        $content = $data['content'];
+        $elementsIn = $data['elementsIn'];
+
+        // So now we create output denizens
+        foreach ($elementsSpec as $espec) {
+            $tag = $espec['tag'];
+            if (array_key_exists($tag, $elementsIn)) {
+                $className = '\\DemocracyApps\\CNP\Entities\\'.$espec['type'];
+                if (!class_exists($className)) return "No class " . $className;
+                $denizen = new $className($tag, \Auth::user()->getId());
+                $denizen->scapeId = $scape;
+                $denizen->content = $elementsIn[$tag];
+                $denizens[$tag] = $denizen;                     
+            }
+            else {
+                if (array_key_exists('required', $espec) && $espec['required'] == true) {
+                    return "Required element " . $tag . " doesn't exist on datum ". $count;
+                }
+            }
+        }
+
+        // Now save them all out, relate them, etc.
+        $story = new \DemocracyApps\CNP\Entities\Story($title, \Auth::user()->getId());
+        $story->scapeId = $scape;
+        $story->save();
+        foreach($denizens as $denizen) {
+            $denizen->save();
+            $relations = DAEntity\Relation::createRelationPair($story->id, 
+                                                               $denizen->id, "HasPart");
+            foreach ($relations as $relation) { $relation->save(); }
+        }
+        foreach ($relationsSpec as $relation) {
+            $from = $relation['from'];
+            $to   = $relation['to'];
+            $relType = $relation['type'];
+            if (array_key_exists($from, $denizens) && array_key_exists($to,$denizens)) {
+                $relations = DAEntity\Relation::createRelationPair($denizens[$from]->id, 
+                                                                   $denizens[$to]->id,
+                                                                   $relType);
+                foreach ($relations as $relation) { $relation->save(); }
+            }
+        }
+
+    }
+    private function processAutoInput($input, $collector, $driver, $spec) {
+        $scape = $collector->scape;
+        $inputSpec = $spec['input'];
+        $elementsSpec = $spec['elements'];
+        $relationsSpec = $spec['relations'];
+        $map = $inputSpec['map'];
+        $values = $driver['runDriver']['map'];
+
+        if (! $map) return "No map!";
+
+        $elementsIn = array();
+        $title = "No Title";
+
+        foreach ($map as $item) {
+            if (array_key_exists('use', $item)) {
+                $tag = $item['tag'];
+                $use = $item['use'];
+                if ($use == 'title') {
+                    $title = $values[$tag]['value'];
+                }
+                else {
+                    $elementsIn[$tag] = $values[$tag]['value'];
+                }
+            }
+        }
+
+        $data = array();
+        $data['title'] = $title;
+        $data['content'] = null;
+        $data['elementsIn'] = $elementsIn;
+        $this->processInput($data, $elementsSpec, $relationsSpec, $scape);
+        return \Redirect::to('/stories');
+    }
+
 
     private function processCsvInput($input, $collector, $spec) 
     {
@@ -190,7 +270,6 @@ class StoriesController extends BaseController {
 		while ( ! feof($myfile) ) {
 			$line = fgetcsv($myfile);
 			$elementsIn = array();
-			$denizens = array();
 			$title = "No Title";
 			if ($line) {
 				++$count;
@@ -203,46 +282,11 @@ class StoriesController extends BaseController {
 						$elementsIn[$column['element']] = $line[$column['column']];
 					}
 				}
-				// So now we create output denizens
-				foreach ($elementsSpec as $espec) {
-					$tag = $espec['tag'];
-					if (array_key_exists($tag, $elementsIn)) {
-						$className = '\\DemocracyApps\\CNP\Entities\\'.$espec['type'];
-						if (!class_exists($className)) return "No class " . $className;
-						$denizen = new $className($tag, \Auth::user()->getId());
-						$denizen->scapeId = $scape;
-						$denizen->content = $elementsIn[$tag];
-						$denizens[$tag] = $denizen;						
-					}
-					else {
-						if (array_key_exists('required', $espec) && $espec['required'] == true) {
-							return "Required element " . $tag . " doesn't exist on datum ". $count;
-						}
-					}
-				}
-
-				// So now we save them all out, relate them, etc.
-				$story = new \DemocracyApps\CNP\Entities\Story($title, \Auth::user()->getId());
-				$story->scapeId = $scape;
-				$story->save();
-				foreach($denizens as $denizen) {
-					$denizen->save();
-					$relations = DAEntity\Relation::createRelationPair($story->id, 
-																	   $denizen->id, "HasPart");
-					foreach ($relations as $relation) { $relation->save(); }
-				}
-				foreach ($relationsSpec as $relation) {
-					$from = $relation['from'];
-					$to   = $relation['to'];
-					$relType = $relation['type'];
-					if (array_key_exists($from, $denizens) && array_key_exists($to,$denizens)) {
-						$relations = DAEntity\Relation::createRelationPair($denizens[$from]->id, 
-																		   $denizens[$to]->id,
-																		   $relType);
-						foreach ($relations as $relation) { $relation->save(); }
-					}
-				}
-
+                $data = array();
+                $data['title'] = $title;
+                $data['content'] = null;
+                $data['elementsIn'] = $elementsIn;
+                $this->processInput($data, $elementsSpec, $relationsSpec, $scape);
 			}
 		}
         return \Redirect::to('stories');			
