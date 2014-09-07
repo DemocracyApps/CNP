@@ -69,24 +69,27 @@ class StoriesController extends BaseController {
 		if (\Auth::guest()) {
             return \Redirect::to('/login');			
 		}
-		$spec = \Input::get('spec')?\Input::get('spec'):'default';
-		if ($spec == 'default') {
-        	return \View::make('stories.create'); // For now ...
-    	}
-    	// Ok, we're here, which means we're operating according to a spec. Hoo, boy.
-    	$collector = DAEntity\Eloquent\Collector::find($spec);
+
+        //dd(\Request::instance());
+
+		$specId = \Input::get('spec')?\Input::get('spec'):'default';
+
+    	$collector = DAEntity\Eloquent\Collector::find($specId);
     	if ( ! $collector ) return "StoriesController.create - no such spec";
-        $spec = DAEntity\Eloquent\Collector::getFullSpecification($spec);
+        $spec = DAEntity\Eloquent\Collector::getFullSpecification($specId);
     	if ( ! $spec ) return "StoriesController.create - no such spec";
     	if ( ! array_key_exists('input', $spec)) return "StoriesController.create - no input spec";
     	$inputSpec = $spec['input'];
     	$inputType = $inputSpec['inputType'];
-
+        \Log::info("Input type is " . $inputType);
     	if ($inputType == 'csv-simple') {
 	    	return \View::make('stories.csvUpload', array('spec' => $collector));
     	}
     	elseif ($inputType == 'auto-interactive') {
-    		$driver = self::autoBuildInteractiveInput($collector, $inputSpec);
+    		$driver = self::buildAutoInteractiveInput($collector, $inputSpec);
+            $driverId = null;
+            if ($driver) $driverId = $driver->id;
+            \Log::info("Off to view with driver id = " . $driverId);
             return \View::make('stories.autoinput', array('spec' => $collector, 'driver' => $driver));
     	}
     	else {
@@ -94,17 +97,21 @@ class StoriesController extends BaseController {
     	}
 	}
 
-	protected static function autoBuildInteractiveInput(DAEntity\Eloquent\Collector $collector, $inputSpec)
+	protected static function buildAutoInteractiveInput(DAEntity\Eloquent\Collector $collector, $inputSpec)
 	{
         $driverId = \Input::get('driver');
         if ($driverId){
             $driver = DAEntity\Eloquent\CollectorAutoInputter::find($driverId);
+            if ( ! $driver) {
+                dd("No damn driver " . $driverId);
+            }
             $driver->reInitialize();
         }
         else {
             $driver = new DAEntity\Eloquent\CollectorAutoInputter;
             $driver->initialize($inputSpec);
             $driver->save();
+            \Log::info("The Driver ID is " . $driver->id);
         }
 		return $driver;
 	}
@@ -119,52 +126,50 @@ class StoriesController extends BaseController {
 		if (\Auth::guest()) {
             return \Redirect::to('/login');			
 		}
-
         $input = \Input::all();
-		$spec = \Input::get('spec')?\Input::get('spec'):'default';
-		if ($spec == 'default') {
-			/*
-			 * Old story save - probably will lose it later.
-			 */
-	        $rules = ['name'=>'required', 'content'=>'required'];
-	        $validator = \Validator::make($input, $rules);
-	        if ($validator->fails()) {
-	            return \Redirect::back()->withInput()->withErrors($validator->messages());
-	        }
-	        $this->story->setName($input['name']);
-	        $this->story->setContent($input['content']);
-	        $this->story->save();
-	        $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
-	        $person = DAEntity\Person::find($user->getDenizenId());
-	        $relations = DAEntity\Relation::createRelationPair($person->getId(), $this->story->getId(),
-	                                                          "CreatorOf");
-	        foreach($relations as $relation) {
-	            $relation->save();
-	        }
-	        return var_dump($relations); // Should redirect back to /stories or to display of this story
-    	}
-    	// Ok, we're here, which means we're operating according to a spec. Hoo, boy.
-    	// 	        $rules = ['name'=>'required', 'content'=>'required'];
+		$spec = \Input::get('spec');
+        $collector = DAEntity\Eloquent\Collector::find($spec);
+        $spec = DAEntity\Eloquent\Collector::getFullSpecification($spec);
+        if ( ! $spec ) return "StoriesController.create - no such spec";
+        $inputSpec = $spec['input'];
+        $inputType = $inputSpec['inputType'];
+        \Log::info("Input type is " . $inputType);
+        if ($inputType == 'csv-simple') {
+            return self::processCsvInput($input, $collector, $spec);
+        }
+        elseif ($inputType == 'auto-interactive') {
+            $driver = self::buildAutoInteractiveInput($collector, $inputSpec);
+            $driverId = null;
+            if ($driver) $driverId = $driver->id;
+            if ($driver->inputDone()) {
+                \Log::info("Let's save this puppy.");
+                return("Saving ...");
+            }
+            else {
+                \Log::info("Off to view with driver id = " . $driverId);
+                return \View::make('stories.autoinput', array('spec' => $collector, 'driver' => $driver));
+            }
+        }
+        else {
+            return "Unknown input type " . $inputType;
+        }
+        return \Redirect::to('stories');
+    }
+
+    private function processCsvInput($input, $collector, $spec) 
+    {
         $rules = ['csv'=>'required'];
         $validator = \Validator::make($input, $rules);
         if ($validator->fails()) {
             return \Redirect::back()->withInput()->withErrors($validator->messages());
         }
-        ini_set("auto_detect_line_endings", true); // Deal with
-    	// Let's start by just learning to parse the file
+        ini_set("auto_detect_line_endings", true); // Deal with Mac line endings
 
-		if ( ! \Input::hasFile('csv')) {
-			die ("Not sure what to do here since we already checked for the parameter");
-		}
 		$file = \Input::file('csv');
 		$myfile = fopen($file->getRealPath(), "r") or die("Unable to open file!");
-		if (! $myfile ) return "WhaFa!!??";
 
-		$collector = DAEntity\Eloquent\Collector::find($spec);
 		$scape = $collector->scape;
 
-        $spec = DAEntity\Eloquent\Collector::getFullSpecification($spec);
-    	if ( ! $spec ) return "StoriesController.create - no such spec";
 
     	$inputSpec = $spec['input'];
     	$elementsSpec = $spec['elements'];
@@ -191,7 +196,6 @@ class StoriesController extends BaseController {
 					$use = $column['use'];
 					if ($use == 'title') {
 						$title = $line[$column['column']];
-						\Log::info("THE TITLE WILL BE " . $title);
 					}
 					else {
 						$elementsIn[$column['element']] = $line[$column['column']];
@@ -201,8 +205,6 @@ class StoriesController extends BaseController {
 				foreach ($elementsSpec as $espec) {
 					$tag = $espec['tag'];
 					if (array_key_exists($tag, $elementsIn)) {
-						\Log::info("Create a new " . $espec['type'] . " with name " . $tag 
-									. " and value " . $elementsIn[$tag]);
 						$className = '\\DemocracyApps\\CNP\Entities\\'.$espec['type'];
 						if (!class_exists($className)) return "No class " . $className;
 						$denizen = new $className($tag, \Auth::user()->getId());
@@ -211,7 +213,6 @@ class StoriesController extends BaseController {
 						$denizens[$tag] = $denizen;						
 					}
 					else {
-						\Log::info(" No element with tag " . $tag);
 						if (array_key_exists('required', $espec) && $espec['required'] == true) {
 							return "Required element " . $tag . " doesn't exist on datum ". $count;
 						}
@@ -233,8 +234,6 @@ class StoriesController extends BaseController {
 					$to   = $relation['to'];
 					$relType = $relation['type'];
 					if (array_key_exists($from, $denizens) && array_key_exists($to,$denizens)) {
-						\Log::info("Create relation ".$relType." from ".$denizens[$from]->name.
-								   " to ".$denizens[$to]->name);
 						$relations = DAEntity\Relation::createRelationPair($denizens[$from]->id, 
 																		   $denizens[$to]->id,
 																		   $relType);
@@ -244,8 +243,6 @@ class StoriesController extends BaseController {
 
 			}
 		}
-		// $line = fgets($myfile);
-		
         return \Redirect::to('stories');			
 	}
 
