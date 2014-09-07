@@ -80,13 +80,11 @@ class StoriesController extends BaseController {
         $collector->initialize(\Input::all());
 
     	$inputType = $collector->getInputType();
-        \Log::info("Input type is " . $inputType);
     	if ($inputType == 'csv-simple') {
 	    	return \View::make('stories.csvUpload', array('collector' => $collector));
     	}
     	elseif ($inputType == 'auto-interactive') {
-    		$driver = $collector->getDriver();
-            return \View::make('stories.autoinput', array('collector' => $collector, 'driver' => $driver));
+            return \View::make('stories.autoinput', array('collector' => $collector));
     	}
     	else {
     		return "Unknown input type " . $inputType;
@@ -111,201 +109,14 @@ class StoriesController extends BaseController {
         }
 
         $inputType = $collector->getInputType();
-        \Log::info("Input type is " . $inputType);
+
         $collector->initialize($input);
-        if ($inputType == 'csv-simple') {
-            self::processCsvInput($input, $collector);
-        }
-        elseif ($inputType == 'auto-interactive') {
-            $driver = $collector->getDriver();
-            $driver->extractSubmittedValues($input);
-            if ($driver->inputDone()) {
-                $values = $driver['runDriver']['map'];
-                $view = self::processAutoInput($input, $collector, $driver);
-                $driver->delete();
-                return $view;
+        $collector->processInput($input);
+        if ($inputType == 'auto-interactive') {
+            if ( ! $collector->inputDone()) {
+                return \View::make('stories.autoinput', array('collector' => $collector));
             }
-            else {
-                return \View::make('stories.autoinput', array('collector' => $collector, 'driver' => $driver));
-            }
-        }
-        else {
-            return "Unknown input type " . $inputType;
         }
         return \Redirect::to('/stories');
     }
-
-    private function processInput ($data, $elementsSpec, $relationsSpec, $scape)
-    {
-        $denizens = array();
-
-        $title = $data['title'];
-        $summary = $data['summary'];
-        $elementsIn = $data['elementsIn'];
-
-        // So now we create output denizens
-        foreach ($elementsSpec as $espec) {
-            $tag = $espec['tag'];
-            if (array_key_exists($tag, $elementsIn)) {
-                $className = '\\DemocracyApps\\CNP\Entities\\'.$espec['type'];
-                if (!class_exists($className)) return "No class " . $className;
-                $denizen = new $className($tag, \Auth::user()->getId());
-                $denizen->scapeId = $scape;
-                $denizen->content = $elementsIn[$tag];
-                $denizens[$tag] = $denizen;                     
-            }
-            else {
-                if (array_key_exists('required', $espec) && $espec['required'] == true) {
-                    return "Required element " . $tag . " doesn't exist on datum ". $count;
-                }
-            }
-        }
-
-        // Now save them all out, relate them, etc.
-        $story = new \DemocracyApps\CNP\Entities\Story($title, \Auth::user()->getId());
-        if ($summary) $story->content = $summary;
-        $story->scapeId = $scape;
-        $story->save();
-        foreach($denizens as $denizen) {
-            $denizen->save();
-            $relations = DAEntity\Relation::createRelationPair($story->id, 
-                                                               $denizen->id, "HasPart");
-            foreach ($relations as $relation) { $relation->save(); }
-        }
-        foreach ($relationsSpec as $relation) {
-            $from = $relation['from'];
-            $to   = $relation['to'];
-            $relType = $relation['type'];
-            if (array_key_exists($from, $denizens) && array_key_exists($to,$denizens)) {
-                $relations = DAEntity\Relation::createRelationPair($denizens[$from]->id, 
-                                                                   $denizens[$to]->id,
-                                                                   $relType);
-                foreach ($relations as $relation) { $relation->save(); }
-            }
-        }
-
-    }
-    private function processAutoInput($input, $collector, $driver) {
-        $scape = $collector->scape;
-        $inputSpec = $collector->getInputSpec();
-        $elementsSpec = $collector->getElementsSpec();
-        $relationsSpec = $collector->getRelationsSpec();
-        $map = $inputSpec['map'];
-        $values = $driver['runDriver']['map'];
-
-        if (! $map) return "No map!";
-
-        $elementsIn = array();
-        $title = "No Title";
-        $summary = null;
-
-        foreach ($map as $item) {
-            if (array_key_exists('use', $item)) {
-                $tag = $item['tag'];
-                $use = $item['use'];
-                if ($use == 'title') {
-                    $title = $values[$tag]['value'];
-                }
-                elseif ($use == 'summary') {
-                    $summary = $values[$tag]['value'];
-                }
-                else {
-                    $elementsIn[$tag] = $values[$tag]['value'];
-                }
-            }
-        }
-
-        $data = array();
-        $data['title'] = $title;
-        $data['summary'] = $summary;
-        $data['elementsIn'] = $elementsIn;
-        $this->processInput($data, $elementsSpec, $relationsSpec, $scape);
-        return \Redirect::to('/stories');
-    }
-
-
-    private function processCsvInput($input, $collector) 
-    {
-        ini_set("auto_detect_line_endings", true); // Deal with Mac line endings
-
-		$file = \Input::file('csv');
-		$myfile = fopen($file->getRealPath(), "r") or die("Unable to open file!");
-
-		$scape = $collector->scape;
-
-        $inputSpec = $collector->getInputSpec();
-        $elementsSpec = $collector->getElementsSpec();
-        $relationsSpec = $collector->getRelationsSpec();
-
-    	$map = $inputSpec['map'];
-    	if (! $map) return "No map!";
-    	$skip = $map['skip'];
-    	$columnMap = $map['columnMap'];
-
-    	while ($skip-- > 0) {
-    		$line = fgetcsv($myfile);
-    		\Log::info("Skipping a line");
-    	}
-		$count = 0;
-		while ( ! feof($myfile) ) {
-			$line = fgetcsv($myfile);
-			$elementsIn = array();
-			$title = "No Title";
-			if ($line) {
-				++$count;
-				foreach ($columnMap as $column) {
-					$use = $column['use'];
-					if ($use == 'title') {
-						$title = $line[$column['column']];
-					}
-					else {
-						$elementsIn[$column['element']] = $line[$column['column']];
-					}
-				}
-                $data = array();
-                $data['title'] = $title;
-                $data['summary'] = null;
-                $data['elementsIn'] = $elementsIn;
-                $this->processInput($data, $elementsSpec, $relationsSpec, $scape);
-			}
-		}
-        return \Redirect::to('stories');			
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
-
-
 }

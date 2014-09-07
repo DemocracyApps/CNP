@@ -1,5 +1,6 @@
 <?php
 namespace DemocracyApps\CNP\Inputs;
+use \DemocracyApps\CNP\Entities as DAEntity;
 
 class Collector extends \Eloquent {
     protected $fullSpecification = null;
@@ -9,6 +10,7 @@ class Collector extends \Eloquent {
     protected $relationsSpec = null;
     protected $messages = null; // Type should be Illuminate\Support\MessageBag
     protected $driver = null;
+    protected $inputDone = false;
 
 	/**
 	 * The database table used by the model.
@@ -136,4 +138,150 @@ class Collector extends \Eloquent {
             }
         }
     }
+
+    public function inputDone()
+    {
+        return $this->inputDone;
+    }
+
+    public function processInput($input)
+    {
+        if ($this->inputType == 'csv-simple') {
+            self::processCsvInput($input);
+        }
+        else if ($this->inputType == 'auto-interactive') {
+            $this->driver->extractSubmittedValues($input);
+            if ($this->driver->inputDone()) {
+                $this->inputDone = true;
+                self::processAutoInput($input);
+                $this->driver->delete();
+            }
+        }
+    }
+
+    private function processAutoInput($input) {
+        $map = $this->inputSpec['map'];
+        $values = $this->driver['runDriver']['map'];
+
+        if (! $map) return "No map!";
+
+        $elementsIn = array();
+        $title = "No Title";
+        $summary = null;
+
+        foreach ($map as $item) {
+            if (array_key_exists('use', $item)) {
+                $tag = $item['tag'];
+                $use = $item['use'];
+                if ($use == 'title') {
+                    $title = $values[$tag]['value'];
+                }
+                elseif ($use == 'summary') {
+                    $summary = $values[$tag]['value'];
+                }
+                else {
+                    $elementsIn[$tag] = $values[$tag]['value'];
+                }
+            }
+        }
+
+        $data = array();
+        $data['title'] = $title;
+        $data['summary'] = $summary;
+        $data['elementsIn'] = $elementsIn;
+        $this->commonProcessInput($data, $this->elementsSpec, $this->relationsSpec, $this->scape);
+    }
+
+    private function processCsvInput($input) 
+    {
+        ini_set("auto_detect_line_endings", true); // Deal with Mac line endings
+
+        $file = \Input::file('csv');
+        $myfile = fopen($file->getRealPath(), "r") or die("Unable to open file!");
+
+        $map = $this->inputSpec['map'];
+        if (! $map) return "No map!";
+        $skip = $map['skip'];
+        $columnMap = $map['columnMap'];
+
+        while ($skip-- > 0) {
+            $line = fgetcsv($myfile);
+            \Log::info("Skipping a line");
+        }
+        $count = 0;
+        while ( ! feof($myfile) ) {
+            $line = fgetcsv($myfile);
+            $elementsIn = array();
+            $title = "No Title";
+            if ($line) {
+                ++$count;
+                foreach ($columnMap as $column) {
+                    $use = $column['use'];
+                    if ($use == 'title') {
+                        $title = $line[$column['column']];
+                    }
+                    else {
+                        $elementsIn[$column['element']] = $line[$column['column']];
+                    }
+                }
+                $data = array();
+                $data['title'] = $title;
+                $data['summary'] = null;
+                $data['elementsIn'] = $elementsIn;
+                $this->commonProcessInput($data, $this->elementsSpec, $this->relationsSpec, $this->scape);
+            }
+        }
+    }
+
+    private function commonProcessInput ($data, $elementsSpec, $relationsSpec, $scape)
+    {
+        $denizens = array();
+
+        $title = $data['title'];
+        $summary = $data['summary'];
+        $elementsIn = $data['elementsIn'];
+
+        // So now we create output denizens
+        foreach ($elementsSpec as $espec) {
+            $tag = $espec['tag'];
+            if (array_key_exists($tag, $elementsIn)) {
+                $className = '\\DemocracyApps\\CNP\Entities\\'.$espec['type'];
+                if (!class_exists($className)) return "No class " . $className;
+                $denizen = new $className($tag, \Auth::user()->getId());
+                $denizen->scapeId = $scape;
+                $denizen->content = $elementsIn[$tag];
+                $denizens[$tag] = $denizen;                     
+            }
+            else {
+                if (array_key_exists('required', $espec) && $espec['required'] == true) {
+                    return "Required element " . $tag . " doesn't exist on datum ". $count;
+                }
+            }
+        }
+
+        // Now save them all out, relate them, etc.
+        $story = new \DemocracyApps\CNP\Entities\Story($title, \Auth::user()->getId());
+        if ($summary) $story->content = $summary;
+        $story->scapeId = $scape;
+        $story->save();
+        foreach($denizens as $denizen) {
+            $denizen->save();
+            $relations = DAEntity\Relation::createRelationPair($story->id, 
+                                                               $denizen->id, "HasPart");
+            foreach ($relations as $relation) { $relation->save(); }
+        }
+        foreach ($relationsSpec as $relation) {
+            $from = $relation['from'];
+            $to   = $relation['to'];
+            $relType = $relation['type'];
+            if (array_key_exists($from, $denizens) && array_key_exists($to,$denizens)) {
+                $relations = DAEntity\Relation::createRelationPair($denizens[$from]->id, 
+                                                                   $denizens[$to]->id,
+                                                                   $relType);
+                foreach ($relations as $relation) { $relation->save(); }
+            }
+        }
+
+    }
+
 }

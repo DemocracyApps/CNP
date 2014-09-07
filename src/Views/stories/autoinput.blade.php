@@ -56,13 +56,13 @@
    }
 ?>
 {{ Form::open(['route' => 'stories.store']) }}
-   <input type="hidden" name="driver" value="{{$driver->id}}"/>
+   <input type="hidden" name="driver" value="{{$collector->getDriver()->id}}"/>
    <input type="hidden" name="collector" value="{{$collector->id}}"/>
    <?php
       $done = false;
       $count = 0;
       while ( ! $done ) {
-         $next = $driver->getNextInput();
+         $next = $collector->getDriver()->getNextInput();
          if ( ! $next)
             $done = true;
          else
@@ -73,11 +73,11 @@
          if ($count > 10) $done = true;
          ++$count;
       }
-      $driver->cleanupAndSave();
+      $collector->getDriver()->cleanupAndSave();
    ?>
 
    <div class="form-group">
-      @if ($driver->inputDone())
+      @if ($collector->getDriver()->inputDone())
          {{ Form::submit('Submit', ['class' => 'btn btn-primary']) }}
       @else
          {{ Form::submit('Next', ['class' => 'btn btn-primary']) }}

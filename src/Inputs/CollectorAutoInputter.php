@@ -104,7 +104,6 @@ class CollectorAutoInputter extends \Eloquent {
             $data['current'] = $current = $data['start'];
             $result = $data['map'][$current];
             $data['expecting'] = array($current);
-            \Log::info("Starting. Current name is " . $current);
         }
         else {
             $result = $data['map'][$current];
