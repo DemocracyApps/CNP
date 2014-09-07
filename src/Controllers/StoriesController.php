@@ -141,8 +141,10 @@ class StoriesController extends BaseController {
             $driver = self::buildAutoInteractiveInput($collector, $inputSpec);
             $driverId = null;
             if ($driver) $driverId = $driver->id;
+            $driver->extractSubmittedValues($input);
             if ($driver->inputDone()) {
                 \Log::info("Let's save this puppy.");
+                dd($driver);
                 return("Saving ...");
             }
             else {

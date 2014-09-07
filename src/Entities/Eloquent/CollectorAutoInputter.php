@@ -22,6 +22,7 @@ class CollectorAutoInputter extends \Eloquent {
         $this->runDriver = array();
         $this->runDriver['start'] = $this->runDriver['current'] = null;
         $this->runDriver['done'] = false;
+        $this->runDriver['expecting'] = null;
         $this->runDriver['map'] = array();
         $previous = null;
 
@@ -44,6 +45,8 @@ class CollectorAutoInputter extends \Eloquent {
 
                 $this->runDriver['map'][$tag] = $item;
                 $previous = &$this->runDriver['map'][$tag];
+
+                $item['value'] = null;
 
                 // If next item is contingent, set
                 //    $item['pagebreak'] = true;
@@ -73,6 +76,14 @@ class CollectorAutoInputter extends \Eloquent {
         }
     }
 
+    public function extractSubmittedValues($input)
+    {
+        foreach ($this->runDriver['expecting'] as $item) {
+            $map = $this->runDriver['map'];
+            $map[$item]['value'] = $input[$item];
+        }
+        $this->runDriver['expecting'] = array();
+    }
     public function getNextInput()
     {
         /*
@@ -102,13 +113,14 @@ class CollectorAutoInputter extends \Eloquent {
         if ($current == null) { // We are at the beginning
             $data['current'] = $current = $data['start'];
             $result = $data['map'][$current];
+            $data['expecting'] = array($current);
             \Log::info("Starting. Current name is " . $current);
         }
         else {
             $result = $data['map'][$current];
             if ($result['next']) {
                 $data['current'] = $result['next'];
-                \Log::info("Setting current page to " . $result['next']);
+                $data['expecting'][] = $data['current'];
                 $result = $data['map'][$result['next']];
             }
             else {
