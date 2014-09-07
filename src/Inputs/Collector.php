@@ -80,22 +80,6 @@ class Collector extends \Eloquent {
         return $this->inputType;
     }
 
-    public function getInputSpec ()
-    {
-        $this->checkReady();
-        return $this->inputSpec;
-    }
-    public function getElementsSpec ()
-    {
-        $this->checkReady();
-        return $this->elementsSpec;
-    }
-    public function getRelationsSpec ()
-    {
-        $this->checkReady();
-        return $this->relationsSpec;
-    }
-
     public function validateInput($input)
     {
         $ok = true;
