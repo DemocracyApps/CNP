@@ -29,7 +29,7 @@
     		},
             {
                 "tag":"summary",
-                "use":"content",
+                "use":"summary",
                 "type":"textarea",
                 "prompt":"Write a summary for this story"
             },

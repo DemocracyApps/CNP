@@ -161,7 +161,7 @@ class StoriesController extends BaseController {
         $denizens = array();
 
         $title = $data['title'];
-        $content = $data['content'];
+        $summary = $data['summary'];
         $elementsIn = $data['elementsIn'];
 
         // So now we create output denizens
@@ -184,7 +184,7 @@ class StoriesController extends BaseController {
 
         // Now save them all out, relate them, etc.
         $story = new \DemocracyApps\CNP\Entities\Story($title, \Auth::user()->getId());
-        if ($content) $story->content = $content;
+        if ($summary) $story->content = $summary;
         $story->scapeId = $scape;
         $story->save();
         foreach($denizens as $denizen) {
@@ -218,7 +218,7 @@ class StoriesController extends BaseController {
 
         $elementsIn = array();
         $title = "No Title";
-        $content = null;
+        $summary = null;
 
         foreach ($map as $item) {
             if (array_key_exists('use', $item)) {
@@ -227,8 +227,8 @@ class StoriesController extends BaseController {
                 if ($use == 'title') {
                     $title = $values[$tag]['value'];
                 }
-                elseif ($use == 'content') {
-                    $content = $values[$tag]['value'];
+                elseif ($use == 'summary') {
+                    $summary = $values[$tag]['value'];
                 }
                 else {
                     $elementsIn[$tag] = $values[$tag]['value'];
@@ -238,7 +238,7 @@ class StoriesController extends BaseController {
 
         $data = array();
         $data['title'] = $title;
-        $data['content'] = $content;
+        $data['summary'] = $summary;
         $data['elementsIn'] = $elementsIn;
         $this->processInput($data, $elementsSpec, $relationsSpec, $scape);
         return \Redirect::to('/stories');
