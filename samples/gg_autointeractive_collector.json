@@ -21,7 +21,7 @@
     	 */
 	    "map": [ // just an array of inputs
             {
-    			"tag":"story",
+    			"tag":"Story",
     			"use":"element",
     			"element":"Story",
     			"type":"textarea",
@@ -37,14 +37,14 @@
     			"prompt":"Give your story a title"
     		},
     		{
-    			"tag":"tags",
+    			"tag":"Topic",
     			"use":"element",
     			"element": "Topic",
     			"type":"text",
     			"prompt":"What is this story about? Separate topics with commas."
     		},
     		{
-    			"tag":"organization",
+    			"tag":"Organization",
     			"use":"element",
     			"element": "Organization",
     			"type":"text",
