@@ -184,6 +184,7 @@ class StoriesController extends BaseController {
 
         // Now save them all out, relate them, etc.
         $story = new \DemocracyApps\CNP\Entities\Story($title, \Auth::user()->getId());
+        if ($content) $story->content = $content;
         $story->scapeId = $scape;
         $story->save();
         foreach($denizens as $denizen) {
@@ -217,6 +218,7 @@ class StoriesController extends BaseController {
 
         $elementsIn = array();
         $title = "No Title";
+        $content = null;
 
         foreach ($map as $item) {
             if (array_key_exists('use', $item)) {
@@ -224,6 +226,9 @@ class StoriesController extends BaseController {
                 $use = $item['use'];
                 if ($use == 'title') {
                     $title = $values[$tag]['value'];
+                }
+                elseif ($use == 'content') {
+                    $content = $values[$tag]['value'];
                 }
                 else {
                     $elementsIn[$tag] = $values[$tag]['value'];
@@ -233,7 +238,7 @@ class StoriesController extends BaseController {
 
         $data = array();
         $data['title'] = $title;
-        $data['content'] = null;
+        $data['content'] = $content;
         $data['elementsIn'] = $elementsIn;
         $this->processInput($data, $elementsSpec, $relationsSpec, $scape);
         return \Redirect::to('/stories');
