@@ -81,25 +81,21 @@ class CollectorAutoInputter extends \Eloquent {
     public function getNextInput()
     {
         /*
-         * Here's the basic philosophy ... 
+         * At the top of the routine, $current is the page we were most recently on. We don't advance
+         * when we return it because sometimes we'll need to know their response to something before
+         * we can decide where to go next. So a call to this function, getNextInput(), means that we 
+         * are now ready to proceed to the next element. We figure it out, store it in $current and
+         * return it. 
          *
-         * $current is the page we're on right now, but if we've just re-arrived, that's actually 
-         * the page we were on last time through. The reason for this is that sometimes we'll need
-         * to know their response to something before we can decide where to go next.
+         * Returning null means that we are done, at least for this section of inputs.
          *
-         * So, a call to this function, getNextInput(), means that we are now ready to proceed to
-         * the next element. We figure it out and return it.
-         *
-         * In the simplest case, the sequence is just a series of elements with next pointers.
-         * At the beginning, current will be set to the head. On each call, we set $result to 
-         * the element named by $current and move $current to $current['next']. If that is null,
-         * we're at the end of the sequence and we should set $done to true.
+         * In the simplest case, the sequence is just a series of elements with next pointers (and maybe 
+         * some pagebreaks in between). At the beginning $current is null.
+         * 
          */
         $data = &$this->runDriver;
-        \Log::info("In getNextInput");
 
         if ($this->pageBreak) {
-            \Log::info("PageBreak set to true, returning null");
             return null; 
         }
 
@@ -118,7 +114,6 @@ class CollectorAutoInputter extends \Eloquent {
                 $result = $data['map'][$result['next']];
             }
             else {
-                \Log::info("It seems we are done");
                 $this->done = true;
                 $data['done'] = true;
                 $result = null;
