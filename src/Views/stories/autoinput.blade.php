@@ -73,7 +73,7 @@
          if ($count > 10) $done = true;
          ++$count;
       }
-      $driver->cleanupOrSave();
+      $driver->cleanupAndSave();
    ?>
 
    <div class="form-group">

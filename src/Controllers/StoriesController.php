@@ -142,7 +142,9 @@ class StoriesController extends BaseController {
             $driver->extractSubmittedValues($input);
             if ($driver->inputDone()) {
                 $values = $driver['runDriver']['map'];
-                return self::processAutoInput($input, $collector, $driver, $spec);
+                $view = self::processAutoInput($input, $collector, $driver, $spec);
+                $driver->delete();
+                return $view;
             }
             else {
                 return \View::make('stories.autoinput', array('spec' => $collector, 'driver' => $driver));
