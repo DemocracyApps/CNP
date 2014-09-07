@@ -76,19 +76,16 @@ class StoriesController extends BaseController {
     	$collector = Collector::find(\Input::get('collector'));
     	if ( ! $collector ) throw new \Exception("Collector ".\Input::get('collector'). " not found.");
 
-        $spec = $collector->getFullSpecification();
         if ( ! $collector->validForInput()) throw new \Exception("Collector ".$collectorId . " not valid for input.");
+        $collector->initialize(\Input::all());
 
-    	$inputSpec = $spec['input'];
-    	$inputType = $inputSpec['inputType'];
+    	$inputType = $collector->getInputType();
         \Log::info("Input type is " . $inputType);
     	if ($inputType == 'csv-simple') {
 	    	return \View::make('stories.csvUpload', array('collector' => $collector));
     	}
     	elseif ($inputType == 'auto-interactive') {
-    		$driver = self::buildAutoInteractiveInput($collector, $inputSpec);
-            $driverId = null;
-            if ($driver) $driverId = $driver->id;
+    		$driver = $collector->getDriver();
             return \View::make('stories.autoinput', array('collector' => $collector, 'driver' => $driver));
     	}
     	else {
@@ -113,17 +110,14 @@ class StoriesController extends BaseController {
             return \Redirect::back()->withInput()->withErrors($collector->messages());
         }
 
-        $spec = $collector->getFullSpecification();
-
         $inputType = $collector->getInputType();
         \Log::info("Input type is " . $inputType);
+        $collector->initialize($input);
         if ($inputType == 'csv-simple') {
             self::processCsvInput($input, $collector);
         }
         elseif ($inputType == 'auto-interactive') {
-            $driver = self::buildAutoInteractiveInput($collector);
-            $driverId = null;
-            if ($driver) $driverId = $driver->id;
+            $driver = $collector->getDriver();
             $driver->extractSubmittedValues($input);
             if ($driver->inputDone()) {
                 $values = $driver['runDriver']['map'];
@@ -139,24 +133,6 @@ class StoriesController extends BaseController {
             return "Unknown input type " . $inputType;
         }
         return \Redirect::to('/stories');
-    }
-
-    protected static function buildAutoInteractiveInput(Collector $collector)
-    {
-        $driverId = \Input::get('driver');
-        if ($driverId){
-            $driver = CollectorAutoInputter::find($driverId);
-            if ( ! $driver) {
-                dd("No damn driver " . $driverId);
-            }
-            $driver->reInitialize();
-        }
-        else {
-            $driver = new CollectorAutoInputter;
-            $driver->initialize($collector->getInputSpec());
-            $driver->save();
-        }
-        return $driver;
     }
 
     private function processInput ($data, $elementsSpec, $relationsSpec, $scape)

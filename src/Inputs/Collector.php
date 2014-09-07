@@ -8,6 +8,7 @@ class Collector extends \Eloquent {
     protected $elementsSpec = null;
     protected $relationsSpec = null;
     protected $messages = null; // Type should be Illuminate\Support\MessageBag
+    protected $driver = null;
 
 	/**
 	 * The database table used by the model.
@@ -109,5 +110,30 @@ class Collector extends \Eloquent {
             \Log::info("No validation defined for input type " . $this->inputType);
         }
         return $ok;
+    }
+
+    public function getDriver()
+    {
+        return $this->driver;
+    }
+
+    public function initialize($input)
+    {
+        $this->checkReady();
+        if ($this->inputType == 'auto-interactive') {
+            $driverId = \Input::get('driver');
+            if ($driverId){
+                $this->driver = CollectorAutoInputter::find($driverId);
+                if ( ! $this->driver) {
+                    dd("No damn driver " . $driverId);
+                }
+                $this->driver->reInitialize();
+            }
+            else {
+                $this->driver = new CollectorAutoInputter;
+                $this->driver->initialize($this->inputSpec);
+                $this->driver->save();
+            }
+        }
     }
 }
