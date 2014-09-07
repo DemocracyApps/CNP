@@ -76,7 +76,7 @@ class StoriesController extends BaseController {
     	$collector = Collector::find(\Input::get('collector'));
     	if ( ! $collector ) throw new \Exception("Collector ".\Input::get('collector'). " not found.");
 
-        if ( ! $collector->validForInput()) throw new \Exception("Collector ".$collectorId . " not valid for input.");
+        if ( ! $collector->validForInput()) throw new \Exception("Collector ".\Input::get('collector') . " not valid for input.");
         $collector->initialize(\Input::all());
 
     	$inputType = $collector->getInputType();
