@@ -20,7 +20,7 @@ class Collector extends \Eloquent {
 	{
     	$collector = Collector::find($id);
         if (! $collector ) {
-            throw new Exception ("Collector specification " . $id . " not found.");
+            throw new \Exception ("Collector specification " . $id . " not found.");
         }
         $spec = json_minify($collector->specification);
         $spec = json_decode($spec, true);
