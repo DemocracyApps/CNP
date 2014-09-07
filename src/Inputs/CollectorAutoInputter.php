@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Entities\Eloquent;
+namespace DemocracyApps\CNP\Inputs;
 /**
  * This class is generated from an 'auto-interactive' input
  */

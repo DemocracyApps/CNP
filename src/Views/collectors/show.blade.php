@@ -27,10 +27,10 @@
 <br/>
 
 <div>
-  <h2>Collector Information</h2>
+  <h2>General Information</h2>
   <table>
     <tr>
-      <th>Name:</th>  <td>{{$collector->name}}</td>
+      <th>Specification Name:</th>  <td>{{$collector->name}}</td>
     </tr>
     <tr>
       <th>Scape:</th>  <td>{{$collector->scape}}</td>

@@ -2,18 +2,19 @@
 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Utility\Api as Api;
+use \DemocracyApps\CNP\Inputs\Collector as Collector;
 
 class CollectorsController extends ApiController {
 	protected $collector;
 
-	function __construct (DAEntity\Eloquent\Collector $collector) 
+	function __construct (Collector $collector) 
 	{
 		$this->collector 			= $collector;
 	}
 
 	public function destroy ($id)
 	{
-		$collector = DAEntity\Eloquent\Collector::find($id);
+		$collector = Collector::find($id);
 		$scape = $collector->scape;
 		$collector->delete();
 		return \Redirect::to('/scapes/'.$scape);
@@ -21,7 +22,7 @@ class CollectorsController extends ApiController {
 
 	public function show ($id)
 	{
-		$collector = DAEntity\Eloquent\Collector::find($id);
+		$collector = Collector::find($id);
 		return \View::make('collectors.show', array('collector' => $collector));
 	}
 
@@ -45,7 +46,7 @@ class CollectorsController extends ApiController {
             }
         }
 
-		$collector = DAEntity\Eloquent\Collector::find($id);
+		$collector = Collector::find($id);
 		$collector->name = $data['name'];
 		if (\Input::has('description')) $collector->description = $data['description'];
         \Log::info("Test collector");        
@@ -67,7 +68,7 @@ class CollectorsController extends ApiController {
 
 	public function edit($id) 
 	{
-		$collector = DAEntity\Eloquent\Collector::find($id);
+		$collector = Collector::find($id);
     	return \View::make('collectors.edit', array('scape' => \Input::get('scape'), 
     												'collector' => $collector,
     												'fileerror' => null));

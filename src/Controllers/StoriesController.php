@@ -2,6 +2,8 @@
 namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
+use \DemocracyApps\CNP\Inputs\Collector as Collector;
+use \DemocracyApps\CNP\Inputs\CollectorAutoInputter as CollectorAutoInputter;
 
 class StoriesController extends BaseController {
     protected $story;
@@ -74,9 +76,9 @@ class StoriesController extends BaseController {
 
 		$specId = \Input::get('spec')?\Input::get('spec'):'default';
 
-    	$collector = DAEntity\Eloquent\Collector::find($specId);
+    	$collector = Collector::find($specId);
     	if ( ! $collector ) return "StoriesController.create - no such spec";
-        $spec = DAEntity\Eloquent\Collector::getFullSpecification($specId);
+        $spec = Collector::getFullSpecification($specId);
     	if ( ! $spec ) return "StoriesController.create - no such spec";
     	if ( ! array_key_exists('input', $spec)) return "StoriesController.create - no input spec";
     	$inputSpec = $spec['input'];
@@ -96,18 +98,18 @@ class StoriesController extends BaseController {
     	}
 	}
 
-	protected static function buildAutoInteractiveInput(DAEntity\Eloquent\Collector $collector, $inputSpec)
+	protected static function buildAutoInteractiveInput(Collector $collector, $inputSpec)
 	{
         $driverId = \Input::get('driver');
         if ($driverId){
-            $driver = DAEntity\Eloquent\CollectorAutoInputter::find($driverId);
+            $driver = CollectorAutoInputter::find($driverId);
             if ( ! $driver) {
                 dd("No damn driver " . $driverId);
             }
             $driver->reInitialize();
         }
         else {
-            $driver = new DAEntity\Eloquent\CollectorAutoInputter;
+            $driver = new CollectorAutoInputter;
             $driver->initialize($inputSpec);
             $driver->save();
         }
@@ -126,8 +128,8 @@ class StoriesController extends BaseController {
 		}
         $input = \Input::all();
 		$spec = \Input::get('spec');
-        $collector = DAEntity\Eloquent\Collector::find($spec);
-        $spec = DAEntity\Eloquent\Collector::getFullSpecification($spec);
+        $collector = Collector::find($spec);
+        $spec = Collector::getFullSpecification($spec);
         if ( ! $spec ) return "StoriesController.create - no such spec";
         $inputSpec = $spec['input'];
         $inputType = $inputSpec['inputType'];
@@ -291,7 +293,7 @@ class StoriesController extends BaseController {
 				}
                 $data = array();
                 $data['title'] = $title;
-                $data['content'] = null;
+                $data['summary'] = null;
                 $data['elementsIn'] = $elementsIn;
                 $this->processInput($data, $elementsSpec, $relationsSpec, $scape);
 			}

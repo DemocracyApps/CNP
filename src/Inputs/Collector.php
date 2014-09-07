@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Entities\Eloquent;
+namespace DemocracyApps\CNP\Inputs;
 
 class Collector extends \Eloquent {
 

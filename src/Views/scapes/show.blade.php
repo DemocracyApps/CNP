@@ -6,10 +6,10 @@
 {{ link_to("/account", "Return to Account Page") }}
 
 <div>
-  <h2>Scape Information</h2>
+  <h2>General Information</h2>
   <table>
     <tr>
-      <th>Name:</th>  <td>{{$scape->getName()}}</td>
+      <th>Scape Name:</th>  <td>{{$scape->getName()}}</td>
     </tr>
     <tr>
       <th>Access:</th>  <td>{{$scape->getProperty('access')}}</td>
@@ -21,7 +21,7 @@
 </div>
 
 <div>
-  <h2>Collectors</h2>
+  <h2>Collector Specifications</h2>
   <table>
     <tr>
       <th> Name </th>

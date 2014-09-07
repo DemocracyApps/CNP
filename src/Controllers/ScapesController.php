@@ -2,6 +2,7 @@
 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Utility\Api as Api;
+use \DemocracyApps\CNP\Inputs\Collector as Collector;
 
 class ScapesController extends ApiController {
 	protected $scape;
@@ -27,7 +28,7 @@ class ScapesController extends ApiController {
 	public function show ($id)
 	{
 		$scape = DAEntity\Scape::find($id);
-		$collectors = DAEntity\Eloquent\Collector::where('scape', '=', $id)->get();
+		$collectors = Collector::where('scape', '=', $id)->get();
 		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
 		if ($isAPI) {
 			if (!$scape) {
