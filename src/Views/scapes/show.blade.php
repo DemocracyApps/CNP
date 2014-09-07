@@ -38,7 +38,7 @@
         <td> {{ $collector->id }} </td>
         <td> {{ $collector->contains }}</td>
         <td> {{ $collector->dependson }}</td>
-        <td> <a href="/stories/create?spec={{$collector->id}}">Use</a></td>
+        <td> <a href="/stories/create?collector={{$collector->id}}">Use</a></td>
       </tr>    
     @endforeach
   </table>

@@ -57,7 +57,7 @@
 ?>
 {{ Form::open(['route' => 'stories.store']) }}
    <input type="hidden" name="driver" value="{{$driver->id}}"/>
-   <input type="hidden" name="spec" value="{{$spec->id}}"/>
+   <input type="hidden" name="collector" value="{{$collector->id}}"/>
    <?php
       $done = false;
       $count = 0;

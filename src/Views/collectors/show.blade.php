@@ -10,10 +10,9 @@
 {{ Form::close() }}
 
 <!-- Run Collector Button -->
-<?php  $insert = 'spec='.$collector->id ?>
 {{ Form::open(array('route' => array('stories.create'), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
-  <input type="hidden" name="spec" value="{{$collector->id}}"/>
+  <input type="hidden" name="collector" value="{{$collector->id}}"/>
   <button type="submit" href="{{ URL::route('stories.create') }}" class="btn btn-info btn-mini">Run</button>
 {{ Form::close() }}
 

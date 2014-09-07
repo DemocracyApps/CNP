@@ -73,24 +73,26 @@ class StoriesController extends BaseController {
 		}
 
 
-		$collectorId = \Input::get('spec')?\Input::get('spec'):'default';
+		$collectorId = \Input::get('collector');
+        if ( ! $collectorId ) {
+            return "No collector specified";
+        }
 
     	$collector = Collector::find($collectorId);
     	if ( ! $collector ) return "StoriesController.create - no such spec";
-        $spec = $collector->getFullSpecification($collectorId);
-    	if ( ! $spec ) return "StoriesController.create - no such spec";
+        $spec = $collector->getFullSpecification();
     	if ( ! array_key_exists('input', $spec)) return "StoriesController.create - no input spec";
     	$inputSpec = $spec['input'];
     	$inputType = $inputSpec['inputType'];
         \Log::info("Input type is " . $inputType);
     	if ($inputType == 'csv-simple') {
-	    	return \View::make('stories.csvUpload', array('spec' => $collector));
+	    	return \View::make('stories.csvUpload', array('collector' => $collector));
     	}
     	elseif ($inputType == 'auto-interactive') {
     		$driver = self::buildAutoInteractiveInput($collector, $inputSpec);
             $driverId = null;
             if ($driver) $driverId = $driver->id;
-            return \View::make('stories.autoinput', array('spec' => $collector, 'driver' => $driver));
+            return \View::make('stories.autoinput', array('collector' => $collector, 'driver' => $driver));
     	}
     	else {
     		return "Unknown input type " . $inputType;
@@ -108,7 +110,7 @@ class StoriesController extends BaseController {
             return \Redirect::to('/login');			
 		}
         $input = \Input::all();
-		$spec = \Input::get('spec');
+		$spec = \Input::get('collector');
         $collector = Collector::find($spec);
         $spec = $collector->getFullSpecification($spec);
         if ( ! $spec ) return "StoriesController.create - no such spec";
@@ -130,7 +132,7 @@ class StoriesController extends BaseController {
                 return $view;
             }
             else {
-                return \View::make('stories.autoinput', array('spec' => $collector, 'driver' => $driver));
+                return \View::make('stories.autoinput', array('collector' => $collector, 'driver' => $driver));
             }
         }
         else {
