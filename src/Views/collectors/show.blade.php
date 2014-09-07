@@ -38,6 +38,12 @@
     <tr>
       <th>Description:</th>  <td>{{$collector->description}}</td
     </tr>
+    <tr>
+      <th>Contains:</th> <td>{{$collector->contains}}</td>
+    </tr>
+    <tr>
+      <th>Depends On:</th> <td>{{$collector->dependson}}</td>
+    </tr>
   </table>
 </div>
 

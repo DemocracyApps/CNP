@@ -20,6 +20,9 @@ class CreateCollectorsTable extends Migration {
 			$table->text('specification')->nullable();
 			$table->bigInteger('scape');
 			$table->foreign('scape')->references('id')->on('denizens');
+            $table->integer('dependson')->nullable();
+            $table->foreign('dependson')->references('id')->on('collectors');
+            $table->string('contains')->nullable();
 			$table->timestamps();
 		});
 	}

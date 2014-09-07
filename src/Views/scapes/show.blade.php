@@ -27,6 +27,8 @@
       <th> Name </th>
       <th> Description </th>
       <th> ID </th>
+      <th> Contains </th>
+      <th> Depends On</th>
       <th> Use Link </th>
     </tr>
     @foreach ($collectors as $collector)
@@ -34,6 +36,8 @@
         <th> {{ link_to("collectors/".$collector->id, $collector->name) }} </th>
         <td> {{ $collector->description }} </td>
         <td> {{ $collector->id }} </td>
+        <td> {{ $collector->contains }}</td>
+        <td> {{ $collector->dependson }}</td>
         <td> <a href="/stories/create?spec={{$collector->id}}">Use</a></td>
       </tr>    
     @endforeach

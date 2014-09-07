@@ -48,12 +48,12 @@ class CollectorsController extends ApiController {
 		$collector = DAEntity\Eloquent\Collector::find($id);
 		$collector->name = $data['name'];
 		if (\Input::has('description')) $collector->description = $data['description'];
-		if (\Input::hasFile('specification')) {
-			$file = \Input::file('specification');
-		    $collector->specification = \File::get($file->getRealPath());
-			$str = json_minify($collector->specification);
-			$cfig = json_decode($str, true);
-			if ( ! $cfig) {
+        \Log::info("Test collector");        
+		if (\Input::hasFile('collector')) {
+            \Log::info("Yes, we have a collector");
+            $ok = $this->loadCollectorCsvSpecification($collector, \Input::file('collector'));
+            \Log::info("And OK = " . $ok);
+			if ( ! $ok) {
 				return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
 			}
 		}
@@ -78,6 +78,41 @@ class CollectorsController extends ApiController {
     	\Session::put('CNP_RETURN_URL', \Request::server('HTTP_REFERER'));
     	return \View::make('collectors.create', array('scape' => \Input::get('scape')));
 	}
+
+    private function loadCollectorCsvSpecification($collector, $file)
+    {
+        $collector->specification = \File::get($file->getRealPath());
+        $str = json_minify($collector->specification);
+        $cfig = json_decode($str, true);
+        if ( ! $cfig) {
+            return false;
+        }
+        $collector->contains = null;
+        if (array_key_exists('elements', $cfig)) {
+            if ($collector->contains)
+                $collector->contains .= ', elements';
+            else
+                $collector->contains .= 'elements';
+        }
+        if (array_key_exists('relations', $cfig)) {
+            if ($collector->contains)
+                $collector->contains .= ', relations';
+            else
+                $collector->contains .= 'relations';
+        }
+        if (array_key_exists('input', $cfig)) {
+            if ($collector->contains)
+                $collector->contains .= ', input';
+            else
+                $collector->contains .= 'input';
+        }
+        $collector->dependson = null;
+        if (array_key_exists('baseSpecificationId', $cfig))
+            $collector->dependson = $cfig['baseSpecificationId'];
+        else
+            $collector->dependson = null;
+        return true;
+    }
 
 	public function store()
 	{
@@ -107,18 +142,12 @@ class CollectorsController extends ApiController {
         if ($data['description']) $this->collector->description = $data['description'];
 
 		// Now load in the file
-		$file = \Input::file('collector');
-		if ($file) {
-			$nm = $file->getClientOriginalName();
-			//$file->move(public_path().'/collectors', 'test.json');
-		    $this->collector->specification = \File::get($file->getRealPath());
-			$str = json_minify($this->collector->specification);
-			$cfig = json_decode($str, true);
-			if ( ! $cfig) {
-				return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
-			}
-		}
-
+        if (\Input::hasFile('collector')) {
+            $ok = $this->loadCollectorCsvSpecification($this->collector, \Input::file('collector'));
+            if ( ! $ok) {
+                return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
+            }
+        }
         $this->collector->save();
 
         if ($isAPI) {

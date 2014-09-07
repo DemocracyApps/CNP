@@ -17,8 +17,8 @@
       <br/>
    </div>
    <div class="form-group">
-      {{ Form::label('specification', 'Replace Specification')}}
-      {{ Form::file('specification')}}
+      {{ Form::label('collector', 'Replace Specification')}}
+      {{ Form::file('collector')}}
       <br/>
       <span class="error">{{ $errors->first('fileerror') }}</span>
    </div>
