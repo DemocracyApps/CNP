@@ -5,7 +5,7 @@ use \DemocracyApps\CNP\Entities as DAEntity;
 class DenizenGenerator 
 {
     static $fcts = array(
-        'LTag' => '\DemocracyApps\CNP\Inputs\DenizenGenerator::tagGenerator'
+        'Tag' => '\DemocracyApps\CNP\Inputs\DenizenGenerator::tagGenerator'
         );
 
     /**
@@ -46,8 +46,35 @@ class DenizenGenerator
 
     static private function tagGenerator($elementType, $content, $properties)
     {
+        $createdDenizens = null;
+        // We want to create separate tags for each word in the content;
+        if ($content) {
+            $tags = null;
+            $s = trim(preg_replace("([, ]+)", ' ', $content));
+            if ($s) $tags = explode(" ", $s);
+            if ($tags && count($tags) > 0) {
+                $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
+                if (!class_exists($className)) throw new \Exception("Cannot find denizen class " . $className);
+                $createdDenizens = array();
+                foreach ($tags as $tag) {
+                    $tag = strtolower($tag);
+                    $d = DAEntity\Tag::findByName($tag);
+                    if ( ! $d) {
+                        $d = new $className($tag, \Auth::user()->getId());
+                        $d->content = $tag;
+                        if ($properties) {
+                            foreach ($properties as $propName => $propValue) {
+                                $d->setProperty($propName, $propValue);
+                            }
+                        }
+                    }
+                    $createdDenizens[] = $d;
+                }
+
+            }
+        }
         // Must return an array of Denizens
-        dd("Special processing of " . $elementType);
+        return $createdDenizens;
     }
 
 }
