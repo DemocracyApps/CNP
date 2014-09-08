@@ -31,20 +31,19 @@ class CollectorAutoInputter extends \Eloquent {
             $item['prev'] = $item['next'] = null;
             $item['pagebreak'] = false;
 
-            if (array_key_exists('tag', $item)) {
-                $ptag = null;
-                $tag = $item['tag'];
+            if (array_key_exists('id', $item)) {
+                $id = $item['id'];
 
                 // If this is the first real item, set start to it.
-                if ($this->runDriver['start'] == null)   $this->runDriver['start']   = $tag;
+                if ($this->runDriver['start'] == null)   $this->runDriver['start']   = $id;
 
                 if ($previous) {
-                    $previous['next'] = $tag;
-                    $item['prev'] = $previous['tag'];
+                    $previous['next'] = $id;
+                    $item['prev'] = $previous['id'];
                 }
 
-                $this->runDriver['map'][$tag] = $item;
-                $previous = &$this->runDriver['map'][$tag];
+                $this->runDriver['map'][$id] = $item;
+                $previous = &$this->runDriver['map'][$id];
 
                 $item['value'] = null;
 

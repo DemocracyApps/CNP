@@ -3,16 +3,16 @@
     "version": "0.01",
     "elements": [
         {
-            "tag":"Story",
+            "id":"Story",
             "required": false,
             "type":"StoryElement"
         },
         {
-            "tag":"Topic",
+            "id":"Topic",
             "type":"Tag"
         },
         {
-            "tag":"Organization",
+            "id":"Organization",
             "type":"StoryElement"
         }
     ],

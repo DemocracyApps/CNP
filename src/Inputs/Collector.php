@@ -155,16 +155,16 @@ class Collector extends \Eloquent {
 
         foreach ($map as $item) {
             if (array_key_exists('use', $item)) {
-                $tag = $item['tag'];
+                $id = $item['id'];
                 $use = $item['use'];
                 if ($use == 'title') {
-                    $title = $values[$tag]['value'];
+                    $title = $values[$id]['value'];
                 }
                 elseif ($use == 'summary') {
-                    $summary = $values[$tag]['value'];
+                    $summary = $values[$id]['value'];
                 }
                 else {
-                    $elementsIn[$tag] = $values[$tag]['value'];
+                    $elementsIn[$id] = $values[$id]['value'];
                 }
             }
         }
@@ -227,18 +227,18 @@ class Collector extends \Eloquent {
 
         // So now we create output denizens
         foreach ($elementsSpec as $espec) {
-            $tag = $espec['tag'];
-            if (array_key_exists($tag, $elementsIn)) {
+            $id = $espec['id'];
+            if (array_key_exists($id, $elementsIn)) {
                 $className = '\\DemocracyApps\\CNP\Entities\\'.$espec['type'];
                 if (!class_exists($className)) throw new \Exception("No class " . $className);
-                $denizen = new $className($tag, \Auth::user()->getId());
+                $denizen = new $className($id, \Auth::user()->getId());
                 $denizen->scapeId = $scape;
-                $denizen->content = $elementsIn[$tag];
-                $denizens[$tag] = $denizen;                     
+                $denizen->content = $elementsIn[$id];
+                $denizens[$id] = $denizen;                     
             }
             else {
                 if (array_key_exists('required', $espec) && $espec['required'] == true) {
-                    return "Required element " . $tag . " doesn't exist on datum ". $count;
+                    return "Required element " . $id . " doesn't exist on datum ". $count;
                 }
             }
         }

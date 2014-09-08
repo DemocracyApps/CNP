@@ -1,0 +1,9 @@
+ToDo.txt
+
+1. Change 'tag' in specifications to 'id'.
+2. Change 'type' to 'inputType'
+3. Figure out if 'element' is just class or also match. Needs to be clarified and 
+   probably separated.
+4. Add a way to specify conversionType or something so that Tag goes to multiple tags. 
+   Or maybe make it a function of the Element type
+   

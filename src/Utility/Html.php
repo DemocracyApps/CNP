@@ -64,12 +64,12 @@ class Html {
     static function createInput($desc)
     {
         self::startElement("div", array('class' => 'form-group'));
-        self::createElement("label", $desc['prompt'], array('for' => $desc['tag']));
+        self::createElement("label", $desc['prompt'], array('for' => $desc['id']));
         if ($desc['type'] == 'text') {
-         self::createElement('input', null, array('class' => 'form-control', 'name' => $desc['tag'], 'type'=>'text'));
+         self::createElement('input', null, array('class' => 'form-control', 'name' => $desc['id'], 'type'=>'text'));
         }
         elseif ($desc['type'] == 'textarea') {
-         self::createElement('textarea', null, array('class' => 'form-control', 'name' => $desc['tag'],
+         self::createElement('textarea', null, array('class' => 'form-control', 'name' => $desc['id'],
                        'cols'=>'50', 'rows' => '10'));
         }
         self::endElement("div");

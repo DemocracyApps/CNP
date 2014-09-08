@@ -21,14 +21,14 @@
     	 */
 	    "map": [ // just an array of inputs
             {
-    			"tag":"Story",
+    			"id":"Story",
     			"use":"element",
     			"element":"Story",
     			"type":"textarea",
     			"prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community."
     		},
             {
-                "tag":"summary",
+                "id":"summary",
                 "use":"summary",
                 "type":"textarea",
                 "prompt":"Write a summary for this story"
@@ -37,20 +37,20 @@
     			"type":"pagebreak"
     		},
     		{
-    			"tag":"title",
+    			"id":"title",
     			"use":"title",
     			"type":"text",
     			"prompt":"Give your story a title"
     		},
     		{
-    			"tag":"Topic",
+    			"id":"Topic",
     			"use":"element",
     			"element": "Topic",
     			"type":"text",
     			"prompt":"What is this story about? Separate topics with commas."
     		},
     		{
-    			"tag":"Organization",
+    			"id":"Organization",
     			"use":"element",
     			"element": "Organization",
     			"type":"text",
