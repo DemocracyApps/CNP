@@ -243,7 +243,7 @@ class Collector extends \Eloquent {
             $id = $espec['id'];
             if (array_key_exists($id, $elementsIn)) {
                 $createdDenizens = DenizenGenerator::generateDenizen($espec['type'], $id, $elementsIn[$id], null, $scape);
-                $denizens[$id] = $createdDenizens;                     
+                if ($createdDenizens) $denizens[$id] = $createdDenizens; // Can happen, e.g., tags
             }
             else {
                 if (array_key_exists('required', $espec) && $espec['required'] == true) {
