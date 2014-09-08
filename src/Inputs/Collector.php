@@ -154,7 +154,8 @@ class Collector extends \Eloquent {
         $summary = null;
 
         foreach ($map as $item) {
-            if (array_key_exists('use', $item)) {
+            // If no id, then it wasn't used to get input (e.g., page breaks).
+            if (array_key_exists('use', $item) && array_key_exists('id', $item)) {
                 $id = $item['id'];
                 $use = $item['use'];
                 if ($use == 'title') {

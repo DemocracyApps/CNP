@@ -65,10 +65,10 @@ class Html {
     {
         self::startElement("div", array('class' => 'form-group'));
         self::createElement("label", $desc['prompt'], array('for' => $desc['id']));
-        if ($desc['type'] == 'text') {
+        if ($desc['inputType'] == 'text') {
          self::createElement('input', null, array('class' => 'form-control', 'name' => $desc['id'], 'type'=>'text'));
         }
-        elseif ($desc['type'] == 'textarea') {
+        elseif ($desc['inputType'] == 'textarea') {
          self::createElement('textarea', null, array('class' => 'form-control', 'name' => $desc['id'],
                        'cols'=>'50', 'rows' => '10'));
         }

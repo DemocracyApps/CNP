@@ -51,7 +51,7 @@ class CollectorAutoInputter extends \Eloquent {
                 //    $item['pagebreak'] = true;
             }
             else {
-                if ($item['type'] == 'pagebreak') {
+                if ($item['use'] == 'pagebreak') {
                     if ($previous) $previous['pagebreak'] = true;
                 }
             }

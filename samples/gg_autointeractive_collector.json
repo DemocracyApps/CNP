@@ -24,36 +24,36 @@
     			"id":"Story",
     			"use":"element",
     			"element":"Story",
-    			"type":"textarea",
+    			"inputType":"textarea",
     			"prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community."
     		},
             {
                 "id":"summary",
                 "use":"summary",
-                "type":"textarea",
+                "inputType":"textarea",
                 "prompt":"Write a summary for this story"
             },
     		{
-    			"type":"pagebreak"
+    			"use":"pagebreak"
     		},
     		{
     			"id":"title",
     			"use":"title",
-    			"type":"text",
+    			"inputType":"text",
     			"prompt":"Give your story a title"
     		},
     		{
     			"id":"Topic",
     			"use":"element",
     			"element": "Topic",
-    			"type":"text",
+    			"inputType":"text",
     			"prompt":"What is this story about? Separate topics with commas."
     		},
     		{
     			"id":"Organization",
     			"use":"element",
     			"element": "Organization",
-    			"type":"text",
+    			"inputType":"text",
     			"prompt":"Name the organization or group most involved in what happened."
     		}
 	   ]
