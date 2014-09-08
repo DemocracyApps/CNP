@@ -142,16 +142,19 @@ class Collector extends \Eloquent {
             // If no id, then it wasn't used to get input (e.g., page breaks).
             if (array_key_exists('use', $item) && array_key_exists('id', $item)) {
                 $id = $item['id'];
-                $use = $item['use'];
-                if ($use == 'title') {
-                    $title = $values[$id]['value'];
-                }
-                elseif ($use == 'summary') {
-                    $summary = $values[$id]['value'];
-                }
-                else {
-                    $elementId = $item['elementId'];
-                    $elementsIn[$elementId] = $values[$id]['value'];
+                if (array_key_exists($id, $values) // May never have had any input
+                    && array_key_exists('value', $values[$id])) {
+                    $use = $item['use'];
+                    if ($use == 'title') {
+                        $title = $values[$id]['value'];
+                    }
+                    elseif ($use == 'summary') {
+                        $summary = $values[$id]['value'];
+                    }
+                    else {
+                        $elementId = $item['elementId'];
+                        $elementsIn[$elementId] = $values[$id]['value'];
+                    }
                 }
             }
         }

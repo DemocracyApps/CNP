@@ -26,21 +26,25 @@ class CollectorAutoInputter extends \Eloquent {
         $this->runDriver['map'] = array();
         $previous = null;
 
+        $breakSequence = false;
         for ($i = 0, $size = count($inputSpec['map']); $i<$size; ++$i) {
             $item = $inputSpec['map'][$i];
-            $item['prev'] = $item['next'] = null;
+            $item['prev'] = null;
+            if (!array_key_exists('next', $item)) $item['next'] = null;
             $item['pagebreak'] = false;
 
             if (array_key_exists('id', $item)) {
                 $id = $item['id'];
-
                 // If this is the first real item, set start to it.
                 if ($this->runDriver['start'] == null)   $this->runDriver['start']   = $id;
 
-                if ($previous) {
-                    $previous['next'] = $id;
+                if ($previous && ! $breakSequence) { // A sequence element breaks connection
+                    if ( ! $previous['next'] ) {
+                        $previous['next'] = $id; // don't override
+                    }
                     $item['prev'] = $previous['id'];
                 }
+                $breakSequence = false;
 
                 $this->runDriver['map'][$id] = $item;
                 $previous = &$this->runDriver['map'][$id];
@@ -53,6 +57,12 @@ class CollectorAutoInputter extends \Eloquent {
             else {
                 if ($item['use'] == 'pagebreak') {
                     if ($previous) $previous['pagebreak'] = true;
+                }
+                elseif ($item['use'] == 'sequence') {
+                    if ($this->runDriver['start'] != null) { // We just ignore sequence elements at the beginning.
+                        $breakSequence = true; // This will suppress next/prev calculation above
+                    }
+
                 }
             }
         }

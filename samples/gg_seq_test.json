@@ -1,0 +1,50 @@
+{
+    "name": "Global Giving Auto-Interactive Input Collector",
+    "version": "0.01",
+    "baseSpecificationId": 1,
+    "input": {
+	    "inputType": "auto-interactive",
+	    "map": [ // just an array of inputs
+            {
+    			"id":"1orso",
+    			"use":"element",
+    			"elementId":"Story",
+    			"inputType":"textarea",
+    			"prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community."
+    		},
+            {
+                "id":"2",
+                "use":"summary",
+                "inputType":"textarea",
+                "prompt":"Write a summary for this story"
+            },
+    		{
+    			"use":"pagebreak"
+    		},
+    		{
+    			"id":"3",
+    			"use":"title",
+    			"inputType":"text",
+    			"prompt":"Give your story a title"
+    		},
+    		{
+    			"id":"4",
+    			"use":"element",
+    			"elementId": "Topic",
+    			"inputType":"text",
+    			"prompt":"What is this story about?",
+                "next":"anythingIwant"
+    		},
+            {
+                "use":"sequence"
+            },
+    		{
+    			"id":"anythingIwant",
+    			"use":"element",
+    			"elementId": "Organization",
+    			"inputType":"text",
+    			"prompt":"Name the organization or group most involved in what happened."
+    		}
+	   ]
+    }
+}
