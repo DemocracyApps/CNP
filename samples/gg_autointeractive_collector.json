@@ -20,6 +20,8 @@
     	 * automatically generate a page break.
          * 
          * Note that these need IDs, but it doesn't matter what they are as long as they're unique within this file.
+         * Actually, not clear that we need them here at all - they could be auto-generated during a session, but we'll
+         * wait to decide that until we understand better how to do free input.
     	 */
 	    "map": [ // just an array of inputs
             {
