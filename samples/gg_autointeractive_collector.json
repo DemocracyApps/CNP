@@ -51,7 +51,7 @@
     			"use":"element",
     			"elementId": "Topic",
     			"inputType":"text",
-    			"prompt":"What is this story about? Separate topics with commas."
+    			"prompt":"What is this story about?"
     		},
     		{
     			"id":"anythingIwant",
