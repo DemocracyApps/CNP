@@ -18,17 +18,19 @@
     	 * Paging occurs in 2 ways. First is simple to insert a pagebreak element. The second is to do any kind
     	 * of computed next link, in which case we can't know what comes next until the user answers. That will also
     	 * automatically generate a page break.
+         * 
+         * Note that these need IDs, but it doesn't matter what they are as long as they're unique within this file.
     	 */
 	    "map": [ // just an array of inputs
             {
-    			"id":"Story",
+    			"id":"1orso",
     			"use":"element",
-    			"element":"Story",
+    			"elementId":"Story",
     			"inputType":"textarea",
     			"prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community."
     		},
             {
-                "id":"summary",
+                "id":"2",
                 "use":"summary",
                 "inputType":"textarea",
                 "prompt":"Write a summary for this story"
@@ -37,22 +39,22 @@
     			"use":"pagebreak"
     		},
     		{
-    			"id":"title",
+    			"id":"3",
     			"use":"title",
     			"inputType":"text",
     			"prompt":"Give your story a title"
     		},
     		{
-    			"id":"Topic",
+    			"id":"4",
     			"use":"element",
-    			"element": "Topic",
+    			"elementId": "Topic",
     			"inputType":"text",
     			"prompt":"What is this story about? Separate topics with commas."
     		},
     		{
-    			"id":"Organization",
+    			"id":"anythingIwant",
     			"use":"element",
-    			"element": "Organization",
+    			"elementId": "Organization",
     			"inputType":"text",
     			"prompt":"Name the organization or group most involved in what happened."
     		}

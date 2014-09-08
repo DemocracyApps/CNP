@@ -165,7 +165,8 @@ class Collector extends \Eloquent {
                     $summary = $values[$id]['value'];
                 }
                 else {
-                    $elementsIn[$id] = $values[$id]['value'];
+                    $elementId = $item['elementId'];
+                    $elementsIn[$elementId] = $values[$id]['value'];
                 }
             }
         }
@@ -206,7 +207,7 @@ class Collector extends \Eloquent {
                         $title = $line[$column['column']];
                     }
                     else {
-                        $elementsIn[$column['element']] = $line[$column['column']];
+                        $elementsIn[$column['elementId']] = $line[$column['column']];
                     }
                 }
                 $data = array();

@@ -15,19 +15,19 @@
 	    		{
 	    			"column": 2,
 	    			"use":"element",
-	    			"element": "Story",
+	    			"elementId": "Story",
 	    			"columnType": "text"
 	    		},
 	    		{
 	    			"column": 5,
 	    			"use":"element",
-	    			"element": "Topic",
+	    			"elementId": "Topic",
 	    			"columnType": "text"
 	    		},
 	    		{
 	    			"column": 4,
 	    			"use":"element",
-	    			"element": "Organization",
+	    			"elementId": "Organization",
 	    			"columnType": "text"
 	    		}
 	    	]
