@@ -12,6 +12,10 @@ use \DemocracyApps\CNP\Entities as DAEntity;
 
 Route::get('/test', function()
 {
+    $s = ",  ,  a sa, ls,, l,";
+    $s = trim(preg_replace("([, ]+)", ' ', $s));
+    $s = explode(" ", $s);
+    dd($s);
     return View::make('test');
 });
 
