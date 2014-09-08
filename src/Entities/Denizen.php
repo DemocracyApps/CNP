@@ -87,7 +87,7 @@ class Denizen
         }
         else {
             DB::table(self::$tableName)
-                ->where('id',$id)
+                ->where('id',$this->id)
                 ->update(
                     array(
                         'name' => $this->name,
