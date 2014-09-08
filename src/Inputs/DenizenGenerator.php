@@ -34,8 +34,10 @@ class DenizenGenerator
             }
             $createdDenizens = array($d);
         }
-        foreach ($createdDenizens as $d) {
-            $d->scapeId = $scapeId;
+        if ($createdDenizens) {
+            foreach ($createdDenizens as $d) {
+                $d->scapeId = $scapeId;
+            }
         }
         return $createdDenizens;
     }
