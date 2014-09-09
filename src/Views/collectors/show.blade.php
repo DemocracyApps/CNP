@@ -6,20 +6,20 @@
 <!-- Edit Collector Button -->
 {{ Form::open(array('route' => array('collectors.edit', $collector->id), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
-  <button type="submit" href="{{ URL::route('collectors.edit', $collector->id) }}" class="btn btn-info btn-mini">Edit</button>
+  <button type="submit" class="btn btn-info btn-mini">Edit</button>
 {{ Form::close() }}
 
 <!-- Run Collector Button -->
 {{ Form::open(array('route' => array('stories.create'), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
   <input type="hidden" name="collector" value="{{$collector->id}}"/>
-  <button type="submit" href="{{ URL::route('stories.create') }}" class="btn btn-info btn-mini">Run</button>
+  <button type="submit" class="btn btn-info btn-mini">Run</button>
 {{ Form::close() }}
 
 <!-- Delete Collector Button -->
 {{ Form::open(array('route' => array('collectors.destroy', $collector->id), 'method' => 'delete',
                                             'style' => 'display:inline-block')) }}
-  <button type="submit" href="{{ URL::route('collectors.destroy', $collector->id) }}" class="btn btn-danger btn-mini">Delete</button>
+  <button type="submit" class="btn btn-danger btn-mini">Delete</button>
 {{ Form::close() }}
 
 {{ link_to("scapes/".$collector->scape, "Return to Scape Page") }}
