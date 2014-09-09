@@ -19,6 +19,61 @@ Route::get('/test', function()
     return View::make('test');
 });
 
+Route::get('/stories/export', array('as' => 'stories.export', function() 
+    {
+        return View::make('stories.export', array('scape' => \Input::get('scape')));
+    }));
+
+Route::get('/kumu', array('as' => 'kumu', function ()
+{
+    $scape = \Input::get('scape');
+    $file= public_path(). "/downloads/kumu1.csv";
+    $fptr = fopen($file, "w");
+    $line = "Label,Type,Tags,Description,Attribution\n";
+    fwrite($fptr,$line);
+    $denizens = DAEntity\Denizen::allScapeDenizens($scape);
+    foreach($denizens as $d) {
+        $line = $d->id . "," . CNP::getDenizenTypeName($d->type) . ",,\"" . $d->name . "\",\n";
+        fwrite($fptr,$line);
+    }
+    $line = ",,,,\n";
+    fwrite($fptr,$line);
+    $line = ",,,,\n";
+    fwrite($fptr,$line);
+    $line = "From,To,Label,Type,Tags\n";
+    fwrite($fptr,$line);
+    $relations = DAEntity\Relation::getScapeRelations($scape);
+    $relationsTypesMap = DAEntity\Eloquent\RelationType::getRelationTypesMap();
+    foreach($relations as $d) {
+        $line = $d->fromId . "," . $d->toId . ",," . $relationsTypesMap[$d->relationId] . ",\n";
+        fwrite($fptr,$line);
+    }
+    fclose($fptr);
+    $headers = array(
+                     'Content-Type: text/csv',
+                    );
+    return Response::download($file, 'kumu1.csv', $headers);
+
+}));
+
+Route::get('/download', function ()
+{
+    $file= public_path(). "/downloads/export.csv";
+    $headers = array(
+                     'Content-Type: text/csv',
+                    );
+    return Response::download($file, 'export.csv', $headers);
+    // return Response::download($pathToFile, $name, $headers);
+/*
+header("Content-type: text/csv");
+header("Content-Disposition: attachment; filename=file.csv");
+header("Pragma: no-cache");
+header("Expires: 0");
+
+echo "record1,record2,record3\n";
+ */
+});
+
 Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
           " and method " .\Request::server('REQUEST_METHOD'));
 
