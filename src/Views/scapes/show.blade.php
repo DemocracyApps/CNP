@@ -3,6 +3,32 @@
 @section('content')
 <h1>{{ $scape->getName() }} </h1>
 
+<!-- Edit Scape Button -->
+{{ Form::open(array('route' => array('scapes.edit', $scape->id), 'method' => 'get', 
+                                            'style' => 'display:inline-block')) }}
+  <button type="submit" href="{{ URL::route('scapes.edit', $scape->id) }}" class="btn btn-info btn-mini">Edit Scape</button>
+{{ Form::close() }}
+
+<!-- Download Stories Button -->
+{{ Form::open(array('route' => array('stories.export'), 'method' => 'get', 
+                                            'style' => 'display:inline-block')) }}
+  <input type="hidden" name="scape" value="{{$scape->id}}"/>
+  <button type="submit" class="btn btn-info btn-mini">Export Stories</button>
+{{ Form::close() }}
+
+<!-- View Stories Button -->
+{{ Form::open(array('route' => array('stories.index'), 'method' => 'get', 
+                                            'style' => 'display:inline-block')) }}
+  <input type="hidden" name="scape" value="{{$scape->id}}"/>
+  <button type="submit" class="btn btn-info btn-mini">View Stories</button>
+{{ Form::close() }}
+
+<!-- Delete Scape Button -->
+{{ Form::open(array('route' => array('scapes.destroy', $scape->id), 'method' => 'delete',
+                                            'style' => 'display:inline-block')) }}
+  <button type="submit" class="btn btn-danger btn-mini">Delete Scape</button>
+{{ Form::close() }}
+
 {{ link_to("/account", "Return to Account Page") }}
 
 <div>
