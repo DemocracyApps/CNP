@@ -58,8 +58,8 @@ class CollectorAutoInputter extends \Eloquent {
                 if ($item['use'] == 'pagebreak') {
                     if ($previous) $previous['pagebreak'] = true;
                 }
-                elseif ($item['use'] == 'sequence') {
-                    if ($this->runDriver['start'] != null) { // We just ignore sequence elements at the beginning.
+                elseif ($item['use'] == 'break') {
+                    if ($this->runDriver['start'] != null) { // We just ignore stop elements at the beginning.
                         $breakSequence = true; // This will suppress next/prev calculation above
                     }
 

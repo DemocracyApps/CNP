@@ -36,7 +36,7 @@
                 "next":"anythingIwant"
     		},
             {
-                "use":"sequence"
+                "use":"break"
             },
     		{
     			"id":"anythingIwant",
