@@ -25,6 +25,23 @@ class Relation
         $instance->{'relationId'} = $data->relationid;
     }
 
+    public static function getScapeRelations ($scape)
+    {
+        $records = DB::table(self::$tableName)
+                    ->join('denizens', 'denizens.id', '=', 'relations.fromid')
+                    ->where('denizens.scape', '=', $scape)
+                    ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid')
+                    ->get();
+        $relations = array();
+
+        foreach ($records as $rec) {
+            $item = new static($rec->fromid, $rec->toid, $rec->relationid);
+            self::fill($item,$rec);
+            $relations[] = $item;
+        }
+        return $relations;
+    }
+
     public static function getRelatedDenizens ($fromId, $relationName) 
     {
         $relId = null;

@@ -108,4 +108,15 @@ class RelationType extends \Eloquent {
         $obj->allowedto         = $this->allowedfrom;
         $obj->inverse           = $this->id;
     }
+
+    public static function getRelationTypesMap ()
+    {
+        $map = array();
+        $list = self::all();
+        foreach ($list as $item) {
+            $map[$item->id] = $item->name;
+        }
+        return $map;
+    }
+
 }
