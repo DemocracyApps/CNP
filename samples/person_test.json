@@ -33,15 +33,11 @@
     			"elementId": "Topic",
     			"inputType":"text",
     			"prompt":"What is this story about?",
-                "next":"anythingIwant"
     		},
-            {
-                "use":"break"
-            },
     		{
-    			"id":"anythingIwant",
+    			"id":"personinput",
     			"use":"element",
-    			"elementId": "Organization",
+    			"elementId": "Person",
     			"inputType":"text",
     			"prompt":"Name the organization or group most involved in what happened."
     		}
