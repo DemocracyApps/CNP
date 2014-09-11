@@ -49,6 +49,99 @@ Elements provide a list of the denizens that will be created, relations specify 
 
 The input section specifies how to map data to fill the structure defined by elements and relations. Inputs can also specify ways to generate structures beyond those defined statically.
 
+The first thing the input section defines is the 'inputType'. Right now there are 2 types: csv-simple and auto-interactive. The csv-simple type just maps columns of a CSV file to the denizens in the elements section. Here is an example for the specification above (assuming that the ID of the spec above is 1):
+
+```
+{
+    "name": "Global Giving CSV Input Collector",
+    "version": "0.01",
+    "baseSpecificationId": 1,
+    "input": {
+        "inputType": "csv-simple",
+        "map": {
+            "skip": 1,
+            "columnMap": [
+                {
+                    "column": 3,
+                    "use":"title",
+                    "columnType": "text"
+                },
+                {
+                    "column": 2,
+                    "use":"element",
+                    "elementId": "Story",
+                    "columnType": "text"
+                },
+                {
+                    "column": 5,
+                    "use":"element",
+                    "elementId": "Topic",
+                    "columnType": "text"
+                },
+                {
+                    "column": 4,
+                    "use":"element",
+                    "elementId": "Organization",
+                    "columnType": "text"
+                }
+            ]
+        }
+    }
+}
+```
+The auto-interactive type is much more complex since it is designed to not only map input to the elements, but also to drive automatic creation of an interactive input form.
+
+Here is a simple example (again applicable to the base specification above, assuming it has ID=1) that just creates text areas and text fields to input the data that will be mapped to the elements:
+
+```
+{
+    "name": "Global Giving Auto-Interactive Input Collector",
+    "version": "0.01",
+    "baseSpecificationId": 1,
+    "input": {
+        "inputType": "auto-interactive",
+        "map": [ 
+            {
+                "id":"1orso",
+                "use":"element",
+                "elementId":"Story",
+                "inputType":"textarea",
+                "prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community."
+            },
+            {
+                "id":"2",
+                "use":"summary",
+                "inputType":"textarea",
+                "prompt":"Write a summary for this story"
+            },
+            {
+                "use":"pagebreak"
+            },
+            {
+                "id":"3",
+                "use":"title",
+                "inputType":"text",
+                "prompt":"Give your story a title"
+            },
+            {
+                "id":"4",
+                "use":"element",
+                "elementId": "Topic",
+                "inputType":"text",
+                "prompt":"What is this story about?"
+            },
+            {
+                "id":"anythingIwant",
+                "use":"element",
+                "elementId": "Organization",
+                "inputType":"text",
+                "prompt":"Name the organization or group most involved in what happened."
+            }
+       ]
+    }
+}
+
+```
 
 ## Collector Cycle
 
