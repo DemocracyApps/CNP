@@ -19,6 +19,27 @@ class Collector extends \Eloquent {
 	 */
 	protected $table = 'collectors';
 
+    public function initialize($input)
+    {
+        $this->checkReady();
+        // Right now initialization is only relevant for interactive input
+        if ($this->inputType == 'auto-interactive') {
+            $driverId = \Input::get('driver');
+            if ($driverId){
+                $this->driver = CollectorInputDriver::find($driverId);
+                if ( ! $this->driver) {
+                    dd("No damn driver " . $driverId);
+                }
+                $this->driver->reInitialize();
+            }
+            else {
+                $this->driver = new CollectorInputDriver;
+                $this->driver->initialize($this->inputSpec);
+                $this->driver->save();
+            }
+        }
+    }
+
     protected function resolveFullSpecification ()
     {
         $spec = json_minify($this->specification);
@@ -101,26 +122,6 @@ class Collector extends \Eloquent {
     public function getDriver()
     {
         return $this->driver;
-    }
-
-    public function initialize($input)
-    {
-        $this->checkReady();
-        if ($this->inputType == 'auto-interactive') {
-            $driverId = \Input::get('driver');
-            if ($driverId){
-                $this->driver = CollectorAutoInputter::find($driverId);
-                if ( ! $this->driver) {
-                    dd("No damn driver " . $driverId);
-                }
-                $this->driver->reInitialize();
-            }
-            else {
-                $this->driver = new CollectorAutoInputter;
-                $this->driver->initialize($this->inputSpec);
-                $this->driver->save();
-            }
-        }
     }
 
     public function inputDone()
@@ -224,7 +225,7 @@ class Collector extends \Eloquent {
             self::processCsvInput($input);
         }
         else if ($this->inputType == 'auto-interactive') {
-            $this->driver->extractSubmittedValues($input);
+            $this->driver->extractSubmittedValues($input); // Import latest batch of form data into driver
             if ($this->driver->inputDone()) {
                 $this->inputDone = true;
                 self::processAutoInput($input);
