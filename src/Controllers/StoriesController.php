@@ -3,7 +3,6 @@ namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Inputs\Collector as Collector;
-use \DemocracyApps\CNP\Inputs\CollectorAutoInputter as CollectorAutoInputter;
 
 class StoriesController extends BaseController {
     protected $story;
