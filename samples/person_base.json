@@ -20,7 +20,7 @@
     "relations": [
         {
             "type": "Causes",
-            "from": "Organization",
+            "from": "Person",
             "to":   "Story"
         },
         {

@@ -177,7 +177,7 @@ class Collector extends \Eloquent {
                 $id = $item['id'];
                 if (array_key_exists($id, $values)) {
                     $base = ucfirst($values[$id]['inputType']);
-                    $inputControllerClassName = '\DemocracyApps\CNP\Inputs\\'.$base."InputController";
+                    $inputControllerClassName = '\DemocracyApps\CNP\Inputs\\'.$base."InputHandler";
                     $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'getValue');
                     $val = $reflectionMethod->invoke(null, $values[$id]);
                     $use = $item['use'];
@@ -281,6 +281,7 @@ class Collector extends \Eloquent {
         foreach ($elementsSpec as $espec) {
             $id = $espec['id'];
             if (array_key_exists($id, $elementsIn)) {
+                \Log::info("Generate a " . $espec['type'] ." using " . json_encode($elementsIn[$id]));
                 $createdDenizens = DenizenGenerator::generateDenizen($espec['type'], $id, $elementsIn[$id], null, $scape);
                 if ($createdDenizens) $denizens[$id] = $createdDenizens; // Can happen, e.g., tags
             }

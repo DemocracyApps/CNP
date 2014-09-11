@@ -87,7 +87,7 @@ class CollectorInputDriver extends \Eloquent {
              * We get a processor associated with the particular input type.
              */
             $base = ucfirst($map[$item]['inputType']);
-            $inputControllerClassName = '\DemocracyApps\CNP\Inputs\\'.$base."InputController";
+            $inputControllerClassName = '\DemocracyApps\CNP\Inputs\\'.$base."InputHandler";
             $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'extractValue');
             $reflectionMethod->invokeArgs(null, array($item, $input, &$map[$item]));
         }

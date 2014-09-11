@@ -1,7 +1,7 @@
 <?php
 namespace DemocracyApps\CNP\Inputs;
 
-abstract class TextInputController extends InputController {
+abstract class TextInputHandler extends InputHandler {
 
     public static function extractValue($id, $input, &$inputMapItem)
     {

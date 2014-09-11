@@ -6,20 +6,11 @@
 	    "inputType": "auto-interactive",
 	    "map": [
             {
-    			"id":"1orso",
+    			"id":"1",
     			"use":"element",
     			"elementId":"Story",
     			"inputType":"textarea",
     			"prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community."
-    		},
-            {
-                "id":"2",
-                "use":"summary",
-                "inputType":"textarea",
-                "prompt":"Write a summary for this story"
-            },
-    		{
-    			"use":"pagebreak"
     		},
     		{
     			"id":"3",
@@ -32,7 +23,7 @@
     			"use":"element",
     			"elementId": "Topic",
     			"inputType":"text",
-    			"prompt":"What is this story about?",
+    			"prompt":"What is this story about?"
     		},
     		{
     			"id":"personinput",
@@ -40,7 +31,7 @@
     			"elementId": "Person",
     			"inputType":"text",
                 "generate":"automerge",
-    			"prompt":"Name the organization or group most involved in what happened."
+    			"prompt":"Name the person most involved in what happened."
     		}
 	   ]
     }
