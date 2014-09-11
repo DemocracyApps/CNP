@@ -39,6 +39,7 @@
     			"use":"element",
     			"elementId": "Person",
     			"inputType":"text",
+                "generate":"automerge",
     			"prompt":"Name the organization or group most involved in what happened."
     		}
 	   ]
