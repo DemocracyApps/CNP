@@ -142,6 +142,12 @@ Here is a simple example (again applicable to the base specification above, assu
 }
 
 ```
+I think we want to allow the input to optionally define an *anchor*. If no anchor is defined, a Story denizen will be created and all elements will be placed in an *is-part-of* relation to it. If an anchor *is* defined, then no Story denizen is created. Have to think about whether (a) the title and summary uses work and (b) whether we have create *is-part-of* relations [probably not, on the latter].
+## Collector
+
+The only thing required to create a collector is the ID of a collector spec (to actually use, the spec must resolve to a valid spec with all 3 sections). 
+
+A collector may optionally define a *referent* and *referentRelation*. If no *referent* is defined, the 
 
 ## Collector Cycle
 
