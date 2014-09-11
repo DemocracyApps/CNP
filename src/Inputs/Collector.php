@@ -4,6 +4,23 @@ use \DemocracyApps\CNP\Entities as DAEntity;
 
 class Collector extends \Eloquent {
     protected $fullSpecification = null;
+
+    //
+    // A story is commonly about something or is an extension of something
+    // and so a relationship should be created when the story is created.
+    // 
+    // Because a story may refer to more than one denizens, the referent is
+    // a DemocracyApps\CNP\Graph\DenizenSet.
+    protected $referent = null; 
+    protected $referentRelation = null; 
+
+
+    protected $anchor = null; /* not sure. Sometimes we don't want to create a story, just some
+                               * other elements. I think this is that, maybe an array of IDs.
+                               * if null, we just create a story?
+                               */
+
+    
     protected $inputSpec = null;
     protected $inputType = null;
     protected $elementsSpec = null;
@@ -18,6 +35,28 @@ class Collector extends \Eloquent {
 	 * @var string
 	 */
 	protected $table = 'collectors';
+
+    /**
+     * Load the full specification and initialize pointers to individual sections
+     */
+    protected function checkReady()
+    {
+        if ( ! $this->fullSpecification) {
+            $this->fullSpecification = $this->resolveFullSpecification();
+        }
+        if (array_key_exists('input', $this->fullSpecification)) {
+            $this->inputSpec = $this->fullSpecification['input'];
+            if (array_key_exists('inputType', $this->inputSpec)) {
+                $this->inputType = $this->inputSpec['inputType'];
+            }
+        }
+        if (array_key_exists('elements', $this->fullSpecification)) {
+            $this->elementsSpec = $this->fullSpecification['elements'];
+        }
+        if (array_key_exists('relations', $this->fullSpecification)) {
+            $this->relationsSpec = $this->fullSpecification['relations'];
+        }
+    }
 
     public function initialize($input)
     {
@@ -66,24 +105,17 @@ class Collector extends \Eloquent {
     	return $this->fullSpecification;
 	}
 
-    protected function checkReady()
+    public function setReferent ($d) 
     {
-        if ( ! $this->fullSpecification) {
-            $this->fullSpecification = $this->resolveFullSpecification();
-        }
-        if (array_key_exists('input', $this->fullSpecification)) {
-            $this->inputSpec = $this->fullSpecification['input'];
-            if (array_key_exists('inputType', $this->inputSpec)) {
-                $this->inputType = $this->inputSpec['inputType'];
-            }
-        }
-        if (array_key_exists('elements', $this->fullSpecification)) {
-            $this->elementsSpec = $this->fullSpecification['elements'];
-        }
-        if (array_key_exists('relations', $this->fullSpecification)) {
-            $this->relationsSpec = $this->fullSpecification['relations'];
-        }
+        $this->referent = new DenizenSet;
+        $this->referent->addDenizens(array($d));
     }
+
+    public function setReferentSet (\DemocracyApps\CNP\Graph\DenizenSet $set) 
+    {
+        $this->referent = $set;
+    }
+
     public function validForInput() // For now, just check input. Should do full validity check.
     {
         $this->checkReady();
@@ -143,18 +175,21 @@ class Collector extends \Eloquent {
             // If no id, then it wasn't used to get input (e.g., page breaks).
             if (array_key_exists('use', $item) && array_key_exists('id', $item)) {
                 $id = $item['id'];
-                if (array_key_exists($id, $values) // May never have had any input
-                    && array_key_exists('value', $values[$id])) {
+                if (array_key_exists($id, $values)) {
+                    $base = ucfirst($values[$id]['inputType']);
+                    $inputControllerClassName = '\DemocracyApps\CNP\Inputs\\'.$base."InputController";
+                    $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'getValue');
+                    $val = $reflectionMethod->invoke(null, $values[$id]);
                     $use = $item['use'];
                     if ($use == 'title') {
-                        $title = $values[$id]['value'];
+                        $title = $val;
                     }
                     elseif ($use == 'summary') {
-                        $summary = $values[$id]['value'];
+                        $summary = $val;
                     }
                     else {
                         $elementId = $item['elementId'];
-                        $elementsIn[$elementId] = $values[$id]['value'];
+                        $elementsIn[$elementId] = $val;
                     }
                 }
             }

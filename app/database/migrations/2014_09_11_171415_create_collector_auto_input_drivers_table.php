@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCollectorAutoInputsTable extends Migration {
+class CreateCollectorAutoInputDriversTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateCollectorAutoInputsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('collector_auto_inputs', function(Blueprint $table)
+		Schema::create('collector_auto_input_drivers', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->integer('userid');
@@ -29,7 +29,7 @@ class CreateCollectorAutoInputsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('collector_auto_inputs');
+		Schema::drop('collector_auto_input_drivers');
 	}
 
 }

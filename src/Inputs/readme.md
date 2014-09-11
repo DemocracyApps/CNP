@@ -143,15 +143,18 @@ Here is a simple example (again applicable to the base specification above, assu
 
 ```
 I think we want to allow the input to optionally define an *anchor*. If no anchor is defined, a Story denizen will be created and all elements will be placed in an *is-part-of* relation to it. If an anchor *is* defined, then no Story denizen is created. Have to think about whether (a) the title and summary uses work and (b) whether we have create *is-part-of* relations [probably not, on the latter].
+
+
 ## Collector
 
 The only thing required to create a collector is the ID of a collector spec (to actually use, the spec must resolve to a valid spec with all 3 sections). 
 
-A collector may optionally define a *referent* and *referentRelation*. If no *referent* is defined, the 
+A collector may optionally define a *referent* and *referentRelation*. If no *referent* is defined, the anchor element of the created story remains disconnected from anything but the internal elements of the story. If it is defined, the the anchor is connected to the referent via a referentRelation relation.
+
 
 ## Collector Cycle
 
-At a high level, the cycle is very simple. On create, we load a Collector using the specified ID and use it to set up the input form. On store, we pull the relevant inputs out of the form data into the Collector and then process the input to 
-generate the nodes and edges of the story. In the case of an auto-generated input form, we may cycle through the creating the input form and extracting data multiple times until all inputs have been received (i.e., if the auto-generated input form is more than a single page).
+At a high level, the cycle is very simple. On create, we load a Collector using the specified ID and use it to set up the input form. If input potentially requires multiple trips between client and server, we create structures to track progress. On store, we pull the relevant inputs out of the form data into the Collector and then process the input to generate the nodes and edges of the story. In the case of an auto-generated input form, we may cycle through the creating the input form and extracting data multiple times until all inputs have been received (i.e., if the auto-generated input form is more than a single page).
+
 
 

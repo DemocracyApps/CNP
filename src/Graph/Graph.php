@@ -9,6 +9,5 @@ class Graph
 	 */
 	public function getUserDenizens ($id, $type = null)
 	{
-		Denizen
 	}
 }

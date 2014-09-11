@@ -4,8 +4,8 @@ namespace DemocracyApps\CNP\Inputs;
  * This class is generated from an 'auto-interactive' input
  */
 class CollectorInputDriver extends \Eloquent {
-    protected $table = 'collector_auto_inputs';
-    protected $runDriver = null;
+    protected $table = 'collector_auto_input_drivers';
+    public $runDriver = null;
     private $done = false;
     private $pageBreak = false;
 
@@ -83,7 +83,13 @@ class CollectorInputDriver extends \Eloquent {
     {
         foreach ($this->runDriver['expecting'] as $item) {
             $map = &$this->runDriver['map'];
-            $map[$item]['value'] = $input[$item];
+            /*
+             * We get a processor associated with the particular input type.
+             */
+            $base = ucfirst($map[$item]['inputType']);
+            $inputControllerClassName = '\DemocracyApps\CNP\Inputs\\'.$base."InputController";
+            $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'extractValue');
+            $reflectionMethod->invokeArgs(null, array($item, $input, &$map[$item]));
         }
         $this->runDriver['expecting'] = array();
     }
