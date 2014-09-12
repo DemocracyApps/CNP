@@ -111,7 +111,7 @@ Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
 
 Route::get('/', function()
 {
-    return Redirect::to('/stories');
+    return Redirect::to('/account');
 });
 
 Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');

@@ -6,7 +6,7 @@
         {
             "id":"Story",
             "required": false,
-            "type":"StoryElement"
+            "type":"Story"
         },
         {
             "id":"Topic",

@@ -4,6 +4,7 @@
     "baseSpecificationId": 1,
     "input": {
 	    "inputType": "auto-interactive",
+        "anchor":"Story",
 	    "map": [
             {
     			"id":"1",

@@ -283,13 +283,24 @@ class Collector extends \Eloquent {
         $title = $data['title'];
         $summary = $data['summary'];
         $elementsIn = $data['elementsIn'];
+        $anchorId = null;
+        if (array_key_exists('anchor', $this->inputSpec)) {
+            $anchorId = $this->inputSpec['anchor'];
+        }
 
         // So now we create output denizens
         foreach ($elementsSpec as $espec) {
             $id = $espec['id'];
             if (array_key_exists($id, $elementsIn)) {
                 $createdDenizens = DenizenGenerator::generateDenizen($espec['type'], $id, $elementsIn[$id], null, $scape);
-                if ($createdDenizens) $denizens[$id] = $createdDenizens; // Can happen, e.g., tags
+                if ($anchorId == $espec['id']) {
+                    if (count($createdDenizens) > 1) throw new \Exception("Cannot set multiple denizens as anchors " . count($createdDenizens));
+                    if ($createdDenizens) {
+                        $createdDenizens[0]->name = $title;
+                        $createdDenizens[0]->content = $summary;
+                    }
+                }
+                if ($createdDenizens) $denizens[$id] = $createdDenizens;
             }
             else {
                 if (array_key_exists('required', $espec) && $espec['required'] == true) {
@@ -297,19 +308,24 @@ class Collector extends \Eloquent {
                 }
             }
         }
-        // Now save them all out, relate them, etc.
-        $story = new \DemocracyApps\CNP\Entities\Story($title, \Auth::user()->getId());
-        if ($summary) $story->content = $summary;
-        $story->scapeId = $scape;
-        $story->save();
+        if (! $anchorId ) {
+            $story = new \DemocracyApps\CNP\Entities\Story($title, \Auth::user()->getId());
+            if ($summary) $story->content = $summary;
+            $story->scapeId = $scape;
+            $story->save();
+        }
+
         foreach($denizens as $denizenList) {
             foreach ($denizenList as $denizen) {
                 $denizen->save();
-                $relations = DAEntity\Relation::createRelationPair($story->id, 
-                                                                   $denizen->id, "HasPart");
-                foreach ($relations as $relation) { $relation->save(); }
+                if ( ! $anchorId ) {
+                    $relations = DAEntity\Relation::createRelationPair($story->id, 
+                                                                       $denizen->id, "HasPart");
+                    foreach ($relations as $relation) { $relation->save(); }
+                }
             }
         }
+
         foreach ($relationsSpec as $relation) {
             $from = $relation['from'];
             $to   = $relation['to'];

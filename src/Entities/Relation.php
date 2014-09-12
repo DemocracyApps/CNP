@@ -45,8 +45,10 @@ class Relation
     public static function getRelatedDenizens ($fromId, $relationName) 
     {
         $relId = null;
-        $relRecord = DB::table(self::$relTypesTableName)->where('name',$relationName)->first();
-        if ($relRecord) $relId = $relRecord->{'id'};
+        if ($relationName) {
+            $relRecord = DB::table(self::$relTypesTableName)->where('name',$relationName)->first();
+            if ($relRecord) $relId = $relRecord->{'id'};
+        }
         if ($relId) {
             $d = DB::table(self::$tableName)->where('fromid', $fromId)->where('relationid', $relId)->get();
         }
