@@ -56,6 +56,17 @@ class Denizen
         $this->properties[$propName] = $propValue;
     }
 
+    public function hasProperty ($propName) 
+    {
+        $hasProperty = false;
+        if ($this->properties) {
+            if (array_key_exists($propName, $this->properties)) {
+                $hasProperty = true;
+            }
+        }
+        return $hasProperty;
+    }
+
     public function getProperty ($propName)
     {
         $propValue = null;

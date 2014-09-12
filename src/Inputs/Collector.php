@@ -106,6 +106,16 @@ class Collector extends \Eloquent {
     	return $this->fullSpecification;
 	}
 
+    public function getInputProperty ($propName) 
+    {
+        $value = null;
+        $this->checkReady();
+        if (array_key_exists($propName, $this->inputSpec) && $this->inputSpec[$propName]) {
+            $value = $this->inputSpec[$propName];
+        }
+        return $value;
+    }
+
     public function setReferentByReferentId ($id)
     {
         $this->referent = DenizenSet::find($id);
@@ -200,6 +210,14 @@ class Collector extends \Eloquent {
                     $inputControllerClassName = '\DemocracyApps\CNP\Inputs\\'.$base."InputHandler";
                     $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'getValue');
                     $val = $reflectionMethod->invoke(null, $values[$id]);
+                    if (array_key_exists('properties', $values[$id])) {
+                        \Log::info("We've got some values! They are " . json_encode($values[$id]['properties']));
+                        $properties = [];
+                        foreach ($values[$id]['properties'] as $prop) {
+                            $properties[$prop['name']] = $prop['value'];
+                        }
+                        $val['properties'] = $properties;
+                    }
                     $use = $item['use'];
                     if ($use == 'title') {
                         $title = $val['value'];
@@ -312,7 +330,10 @@ class Collector extends \Eloquent {
         foreach ($elementsSpec as $espec) {
             $id = $espec['id'];
             if (array_key_exists($id, $elementsIn)) {
-                $createdDenizens = DenizenGenerator::generateDenizen($espec['type'], $id, $elementsIn[$id], null, $scape);
+                $properties = null;
+                if (array_key_exists('properties', $elementsIn[$id])) $properties = $elementsIn[$id]['properties'];
+                $createdDenizens = DenizenGenerator::generateDenizen($espec['type'], $id, 
+                                                                     $elementsIn[$id], $properties, $scape);
                 if ($anchorId == $espec['id']) {
                     if (count($createdDenizens) > 1) throw new \Exception("Cannot set multiple denizens as anchors " . count($createdDenizens));
                     if ($createdDenizens) {

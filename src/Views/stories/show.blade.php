@@ -21,6 +21,33 @@
     </tr>
   </table>
 
+  <br/>
+
+  <!-- Decorators section start -->
+  <!-- See Laravel template section on how to pass parameters to an include. 
+   -->
+  @if ($story->hasProperty('branchDecorators'))
+    <?php
+        $decorators = explode(',', $story->getProperty('branchDecorators'));
+    ?>
+    <ul>
+    @foreach ($decorators as $decorator)
+      <?php
+      $launchText = null;
+        $collector = \DemocracyApps\CNP\Inputs\Collector::find($decorator);
+        if ($collector && $collector->validForInput()) {
+          $launchText = $collector->getInputProperty('referentLaunchText');
+        }
+        if ($launchText == null) $launchText = "Branch to Comment";
+      ?>
+      <li><a href="/stories/create?collector={{$decorator}}&referent={{$story->getId()}}">{{$launchText}}</a></li>
+    @endforeach
+    </ul>
+  @endif
+  <!-- Decorators section end -->
+
+  <br/>
+
   @if (sizeof($elements) > 0)
     <h3>Story Elements</h3>
     <table>
