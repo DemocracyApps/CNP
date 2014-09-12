@@ -63,14 +63,19 @@ class Html {
 
     static function createInput($desc)
     {
+        self::createElement('input', null, array('class' => 'form-control', 'id' => $desc['id'].'_param', 'name' => $desc['id']."_param", 'type'=>'hidden'));
         self::startElement("div", array('class' => 'form-group'));
         self::createElement("label", $desc['prompt'], array('for' => $desc['id']));
         if ($desc['inputType'] == 'text') {
-         self::createElement('input', null, array('class' => 'form-control', 'name' => $desc['id'], 'type'=>'text'));
+            self::createElement('input', null, array('class' => 'form-control', 'name' => $desc['id'], 'type'=>'text'));
         }
         elseif ($desc['inputType'] == 'textarea') {
-         self::createElement('textarea', null, array('class' => 'form-control', 'name' => $desc['id'],
+            self::createElement('textarea', null, array('class' => 'form-control', 'name' => $desc['id'],
                        'cols'=>'50', 'rows' => '10'));
+        }
+        elseif ($desc['inputType'] == 'person') {
+            self::createElement('input', null, 
+                array( 'class' => 'form-control auto-person', 'name' => $desc['id'], 'type'=>'text'));
         }
         self::endElement("div");
     }

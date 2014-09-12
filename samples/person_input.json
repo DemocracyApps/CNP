@@ -29,7 +29,7 @@
     			"id":"personinput",
     			"use":"element",
     			"elementId": "Person",
-    			"inputType":"text",
+    			"inputType":"person",
                 "generate":"automerge",
     			"prompt":"Name the person most involved in what happened."
     		}

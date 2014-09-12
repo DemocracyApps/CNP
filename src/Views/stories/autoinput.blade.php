@@ -8,7 +8,6 @@
    <input type="hidden" name="collector" value="{{$collector->id}}"/>
    <?php
       $done = false;
-      $count = 0;
       while ( ! $done ) {
          $next = $collector->getDriver()->getNextInput();
          if ( ! $next)
@@ -16,11 +15,10 @@
          else
             if (array_key_exists('prompt', $next)) {
                \DemocracyApps\CNP\Utility\Html::createInput($next);
+               echo("\n");
             }
          \DemocracyApps\CNP\Utility\Html::createSelfClosingElement('br');
-
-         if ($count > 10) $done = true;
-         ++$count;
+         echo("\n");
       }
       $collector->getDriver()->cleanupAndSave();
    ?>
@@ -35,3 +33,25 @@
 {{ Form::close() }}
 
 @stop
+@section('scripts')
+    <script type="text/javascript">
+//autocomplete
+      $(function() {
+         $(".auto-person").autocomplete({
+            source: "http://cnp.dev/ajax/person?collector={{$collector->id}}&driver={{$collector->getDriver()->id}}",
+            minLength: 1
+         });
+      });
+
+      $( ".auto-person" ).autocomplete({
+         select: function( event, ui ) {
+            console.log(ui.item.value);
+            event.preventDefault();
+            console.log(ui.item);
+            this.value = ui.item.label;
+            $ ("#"+this.name+"_param").val(ui.item.value);
+         }
+});
+    </script>
+@stop
+

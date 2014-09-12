@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
   @include('includes.head')
+
+  @yield('header')
+  
+
   <style>
+
         span.error {
           color: #f00;
         }
@@ -27,8 +32,44 @@
         table#simple-table, table#simple-table th, table#simple-table td {
           border:0px solid white; padding:3px;
         }
+
+        /*
+         * Autocompletion
+         */
+
+        /* highlight results */
+        .ui-autocomplete span.hl_results {
+            background-color: #ffff66;
+        }
+         
+        /* scroll results */
+        .ui-autocomplete {
+            max-height: 250px;
+            overflow-y: auto;
+            /* prevent horizontal scrollbar */
+            overflow-x: visible;
+            /* add padding for vertical scrollbar */
+            padding-right: 5px;
+        }
+
+        .ui-autocomplete li {
+            font-size: 16px;
+        }
+
+        /* IE 6 doesn't support max-height
+        * we use height instead, but this forces the menu to always be this tall
+        */
+        * html .ui-autocomplete {
+            height: 250px;
+        }
+
+        .ui-menu .ui-menu-item {
+            height:18px;
+            font-size:14px;
+            background:white;
+        }
   </style>
-	@yield('header')
+
 </head>
 <body>
 	@include('layouts.partials.datarider')
@@ -51,5 +92,7 @@
   	</footer>
   </div>
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+    @yield('scripts')
 </body>
 </html>
