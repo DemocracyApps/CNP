@@ -1,10 +1,38 @@
 {
     "name": "Global Giving Auto-Interactive Input Collector",
     "version": "0.01",
-    "baseSpecificationId": 3,
+    "baseSpecificationId": 1,
+    "elements": [
+        {
+            "id":"Story",
+            "required": false,
+            "type":"Story"
+        },
+        {
+            "id":"Topic",
+            "type":"Tag"
+        },
+        {
+            "id":"Person",
+            "type":"Person"
+        }
+    ],
+    "relations": [
+        {
+            "type": "Causes",
+            "from": "Person",
+            "to":   "Story"
+        },
+        {
+            "type": "Tags",
+            "from": "Topic",
+            "to":   "Story"
+        }
+    ],
     "input": {
 	    "inputType": "auto-interactive",
         "anchor":"Story",
+        "referentRelation":"BranchesTo",
 	    "map": [
             {
     			"id":"1",
@@ -26,6 +54,9 @@
     			"inputType":"text",
     			"prompt":"What is this story about?"
     		},
+            {
+                "use":"pagebreak"
+            },
     		{
     			"id":"personinput",
     			"use":"element",

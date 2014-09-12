@@ -38,12 +38,10 @@ Route::group(['prefix' => 'ajax'], function ()
             $term = Input::get('term');
             $collector = \DemocracyApps\CNP\Inputs\Collector::find(\Input::get('collector'));
             $scape = $collector->scape;
-            \Log::info("Got the scape " . $scape . ", so let us find the term " . $term);
             $list = DAEntity\Person::getDenizensLike($scape, $term);
             $ret = array();
             foreach ($list as $item) {
                 $ret[] = new PP($item->name, $item->id);
-                \Log::info("Adding menu item " . $item->name);
             }
 //            $ret = array(new PP('Johnjohn', 101), new PP('Wilma', 102), new PP('Barney', 301), new PP('Bloomberg', 333), new PP('abc', 122));
             return json_encode($ret);            

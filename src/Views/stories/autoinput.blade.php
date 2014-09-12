@@ -6,6 +6,9 @@
 {{ Form::open(['route' => 'stories.store']) }}
    <input type="hidden" name="driver" value="{{$collector->getDriver()->id}}"/>
    <input type="hidden" name="collector" value="{{$collector->id}}"/>
+   @if ($collector->getReferentId())
+      <input type="hidden" name="referentId" value="{{$collector->getReferentId()}}"/>
+   @endif
    <?php
       $done = false;
       while ( ! $done ) {

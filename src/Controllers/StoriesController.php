@@ -78,6 +78,10 @@ class StoriesController extends BaseController {
         if ( ! $collector->validForInput()) throw new \Exception("Collector ".\Input::get('collector') . " not valid for input.");
         $collector->initialize(\Input::all());
 
+        if (\Input::get('referent')) {
+            $collector->setReferentByDenizenId(\Input::get('referent'));
+        }
+
     	$inputType = $collector->getInputType();
     	if ($inputType == 'csv-simple') {
 	    	return \View::make('stories.csvUpload', array('collector' => $collector));
@@ -104,6 +108,9 @@ class StoriesController extends BaseController {
         $collector = Collector::find(\Input::get('collector'));
         if ( ! $collector->validateInput($input)) {
             return \Redirect::back()->withInput()->withErrors($collector->messages());
+        }
+        if (\Input::get('referentId')) {
+            $collector->setReferentByReferentId(\Input::get('referentId'));
         }
 
         $inputType = $collector->getInputType();

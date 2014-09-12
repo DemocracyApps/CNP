@@ -16,6 +16,9 @@
     <tr>
       <th>Content:</th>  <td>{{$story->getContent()}}</td>
     </tr>
+    <tr>
+      <th>Branch:</th>  <td><a href="/stories/create?collector=5&referent={{$story->getId()}}">Fly!</a></td>
+    </tr>
   </table>
 
   @if (sizeof($elements) > 0)

@@ -1,6 +1,7 @@
 <?php
 namespace DemocracyApps\CNP\Inputs;
 use \DemocracyApps\CNP\Entities as DAEntity;
+use \DemocracyApps\CNP\Graph\DenizenSet;
 
 class Collector extends \Eloquent {
     protected $fullSpecification = null;
@@ -105,15 +106,34 @@ class Collector extends \Eloquent {
     	return $this->fullSpecification;
 	}
 
+    public function setReferentByReferentId ($id)
+    {
+        $this->referent = DenizenSet::find($id);
+    }
+
+    public function setReferentByDenizenId ($id) {
+        $d = DAEntity\Denizen::find($id);
+        $this->referent = new DenizenSet;
+        $this->referent->initialize();
+        $this->referent->addDenizen($d);
+        $this->referent->save();
+        return $this->referent->id;
+    }
+
     public function setReferent ($d) 
     {
         $this->referent = new DenizenSet;
-        $this->referent->addDenizens(array($d));
+        $this->referent->initialize();
+        $this->referent->addDenizen($d);
+        $this->referent->save();
+        return $this->referent->id;
     }
 
-    public function setReferentSet (\DemocracyApps\CNP\Graph\DenizenSet $set) 
+    public function getReferentId()
     {
-        $this->referent = $set;
+        $refId = null;
+        if ($this->referent) $refId = $this->referent->id;
+        return $refId;
     }
 
     public function validForInput() // For now, just check input. Should do full validity check.
@@ -287,7 +307,7 @@ class Collector extends \Eloquent {
         if (array_key_exists('anchor', $this->inputSpec)) {
             $anchorId = $this->inputSpec['anchor'];
         }
-
+        $topElement = null;
         // So now we create output denizens
         foreach ($elementsSpec as $espec) {
             $id = $espec['id'];
@@ -298,6 +318,7 @@ class Collector extends \Eloquent {
                     if ($createdDenizens) {
                         $createdDenizens[0]->name = $title;
                         $createdDenizens[0]->content = $summary;
+                        $topElement = $createdDenizens[0];
                     }
                 }
                 if ($createdDenizens) $denizens[$id] = $createdDenizens;
@@ -313,6 +334,7 @@ class Collector extends \Eloquent {
             if ($summary) $story->content = $summary;
             $story->scapeId = $scape;
             $story->save();
+            $topElement = $story;
         }
 
         foreach($denizens as $denizenList) {
@@ -346,6 +368,17 @@ class Collector extends \Eloquent {
                         foreach ($relations as $relation) { $relation->save(); }                        
                     }
                 }
+            }
+        }
+        $haveit = ($this->referent != null);
+        if ($this->referent) {
+            $referents = $this->referent->getDenizens();
+            $referentRelation = $this->inputSpec['referentRelation'];
+            foreach($referents as $ref) {
+                $relations = DAEntity\Relation::createRelationPair($ref->id, 
+                                                                   $topElement->id, $referentRelation);
+                foreach ($relations as $relation) { $relation->save(); }
+
             }
         }
 

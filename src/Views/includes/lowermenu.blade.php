@@ -2,7 +2,7 @@
 	--<br/>
 	<div class="menu-inner">
 		<ul class="menu">
-			<li class="menu"><a href="/">Stories</a></li>
+			<li class="menu"><a href="/stories">Stories</a></li>
 			@if (\Auth::check())
 				<li class="menu"><a href="/account">Account</a></li>
 				<li class="menu"><a href="/relationtypes">Relations</a></li>
