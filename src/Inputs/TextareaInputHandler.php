@@ -12,7 +12,10 @@ abstract class TextareaInputHandler extends InputHandler {
     }
     public static function getValue ($inputMapItem)
     {
-        return $inputMapItem['value'];
+        $val = array();
+        $val['isRef'] = false;
+        $val['value'] = $inputMapItem['value'];
+        return $val;
     }
 
 }

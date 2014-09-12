@@ -182,10 +182,10 @@ class Collector extends \Eloquent {
                     $val = $reflectionMethod->invoke(null, $values[$id]);
                     $use = $item['use'];
                     if ($use == 'title') {
-                        $title = $val;
+                        $title = $val['value'];
                     }
                     elseif ($use == 'summary') {
-                        $summary = $val;
+                        $summary = $val['value'];
                     }
                     else {
                         $elementId = $item['elementId'];
@@ -222,7 +222,8 @@ class Collector extends \Eloquent {
         while ( ! feof($myfile) ) {
             $line = fgetcsv($myfile);
             $elementsIn = array();
-            $title = "No Title";
+            $title = " - ";
+            $summary = null;
             if ($line) {
                 ++$count;
                 foreach ($columnMap as $column) {
@@ -230,13 +231,19 @@ class Collector extends \Eloquent {
                     if ($use == 'title') {
                         $title = $line[$column['column']];
                     }
+                    elseif ($use == 'summary') {
+                        $summary = $val;
+                    }
                     else {
-                        $elementsIn[$column['elementId']] = $line[$column['column']];
+                        $val = array();
+                        $val['isRef'] = false;
+                        $val['value'] = $line[$column['column']];
+                        $elementsIn[$column['elementId']] = $val;
                     }
                 }
                 $data = array();
                 $data['title'] = $title;
-                $data['summary'] = null;
+                $data['summary'] = $summary;
                 $data['elementsIn'] = $elementsIn;
                 $this->commonProcessInput($data, $this->elementsSpec, $this->relationsSpec, $this->scape);
             }
@@ -281,7 +288,6 @@ class Collector extends \Eloquent {
         foreach ($elementsSpec as $espec) {
             $id = $espec['id'];
             if (array_key_exists($id, $elementsIn)) {
-                \Log::info("Generate a " . $espec['type'] ." using " . json_encode($elementsIn[$id]));
                 $createdDenizens = DenizenGenerator::generateDenizen($espec['type'], $id, $elementsIn[$id], null, $scape);
                 if ($createdDenizens) $denizens[$id] = $createdDenizens; // Can happen, e.g., tags
             }
@@ -291,7 +297,6 @@ class Collector extends \Eloquent {
                 }
             }
         }
-
         // Now save them all out, relate them, etc.
         $story = new \DemocracyApps\CNP\Entities\Story($title, \Auth::user()->getId());
         if ($summary) $story->content = $summary;

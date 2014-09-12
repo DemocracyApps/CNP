@@ -155,13 +155,13 @@ class Denizen
     {
          if (static::$classDenizenType <= 0) { // All Denizens
             $d = DB::table(self::$tableName)->where('scape', '=', $scapeId)
-                                            ->where('name', 'LIKE', "%".$like."%")
+                                            ->where('name', 'ILIKE', "%".$like."%")
                                             ->get();
         }
         else { // Specific Denizen Type
             $d = DB::table(self::$tableName)->where('scape', '=', $scapeId)
                                             ->where('type', '=', static::$classDenizenType)
-                                            ->where('name', 'LIKE', "%".$like."%")
+                                            ->where('name', 'ILIKE', "%".$like."%")
                                             ->get();
         }
 

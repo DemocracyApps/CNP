@@ -101,7 +101,6 @@ class StoriesController extends BaseController {
             return \Redirect::to('/login');			
 		}
         $input = \Input::all();
-        dd($input);
         $collector = Collector::find(\Input::get('collector'));
         if ( ! $collector->validateInput($input)) {
             return \Redirect::back()->withInput()->withErrors($collector->messages());

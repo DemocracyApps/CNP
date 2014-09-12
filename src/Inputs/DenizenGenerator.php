@@ -5,7 +5,8 @@ use \DemocracyApps\CNP\Entities as DAEntity;
 class DenizenGenerator 
 {
     static $fcts = array(
-        'Tag' => '\DemocracyApps\CNP\Inputs\DenizenGenerator::tagGenerator'
+        'Tag' => '\DemocracyApps\CNP\Inputs\DenizenGenerator::tagGenerator',
+        'Person' => '\DemocracyApps\CNP\Inputs\DenizenGenerator::personGenerator'
         );
 
     /**
@@ -26,7 +27,8 @@ class DenizenGenerator
             $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
             if (!class_exists($className)) throw new \Exception("Cannot find denizen class " . $className);
             $d = new $className($name, \Auth::user()->getId());
-            $d->content = $content;
+            $d->content = $content['value'];
+
             if ($properties) {
                 foreach ($properties as $propName => $propValue) {
                     $d->setProperty($propName, $propValue);
@@ -46,13 +48,39 @@ class DenizenGenerator
         self::$fcts[$elementType] = $methodName;
     }
 
+    static private function personGenerator($elementType, $content, $properties)
+    {
+        $createdDenizens = null;
+        // We want to create separate tags for each word in the content;
+        if ($content) {
+            $d = null;
+            if ($content['isRef']) {
+                $d = DAEntity\Person::find($content['id']);
+            }
+            else {
+                $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
+                if (!class_exists($className)) throw new \Exception("Cannot find denizen class " . $className);
+                $d = new $className($content['value'], \Auth::user()->getId());
+
+                if ($properties) {
+                    foreach ($properties as $propName => $propValue) {
+                        $d->setProperty($propName, $propValue);
+                    }
+                }
+            }
+            $createdDenizens = array($d);
+        }
+        // Must return an array of Denizens
+        return $createdDenizens;
+    }
+
     static private function tagGenerator($elementType, $content, $properties)
     {
         $createdDenizens = null;
         // We want to create separate tags for each word in the content;
         if ($content) {
             $tags = null;
-            $s = trim(preg_replace("([, ]+)", ' ', $content));
+            $s = trim(preg_replace("([, ]+)", ' ', $content['value']));
             if ($s) $tags = explode(" ", $s);
             if ($tags && count($tags) > 0) {
                 $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
