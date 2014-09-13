@@ -191,6 +191,135 @@ class Collector extends \Eloquent {
         return $this->inputDone;
     }
 
+    /*************************************************************************************
+     *************************************************************************************
+     **
+     **
+     **
+     **
+     **
+     **   INPUT PROCESSING ROUTINES
+     **
+     **
+     **
+     **
+     **
+     *************************************************************************************
+     *************************************************************************************/
+
+    public function processInput($input)
+    {
+        self::registerElementProcessors();
+        if ($this->inputType == 'csv-simple') {
+            self::processCsvInput($input);
+        }
+        else if ($this->inputType == 'auto-interactive') {
+            $this->driver->extractSubmittedValues($input); // Import latest batch of form data into driver
+            if ($this->driver->inputDone()) {
+                $this->inputDone = true;
+                self::processAutoInput($input);
+                $this->driver->delete();
+            }
+        }
+    }
+
+    public static function tryit ($elementType, $content, $properties) 
+    {
+        dd("Hallelujah!");
+    }
+
+    private static function registerElementProcessors ()
+    {
+        //ElementGenerator::registerElementGenerator('Tag', 'DemocracyApps\CNP\Inputs\Collector::tryit');
+    }
+
+    private function commonProcessInput ($data, $elementsSpec, $relationsSpec, $scape)
+    {
+        $denizens = array();
+
+        $title = $data['title'];
+        $summary = $data['summary'];
+        $elementsIn = $data['elementsIn'];
+        $anchorId = null;
+        if (array_key_exists('anchor', $this->inputSpec)) {
+            $anchorId = $this->inputSpec['anchor'];
+        }
+        else {
+            $anchorId = $this->elementsSpec[0]['id'];
+        }
+        $topElement = null;
+        // So now we create output denizens
+        foreach ($elementsSpec as $espec) {
+            $id = $espec['id'];
+            if (array_key_exists($id, $elementsIn)) {
+                $properties = null;
+                if (array_key_exists('properties', $elementsIn[$id])) $properties = $elementsIn[$id]['properties'];
+                $createdDenizens = DenizenGenerator::generateDenizen($espec['type'], $id, 
+                                                                     $elementsIn[$id], $properties, $scape);
+                if ($anchorId == $espec['id']) {
+                    if (count($createdDenizens) > 1) throw new \Exception("Cannot set multiple denizens as anchors " . count($createdDenizens));
+                    if ($createdDenizens) {
+                        $createdDenizens[0]->name = $title;
+                        $createdDenizens[0]->content = $summary;
+                        $topElement = $createdDenizens[0];
+                    }
+                }
+                if ($createdDenizens) $denizens[$id] = $createdDenizens;
+            }
+            else {
+                if (array_key_exists('required', $espec) && $espec['required'] == true) {
+                    return "Required element " . $id . " doesn't exist on datum ". $count;
+                }
+            }
+        }
+
+        foreach($denizens as $denizenList) {
+            foreach ($denizenList as $denizen) {
+                $denizen->save();
+                if ( ! $anchorId ) {
+                    $relations = DAEntity\Relation::createRelationPair($story->id, 
+                                                                       $denizen->id, "HasPart");
+                    foreach ($relations as $relation) { $relation->save(); }
+                }
+            }
+        }
+
+        foreach ($relationsSpec as $relation) {
+            $from = $relation['from'];
+            $to   = $relation['to'];
+            $relType = $relation['type'];
+            if (array_key_exists($from, $denizens) && array_key_exists($to,$denizens)) {
+                $dfrom = $denizens[$from];
+                $dto   = $denizens[$to];
+                // One or the other may expand to multiple denizens (e.g., tags), but let's not
+                // let things get out of hand.
+                if (count($dfrom) > 1 && count($dto) > 1) {
+                    throw new \Exception("Collector processing - N X M relation generation not allowed");
+                }
+                foreach ($dfrom as $df) {
+                    foreach ($dto as $dt) {
+                        $relations = DAEntity\Relation::createRelationPair($df->id, 
+                                                                           $dt->id,
+                                                                           $relType);
+                        foreach ($relations as $relation) { $relation->save(); }                        
+                    }
+                }
+            }
+        }
+        $haveit = ($this->referent != null);
+        if ($this->referent) {
+            $referents = $this->referent->getDenizens();
+            $referentRelation = $this->inputSpec['referentRelation'];
+            foreach($referents as $ref) {
+                $relations = DAEntity\Relation::createRelationPair($ref->id, 
+                                                                   $topElement->id, $referentRelation);
+                foreach ($relations as $relation) { $relation->save(); }
+
+            }
+        }
+
+    }
+
     private function processAutoInput($input) {
         $map = $this->inputSpec['map'];
         $values = $this->driver['runDriver']['map'];
@@ -288,121 +417,5 @@ class Collector extends \Eloquent {
         }
     }
 
-    public static function tryit ($elementType, $content, $properties) 
-    {
-        dd("Hallelujah!");
-    }
-
-    private static function registerElementProcessors ()
-    {
-        //ElementGenerator::registerElementGenerator('Tag', 'DemocracyApps\CNP\Inputs\Collector::tryit');
-    }
-
-    public function processInput($input)
-    {
-        self::registerElementProcessors();
-        if ($this->inputType == 'csv-simple') {
-            self::processCsvInput($input);
-        }
-        else if ($this->inputType == 'auto-interactive') {
-            $this->driver->extractSubmittedValues($input); // Import latest batch of form data into driver
-            if ($this->driver->inputDone()) {
-                $this->inputDone = true;
-                self::processAutoInput($input);
-                $this->driver->delete();
-            }
-        }
-    }
-
-    private function commonProcessInput ($data, $elementsSpec, $relationsSpec, $scape)
-    {
-        $denizens = array();
-
-        $title = $data['title'];
-        $summary = $data['summary'];
-        $elementsIn = $data['elementsIn'];
-        $anchorId = null;
-        if (array_key_exists('anchor', $this->inputSpec)) {
-            $anchorId = $this->inputSpec['anchor'];
-        }
-        $topElement = null;
-        // So now we create output denizens
-        foreach ($elementsSpec as $espec) {
-            $id = $espec['id'];
-            if (array_key_exists($id, $elementsIn)) {
-                $properties = null;
-                if (array_key_exists('properties', $elementsIn[$id])) $properties = $elementsIn[$id]['properties'];
-                $createdDenizens = DenizenGenerator::generateDenizen($espec['type'], $id, 
-                                                                     $elementsIn[$id], $properties, $scape);
-                if ($anchorId == $espec['id']) {
-                    if (count($createdDenizens) > 1) throw new \Exception("Cannot set multiple denizens as anchors " . count($createdDenizens));
-                    if ($createdDenizens) {
-                        $createdDenizens[0]->name = $title;
-                        $createdDenizens[0]->content = $summary;
-                        $topElement = $createdDenizens[0];
-                    }
-                }
-                if ($createdDenizens) $denizens[$id] = $createdDenizens;
-            }
-            else {
-                if (array_key_exists('required', $espec) && $espec['required'] == true) {
-                    return "Required element " . $id . " doesn't exist on datum ". $count;
-                }
-            }
-        }
-        if (! $anchorId ) {
-            $story = new \DemocracyApps\CNP\Entities\Story($title, \Auth::user()->getId());
-            if ($summary) $story->content = $summary;
-            $story->scapeId = $scape;
-            $story->save();
-            $topElement = $story;
-        }
-
-        foreach($denizens as $denizenList) {
-            foreach ($denizenList as $denizen) {
-                $denizen->save();
-                if ( ! $anchorId ) {
-                    $relations = DAEntity\Relation::createRelationPair($story->id, 
-                                                                       $denizen->id, "HasPart");
-                    foreach ($relations as $relation) { $relation->save(); }
-                }
-            }
-        }
-
-        foreach ($relationsSpec as $relation) {
-            $from = $relation['from'];
-            $to   = $relation['to'];
-            $relType = $relation['type'];
-            if (array_key_exists($from, $denizens) && array_key_exists($to,$denizens)) {
-                $dfrom = $denizens[$from];
-                $dto   = $denizens[$to];
-                // One or the other may expand to multiple denizens (e.g., tags), but let's not
-                // let things get out of hand.
-                if (count($dfrom) > 1 && count($dto) > 1) {
-                    throw new \Exception("Collector processing - N X M relation generation not allowed");
-                }
-                foreach ($dfrom as $df) {
-                    foreach ($dto as $dt) {
-                        $relations = DAEntity\Relation::createRelationPair($df->id, 
-                                                                           $dt->id,
-                                                                           $relType);
-                        foreach ($relations as $relation) { $relation->save(); }                        
-                    }
-                }
-            }
-        }
-        $haveit = ($this->referent != null);
-        if ($this->referent) {
-            $referents = $this->referent->getDenizens();
-            $referentRelation = $this->inputSpec['referentRelation'];
-            foreach($referents as $ref) {
-                $relations = DAEntity\Relation::createRelationPair($ref->id, 
-                                                                   $topElement->id, $referentRelation);
-                foreach ($relations as $relation) { $relation->save(); }
-
-            }
-        }
-
-    }
 
 }

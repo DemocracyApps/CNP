@@ -4,6 +4,7 @@
     "baseSpecificationId": 1,
     "input": {
 	    "inputType": "csv-simple",
+        "anchor":"Story",
 	    "map": {
 	    	"skip": 1,
 	    	"columnMap": [
