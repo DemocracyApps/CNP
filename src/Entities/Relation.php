@@ -24,6 +24,7 @@ class Relation
         $instance->{'fromId'} = $data->fromid;
         $instance->{'toId'} = $data->toid;
         $instance->{'relationId'} = $data->relationid;
+        $instance->{'properties'} = (array) json_decode($data->properties);
     }
 
     public static function getScapeRelations ($scape)
@@ -31,7 +32,8 @@ class Relation
         $records = DB::table(self::$tableName)
                     ->join('denizens', 'denizens.id', '=', 'relations.fromid')
                     ->where('denizens.scape', '=', $scape)
-                    ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid')
+                    ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
+                             'relations.properties')
                     ->get();
         $relations = array();
 
@@ -82,13 +84,15 @@ class Relation
         return $relations;
     }
 
-    public static function createRelationPair($fromId, $toId, $relationName) 
+    public static function createRelationPair($fromId, $toId, $relationName, $props1 = null, $props2=null) 
     {
         $relation = array();
         $relRecord = DB::table(self::$relTypesTableName)->where('name',$relationName)->first();
         $relation[] = new static ($fromId, $toId, $relRecord->{'id'});
+        if ($props1) $relations[0]->properties = $props1;
         $inverse = $relRecord->{'inverse'}?$relRecord->{'inverse'}:$relRecord->{'id'};
         $relation[] = new static ($toId, $fromId, $inverse);
+        if ($props2) $relations[1]->properties = $props2;
         return $relation;
     }
 
@@ -103,6 +107,7 @@ class Relation
                     'fromid'     => $this->fromId,
                     'toid'       => $this->toId,
                     'relationid' => $this->relationId,
+                    'properties' => json_encode($this->properties),
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s')
                 )
@@ -116,6 +121,7 @@ class Relation
                         'fromid'     => $this->fromId,
                         'toid'       => $this->toId,
                         'relationid' => $this->relationId,
+                        'properties' => json_encode($this->properties),
                         'updated_at' => date('Y-m-d H:i:s')
                     )
                 );
