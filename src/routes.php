@@ -19,6 +19,10 @@ Route::get('/test', function()
     return View::make('test');
 });
 
+Route::get('/denizens/{id}', function ($id) {
+    return Redirect::to('/stories/'.$id);
+});
+
 class PP {
 
     public $label = null;
@@ -29,7 +33,6 @@ class PP {
     }
 
 }
-
 
 Route::group(['prefix' => 'ajax'], function () 
     {
