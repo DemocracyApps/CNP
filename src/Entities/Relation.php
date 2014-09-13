@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\DB as DB;
 
 class Relation 
 {
+    use ImplementsProperties;
     static $tableName = 'relations';
     static $relTypesTableName = 'relation_types';
     public $id = null;

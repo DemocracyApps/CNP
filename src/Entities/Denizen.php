@@ -4,6 +4,8 @@ use Illuminate\Support\Collection;
 
 class Denizen
 {
+    use ImplementsProperties;
+
     static    $classDenizenType = -1;
     static $tableName = 'denizens';
     protected $denizenType = null;
@@ -11,7 +13,6 @@ class Denizen
     public $scapeId = -1;
     public $name = null;
     public $content = null;
-    public $properties = null;
     public $userid = null;
 
     public function __construct($nm, $userid, $dtype=0) {
@@ -48,32 +49,6 @@ class Denizen
     public function getContent()
     {
         return $this->content;
-    }
-
-    public function setProperty ($propName, $propValue)
-    {
-        if (! $this->properties) $this->properties = [];
-        $this->properties[$propName] = $propValue;
-    }
-
-    public function hasProperty ($propName) 
-    {
-        $hasProperty = false;
-        if ($this->properties) {
-            if (array_key_exists($propName, $this->properties)) {
-                $hasProperty = true;
-            }
-        }
-        return $hasProperty;
-    }
-
-    public function getProperty ($propName)
-    {
-        $propValue = null;
-        if ($this->properties) {
-            $propValue = $this->properties[$propName];
-        }
-        return $propValue;
     }
 
     public function setUserId($uid) 
