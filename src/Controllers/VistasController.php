@@ -73,7 +73,7 @@ class VistasController extends ApiController {
 			$data = \Input::all();
 		}
 
-        $rules = ['name'=>'required'];
+        $rules = ['name'=>'required', 'collector'=>'required'];
         $validator = \Validator::make($data, $rules);
         if ($validator->fails()) {
         	if ($isAPI) {
@@ -88,6 +88,7 @@ class VistasController extends ApiController {
 
         $this->vista->name = $data['name'];
         $this->vista->scape = $data['scape'];
+        $this->vista->collector = $data['collector'];
         if ($data['description']) $this->vista->description = $data['description'];
 
 		// Now load in the file

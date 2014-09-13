@@ -18,8 +18,8 @@ class CreateVistasTable extends Migration {
 			$table->string('name');
 			$table->string('description')->nullable();
 			$table->text('topelements')->nullable();
-			$table->integer('specification')->nullable();
-			$table->foreign('specification')->references('id')->on('collectors');
+			$table->integer('collector');
+			$table->foreign('collector')->references('id')->on('collectors');
 			$table->bigInteger('scape');
 			$table->foreign('scape')->references('id')->on('denizens');
 			$table->timestamps();

@@ -11,6 +11,12 @@
       <br/>
       <span class="error">{{ $errors->first('name') }}</span>
    </div>
+   <div class="form-group">
+      {{ Form::label('collector', 'Collector Specification ID: ') }}
+      {{ Form::text('collector', null, ['class' => 'form-control']) }}
+      <br/>
+      <span class="error">{{ $errors->first('collector') }}</span>
+   </div>
 
    <div class="form-group">
       {{ Form::label('description', 'Description: ') }}

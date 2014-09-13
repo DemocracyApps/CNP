@@ -52,6 +52,7 @@
     <tr>
       <th> ID </th>
       <th> Name </th>
+      <th> Collector </th>
       <th> Description </th>
       <th> Top Level Elements</th>
       <th> Link </th>
@@ -59,7 +60,8 @@
     @foreach ($vistas as $vista)
       <tr>
         <td> {{ $vista->id }} </td>
-        <th> {{ $vista->name }} </th>
+        <td> {{ $vista->name }} </td>
+        <td> {{ $vista->collector }}</td>
         <td> {{ $vista->description }} </td>
         <td> {{ $vista->topelements }}</td>
         <td> <a href="/vistas?vista={{$vista->id}}">View</a></td>
