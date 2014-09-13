@@ -300,7 +300,12 @@ class Collector extends \Eloquent {
                     foreach ($dto as $dt) {
                         $relations = DAEntity\Relation::createRelationPair($df->id, 
                                                                            $dt->id,
-                                                                           $relType);
+                                                                           $relType,
+                                                                           array('specFromId' => $from,
+                                                                                 'specToId'   => $to),
+                                                                           array('specFromId' => $to,
+                                                                                 'specToId'   => $from)
+                                                                           );
                         foreach ($relations as $relation) { $relation->save(); }                        
                     }
                 }
