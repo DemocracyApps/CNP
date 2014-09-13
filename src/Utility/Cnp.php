@@ -69,6 +69,20 @@ class Cnp {
         throw new \OutOfBoundsException('Unknown Denizen Type ' . $name);
     }
 
+    public function getDenizenTypes ($asHash)
+    {
+        $result = array();
+        foreach ($this->denizenTypesById as $type) {
+            if ($asHash) {
+                $result[$type->id] = $type->name;
+            }
+            else {
+                $result[] = $type->name;
+            }
+        }
+        return $result;
+    }
+
     /**
      * @string $name [Parameter name]
      *

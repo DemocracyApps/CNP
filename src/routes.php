@@ -115,6 +115,7 @@ Route::get('/', function()
 Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
 Route::resource('scapes', 'DemocracyApps\CNP\Controllers\ScapesController');
 Route::resource('collectors', 'DemocracyApps\CNP\Controllers\CollectorsController');
+Route::resource('vistas', 'DemocracyApps\CNP\Controllers\VistasController');
 
 Route::get('account', array('before' => 'cnp.auth', function()
 {

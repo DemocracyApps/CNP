@@ -120,7 +120,7 @@ class CollectorsController extends ApiController {
 		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
 		$params = [];
 		if ($isAPI) {
-			throw new \Exception("API Collector creation not yet implemented");
+			throw new \Exception("API Collector creation not implemented");
 		}
 		else {
 			$data = \Input::all();

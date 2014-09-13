@@ -4,8 +4,8 @@ namespace DemocracyApps\CNP\Entities;
 
 class DenizenType
 {
-    protected $id = null;
-    protected $name = null;
+    public $id = null;
+    public $name = null;
 
     function __construct ($id, $nm) 
     {

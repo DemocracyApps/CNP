@@ -47,6 +47,35 @@
 </div>
 
 <div>
+  <h2>Vistas</h2>
+  <table>
+    <tr>
+      <th> ID </th>
+      <th> Name </th>
+      <th> Description </th>
+      <th> Top Level Elements</th>
+      <th> Link </th>
+    </tr>
+    @foreach ($vistas as $vista)
+      <tr>
+        <td> {{ $vista->id }} </td>
+        <th> {{ $vista->name }} </th>
+        <td> {{ $vista->description }} </td>
+        <td> {{ $vista->topelements }}</td>
+        <td> <a href="/vistas?vista={{$vista->id}}">View</a></td>
+      </tr>    
+    @endforeach
+  </table>
+  <br/>
+  {{ Form::open(['route' => 'vistas.create', 'method' => 'get']) }}
+     <div>
+       {{ Form::hidden('scape', $scape->getId())}}
+       {{ Form::submit('Add a Vista', ['class' => 'btn btn-primary']) }}
+     </div>
+  {{ Form::close() }}
+</div>
+<br/>
+<div>
   <h2>Collector Specifications</h2>
   <table>
     <tr>

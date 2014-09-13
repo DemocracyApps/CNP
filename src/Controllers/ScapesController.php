@@ -3,6 +3,7 @@
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Utility\Api as Api;
 use \DemocracyApps\CNP\Inputs\Collector as Collector;
+use \DemocracyApps\CNP\Outputs\Vista as Vista;
 
 class ScapesController extends ApiController {
 	protected $scape;
@@ -29,6 +30,7 @@ class ScapesController extends ApiController {
 	{
 		$scape = DAEntity\Scape::find($id);
 		$collectors = Collector::where('scape', '=', $id)->get();
+		$vistas = Vista::where('scape', '=', $id)->get();
 		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
 		if ($isAPI) {
 			if (!$scape) {
@@ -40,7 +42,7 @@ class ScapesController extends ApiController {
 			}
 		}
 		else {
-			return \View::make('scapes.show', array('scape' => $scape, 'collectors' => $collectors));
+			return \View::make('scapes.show', array('scape' => $scape, 'collectors' => $collectors, 'vistas' => $vistas));
 		}
 	}
 

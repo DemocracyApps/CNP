@@ -1,0 +1,133 @@
+<?php namespace DemocracyApps\CNP\Controllers;
+use \DemocracyApps\CNP\Utility\Api as Api;
+
+class VistasController extends ApiController {
+
+	protected $vista;
+
+
+	function __construct (\DemocracyApps\CNP\Outputs\Vista $vista)
+	{
+		$this->vista = $vista;
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 *
+	 * @return Response
+	 */
+	public function index()
+	{
+		//
+	}
+
+
+	/**
+	 *
+	 * @return Response
+	 */
+	public function create()
+	{
+    	return \View::make('vistas.create', array('scape' => \Input::get('scape')));
+	}
+
+
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @return Response
+	 */
+	public function store()
+	{
+		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
+		$params = [];
+		if ($isAPI) {
+			throw new \Exception("API Vista creation not implemented");
+		}
+		else {
+			$data = \Input::all();
+		}
+
+        $rules = ['name'=>'required'];
+        $validator = \Validator::make($data, $rules);
+        if ($validator->fails()) {
+        	if ($isAPI) {
+        		return $this->respondFailedValidation(Api::compactMessages($validator->messages()));
+        	}
+        	else {
+            	return \Redirect::back()->withInput()->withErrors($validator->messages());
+            }
+        }
+	    
+	    // Validation OK, let's create the vista
+
+        $this->vista->name = $data['name'];
+        $this->vista->scape = $data['scape'];
+        if ($data['description']) $this->vista->description = $data['description'];
+
+		// Now load in the file
+        if (\Input::has('topelements')) {
+            $s = trim(preg_replace("([, ]+)", ' ', $data['topelements']));
+            if ($s) $s = explode(" ", $s);
+            if ($s) $s = implode(", ", $s);
+            $this->vista->topelements = $s;
+        }
+        $this->vista->save();
+
+        if ($isAPI) {
+        }
+        else {
+			return \Redirect::to('/scapes/'.$data['scape']);
+        }
+	}
+
+
+	/**
+	 * Display the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function show($id)
+	{
+		//
+	}
+
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit($id)
+	{
+		//
+	}
+
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function update($id)
+	{
+		//
+	}
+
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function destroy($id)
+	{
+		//
+	}
+
+
+}
