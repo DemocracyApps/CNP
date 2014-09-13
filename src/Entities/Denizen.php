@@ -64,7 +64,7 @@ class Denizen
                     'scape'=> $this->scapeId,
                     'type' => $this->denizenType,
                     'content' => $this->content,
-                    'properties' => json_encode($this->properties),
+                    'properties' => json_encode($this->properties), // How do I move this to ImplementsProperties trait?
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
                     'userid'     => $this->userid

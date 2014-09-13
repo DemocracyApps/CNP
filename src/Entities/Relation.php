@@ -89,10 +89,10 @@ class Relation
         $relation = array();
         $relRecord = DB::table(self::$relTypesTableName)->where('name',$relationName)->first();
         $relation[] = new static ($fromId, $toId, $relRecord->{'id'});
-        if ($props1) $relations[0]->properties = $props1;
+        if ($props1) $relation[0]->properties = $props1;
         $inverse = $relRecord->{'inverse'}?$relRecord->{'inverse'}:$relRecord->{'id'};
         $relation[] = new static ($toId, $fromId, $inverse);
-        if ($props2) $relations[1]->properties = $props2;
+        if ($props2) $relation[1]->properties = $props2;
         return $relation;
     }
 
