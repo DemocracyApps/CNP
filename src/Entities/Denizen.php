@@ -142,16 +142,21 @@ class Denizen
         return $result;
     }
 
-    public static function allScapeDenizens ($id)
+    public static function allScapeDenizens ($id, $types = null)
     {
-         if (static::$classDenizenType <= 0) { // All Denizens
-            $d = DB::table(self::$tableName)->where('scape', '=', $id)->get();
-        }
-        else { // Specific Denizen Type
+        if ($types) {
             $d = DB::table(self::$tableName)->where('scape', '=', $id)
+                                            ->whereIn('type', $types)
                                             ->get();
         }
-
+        else {
+            if (static::$classDenizenType <= 0) { // All Denizens
+                $d = DB::table(self::$tableName)->where('scape', '=', $id)->get();
+            }
+            else { // Specific Denizen Type
+                $d = DB::table(self::$tableName)->where('scape', '=', $id)->get();
+            }
+        }
         $result = array();
 
         foreach ($d as $data) {

@@ -1,5 +1,8 @@
 <?php namespace DemocracyApps\CNP\Controllers;
+
 use \DemocracyApps\CNP\Utility\Api as Api;
+use \DemocracyApps\CNP\Outputs\Vista;
+use \DemocracyApps\CNP\Entities\Denizen;
 
 class VistasController extends ApiController {
 
@@ -18,7 +21,29 @@ class VistasController extends ApiController {
 	 */
 	public function index()
 	{
-		//
+		$vista = Vista::find(\Input::get('vista'));
+		$typeList = null;
+		$denizens = null;
+		if ($vista->topelements) {
+			$typeList = array();
+            $s = trim(preg_replace("([, ]+)", ' ', $vista->topelements));
+            if ($s) $types = explode(" ", $s);
+            foreach ($types as $type) {
+            	$typeList [] = \CNP::getDenizenTypeId($type);
+            }
+            $denizens = Denizen::allScapeDenizens($vista->scape, $typeList);
+		}
+		else {
+            $denizens = Denizen::allScapeDenizens($vista->scape);
+		}
+		$args = array('denizens' => $denizens, 'vista' => $vista);
+		if ($vista->specification) {
+			$args['controller'] = $vista->specification;
+		}
+		else {
+			$args['controller'] = null;
+		}
+		return \View::make('vistas.index', $args);
 	}
 
 
@@ -69,7 +94,7 @@ class VistasController extends ApiController {
         if (\Input::has('topelements')) {
             $s = trim(preg_replace("([, ]+)", ' ', $data['topelements']));
             if ($s) $s = explode(" ", $s);
-            if ($s) $s = implode(", ", $s);
+            if ($s) $s = implode(",", $s);
             $this->vista->topelements = $s;
         }
         $this->vista->save();
