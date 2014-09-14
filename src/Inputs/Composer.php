@@ -2,6 +2,7 @@
 namespace DemocracyApps\CNP\Inputs;
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Graph\DenizenSet;
+use \DemocracyApps\CNP\Entities\Relation;
 
 class Composer extends \Eloquent {
     protected $fullSpecification = null;
@@ -298,11 +299,6 @@ class Composer extends \Eloquent {
         foreach($denizens as $denizenList) {
             foreach ($denizenList as $denizen) {
                 $denizen->save();
-                if ( ! $anchorId ) {
-                    $relations = DAEntity\Relation::createRelationPair($story->id, 
-                                                                       $denizen->id, "HasPart");
-                    foreach ($relations as $relation) { $relation->save(); }
-                }
             }
         }
 
@@ -320,15 +316,18 @@ class Composer extends \Eloquent {
                 }
                 foreach ($dfrom as $df) {
                     foreach ($dto as $dt) {
-                        $relations = DAEntity\Relation::createRelationPair($df->id, 
-                                                                           $dt->id,
-                                                                           $relType,
-                                                                           array('specFromId' => $from,
-                                                                                 'specToId'   => $to),
-                                                                           array('specFromId' => $to,
-                                                                                 'specToId'   => $from)
-                                                                           );
-                        foreach ($relations as $relation) { $relation->save(); }                        
+                        $relations = Relation::createRelationPair($df->id, 
+                                                                  $dt->id,
+                                                                  $relType,
+                                                                  array('collectorElements'
+                                                                        => $from.','.$to),
+                                                                  array('collectorElements'
+                                                                        => $to.','.$from)
+                                                               );
+                        foreach ($relations as $relation) {
+                            $relation->setComposerId($this->id);
+                            $relation->save(); 
+                        }                        
                     }
                 }
             }

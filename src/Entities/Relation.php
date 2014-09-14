@@ -11,6 +11,7 @@ class Relation
     public $fromId = null;
     public $toId = null;
     public $relationId = null;
+    public $composerid = null;
 
     function __construct($from, $to, $type) {
         $this->fromId = $from;
@@ -25,6 +26,12 @@ class Relation
         $instance->{'toId'} = $data->toid;
         $instance->{'relationId'} = $data->relationid;
         $instance->{'properties'} = (array) json_decode($data->properties);
+        $instance->{'composerid'} = $data->composerid;
+    }
+
+    public function setComposerId ($id)
+    {
+        $this->composerid = $id;
     }
 
     public static function getScapeRelations ($scape)
@@ -33,7 +40,7 @@ class Relation
                     ->join('denizens', 'denizens.id', '=', 'relations.fromid')
                     ->where('denizens.scape', '=', $scape)
                     ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
-                             'relations.properties')
+                             'relations.properties', 'relations.composerid')
                     ->get();
         $relations = array();
 
@@ -116,7 +123,8 @@ class Relation
                     'relationid' => $this->relationId,
                     'properties' => json_encode($this->properties),
                     'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s')
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'composerid' => $this->composerid
                 )
             );
         }
@@ -129,7 +137,8 @@ class Relation
                         'toid'       => $this->toId,
                         'relationid' => $this->relationId,
                         'properties' => json_encode($this->properties),
-                        'updated_at' => date('Y-m-d H:i:s')
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'composerid' => $this->composerid
                     )
                 );
         }
