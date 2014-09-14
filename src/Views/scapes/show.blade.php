@@ -52,18 +52,20 @@
     <tr>
       <th> ID </th>
       <th> Name </th>
-      <th> Composer </th>
       <th> Description </th>
-      <th> Top Level Elements</th>
+      <th> Input Composers </th>
+      <th> Output Composers </th>
+      <th> Selectors </th>
       <th> Link </th>
     </tr>
     @foreach ($vistas as $vista)
       <tr>
         <td> {{ $vista->id }} </td>
         <td> {{ $vista->name }} </td>
-        <td> {{ $vista->composer }}</td>
         <td> {{ $vista->description }} </td>
-        <td> {{ $vista->topelements }}</td>
+        <td> {{ $vista->input_composers }}</td>
+        <td> {{ $vista->output_composer }}</td>
+        <td> {{ $vista->selector }}</td>
         <td> <a href="/vistas?vista={{$vista->id}}">View</a></td>
       </tr>    
     @endforeach

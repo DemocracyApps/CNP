@@ -17,9 +17,10 @@ class CreateVistasTable extends Migration {
 			$table->increments('id');
 			$table->string('name');
 			$table->string('description')->nullable();
-			$table->text('topelements')->nullable();
-			$table->integer('composer');
-			$table->foreign('composer')->references('id')->on('composers');
+			$table->string('input_composers');
+			$table->integer('output_composer');
+			$table->foreign('output_composer')->references('id')->on('composers');
+			$table->text('selector')->nullable();
 			$table->bigInteger('scape');
 			$table->foreign('scape')->references('id')->on('denizens');
 			$table->timestamps();

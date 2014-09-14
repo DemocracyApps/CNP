@@ -73,7 +73,7 @@ class VistasController extends ApiController {
 			$data = \Input::all();
 		}
 
-        $rules = ['name'=>'required', 'composer'=>'required'];
+        $rules = ['name'=>'required', 'output_composer'=>'required', 'input_composers'=>'required'];
         $validator = \Validator::make($data, $rules);
         if ($validator->fails()) {
         	if ($isAPI) {
@@ -88,15 +88,16 @@ class VistasController extends ApiController {
 
         $this->vista->name = $data['name'];
         $this->vista->scape = $data['scape'];
-        $this->vista->composer = $data['composer'];
+        $this->vista->input_composers = $data['input_composers'];
+        $this->vista->output_composer = $data['output_composer'];
         if ($data['description']) $this->vista->description = $data['description'];
 
 		// Now load in the file
-        if (\Input::has('topelements')) {
-            $s = trim(preg_replace("([, ]+)", ' ', $data['topelements']));
+        if (\Input::has('selector')) {
+            $s = trim(preg_replace("([, ]+)", ' ', $data['selector']));
             if ($s) $s = explode(" ", $s);
             if ($s) $s = implode(",", $s);
-            $this->vista->topelements = $s;
+            $this->vista->selector = $s;
         }
         $this->vista->save();
 
