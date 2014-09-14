@@ -116,7 +116,10 @@ class StoriesController extends BaseController {
         $inputType = $composer->getInputType();
 
         $composer->initialize($input);
-        $composer->processInput($input);
+        $composition = new \DemocracyApps\CNP\Inputs\Composition;
+        $composition->input_composer_id = $composer->id;
+        $composition->save();
+        $composer->processInput($input, $composition);
         if ($inputType == 'auto-interactive') {
             if ( ! $composer->inputDone()) {
                 return \View::make('stories.autoinput', array('composer' => $composer));

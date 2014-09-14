@@ -35,16 +35,42 @@ class Graph
     /**
      * Assign an object to the payload, but also allow setting an alternate map
      * to the graph node using a key appropriate to the object (e.g., its own ID)
+     * 
+     * @param  string $key     Native key of graph
+     * @param  object $object  The payload (e.g., denizen)
+     * @param  string $altkey  Optional alternate key to use (e.g., denizen ID)
+     * @param  string $mapName Name of map to store the alternate key in
+     * @return boolean         True if we succeeded in finding a place to assign the payload
      */
     public function assignPayload($key, $object, $altkey = null, $mapName = null)
     {
+        $result = false;
         if (array_key_exists($key, $this->nodeList)) {
             $node = &$this->nodeList[$key];
             $node->assignPayload($object);
+            $result = true;
             if ($altkey) {
                 $map = &$this->getMap($mapName);
-                $map[$altkey] = $node;
+                if (!array_key_exists($altkey, $map)) {
+                    $map[$altkey] = array($node);
+                }
+                else {
+                    $map[$altkey][] = $node;
+                }
             }
         }
+        return $result;
+    }
+
+    public function propagatePayloads($id, $mapName) {
+        $node = null;
+        if ($mapName) {
+            $map = &$this->getMap($mapName);
+            $node = &$map[$id][0];            
+        }
+        else {
+            $node = $nodeList[$id];
+        }
+        
     }
 }

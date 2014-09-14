@@ -230,17 +230,17 @@ class Composer extends \Eloquent {
      *************************************************************************************
      *************************************************************************************/
 
-    public function processInput($input)
+    public function processInput($input, Composition $composition)
     {
         self::registerElementProcessors();
         if ($this->inputType == 'csv-simple') {
-            self::processCsvInput($input);
+            self::processCsvInput($input, $composition);
         }
         else if ($this->inputType == 'auto-interactive') {
             $this->driver->extractSubmittedValues($input); // Import latest batch of form data into driver
             if ($this->driver->inputDone()) {
                 $this->inputDone = true;
-                self::processAutoInput($input);
+                self::processAutoInput($input, $composition);
                 $this->driver->delete();
             }
         }
@@ -256,7 +256,7 @@ class Composer extends \Eloquent {
         //ElementGenerator::registerElementGenerator('Tag', 'DemocracyApps\CNP\Inputs\Composer::tryit');
     }
 
-    private function commonProcessInput ($data, $elementsSpec, $relationsSpec, $scape)
+    private function commonProcessInput (Composition $composition, $data, $elementsSpec, $relationsSpec, $scape)
     {
         $denizens = array();
 
@@ -326,6 +326,7 @@ class Composer extends \Eloquent {
                                                                );
                         foreach ($relations as $relation) {
                             $relation->setComposerId($this->id);
+                            $relation->setCompositionId($composition->id);
                             $relation->save(); 
                         }                        
                     }
@@ -346,7 +347,7 @@ class Composer extends \Eloquent {
 
     }
 
-    private function processAutoInput($input) {
+    private function processAutoInput($input, Composition $composition) {
         $map = $this->inputSpec['map'];
         $values = $this->driver['runDriver']['map'];
 
@@ -392,10 +393,10 @@ class Composer extends \Eloquent {
         $data['title'] = $title;
         $data['summary'] = $summary;
         $data['elementsIn'] = $elementsIn;
-        $this->commonProcessInput($data, $this->elementsSpec, $this->relationsSpec, $this->scape);
+        $this->commonProcessInput($composition, $data, $this->elementsSpec, $this->relationsSpec, $this->scape);
     }
 
-    private function processCsvInput($input) 
+    private function processCsvInput($input, Composition $composition) 
     {
         ini_set("auto_detect_line_endings", true); // Deal with Mac line endings
 
@@ -438,10 +439,10 @@ class Composer extends \Eloquent {
                 $data['title'] = $title;
                 $data['summary'] = $summary;
                 $data['elementsIn'] = $elementsIn;
-                $this->commonProcessInput($data, $this->elementsSpec, $this->relationsSpec, $this->scape);
+                $childComposition = $composition->createChildComposition();
+                $this->commonProcessInput($childComposition, $data, $this->elementsSpec, $this->relationsSpec, $this->scape);
             }
         }
     }
-
 
 }

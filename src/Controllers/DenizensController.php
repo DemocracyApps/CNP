@@ -25,9 +25,15 @@ class DenizensController extends ApiController {
         $vista = Vista::find($vista);
         $graph = $composer ->generateGraph();
         $roles = $vista->extractComposerRoles($denizen);
+        $count = 0;
         foreach ($roles as $role => $count) {
-            $graph->assignPayload($role, $denizen, $denizen->id, 'denizens');
+            if ($graph->assignPayload($role, $denizen, $denizen->id, 'denizenId')) ++$count;
         }
+        if ($count <= 0) {
+            throw new Exception ("Unable to match denizen to Composer role");
+        }
+
+        $graph->propagatePayloads($denizen->id, 'denizenId');
         dd($graph);
 
         /*

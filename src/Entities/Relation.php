@@ -27,11 +27,17 @@ class Relation
         $instance->{'relationId'} = $data->relationid;
         $instance->{'properties'} = (array) json_decode($data->properties);
         $instance->{'composerid'} = $data->composerid;
+        $instance->{'compositionid'} = $data->compositionid;
     }
 
     public function setComposerId ($id)
     {
         $this->composerid = $id;
+    }
+
+    public function setCompositionId ($id)
+    {
+        $this->compositionid = $id;
     }
 
     public static function getScapeRelations ($scape)
@@ -40,7 +46,7 @@ class Relation
                     ->join('denizens', 'denizens.id', '=', 'relations.fromid')
                     ->where('denizens.scape', '=', $scape)
                     ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
-                             'relations.properties', 'relations.composerid')
+                             'relations.properties', 'relations.composerid', 'relations.compositionid')
                     ->get();
         $relations = array();
 
@@ -124,7 +130,8 @@ class Relation
                     'properties' => json_encode($this->properties),
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
-                    'composerid' => $this->composerid
+                    'composerid' => $this->composerid,
+                    'compositionid' => $this->compositionid
                 )
             );
         }
@@ -138,7 +145,8 @@ class Relation
                         'relationid' => $this->relationId,
                         'properties' => json_encode($this->properties),
                         'updated_at' => date('Y-m-d H:i:s'),
-                        'composerid' => $this->composerid
+                        'composerid' => $this->composerid,
+                        'compositionid' => $this->compositionid
                     )
                 );
         }
