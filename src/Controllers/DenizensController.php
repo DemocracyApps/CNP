@@ -2,7 +2,8 @@
 namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
-use \DemocracyApps\CNP\Inputs\Composer as Composer;
+use \DemocracyApps\CNP\Inputs\Composer;
+use \DemocracyApps\CNP\Outputs\Vista;
 
 class DenizensController extends ApiController {
     protected $denizen;
@@ -20,8 +21,13 @@ class DenizensController extends ApiController {
         $composer = \Input::get('composer');
         $composer = Composer::find($composer);
         $composer->initialize(null);
+        $vista = \Input::get('vista');
+        $vista = Vista::find($vista);
         $graph = $composer ->generateGraph();
-        $relations = $composer->extractRelevantRelations($denizen->getRelations());
+        $roles = $vista->extractComposerRoles($denizen);
+        foreach ($roles as $role => $count) {
+            $graph->assignPayload($role, $denizen, $denizen->id, 'denizens');
+        }
         dd($graph);
 
         /*

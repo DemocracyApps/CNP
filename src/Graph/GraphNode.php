@@ -17,4 +17,9 @@ class GraphNode
         if (! $this->edges) $this->edges = array();
         $this->edges[] = new GraphEdge($this, $to, $relation);
     }
+
+    public function assignPayload ($p)
+    {
+        $this->payload = $p;
+    }
 }

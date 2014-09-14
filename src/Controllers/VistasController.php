@@ -38,12 +38,7 @@ class VistasController extends ApiController {
         $denizens = Denizen::getVistaDenizens ($vista->scape, $allowedComposers, $typeList);
 
 		$args = array('denizens' => $denizens, 'vista' => $vista);
-		if ($vista->composer) {
-			$args['composer'] = $vista->composer;
-		}
-		else {
-			$args['composer'] = null;
-		}
+		$args['composer'] = $vista->output_composer;
 		return \View::make('vistas.index', $args);
 	}
 

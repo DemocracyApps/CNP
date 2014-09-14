@@ -207,7 +207,7 @@ class Composer extends \Eloquent {
         foreach ($this->relationsSpec as $relation) {
             $graph->addEdge($relation['from'], $relation['to'], $relation['type']);
             $graph->addEdge($relation['to'], $relation['from'], 
-                            \DemocracyApps\CNP\Entities\Relation::getInverseRelationName($relation['type']));
+                            Relation::getInverseRelationName($relation['type']));
         }
 
         return $graph;
@@ -319,9 +319,9 @@ class Composer extends \Eloquent {
                         $relations = Relation::createRelationPair($df->id, 
                                                                   $dt->id,
                                                                   $relType,
-                                                                  array('collectorElements'
+                                                                  array('composerElements'
                                                                         => $from.','.$to),
-                                                                  array('collectorElements'
+                                                                  array('composerElements'
                                                                         => $to.','.$from)
                                                                );
                         foreach ($relations as $relation) {
