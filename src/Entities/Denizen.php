@@ -92,11 +92,17 @@ class Denizen
     {
         $instance->{'id'} = $data->id;
         $instance->{'type'} = $data->type;
-        $instance->{'userid'} = $data->userid;
+        if (property_exists($data, 'userid')) {
+            $instance->{'userid'} = $data->userid;
+        }
         $instance->{'name'} = $data->name;
         $instance->{'scapeId'} = $data->scape;
-        $instance->{'content'} = $data->content;
-        $instance->{'properties'} = (array) json_decode($data->properties);
+        if (property_exists($data, 'content')) {
+            $instance->{'content'} = $data->content;
+        }
+        if (property_exists($data, 'properties')) {
+            $instance->{'properties'} = (array) json_decode($data->properties);
+        }
     }
 
     /**
@@ -115,6 +121,41 @@ class Denizen
             self::fill($result, $data);
         }
         return $result;
+    }
+
+    /*
+     *  I know this absolutely does not belong in the Denizen class. Give me 
+     *  some time to get this all figured out. Sigh.
+     */
+    public static function getVistaDenizens ($scape, $allowedComposers, $types)
+    {
+        if ($types) {
+            $records = DB::table(self::$tableName)
+                        ->join('relations', 'relations.fromid', '=', 'denizens.id')
+                        ->where('denizens.scape', '=', $scape)
+                        ->whereIn('denizens.type', $types)
+                        ->whereIn('relations.composerid', $allowedComposers)
+                        ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
+                        ->distinct()
+                        ->get();
+        }
+        else {
+            $records = DB::table(self::$tableName)
+                        ->join('relations', 'relations.from', '=', 'denizens.id')
+                        ->where('denizens.scape', '=', $scape)
+                        ->whereIn('relations.composerid', $allowedComposers)
+                        ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
+                        ->distinct()
+                        ->get();
+        }
+        $result = array();
+
+        foreach ($records as $record) {
+            $item = new static($record->name, null);
+            self::fill($item,$record);
+            $result[] = $item;
+        }
+        return $result;        
     }
 
     public static function allScapeDenizens ($id, $types = null)
@@ -216,5 +257,6 @@ class Denizen
     {
         return Relation::getRelations($this->id);
     }
+
 }
  

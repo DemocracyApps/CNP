@@ -24,18 +24,19 @@ class VistasController extends ApiController {
 		$vista = Vista::find(\Input::get('vista'));
 		$typeList = null;
 		$denizens = null;
-		if ($vista->topelements) {
+		if ($vista->selector) {
 			$typeList = array();
-            $s = trim(preg_replace("([, ]+)", ' ', $vista->topelements));
+            $s = trim(preg_replace("([, ]+)", ' ', $vista->selector));
             if ($s) $types = explode(" ", $s);
             foreach ($types as $type) {
             	$typeList [] = \CNP::getDenizenTypeId($type);
             }
-            $denizens = Denizen::allScapeDenizens($vista->scape, $typeList);
 		}
-		else {
-            $denizens = Denizen::allScapeDenizens($vista->scape);
-		}
+        $s = trim(preg_replace("([, ]+)", ' ', $vista->input_composers));
+        if ($s) $allowedComposers = explode(" ", $s);
+
+        $denizens = Denizen::getVistaDenizens ($vista->scape, $allowedComposers, $typeList);
+
 		$args = array('denizens' => $denizens, 'vista' => $vista);
 		if ($vista->composer) {
 			$args['composer'] = $vista->composer;
