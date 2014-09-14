@@ -37,11 +37,11 @@ class VistasController extends ApiController {
             $denizens = Denizen::allScapeDenizens($vista->scape);
 		}
 		$args = array('denizens' => $denizens, 'vista' => $vista);
-		if ($vista->specification) {
-			$args['controller'] = $vista->specification;
+		if ($vista->composer) {
+			$args['composer'] = $vista->composer;
 		}
 		else {
-			$args['controller'] = null;
+			$args['composer'] = null;
 		}
 		return \View::make('vistas.index', $args);
 	}
@@ -73,7 +73,7 @@ class VistasController extends ApiController {
 			$data = \Input::all();
 		}
 
-        $rules = ['name'=>'required', 'collector'=>'required'];
+        $rules = ['name'=>'required', 'composer'=>'required'];
         $validator = \Validator::make($data, $rules);
         if ($validator->fails()) {
         	if ($isAPI) {
@@ -88,7 +88,7 @@ class VistasController extends ApiController {
 
         $this->vista->name = $data['name'];
         $this->vista->scape = $data['scape'];
-        $this->vista->collector = $data['collector'];
+        $this->vista->composer = $data['composer'];
         if ($data['description']) $this->vista->description = $data['description'];
 
 		// Now load in the file

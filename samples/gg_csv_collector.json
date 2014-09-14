@@ -1,7 +1,7 @@
 {
-    "name": "Global Giving CSV Input Collector",
+    "name": "Global Giving CSV Input Composer",
     "version": "0.01",
-    "baseSpecificationId": 1,
+    "baseSpecificationId": 3,
     "input": {
 	    "inputType": "csv-simple",
         "anchor":"Story",

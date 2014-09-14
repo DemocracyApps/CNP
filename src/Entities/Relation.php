@@ -96,6 +96,13 @@ class Relation
         return $relation;
     }
 
+    public static function getInverseRelationName ($relationName) {
+        $relRecord = DB::table(self::$relTypesTableName)->where('name',$relationName)->first();
+        $inverse = $relRecord->{'inverse'}?$relRecord->{'inverse'}:$relRecord->{'id'};
+        $inverseRecord = DB::table(self::$relTypesTableName)->where('id',$inverse)->first();
+        return $inverseRecord->{'name'};
+    }
+
     public function getId() {
         return $this->id;
     }

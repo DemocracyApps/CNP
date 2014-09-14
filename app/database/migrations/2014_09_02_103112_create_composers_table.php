@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCollectorsTable extends Migration {
+class CreateComposersTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateCollectorsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('collectors', function(Blueprint $table)
+		Schema::create('composers', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('name');
@@ -21,7 +21,7 @@ class CreateCollectorsTable extends Migration {
 			$table->bigInteger('scape');
 			$table->foreign('scape')->references('id')->on('denizens');
             $table->integer('dependson')->nullable();
-            $table->foreign('dependson')->references('id')->on('collectors');
+            $table->foreign('dependson')->references('id')->on('composers');
             $table->string('contains')->nullable();
 			$table->timestamps();
 		});
@@ -34,7 +34,7 @@ class CreateCollectorsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('collectors');
+		Schema::drop('composers');
 	}
 
 }

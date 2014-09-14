@@ -19,9 +19,15 @@ Route::get('/test', function()
     return View::make('test');
 });
 
-Route::get('/denizens/{id}', function ($id) {
-    return Redirect::to('/stories/'.$id);
-});
+// DenizensController doesn't actually need all the routes, but I can't 
+// figure out how to call just show($id)
+Route::resource('denizens', 'DemocracyApps\CNP\Controllers\DenizensController');
+
+
+Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
+Route::resource('scapes', 'DemocracyApps\CNP\Controllers\ScapesController');
+Route::resource('composers', 'DemocracyApps\CNP\Controllers\ComposersController');
+Route::resource('vistas', 'DemocracyApps\CNP\Controllers\VistasController');
 
 class PP {
 
@@ -39,8 +45,8 @@ Route::group(['prefix' => 'ajax'], function ()
         Route::get('person', function()
         {
             $term = Input::get('term');
-            $collector = \DemocracyApps\CNP\Inputs\Collector::find(\Input::get('collector'));
-            $scape = $collector->scape;
+            $composer = \DemocracyApps\CNP\Inputs\Composer::find(\Input::get('composer'));
+            $scape = $composer->scape;
             $list = DAEntity\Person::getDenizensLike($scape, $term);
             $ret = array();
             foreach ($list as $item) {
@@ -114,11 +120,6 @@ Route::get('/', function()
 {
     return Redirect::to('/account');
 });
-
-Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
-Route::resource('scapes', 'DemocracyApps\CNP\Controllers\ScapesController');
-Route::resource('collectors', 'DemocracyApps\CNP\Controllers\CollectorsController');
-Route::resource('vistas', 'DemocracyApps\CNP\Controllers\VistasController');
 
 Route::get('account', array('before' => 'cnp.auth', function()
 {

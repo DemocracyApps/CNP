@@ -3,10 +3,10 @@
 @section('content')
 <h1>Upload CSV File of Stories</h1>
 
-<p>We will use Collector specification {{ $collector->id }} ({{$collector->name}}) to process your stories.</p>
+<p>We will use Composer specification {{ $composer->id }} ({{$composer->name}}) to process your stories.</p>
 <br/>
 {{ Form::open(['route' => array('stories.store'), 'files' => true]) }}
-   {{ Form::hidden('collector', $collector->id)}}
+   {{ Form::hidden('composer', $composer->id)}}
    <div class="form-group">
       {{ Form::label('csv', 'CSV File')}}
       {{ Form::file('csv')}}

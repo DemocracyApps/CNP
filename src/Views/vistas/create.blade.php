@@ -12,10 +12,10 @@
       <span class="error">{{ $errors->first('name') }}</span>
    </div>
    <div class="form-group">
-      {{ Form::label('collector', 'Collector Specification ID: ') }}
-      {{ Form::text('collector', null, ['class' => 'form-control']) }}
+      {{ Form::label('composer', 'Composer Specification ID: ') }}
+      {{ Form::text('composer', null, ['class' => 'form-control']) }}
       <br/>
-      <span class="error">{{ $errors->first('collector') }}</span>
+      <span class="error">{{ $errors->first('composer') }}</span>
    </div>
 
    <div class="form-group">

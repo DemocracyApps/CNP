@@ -1,57 +1,57 @@
 @extends('layouts.default')
 
 @section('content')
-<h1>{{ $collector->name }} </h1>
+<h1>{{ $composer->name }} </h1>
 
-<!-- Edit Collector Button -->
-{{ Form::open(array('route' => array('collectors.edit', $collector->id), 'method' => 'get', 
+<!-- Edit Composer Button -->
+{{ Form::open(array('route' => array('composers.edit', $composer->id), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
   <button type="submit" class="btn btn-info btn-mini">Edit</button>
 {{ Form::close() }}
 
-<!-- Run Collector Button -->
+<!-- Run Composer Button -->
 {{ Form::open(array('route' => array('stories.create'), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
-  <input type="hidden" name="collector" value="{{$collector->id}}"/>
+  <input type="hidden" name="composer" value="{{$composer->id}}"/>
   <button type="submit" class="btn btn-info btn-mini">Run</button>
 {{ Form::close() }}
 
-<!-- Delete Collector Button -->
-{{ Form::open(array('route' => array('collectors.destroy', $collector->id), 'method' => 'delete',
+<!-- Delete Composer Button -->
+{{ Form::open(array('route' => array('composers.destroy', $composer->id), 'method' => 'delete',
                                             'style' => 'display:inline-block')) }}
   <button type="submit" class="btn btn-danger btn-mini">Delete</button>
 {{ Form::close() }}
 
-{{ link_to("scapes/".$collector->scape, "Return to Scape Page") }}
+{{ link_to("scapes/".$composer->scape, "Return to Scape Page") }}
 <br/>
 
 <div>
   <h2>General Information</h2>
   <table>
     <tr>
-      <th>Specification Name:</th>  <td>{{$collector->name}}</td>
+      <th>Specification Name:</th>  <td>{{$composer->name}}</td>
     </tr>
     <tr>
-      <th>Scape:</th>  <td>{{$collector->scape}}</td>
+      <th>Scape:</th>  <td>{{$composer->scape}}</td>
     </tr>
     <tr>
-      <th>Description:</th>  <td>{{$collector->description}}</td
+      <th>Description:</th>  <td>{{$composer->description}}</td
     </tr>
     <tr>
-      <th>Contains:</th> <td>{{$collector->contains}}</td>
+      <th>Contains:</th> <td>{{$composer->contains}}</td>
     </tr>
     <tr>
-      <th>Depends On:</th> <td>{{$collector->dependson}}</td>
+      <th>Depends On:</th> <td>{{$composer->dependson}}</td>
     </tr>
   </table>
 </div>
 
 <div>
-  <h2>Collector Specification</h2>
+  <h2>Composer Specification</h2>
   <br/>
   <pre>
     <code>
-    {{$collector->specification}}
+    {{$composer->specification}}
     </code>
   </pre>
 </div>

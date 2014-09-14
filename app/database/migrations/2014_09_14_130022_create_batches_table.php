@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVistasTable extends Migration {
+class CreateBatchesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,16 +12,11 @@ class CreateVistasTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('vistas', function(Blueprint $table)
+		Schema::create('batches', function(Blueprint $table)
 		{
-			$table->increments('id');
-			$table->string('name');
-			$table->string('description')->nullable();
-			$table->text('topelements')->nullable();
+			$table->bigIncrements('id');
 			$table->integer('composer');
 			$table->foreign('composer')->references('id')->on('composers');
-			$table->bigInteger('scape');
-			$table->foreign('scape')->references('id')->on('denizens');
 			$table->timestamps();
 		});
 	}
@@ -33,7 +28,7 @@ class CreateVistasTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('vistas');
+		Schema::drop('batches');
 	}
 
 }

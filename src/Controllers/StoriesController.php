@@ -2,7 +2,7 @@
 namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
-use \DemocracyApps\CNP\Inputs\Collector as Collector;
+use \DemocracyApps\CNP\Inputs\Composer as Composer;
 
 class StoriesController extends BaseController {
     protected $story;
@@ -70,24 +70,24 @@ class StoriesController extends BaseController {
             return \Redirect::to('/login');			
 		}
 
-        if ( ! \Input::has('collector')) throw new \Exception("No collector id specified.");
+        if ( ! \Input::has('composer')) throw new \Exception("No composer id specified.");
 
-    	$collector = Collector::find(\Input::get('collector'));
-    	if ( ! $collector ) throw new \Exception("Collector ".\Input::get('collector'). " not found.");
+    	$composer = Composer::find(\Input::get('composer'));
+    	if ( ! $composer ) throw new \Exception("Composer ".\Input::get('composer'). " not found.");
 
-        if ( ! $collector->validForInput()) throw new \Exception("Collector ".\Input::get('collector') . " not valid for input.");
-        $collector->initialize(\Input::all());
+        if ( ! $composer->validForInput()) throw new \Exception("Composer ".\Input::get('composer') . " not valid for input.");
+        $composer->initialize(\Input::all());
 
         if (\Input::get('referent')) {
-            $collector->setReferentByDenizenId(\Input::get('referent'));
+            $composer->setReferentByDenizenId(\Input::get('referent'));
         }
 
-    	$inputType = $collector->getInputType();
+    	$inputType = $composer->getInputType();
     	if ($inputType == 'csv-simple') {
-	    	return \View::make('stories.csvUpload', array('collector' => $collector));
+	    	return \View::make('stories.csvUpload', array('composer' => $composer));
     	}
     	elseif ($inputType == 'auto-interactive') {
-            return \View::make('stories.autoinput', array('collector' => $collector));
+            return \View::make('stories.autoinput', array('composer' => $composer));
     	}
     	else {
     		return "Unknown input type " . $inputType;
@@ -105,21 +105,21 @@ class StoriesController extends BaseController {
             return \Redirect::to('/login');			
 		}
         $input = \Input::all();
-        $collector = Collector::find(\Input::get('collector'));
-        if ( ! $collector->validateInput($input)) {
-            return \Redirect::back()->withInput()->withErrors($collector->messages());
+        $composer = Composer::find(\Input::get('composer'));
+        if ( ! $composer->validateInput($input)) {
+            return \Redirect::back()->withInput()->withErrors($composer->messages());
         }
         if (\Input::get('referentId')) {
-            $collector->setReferentByReferentId(\Input::get('referentId'));
+            $composer->setReferentByReferentId(\Input::get('referentId'));
         }
 
-        $inputType = $collector->getInputType();
+        $inputType = $composer->getInputType();
 
-        $collector->initialize($input);
-        $collector->processInput($input);
+        $composer->initialize($input);
+        $composer->processInput($input);
         if ($inputType == 'auto-interactive') {
-            if ( ! $collector->inputDone()) {
-                return \View::make('stories.autoinput', array('collector' => $collector));
+            if ( ! $composer->inputDone()) {
+                return \View::make('stories.autoinput', array('composer' => $composer));
             }
         }
         return \Redirect::to('/stories');

@@ -3,7 +3,7 @@ namespace DemocracyApps\CNP\Inputs;
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Graph\DenizenSet;
 
-class Collector extends \Eloquent {
+class Composer extends \Eloquent {
     protected $fullSpecification = null;
 
     //
@@ -35,7 +35,7 @@ class Collector extends \Eloquent {
 	 *
 	 * @var string
 	 */
-	protected $table = 'collectors';
+	protected $table = 'composers';
 
     /**
      * Load the full specification and initialize pointers to individual sections
@@ -63,17 +63,17 @@ class Collector extends \Eloquent {
     {
         $this->checkReady();
         // Right now initialization is only relevant for interactive input
-        if ($this->inputType == 'auto-interactive') {
+        if ($this->inputType == 'auto-interactive' && $input != null) {
             $driverId = \Input::get('driver');
             if ($driverId){
-                $this->driver = CollectorInputDriver::find($driverId);
+                $this->driver = ComposerInputDriver::find($driverId);
                 if ( ! $this->driver) {
                     dd("No damn driver " . $driverId);
                 }
                 $this->driver->reInitialize();
             }
             else {
-                $this->driver = new CollectorInputDriver;
+                $this->driver = new ComposerInputDriver;
                 $this->driver->initialize($this->inputSpec);
                 $this->driver->save();
             }
@@ -85,8 +85,8 @@ class Collector extends \Eloquent {
         $spec = json_minify($this->specification);
         $spec = json_decode($spec, true);
         if (array_key_exists('baseSpecificationId', $spec)) {
-            $nextCollector = Collector::find($spec['baseSpecificationId']);
-            $tmpspec = $nextCollector->resolveFullSpecification($spec['baseSpecificationId']);
+            $nextComposer = Composer::find($spec['baseSpecificationId']);
+            $tmpspec = $nextComposer->resolveFullSpecification($spec['baseSpecificationId']);
             if ( ! array_key_exists('input', $spec) && array_key_exists('input', $tmpspec)) {
                 $spec['input'] = $tmpspec['input'];
             }
@@ -191,6 +191,28 @@ class Collector extends \Eloquent {
         return $this->inputDone;
     }
 
+    /*
+     *  Graph Generation
+     */
+    
+    public function generateGraph()
+    {
+        $graph = new \DemocracyApps\CNP\Graph\Graph;
+
+        foreach ($this->elementsSpec as $element) {
+            $graph->addNode($element['id'], null);
+        }
+
+        foreach ($this->relationsSpec as $relation) {
+            $graph->addEdge($relation['from'], $relation['to'], $relation['type']);
+            $graph->addEdge($relation['to'], $relation['from'], 
+                            \DemocracyApps\CNP\Entities\Relation::getInverseRelationName($relation['type']));
+        }
+
+        return $graph;
+    }
+
+
     /*************************************************************************************
      *************************************************************************************
      **
@@ -230,7 +252,7 @@ class Collector extends \Eloquent {
 
     private static function registerElementProcessors ()
     {
-        //ElementGenerator::registerElementGenerator('Tag', 'DemocracyApps\CNP\Inputs\Collector::tryit');
+        //ElementGenerator::registerElementGenerator('Tag', 'DemocracyApps\CNP\Inputs\Composer::tryit');
     }
 
     private function commonProcessInput ($data, $elementsSpec, $relationsSpec, $scape)
@@ -294,7 +316,7 @@ class Collector extends \Eloquent {
                 // One or the other may expand to multiple denizens (e.g., tags), but let's not
                 // let things get out of hand.
                 if (count($dfrom) > 1 && count($dto) > 1) {
-                    throw new \Exception("Collector processing - N X M relation generation not allowed");
+                    throw new \Exception("Composer processing - N X M relation generation not allowed");
                 }
                 foreach ($dfrom as $df) {
                     foreach ($dto as $dt) {

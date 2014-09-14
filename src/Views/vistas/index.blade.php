@@ -4,7 +4,7 @@
 <h1>Vista: {{$vista->name}}</h1>
   <?php
     $getParams = null;
-    if ($controller) $getParams = '?controller='.$controller;
+    if ($composer) $getParams = '?composer='.$composer;
   ?>
 
 	<table class="long-table">

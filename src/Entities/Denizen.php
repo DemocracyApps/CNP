@@ -211,5 +211,10 @@ class Denizen
         }
         return $result;
     }
+
+    public function getRelations()
+    {
+        return Relation::getRelations($this->id);
+    }
 }
  

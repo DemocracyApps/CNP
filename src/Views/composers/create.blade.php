@@ -1,9 +1,9 @@
 @extends('layouts.default')
 
 @section('content')
-<h1>Create New Collector</h1>
+<h1>Create New Composer</h1>
 
-{{ Form::open(['route' => 'collectors.store', 'files' => true]) }}
+{{ Form::open(['route' => 'composers.store', 'files' => true]) }}
    {{ Form::hidden('scape', $scape)}}
    <div class="form-group">
       {{ Form::label('name', 'Name: ') }}
@@ -18,14 +18,14 @@
       <br/>
    </div>
    <div class="form-group">
-      {{ Form::label('collector', 'Specification')}}
-      {{ Form::file('collector')}}
+      {{ Form::label('composer', 'Specification')}}
+      {{ Form::file('composer')}}
       
       <span class="error">{{ $errors->first('fileerror') }}</span>
    </div>
    <br/>
    <div class="form-group">
-	  {{ Form::submit('Create Collector', ['class' => 'btn btn-primary']) }}
+	  {{ Form::submit('Create Composer', ['class' => 'btn btn-primary']) }}
    </div>
 {{ Form::close() }}
 

@@ -4,15 +4,15 @@
 <h1>Tell Your New Story</h1>
 
 {{ Form::open(['route' => 'stories.store']) }}
-   <input type="hidden" name="driver" value="{{$collector->getDriver()->id}}"/>
-   <input type="hidden" name="collector" value="{{$collector->id}}"/>
-   @if ($collector->getReferentId())
-      <input type="hidden" name="referentId" value="{{$collector->getReferentId()}}"/>
+   <input type="hidden" name="driver" value="{{$composer->getDriver()->id}}"/>
+   <input type="hidden" name="composer" value="{{$composer->id}}"/>
+   @if ($composer->getReferentId())
+      <input type="hidden" name="referentId" value="{{$composer->getReferentId()}}"/>
    @endif
    <?php
       $done = false;
       while ( ! $done ) {
-         $next = $collector->getDriver()->getNextInput();
+         $next = $composer->getDriver()->getNextInput();
          if ( ! $next)
             $done = true;
          else
@@ -23,11 +23,11 @@
          \DemocracyApps\CNP\Utility\Html::createSelfClosingElement('br');
          echo("\n");
       }
-      $collector->getDriver()->cleanupAndSave();
+      $composer->getDriver()->cleanupAndSave();
    ?>
 
    <div class="form-group">
-      @if ($collector->getDriver()->inputDone())
+      @if ($composer->getDriver()->inputDone())
          {{ Form::submit('Submit', ['class' => 'btn btn-primary']) }}
       @else
          {{ Form::submit('Next', ['class' => 'btn btn-primary']) }}
@@ -41,7 +41,7 @@
 //autocomplete
       $(function() {
          $(".auto-person").autocomplete({
-            source: "http://cnp.dev/ajax/person?collector={{$collector->id}}&driver={{$collector->getDriver()->id}}",
+            source: "http://cnp.dev/ajax/person?composer={{$composer->id}}&driver={{$composer->getDriver()->id}}",
             minLength: 1
          });
       });

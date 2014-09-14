@@ -17,7 +17,7 @@
       <th>Content:</th>  <td>{{$story->getContent()}}</td>
     </tr>
     <tr>
-      <th>Branch:</th>  <td><a href="/stories/create?collector=5&referent={{$story->getId()}}">Fly!</a></td>
+      <th>Branch:</th>  <td><a href="/stories/create?composer=5&referent={{$story->getId()}}">Fly!</a></td>
     </tr>
   </table>
 
@@ -34,13 +34,13 @@
     @foreach ($decorators as $decorator)
       <?php
       $launchText = null;
-        $collector = \DemocracyApps\CNP\Inputs\Collector::find($decorator);
-        if ($collector && $collector->validForInput()) {
-          $launchText = $collector->getInputProperty('referentLaunchText');
+        $composer = \DemocracyApps\CNP\Inputs\Composer::find($decorator);
+        if ($composer && $composer->validForInput()) {
+          $launchText = $composer->getInputProperty('referentLaunchText');
         }
         if ($launchText == null) $launchText = "Branch to Comment";
       ?>
-      <li><a href="/stories/create?collector={{$decorator}}&referent={{$story->getId()}}">{{$launchText}}</a></li>
+      <li><a href="/stories/create?composer={{$decorator}}&referent={{$story->getId()}}">{{$launchText}}</a></li>
     @endforeach
     </ul>
   @endif

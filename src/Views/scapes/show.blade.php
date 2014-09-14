@@ -52,7 +52,7 @@
     <tr>
       <th> ID </th>
       <th> Name </th>
-      <th> Collector </th>
+      <th> Composer </th>
       <th> Description </th>
       <th> Top Level Elements</th>
       <th> Link </th>
@@ -61,7 +61,7 @@
       <tr>
         <td> {{ $vista->id }} </td>
         <td> {{ $vista->name }} </td>
-        <td> {{ $vista->collector }}</td>
+        <td> {{ $vista->composer }}</td>
         <td> {{ $vista->description }} </td>
         <td> {{ $vista->topelements }}</td>
         <td> <a href="/vistas?vista={{$vista->id}}">View</a></td>
@@ -78,7 +78,7 @@
 </div>
 <br/>
 <div>
-  <h2>Collector Specifications</h2>
+  <h2>Composer Specifications</h2>
   <table>
     <tr>
       <th> Name </th>
@@ -88,22 +88,22 @@
       <th> Depends On</th>
       <th> Use Link </th>
     </tr>
-    @foreach ($collectors as $collector)
+    @foreach ($composers as $composer)
       <tr>
-        <th> {{ link_to("collectors/".$collector->id, $collector->name) }} </th>
-        <td> {{ $collector->description }} </td>
-        <td> {{ $collector->id }} </td>
-        <td> {{ $collector->contains }}</td>
-        <td> {{ $collector->dependson }}</td>
-        <td> <a href="/stories/create?collector={{$collector->id}}">Use</a></td>
+        <th> {{ link_to("composers/".$composer->id, $composer->name) }} </th>
+        <td> {{ $composer->description }} </td>
+        <td> {{ $composer->id }} </td>
+        <td> {{ $composer->contains }}</td>
+        <td> {{ $composer->dependson }}</td>
+        <td> <a href="/stories/create?composer={{$composer->id}}">Use</a></td>
       </tr>    
     @endforeach
   </table>
   <br/>
-  {{ Form::open(['route' => 'collectors.create', 'method' => 'get']) }}
+  {{ Form::open(['route' => 'composers.create', 'method' => 'get']) }}
      <div>
        {{ Form::hidden('scape', $scape->getId())}}
-       {{ Form::submit('Add a Collector', ['class' => 'btn btn-primary']) }}
+       {{ Form::submit('Add a Composer', ['class' => 'btn btn-primary']) }}
      </div>
   {{ Form::close() }}
 </div>

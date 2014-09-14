@@ -3,8 +3,8 @@ namespace DemocracyApps\CNP\Inputs;
 /**
  * This class is generated from an 'auto-interactive' input
  */
-class CollectorInputDriver extends \Eloquent {
-    protected $table = 'collector_auto_input_drivers';
+class ComposerInputDriver extends \Eloquent {
+    protected $table = 'composer_auto_input_drivers';
     public $runDriver = null;
     private $done = false;
     private $pageBreak = false;
