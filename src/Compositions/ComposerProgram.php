@@ -97,11 +97,6 @@ class ComposerProgram {
         }
     }
 
-    public function testit()
-    {
-        dd($this->runnable);
-    }
-
     public function getNext()
     {
         /*
