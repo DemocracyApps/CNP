@@ -13,6 +13,26 @@ class Vista extends \Eloquent
 
     }
 
+    public function extractCompositions ($denizen)
+    {
+        if (! $this->allowedComposers) $this->initialize();
+        $result = array();
+        $relations = $denizen->getRelations();
+        foreach($relations as $relation) {
+            if (in_array($relation->composerid, $this->allowedComposers, false)) {
+                if ($relation->compositionid) {
+                    if (array_key_exists($relation->compositionid, $result)) {
+                        ++$result[$relation->compositionid];
+                    }
+                    else {
+                        $result[$relation->compositionid] = 1;
+                    }
+                }
+            }
+        }
+        return $result;        
+    }
+
     /*
      * We get denizen and we want to figure out what role(s) it plays in the composer
      * spec.

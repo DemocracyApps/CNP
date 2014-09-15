@@ -158,6 +158,25 @@ class Denizen
         return $result;        
     }
 
+    public static function getCompositionDenizens ($compositionId)
+    {
+        $records = DB::table(self::$tableName)
+                    ->join('relations', 'relations.fromid', '=', 'denizens.id')
+                    ->where('relations.compositionid', '=', $compositionId)
+                    ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
+                    ->distinct()
+                    ->get();
+        dd($records);
+        $result = array();
+
+        foreach ($records as $record) {
+            $item = new static($record->name, null);
+            self::fill($item,$record);
+            $result[] = $item;
+        }
+        return $result;        
+    }
+
     public static function allScapeDenizens ($id, $types = null)
     {
         if ($types) {

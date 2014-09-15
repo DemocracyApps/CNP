@@ -23,6 +23,13 @@ class DenizensController extends ApiController {
         $composer->initialize(null);
         $vista = \Input::get('vista');
         $vista = Vista::find($vista);
+        $compositions = $vista->extractCompositions($denizen);
+        $denizens = array();
+        foreach ($compositions as $id => $count) {
+            $d = DAEntity\Denizen::getCompositionDenizens($id);
+            $denizens = array_merge($denizens, $d);
+        }
+        dd($denizens);
         $graph = $composer ->generateGraph();
         $roles = $vista->extractComposerRoles($denizen);
         $count = 0;
