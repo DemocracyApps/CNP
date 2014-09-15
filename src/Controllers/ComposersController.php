@@ -2,7 +2,7 @@
 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Utility\Api as Api;
-use \DemocracyApps\CNP\Inputs\Composer as Composer;
+use \DemocracyApps\CNP\Compositions\Composer as Composer;
 
 class ComposersController extends ApiController {
 	protected $composer;

@@ -2,7 +2,7 @@
 namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
-use \DemocracyApps\CNP\Inputs\Composer as Composer;
+use \DemocracyApps\CNP\Compositions\Composer as Composer;
 
 class StoriesController extends BaseController {
     protected $story;
@@ -116,7 +116,7 @@ class StoriesController extends BaseController {
         $inputType = $composer->getInputType();
 
         $composer->initialize($input);
-        $composition = new \DemocracyApps\CNP\Inputs\Composition;
+        $composition = new \DemocracyApps\CNP\Compositions\Composition;
         $composition->input_composer_id = $composer->id;
         $composition->save();
         $composer->processInput($input, $composition);

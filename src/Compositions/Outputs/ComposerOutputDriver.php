@@ -1,7 +1,7 @@
 <?php
-namespace DemocracyApps\CNP\Outputs;
+namespace DemocracyApps\CNP\Compositions\Outputs;
 
-use \DemocracyApps\CNP\Inputs\Composer;
+use \DemocracyApps\CNP\Compositions\Composer;
 
 class ComposerOutputDriver extends \Eloquent {
     protected $table = 'composer_output_drivers';

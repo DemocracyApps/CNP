@@ -2,8 +2,8 @@
 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Utility\Api as Api;
-use \DemocracyApps\CNP\Inputs\Composer as Composer;
-use \DemocracyApps\CNP\Outputs\Vista as Vista;
+use \DemocracyApps\CNP\Compositions\Composer as Composer;
+use \DemocracyApps\CNP\Compositions\Outputs\Vista as Vista;
 
 class ScapesController extends ApiController {
 	protected $scape;

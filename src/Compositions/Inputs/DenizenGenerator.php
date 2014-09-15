@@ -1,12 +1,12 @@
 <?php
-namespace DemocracyApps\CNP\Inputs;
+namespace DemocracyApps\CNP\Compositions\Inputs;
 use \DemocracyApps\CNP\Entities as DAEntity;
 
 class DenizenGenerator 
 {
     static $fcts = array(
-        'Tag' => '\DemocracyApps\CNP\Inputs\DenizenGenerator::tagGenerator',
-        'Person' => '\DemocracyApps\CNP\Inputs\DenizenGenerator::personGenerator'
+        'Tag' => '\DemocracyApps\CNP\Compositions\Inputs\DenizenGenerator::tagGenerator',
+        'Person' => '\DemocracyApps\CNP\Compositions\Inputs\DenizenGenerator::personGenerator'
         );
 
     /**

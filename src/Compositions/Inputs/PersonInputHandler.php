@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Inputs;
+namespace DemocracyApps\CNP\Compositions\Inputs;
 
 abstract class PersonInputHandler extends InputHandler {
 

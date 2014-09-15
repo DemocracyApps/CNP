@@ -45,7 +45,7 @@ Route::group(['prefix' => 'ajax'], function ()
         Route::get('person', function()
         {
             $term = Input::get('term');
-            $composer = \DemocracyApps\CNP\Inputs\Composer::find(\Input::get('composer'));
+            $composer = \DemocracyApps\CNP\Compositions\Composer::find(\Input::get('composer'));
             $scape = $composer->scape;
             $list = DAEntity\Person::getDenizensLike($scape, $term);
             $ret = array();
@@ -102,15 +102,7 @@ Route::get('/download', function ()
                      'Content-Type: text/csv',
                     );
     return Response::download($file, 'export.csv', $headers);
-    // return Response::download($pathToFile, $name, $headers);
-/*
-header("Content-type: text/csv");
-header("Content-Disposition: attachment; filename=file.csv");
-header("Pragma: no-cache");
-header("Expires: 0");
 
-echo "record1,record2,record3\n";
- */
 });
 
 Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .

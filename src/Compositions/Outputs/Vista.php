@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Outputs;
+namespace DemocracyApps\CNP\Compositions\Outputs;
 use \DemocracyApps\CNP\Entities as DAEntity;
 
 class Vista extends \Eloquent

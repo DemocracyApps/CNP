@@ -1,7 +1,7 @@
 <?php namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Utility\Api as Api;
-use \DemocracyApps\CNP\Outputs\Vista;
+use \DemocracyApps\CNP\Compositions\Outputs\Vista;
 use \DemocracyApps\CNP\Entities\Denizen;
 
 class VistasController extends ApiController {
@@ -9,7 +9,7 @@ class VistasController extends ApiController {
 	protected $vista;
 
 
-	function __construct (\DemocracyApps\CNP\Outputs\Vista $vista)
+	function __construct (Vista $vista)
 	{
 		$this->vista = $vista;
 	}

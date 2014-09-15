@@ -1,7 +1,7 @@
 <?php
-namespace DemocracyApps\CNP\Inputs;
+namespace DemocracyApps\CNP\Compositions\Inputs;
 
-use \DemocracyApps\CNP\Inputs\Composer;
+use \DemocracyApps\CNP\Compositions\Composer;
 
 /**
  * This class is generated from an 'auto-interactive' input
@@ -94,7 +94,7 @@ class ComposerInputDriver extends \Eloquent {
              * We get a processor associated with the particular input type.
              */
             $base = ucfirst($map[$item]['inputType']);
-            $inputControllerClassName = '\DemocracyApps\CNP\Inputs\\'.$base."InputHandler";
+            $inputControllerClassName = '\DemocracyApps\CNP\Compositions\Inputs\\'.$base."InputHandler";
             $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'extractValue');
             $reflectionMethod->invokeArgs(null, array($item, $input, &$map[$item]));
         }

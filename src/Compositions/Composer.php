@@ -1,9 +1,11 @@
 <?php
-namespace DemocracyApps\CNP\Inputs;
+namespace DemocracyApps\CNP\Compositions;
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Graph\DenizenSet;
 use \DemocracyApps\CNP\Entities\Relation;
-use \DemocracyApps\CNP\Outputs\ComposerOutputDriver;
+use \DemocracyApps\CNP\Compositions\Outputs\ComposerOutputDriver;
+use \DemocracyApps\CNP\Compositions\Inputs\ComposerInputDriver;
+use \DemocracyApps\CNP\Compositions\Inputs\DenizenGenerator;
 
 class Composer extends \Eloquent {
     protected $fullSpecification = null;
@@ -409,7 +411,7 @@ class Composer extends \Eloquent {
                 $id = $item['id'];
                 if (array_key_exists($id, $values)) {
                     $base = ucfirst($values[$id]['inputType']);
-                    $inputControllerClassName = '\DemocracyApps\CNP\Inputs\\'.$base."InputHandler";
+                    $inputControllerClassName = '\DemocracyApps\CNP\Compositions\Inputs\\'.$base."InputHandler";
                     $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'getValue');
                     $val = $reflectionMethod->invoke(null, $values[$id]);
                     if (array_key_exists('properties', $values[$id])) {

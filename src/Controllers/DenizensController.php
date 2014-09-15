@@ -2,8 +2,8 @@
 namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
-use \DemocracyApps\CNP\Inputs\Composer;
-use \DemocracyApps\CNP\Outputs\Vista;
+use \DemocracyApps\CNP\Compositions\Composer;
+use \DemocracyApps\CNP\Compositions\Outputs\Vista;
 
 class DenizensController extends ApiController {
     protected $denizen;
