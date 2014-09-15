@@ -404,20 +404,21 @@ class Composer extends \Eloquent {
         $elementsIn = array();
         $title = "No Title";
         $summary = null;
-
         foreach ($map as $item) {
             // If no id, then it wasn't used to get input (e.g., page breaks).
             if (array_key_exists('use', $item) && array_key_exists('id', $item)) {
                 $id = $item['id'];
-                if (array_key_exists($id, $values)) {
-                    $base = ucfirst($values[$id]['inputType']);
+                $value = $this->inputDriver->getCompositionElementById($id);
+
+                //if (array_key_exists($id, $values)) {
+                if ($value) {
+                    $base = ucfirst($value['inputType']);
                     $inputControllerClassName = '\DemocracyApps\CNP\Compositions\Inputs\\'.$base."InputHandler";
                     $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'getValue');
-                    $val = $reflectionMethod->invoke(null, $values[$id]);
-                    if (array_key_exists('properties', $values[$id])) {
-                        \Log::info("We've got some values! They are " . json_encode($values[$id]['properties']));
+                    $val = $reflectionMethod->invoke(null, $value);
+                    if (array_key_exists('properties', $value)) {
                         $properties = [];
-                        foreach ($values[$id]['properties'] as $prop) {
+                        foreach ($value['properties'] as $prop) {
                             $properties[$prop['name']] = $prop['value'];
                         }
                         $val['properties'] = $properties;
@@ -458,7 +459,6 @@ class Composer extends \Eloquent {
 
         while ($skip-- > 0) {
             $line = fgetcsv($myfile);
-            \Log::info("Skipping a line");
         }
         $count = 0;
         while ( ! feof($myfile) ) {

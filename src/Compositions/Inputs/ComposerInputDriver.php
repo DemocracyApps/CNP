@@ -2,6 +2,7 @@
 namespace DemocracyApps\CNP\Compositions\Inputs;
 
 use \DemocracyApps\CNP\Compositions\Composer;
+use \DemocracyApps\CNP\Compositions\ComposerProgram;
 
 /**
  * This class is generated from an 'auto-interactive' input
@@ -9,15 +10,20 @@ use \DemocracyApps\CNP\Compositions\Composer;
 class ComposerInputDriver extends \Eloquent {
     protected $table = 'composer_input_drivers';
     protected $composer = null;
-    public $runDriver = null;
-    private $done = false;
-    private $pageBreak = false;
+
+    protected $program = null;
+
+    // public $runDriver = null;
+    // private $done = false;
+    // private $pageBreak = false;
 
     public function reInitialize(Composer $composer)
     {
         $this->composer = $composer;
-        $this->runDriver = json_decode($this->driver, true);
-        $this->done = $this->runDriver['done'];
+        $this->program = new ComposerProgram;
+        $this->program->restart($this->driver);
+        // $this->runDriver = json_decode($this->driver, true);
+        // $this->done = $this->runDriver['done'];
     }
 
     public function initialize(Composer $composer) 
@@ -26,6 +32,9 @@ class ComposerInputDriver extends \Eloquent {
         $this->userid = \Auth::user()->getId();
         $this->expires = date('Y-m-d H:i:s', time() + 24 * 60 * 60);
 
+        $this->program = new ComposerProgram;
+        $this->program->compile($inputSpec);
+/*
         $this->runDriver = array();
         $this->runDriver['start'] = $this->runDriver['current'] = null;
         $this->runDriver['done'] = false;
@@ -73,48 +82,49 @@ class ComposerInputDriver extends \Eloquent {
                 }
             }
         }
+*/
     }
 
     public function inputDone ()
     {
-        return $this->done;
+        //return $this->done;
+        return $this->program->executionDone();
     }
 
     public function cleanupAndSave()
     {
-        $this->driver = json_encode($this->runDriver);
+        // $this->driver = json_encode($this->runDriver);
+        $this->driver = $this->program->getProgramState();
         $this->save();
     }
 
     public function extractSubmittedValues($input)
     {
-        foreach ($this->runDriver['expecting'] as $item) {
-            $map = &$this->runDriver['map'];
+        $expectedIds = $this->program->getExpectedIds();
+        foreach ($expectedIds as $id) {
+            $cElem = &$this->program->getExpectedCompositionElement($id);
             /*
              * We get a processor associated with the particular input type.
              */
-            $base = ucfirst($map[$item]['inputType']);
+            $base = ucfirst($cElem['inputType']);
             $inputControllerClassName = '\DemocracyApps\CNP\Compositions\Inputs\\'.$base."InputHandler";
             $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'extractValue');
-            $reflectionMethod->invokeArgs(null, array($item, $input, &$map[$item]));
+            $reflectionMethod->invokeArgs(null, array($id, $input, &$cElem));
         }
-        $this->runDriver['expecting'] = array();
     }
+
+    public function getCompositionElementById($id)
+    {
+        return $this->program->getCompositionElementById($id);
+    }
+
     public function getNextInput()
     {
-        /*
-         * At the top of the routine, $current is the page we were most recently on. We don't advance
-         * when we return it because sometimes we'll need to know their response to something before
-         * we can decide where to go next. So a call to this function, getNextInput(), means that we 
-         * are now ready to proceed to the next element. We figure it out, store it in $current and
-         * return it. 
-         *
-         * Returning null means that we are done, at least for this section of inputs.
-         *
-         * In the simplest case, the sequence is just a series of elements with next pointers (and maybe 
-         * some pagebreaks in between). At the beginning $current is null.
-         * 
-         */
+        return $this->program->getNext();
+    }
+/*
+    public function getNextInput()
+    {
         $data = &$this->runDriver;
 
         if ($this->pageBreak) {
@@ -143,5 +153,6 @@ class ComposerInputDriver extends \Eloquent {
         if ($result != null && $result['pagebreak']) $this->pageBreak = true;
         return $result;
     }
+*/
 }
 

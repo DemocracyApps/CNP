@@ -17,7 +17,7 @@
       <th>Content:</th>  <td>{{$story->getContent()}}</td>
     </tr>
     <tr>
-      <th>Branch:</th>  <td><a href="/stories/create?composer=5&referent={{$story->getId()}}">Fly!</a></td>
+      <th>Branch:</th>  <td><a href="/stories/create?composer=7&referent={{$story->getId()}}">Fly!</a></td>
     </tr>
   </table>
 
@@ -34,7 +34,7 @@
     @foreach ($decorators as $decorator)
       <?php
       $launchText = null;
-        $composer = \DemocracyApps\CNP\Inputs\Composer::find($decorator);
+        $composer = \DemocracyApps\CNP\Compositions\Composer::find($decorator);
         if ($composer && $composer->validForInput()) {
           $launchText = $composer->getInputProperty('referentLaunchText');
         }

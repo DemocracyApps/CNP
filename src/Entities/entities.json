@@ -14,7 +14,9 @@
         {"name":"IsPartOf", "inverse":"HasPart"},
         {"name":"HasPart", "inverse":"IsPartOf"},
         {"name":"Causes", "inverse":"IsCausedBy"},
-        {"name":"IsCausedBy", "inverse":"Causes"}
+        {"name":"IsCausedBy", "inverse":"Causes"},
+        {"name":"BranchesTo", "inverse":"BranchesFrom"},
+        {"name":"BranchesFrom", "inverse":"BranchesTo"}
     ],
     "silly": "32"
 }
