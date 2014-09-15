@@ -1,21 +1,28 @@
 <?php
 namespace DemocracyApps\CNP\Inputs;
+
+use \DemocracyApps\CNP\Inputs\Composer;
+
 /**
  * This class is generated from an 'auto-interactive' input
  */
 class ComposerInputDriver extends \Eloquent {
-    protected $table = 'composer_auto_input_drivers';
+    protected $table = 'composer_input_drivers';
+    protected $composer = null;
     public $runDriver = null;
     private $done = false;
     private $pageBreak = false;
 
-    public function reInitialize()
+    public function reInitialize(Composer $composer)
     {
+        $this->composer = $composer;
         $this->runDriver = json_decode($this->driver, true);
         $this->done = $this->runDriver['done'];
     }
-    public function initialize($inputSpec) 
+
+    public function initialize(Composer $composer) 
     {
+        $inputSpec = $composer->getInputSpec();
         $this->userid = \Auth::user()->getId();
         $this->expires = date('Y-m-d H:i:s', time() + 24 * 60 * 60);
 

@@ -26,10 +26,15 @@ class DenizensController extends ApiController {
         $compositions = $vista->extractCompositions($denizen);
         $denizens = array();
         foreach ($compositions as $id => $count) {
-            $d = DAEntity\Denizen::getCompositionDenizens($id);
-            $denizens = array_merge($denizens, $d);
+            DAEntity\Denizen::getCompositionDenizens($id, $denizens);
         }
-        dd($denizens);
+        /*
+         * Ok, so now we have a way to look up instances of any element ID. Now I guess we look for 
+         * the output spec.
+         */
+        $composer->initializeForOutput(\Input::all(), $denizens);
+
+        dd($composer->getOutputDriver());
         $graph = $composer ->generateGraph();
         $roles = $vista->extractComposerRoles($denizen);
         $count = 0;

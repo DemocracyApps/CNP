@@ -3,6 +3,7 @@ namespace DemocracyApps\CNP\Inputs;
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Graph\DenizenSet;
 use \DemocracyApps\CNP\Entities\Relation;
+use \DemocracyApps\CNP\Outputs\ComposerOutputDriver;
 
 class Composer extends \Eloquent {
     protected $fullSpecification = null;
@@ -25,11 +26,13 @@ class Composer extends \Eloquent {
     
     protected $inputSpec = null;
     protected $inputType = null;
+    protected $outputSpec = null;
     protected $elementsSpec = null;
     protected $relationsSpec = null;
     protected $messages = null; // Type should be Illuminate\Support\MessageBag
-    protected $driver = null;
+    protected $inputDriver = null;
     protected $inputDone = false;
+    protected $outputDriver = null;
 
 	/**
 	 * The database table used by the model.
@@ -52,6 +55,9 @@ class Composer extends \Eloquent {
                 $this->inputType = $this->inputSpec['inputType'];
             }
         }
+        if (array_key_exists('output', $this->fullSpecification)) {
+            $this->outputSpec = $this->fullSpecification['output'];
+        }
         if (array_key_exists('elements', $this->fullSpecification)) {
             $this->elementsSpec = $this->fullSpecification['elements'];
         }
@@ -67,16 +73,30 @@ class Composer extends \Eloquent {
         if ($this->inputType == 'auto-interactive' && $input != null) {
             $driverId = \Input::get('driver');
             if ($driverId){
-                $this->driver = ComposerInputDriver::find($driverId);
-                if ( ! $this->driver) {
+                $this->inputDriver = ComposerInputDriver::find($driverId);
+                if ( ! $this->inputDriver) {
                     dd("No damn driver " . $driverId);
                 }
-                $this->driver->reInitialize();
+                $this->inputDriver->reInitialize($this);
             }
             else {
-                $this->driver = new ComposerInputDriver;
-                $this->driver->initialize($this->inputSpec);
-                $this->driver->save();
+                $this->inputDriver = new ComposerInputDriver;
+                $this->inputDriver->initialize($this);
+                $this->inputDriver->save();
+            }
+        }
+    }
+
+    public function initializeForOutput($input, $denizensMap)
+    {
+        if ($input) {
+            if (array_key_exists('driver', $input)) {
+                // We're not at beginning
+            }
+            else {
+                $this->outputDriver = new ComposerOutputDriver;
+                $this->outputDriver->initialize($this, $denizensMap);
+                $this->outputDriver->save();
             }
         }
     }
@@ -140,6 +160,27 @@ class Composer extends \Eloquent {
         return $this->referent->id;
     }
 
+    public function getInputSpec()
+    {
+        $this->checkReady();
+        return $this->inputSpec;
+    }
+    public function getOutputSpec()
+    {
+        $this->checkReady();
+        return $this->outputSpec;
+    }
+    public function getElementsSpec()
+    {
+        $this->checkReady();
+        return $this->elementsSpec;
+    }
+    public function getRelationsSpec()
+    {
+        $this->checkReady();
+        return $this->relationsSpec;
+    }
+
     public function getReferentId()
     {
         $refId = null;
@@ -182,9 +223,14 @@ class Composer extends \Eloquent {
         return $ok;
     }
 
+    public function getOutputDriver()
+    {
+        return $this->outputDriver;
+    }
+
     public function getDriver()
     {
-        return $this->driver;
+        return $this->inputDriver;
     }
 
     public function inputDone()
@@ -237,11 +283,11 @@ class Composer extends \Eloquent {
             self::processCsvInput($input, $composition);
         }
         else if ($this->inputType == 'auto-interactive') {
-            $this->driver->extractSubmittedValues($input); // Import latest batch of form data into driver
-            if ($this->driver->inputDone()) {
+            $this->inputDriver->extractSubmittedValues($input); // Import latest batch of form data into inputDriver
+            if ($this->inputDriver->inputDone()) {
                 $this->inputDone = true;
                 self::processAutoInput($input, $composition);
-                $this->driver->delete();
+                $this->inputDriver->delete();
             }
         }
     }
@@ -349,7 +395,7 @@ class Composer extends \Eloquent {
 
     private function processAutoInput($input, Composition $composition) {
         $map = $this->inputSpec['map'];
-        $values = $this->driver['runDriver']['map'];
+        $values = $this->inputDriver['runDriver']['map'];
 
         if (! $map) return "No map!";
 

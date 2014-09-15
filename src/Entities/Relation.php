@@ -12,6 +12,7 @@ class Relation
     public $toId = null;
     public $relationId = null;
     public $composerid = null;
+    public $compositionid = null;
 
     function __construct($from, $to, $type) {
         $this->fromId = $from;
@@ -25,9 +26,12 @@ class Relation
         $instance->{'fromId'} = $data->fromid;
         $instance->{'toId'} = $data->toid;
         $instance->{'relationId'} = $data->relationid;
-        $instance->{'properties'} = (array) json_decode($data->properties);
-        $instance->{'composerid'} = $data->composerid;
-        $instance->{'compositionid'} = $data->compositionid;
+        if (property_exists($data, 'properties'))
+            $instance->{'properties'} = (array) json_decode($data->properties);
+        if (property_exists($data, 'composerid'))
+            $instance->{'composerid'} = $data->composerid;
+        if (property_exists($data, 'compositionid'))
+            $instance->{'compositionid'} = $data->compositionid;
     }
 
     public function setComposerId ($id)

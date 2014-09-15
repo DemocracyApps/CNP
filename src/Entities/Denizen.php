@@ -158,23 +158,42 @@ class Denizen
         return $result;        
     }
 
-    public static function getCompositionDenizens ($compositionId)
+    /**
+     * This gets all the denizens involved in the given composition in each of their unique 
+     * relationships (i.e., a specific denizen will be returned as many times as it has 
+     * relations). We return a hash by composer element ID, ensuring that a denizen is 
+     * only stored once for a given hash index.
+     * 
+     * @param  Integer $compositionid      ID of the composition that created the relations
+     * @param  Array                       Hash of denizens by composer element ID
+     */
+    public static function getCompositionDenizens ($compositionId, &$resultArray)
     {
         $records = DB::table(self::$tableName)
                     ->join('relations', 'relations.fromid', '=', 'denizens.id')
                     ->where('relations.compositionid', '=', $compositionId)
-                    ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
+                    ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name',
+                             'relations.properties as rprops')
                     ->distinct()
                     ->get();
-        dd($records);
-        $result = array();
 
         foreach ($records as $record) {
             $item = new static($record->name, null);
             self::fill($item,$record);
-            $result[] = $item;
+            if ($record->rprops) {
+                $props = (array) json_decode($record->rprops);
+                if (array_key_exists('composerElements', $props)) {
+                    $elemId = explode(',', $props['composerElements'])[0];
+                    \Log::info("Dealing with denizen ID " . $item->id);
+                    if (array_key_exists($elemId, $resultArray)) {
+                        if (! in_array($item, $resultArray[$elemId])) $resultArray[$elemId][] = $item;
+                    }
+                    else {
+                        $resultArray[$elemId] = array($item);
+                    }
+                }
+            }
         }
-        return $result;        
     }
 
     public static function allScapeDenizens ($id, $types = null)
