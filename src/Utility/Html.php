@@ -79,4 +79,29 @@ class Html {
         }
         self::endElement("div");
     }
+
+    static function createOutput($anchor, $driver, $desc)
+    {
+        self::startElement("div", array('class' => 'form-group'));
+        $prompt = (array_key_exists('outputPrompt', $desc))?$desc['outputPrompt']:$desc['prompt'];
+        self::createElement("h3", $prompt, array('id' => $desc['id']));
+
+        if ($desc['use'] == 'title') {
+            self::createElement('p', $anchor->getName(), array('id' => $anchor->id));
+        }
+        else if ($desc['use'] == 'summary') {
+            self::createElement('p', $anchor->getContent(), array('id' => $anchor->id));
+        }
+        else if ($desc['use'] == 'element') {
+            $denizens = $driver->getDenizens($desc['elementId']);
+            foreach($denizens as $den) {
+                self::createElement('p', $den->getContent(), array('id'=>$den->id));
+                self::createSelfClosingElement('br');
+            }
+        }
+        else {
+            self::createElement('p', "Still TBD", array('class'=>'whoknows'));
+        }
+        self::endElement("div");
+    }
 }

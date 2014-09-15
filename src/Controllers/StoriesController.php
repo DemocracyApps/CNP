@@ -76,7 +76,7 @@ class StoriesController extends BaseController {
     	if ( ! $composer ) throw new \Exception("Composer ".\Input::get('composer'). " not found.");
 
         if ( ! $composer->validForInput()) throw new \Exception("Composer ".\Input::get('composer') . " not valid for input.");
-        $composer->initialize(\Input::all());
+        $composer->initializeForInput(\Input::all());
 
         if (\Input::get('referent')) {
             $composer->setReferentByDenizenId(\Input::get('referent'));
@@ -115,13 +115,13 @@ class StoriesController extends BaseController {
 
         $inputType = $composer->getInputType();
 
-        $composer->initialize($input);
+        $composer->initializeForInput($input);
         $composition = new \DemocracyApps\CNP\Compositions\Composition;
         $composition->input_composer_id = $composer->id;
         $composition->save();
         $composer->processInput($input, $composition);
         if ($inputType == 'auto-interactive') {
-            if ( ! $composer->inputDone()) {
+            if ( ! $composer->getDriver()->done()) {
                 return \View::make('stories.autoinput', array('composer' => $composer));
             }
         }

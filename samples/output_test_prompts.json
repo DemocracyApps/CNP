@@ -31,8 +31,6 @@
     "input": {
 	    "inputType": "auto-interactive",
         "anchor":"Story",
-        "referentRelation":"BranchesTo",
-        "referentLaunchText":"10...9...8...",
 	    "map": [
             {
     			"id":"1",
@@ -40,6 +38,7 @@
     			"elementId":"Story",
     			"inputType":"textarea",
     			"prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community.",
+                "outputPrompt":"This is a story about a person or organization helping someone",
                 "properties": [
                     {
                         "name":"branchDecorators",
@@ -62,6 +61,7 @@
     			"use":"element",
     			"elementId": "Topic",
     			"inputType":"text",
+                "outputPrompt":"Tags",
     			"prompt":"What is this story about?"
     		},
     		{

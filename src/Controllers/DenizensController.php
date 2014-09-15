@@ -20,7 +20,6 @@ class DenizensController extends ApiController {
         // We have to have a composer for this. Hoo boy.
         $composer = \Input::get('composer');
         $composer = Composer::find($composer);
-        $composer->initialize(null);
         $vista = \Input::get('vista');
         $vista = Vista::find($vista);
         $compositions = $vista->extractCompositions($denizen);
@@ -33,10 +32,15 @@ class DenizensController extends ApiController {
          * the output spec.
          */
         $composer->initializeForOutput(\Input::all(), $denizens);
-
-        dd($composer->getOutputDriver());
-
         
+        if ( ! $composer->getDriver()->done()) {
+          return \View::make('compositions.show', array('composer' => $composer, 'topDenizen' => $denizen,
+                                                        'vista' => $vista->id));
+        }
+        else {
+          return \Redirect::to('/vistas?vista='.$vista->id);
+        }
+/*
         $graph = $composer ->generateGraph();
         $roles = $vista->extractComposerRoles($denizen);
         $count = 0;
@@ -52,6 +56,7 @@ class DenizensController extends ApiController {
 
         return \View::make('stories.show', array('story' => $denizen, 'elements' => $elements,
                                                  'relations' => $elementRelations));
+ */
     }
 
 }

@@ -30,15 +30,13 @@ class ComposerInputDriver extends \Eloquent {
         $this->program->compile($inputSpec);
     }
 
-    public function inputDone ()
+    public function done ()
     {
-        //return $this->done;
         return $this->program->executionDone();
     }
 
     public function cleanupAndSave()
     {
-        // $this->driver = json_encode($this->runDriver);
         $this->driver = $this->program->getProgramState();
         $this->save();
     }
@@ -63,7 +61,7 @@ class ComposerInputDriver extends \Eloquent {
         return $this->program->getCompositionElementById($id);
     }
 
-    public function getNextInput()
+    public function getNext()
     {
         return $this->program->getNext();
     }

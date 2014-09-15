@@ -12,14 +12,16 @@
    <?php
       $done = false;
       while ( ! $done ) {
-         $next = $composer->getDriver()->getNextInput();
-         if ( ! $next)
+         $next = $composer->getDriver()->getNext();
+         if ( ! $next) {
             $done = true;
-         else
+         }
+         else {
             if (array_key_exists('prompt', $next)) {
                \DemocracyApps\CNP\Utility\Html::createInput($next);
                echo("\n");
             }
+         }
          \DemocracyApps\CNP\Utility\Html::createSelfClosingElement('br');
          echo("\n");
       }
@@ -27,7 +29,7 @@
    ?>
 
    <div class="form-group">
-      @if ($composer->getDriver()->inputDone())
+      @if ($composer->getDriver()->done())
          {{ Form::submit('Submit', ['class' => 'btn btn-primary']) }}
       @else
          {{ Form::submit('Next', ['class' => 'btn btn-primary']) }}

@@ -20,6 +20,7 @@ class DenizenGenerator
     static public function generateDenizen ($elementType, $name, $content, $properties, $scapeId)
     {
         $createdDenizens = null;
+        \Log::info("In generateDenizen with name ".$name." and content=  ".$content['value']);
         if (array_key_exists($elementType, self::$fcts) && self::$fcts[$elementType]) {
             $createdDenizens = call_user_func(self::$fcts[$elementType], $elementType, $content, $properties);
         }
@@ -61,7 +62,7 @@ class DenizenGenerator
                 $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
                 if (!class_exists($className)) throw new \Exception("Cannot find denizen class " . $className);
                 $d = new $className($content['value'], \Auth::user()->getId());
-
+                $d->content = $content['value'];
                 if ($properties) {
                     foreach ($properties as $propName => $propValue) {
                         $d->setProperty($propName, $propValue);

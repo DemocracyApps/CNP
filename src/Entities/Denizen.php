@@ -172,7 +172,7 @@ class Denizen
         $records = DB::table(self::$tableName)
                     ->join('relations', 'relations.fromid', '=', 'denizens.id')
                     ->where('relations.compositionid', '=', $compositionId)
-                    ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name',
+                    ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name', 'denizens.content',
                              'relations.properties as rprops')
                     ->distinct()
                     ->get();
@@ -184,7 +184,6 @@ class Denizen
                 $props = (array) json_decode($record->rprops);
                 if (array_key_exists('composerElements', $props)) {
                     $elemId = explode(',', $props['composerElements'])[0];
-                    \Log::info("Dealing with denizen ID " . $item->id);
                     if (array_key_exists($elemId, $resultArray)) {
                         if (! in_array($item, $resultArray[$elemId])) $resultArray[$elemId][] = $item;
                     }

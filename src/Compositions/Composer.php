@@ -33,8 +33,9 @@ class Composer extends \Eloquent {
     protected $relationsSpec = null;
     protected $messages = null; // Type should be Illuminate\Support\MessageBag
     protected $inputDriver = null;
-    protected $inputDone = false;
     protected $outputDriver = null;
+
+    protected $doingInput = true;
 
 	/**
 	 * The database table used by the model.
@@ -68,9 +69,10 @@ class Composer extends \Eloquent {
         }
     }
 
-    public function initialize($input)
+    public function initializeForInput($input)
     {
         $this->checkReady();
+        $this->doingInput = true;
         // Right now initialization is only relevant for interactive input
         if ($this->inputType == 'auto-interactive' && $input != null) {
             $driverId = \Input::get('driver');
@@ -91,9 +93,16 @@ class Composer extends \Eloquent {
 
     public function initializeForOutput($input, $denizensMap)
     {
+        $this->checkReady();
+        $this->doingInput = false;
         if ($input) {
             if (array_key_exists('driver', $input)) {
-                // We're not at beginning
+                $driverId = \Input::get('driver');
+                $this->outputDriver = ComposerOutputDriver::find($driverId);
+                if ( ! $this->outputDriver) {
+                    dd("No damn driver " . $driverId);
+                }
+                $this->outputDriver->reInitialize($this);
             }
             else {
                 $this->outputDriver = new ComposerOutputDriver;
@@ -225,19 +234,12 @@ class Composer extends \Eloquent {
         return $ok;
     }
 
-    public function getOutputDriver()
-    {
-        return $this->outputDriver;
-    }
-
     public function getDriver()
     {
-        return $this->inputDriver;
-    }
-
-    public function inputDone()
-    {
-        return $this->inputDone;
+        if ($this->doingInput)
+            return $this->inputDriver;
+        else
+            return $this->outputDriver;
     }
 
     /*
@@ -286,8 +288,7 @@ class Composer extends \Eloquent {
         }
         else if ($this->inputType == 'auto-interactive') {
             $this->inputDriver->extractSubmittedValues($input); // Import latest batch of form data into inputDriver
-            if ($this->inputDriver->inputDone()) {
-                $this->inputDone = true;
+            if ($this->inputDriver->done()) {
                 self::processAutoInput($input, $composition);
                 $this->inputDriver->delete();
             }
@@ -330,8 +331,8 @@ class Composer extends \Eloquent {
                 if ($anchorId == $espec['id']) {
                     if (count($createdDenizens) > 1) throw new \Exception("Cannot set multiple denizens as anchors " . count($createdDenizens));
                     if ($createdDenizens) {
-                        $createdDenizens[0]->name = $title;
-                        $createdDenizens[0]->content = $summary;
+                        if ($title) $createdDenizens[0]->name = $title;
+                        if ($summary) $createdDenizens[0]->content = $summary;
                         $topElement = $createdDenizens[0];
                     }
                 }
@@ -343,7 +344,6 @@ class Composer extends \Eloquent {
                 }
             }
         }
-
         foreach($denizens as $denizenList) {
             foreach ($denizenList as $denizen) {
                 $denizen->save();
