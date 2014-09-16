@@ -4,6 +4,7 @@
 <h1>Auto-Output for <em>{{ $topDenizen->getName() }} </em></h1>
 
 <?php
+  use \DemocracyApps\CNP\Compositions\Outputs\ComposerOutputDriver;
   $done = false;
   while (! $done ) {
     $next = $composer->getDriver()->getNext();
@@ -11,8 +12,8 @@
       $done = true;
     }
     else {
-      if (array_key_exists('prompt', $next)) {
-        \DemocracyApps\CNP\Utility\Html::createOutput($topDenizen, $composer->getDriver(), $next);
+      if (ComposerOutputDriver::validForOutput($next)) {
+        ComposerOutputDriver::createOutput($topDenizen, $composer->getDriver(), $next);
          echo("\n");
        }
        \DemocracyApps\CNP\Utility\Html::createSelfClosingElement('br');

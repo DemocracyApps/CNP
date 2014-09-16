@@ -10,6 +10,7 @@
       <input type="hidden" name="referentId" value="{{$composer->getReferentId()}}"/>
    @endif
    <?php
+      use \DemocracyApps\CNP\Compositions\Inputs\ComposerInputDriver;
       $done = false;
       while ( ! $done ) {
          $next = $composer->getDriver()->getNext();
@@ -17,8 +18,8 @@
             $done = true;
          }
          else {
-            if (array_key_exists('prompt', $next)) {
-               \DemocracyApps\CNP\Utility\Html::createInput($next);
+            if (ComposerInputDriver::validForInput($next)) {
+               ComposerInputDriver::createInput($next);
                echo("\n");
             }
          }

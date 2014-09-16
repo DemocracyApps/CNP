@@ -22,7 +22,7 @@ class Html {
         'wbr' => true
         );
 
-    static function createSelfClosingElement($type)
+    static public function createSelfClosingElement($type)
     {
         if ( ! array_key_exists($type, self::$selfClosingElements)) {
             throw new \Exception("Attempt to create invalid self-closing HTML element " . $type);
@@ -30,7 +30,7 @@ class Html {
         echo "<".$type.">";
     }
 
-    static function createElement($type, $content, $properties)
+    static public function createElement($type, $content, $properties)
     {
         echo "<".$type;
         foreach ($properties as $key => $value) {
@@ -47,7 +47,7 @@ class Html {
         }
     }
 
-    static function startElement($type, $properties)
+    static public function startElement($type, $properties)
     {
         echo "<".$type;
         foreach ($properties as $key => $value) {
@@ -56,52 +56,8 @@ class Html {
         echo ">";
     }
 
-    static function endElement($type)
+    static public function endElement($type)
     {
         echo "</".$type.">";
-    }
-
-    static function createInput($desc)
-    {
-        self::createElement('input', null, array('class' => 'form-control', 'id' => $desc['id'].'_param', 'name' => $desc['id']."_param", 'type'=>'hidden'));
-        self::startElement("div", array('class' => 'form-group'));
-        self::createElement("label", $desc['prompt'], array('for' => $desc['id']));
-        if ($desc['inputType'] == 'text') {
-            self::createElement('input', null, array('class' => 'form-control', 'name' => $desc['id'], 'type'=>'text'));
-        }
-        elseif ($desc['inputType'] == 'textarea') {
-            self::createElement('textarea', null, array('class' => 'form-control', 'name' => $desc['id'],
-                       'cols'=>'50', 'rows' => '10'));
-        }
-        elseif ($desc['inputType'] == 'person') {
-            self::createElement('input', null, 
-                array( 'class' => 'form-control auto-person', 'name' => $desc['id'], 'type'=>'text'));
-        }
-        self::endElement("div");
-    }
-
-    static function createOutput($anchor, $driver, $desc)
-    {
-        self::startElement("div", array('class' => 'form-group'));
-        $prompt = (array_key_exists('outputPrompt', $desc))?$desc['outputPrompt']:$desc['prompt'];
-        self::createElement("h3", $prompt, array('id' => $desc['id']));
-
-        if ($desc['use'] == 'title') {
-            self::createElement('p', $anchor->getName(), array('id' => $anchor->id));
-        }
-        else if ($desc['use'] == 'summary') {
-            self::createElement('p', $anchor->getContent(), array('id' => $anchor->id));
-        }
-        else if ($desc['use'] == 'element') {
-            $denizens = $driver->getDenizens($desc['elementId']);
-            foreach($denizens as $den) {
-                self::createElement('p', $den->getContent(), array('id'=>$den->id));
-                self::createSelfClosingElement('br');
-            }
-        }
-        else {
-            self::createElement('p', "Still TBD", array('class'=>'whoknows'));
-        }
-        self::endElement("div");
     }
 }

@@ -3,6 +3,7 @@ namespace DemocracyApps\CNP\Compositions\Inputs;
 
 use \DemocracyApps\CNP\Compositions\Composer;
 use \DemocracyApps\CNP\Compositions\ComposerProgram;
+use \DemocracyApps\CNP\Utility\Html;
 
 /**
  * This class is generated from an 'auto-interactive' input
@@ -65,5 +66,30 @@ class ComposerInputDriver extends \Eloquent {
     {
         return $this->program->getNext();
     }
+
+    static public function validForInput($next)
+    {
+        return array_key_exists('prompt', $next);
+    }
+
+    static public function createInput($desc)
+    {
+        Html::createElement('input', null, array('class' => 'form-control', 'id' => $desc['id'].'_param', 'name' => $desc['id']."_param", 'type'=>'hidden'));
+        Html::startElement("div", array('class' => 'form-group'));
+        Html::createElement("label", $desc['prompt'], array('for' => $desc['id']));
+        if ($desc['inputType'] == 'text') {
+            Html::createElement('input', null, array('class' => 'form-control', 'name' => $desc['id'], 'type'=>'text'));
+        }
+        elseif ($desc['inputType'] == 'textarea') {
+            Html::createElement('textarea', null, array('class' => 'form-control', 'name' => $desc['id'],
+                       'cols'=>'50', 'rows' => '10'));
+        }
+        elseif ($desc['inputType'] == 'person') {
+            Html::createElement('input', null, 
+                array( 'class' => 'form-control auto-person', 'name' => $desc['id'], 'type'=>'text'));
+        }
+        Html::endElement("div");
+    }
+
 }
 
