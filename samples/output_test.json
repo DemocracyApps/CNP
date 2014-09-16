@@ -67,7 +67,6 @@
     			"use":"element",
     			"elementId": "Person",
     			"inputType":"person",
-                "generate":"automerge",
     			"prompt":"Name the person most involved in what happened."
     		}
 	   ]
