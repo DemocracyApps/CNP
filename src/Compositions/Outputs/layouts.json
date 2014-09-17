@@ -1,0 +1,141 @@
+{
+    "version": "0.01",
+    "layouts": {
+        "single": {
+            "content": [
+                {
+                    "type":"div",
+                    "class":"single-main-div",
+                    "target":"main"
+                }
+            ]
+        },
+        "halves": {
+            "content": [
+                {
+                    "type":"div",
+                    "class":"halves-main-div",
+                    "content": [
+                        {
+                            "type":"div",
+                            "class":"halves-left",
+                            "target":"left"
+                        },
+                        {
+                            "type":"div",
+                            "class":"halves-right",
+                            "target":"right"
+                        }
+                    ]
+                }
+            ]
+        },
+        "quadrants": { 
+            "content": {
+                "type":"div",
+                "class":"quadrants-main-div",
+                "content": [
+                    {
+                        "type":"div",
+                        "class":"quadrants-top-div",
+                        "content": [
+                            {
+                                "type":"div",
+                                "class":"quandrants-top-left",
+                                "target":"top-left"
+                            },
+                            {
+                                "type":"div",
+                                "class":"quandrants-top-right",
+                                "target":"top-right"
+                            }
+                        ]
+                    },
+                    {
+                        "type":"div",
+                        "class":"quadrants-bottom-div",
+                        "content": [
+                            {
+                                "type":"div",
+                                "class":"quandrants-bottom-left",
+                                "target":"bottom-left"
+                            },
+                            {
+                                "type":"div",
+                                "class":"quandrants-bottom-right",
+                                "target":"bottom-right"
+                            }
+                        ]
+                    }
+                ]
+            }
+        },
+        "left_sidebar": {
+            "content": [
+                {
+                    "type":"div",
+                    "class":"left-sidebar-main-div",
+                    "content": [
+                        {
+                            "type":"div",
+                            "class":"left-sidebar-left",
+                            "target":"left"
+                        },
+                        {
+                            "type":"div",
+                            "class":"left-sidebar-right",
+                            "target":"right"
+                        }
+                    ]
+                }
+            ]
+        },
+        "right_sidebar": {
+            "content": [
+                {
+                    "type":"div",
+                    "class":"right-sidebar-main-div",
+                    "content": [
+                        {
+                            "type":"div",
+                            "class":"right-sidebar-left",
+                            "target":"left"
+                        },
+                        {
+                            "type":"div",
+                            "class":"right-sidebar-right",
+                            "target":"right"
+                        }
+                    ]
+                }
+            ]
+        },
+        "thirds": {
+            "content": [
+                {
+                    "type":"div",
+                    "class":"thirds-main-div",
+                    "content": [
+                        {
+                            "type":"div",
+                            "class":"thirds-left",
+                            "target":"left"
+                        },
+                        {
+                            "type":"div",
+                            "class":"thirds-middle",
+                            "target":"middle"
+                        },
+                        {
+                            "type":"div",
+                            "class":"thirds-right",
+                            "target":"right"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
+
+            
