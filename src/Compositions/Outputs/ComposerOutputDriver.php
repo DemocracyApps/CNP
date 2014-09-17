@@ -35,11 +35,16 @@ class ComposerOutputDriver extends \Eloquent {
         $this->outputSpec = $composer->getOutputSpec();
         if (! $this->outputSpec) {
             $this->outputSpec = $composer->getInputSpec();
-            $usingInputSpec = true;
+            $this->usingInputSpec = true;
         }
         $this->program = new ComposerProgram;
         $this->program->compile($this->outputSpec);
         $this->denizensMap = $denizensMap;
+    }
+
+    public function usingInputForOutput() 
+    {
+        return $this->usingInputSpec;
     }
 
     public function getDenizens ($id) {
