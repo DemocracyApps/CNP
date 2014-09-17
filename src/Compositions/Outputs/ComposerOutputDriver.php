@@ -145,9 +145,72 @@ class ComposerOutputDriver extends \Eloquent {
                 }
             }
         }
-        // Now output according to the layout
+        // Now output this page according to the layout
         $content = $this->runLayout($currentLayout, $targeted, $topDenizen);
         $this->cleanupAndSave();
+    }
+
+
+    private function runLayout ($layout, $targeted, $topDenizen) 
+    {
+        $sections = $layout['content'];
+
+        /*
+         */
+        foreach ($sections as $section) {
+            $props = array();
+            if (array_key_exists('class', $section)) {
+                $props['class'] = $section['class'];
+            }
+            Html::startElement($section['type'], $props); // Main div for the section
+            // There should be either content or a target
+            if (array_key_exists('content', $section)) {
+                $this->runLayout($section, $targeted, $topDenizen);
+            }
+            elseif (array_key_exists('target', $section)) {
+                $target = $section['target'];
+                if (array_key_exists($target, $targeted)) {
+                    $list = $targeted[$target]; // List of output elements
+                    $title = null;
+                    // Let's pull out any special ones, like the title of this section
+                    $tmpList = $list;
+                    $list = array();
+                    foreach ($tmpList as $item) {
+                        if ($item['use'] == 'title') $title = $item;
+                        else {
+                            $list[] = $item;
+                        }
+                    }
+                    if ($title) {
+                        $content = null;
+                        $source = explode('.', $title['source']);
+                        if ($source[0] == 'element') {
+                            $den = $this->getDenizens($title['elementId']);
+                            if ($den) {
+                                if (sizeof($source) == 2) {
+                                    if ($source[1] == 'name') {
+                                        $content = $den[0]->getName();
+                                    }
+                                    else {
+                                        $content = $den[0]->getContent();
+                                    }
+                                }                                
+                            }
+                        }
+                        else if ($source[0] == 'this') {
+                            $content = $title['content'];
+                        }
+                        if ($content) {
+                            Html::createElement('h2', $content, array());
+                        }
+                    }
+                    foreach ($list as $item) {
+                        self::createOutput($topDenizen, $item);
+                    }
+                }
+            }
+            Html::endElement($section['type']);
+        }
     }
 
     public function createOutput($anchor, $item)
@@ -171,30 +234,5 @@ class ComposerOutputDriver extends \Eloquent {
             Html::createElement('p', "Still TBD", array('class'=>'whoknows'));
         }
         Html::endElement("div");
-    }
-
-    private function runLayout ($layout, $targeted, $topDenizen) 
-    {
-        $elements = $layout['content'];
-        foreach ($elements as $element) {
-            $props = array();
-            if (array_key_exists('class', $element)) {
-                $props['class'] = $element['class'];
-            }
-            Html::startElement($element['type'], $props);
-            // There should be either content or a target
-            if (array_key_exists('content', $element)) {
-                $this->runLayout($element, $targeted, $topDenizen);
-            }
-            elseif (array_key_exists('target', $element)) {
-                if (array_key_exists($element['target'], $targeted)) {
-                    $list = $targeted[$element['target']];
-                    foreach ($list as $item) {
-                        self::createOutput($topDenizen, $item);
-                    }
-                }
-            }
-            Html::endElement($element['type']);
-        }
     }
 }

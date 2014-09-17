@@ -45,6 +45,7 @@
                 "use":"title",
                 "source":"element.name",
                 "elementId":"Story",
+                "content":"Section Title", // not being used here.
                 "location":"left"
             },
             {
@@ -66,6 +67,13 @@
                 "use":"element",
                 "elementId": "Topic",
                 "header":"Tags",
+                "location":"right"
+            },
+            {
+                "id":"t2",
+                "use":"title",
+                "source":"this",
+                "content":"Section Title", // not being used here.
                 "location":"right"
             },
             {
