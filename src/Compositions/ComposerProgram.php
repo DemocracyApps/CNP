@@ -29,12 +29,12 @@ class ComposerProgram {
             if (!array_key_exists('next', $item)) $item['next'] = null;
             $item['pagebreak'] = false;
 
-            if (array_key_exists('id', $item)) {
+            if (array_key_exists('id', $item) || array_key_exists('location', $item)) {
                 $id = $item['id'];
                 // If this is the first real item, set start to it.
                 if ($this->runnable['start'] == null)   $this->runnable['start']   = $id;
 
-                if ($previous && ! $breakSequence) { // A sequence element breaks connection
+                if ($previous && ! $breakSequence) { // A break element breaks connection
                     if ( ! $previous['next'] ) {
                         $previous['next'] = $id; // don't override
                     }
@@ -113,7 +113,6 @@ class ComposerProgram {
          * 
          */
         $data = &$this->runnable;
-
         if ($this->pageBreak) {
             return null; 
         }

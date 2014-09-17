@@ -77,6 +77,7 @@ class ComposerInputDriver extends \Eloquent {
         Html::createElement('input', null, array('class' => 'form-control', 'id' => $desc['id'].'_param', 'name' => $desc['id']."_param", 'type'=>'hidden'));
         Html::startElement("div", array('class' => 'form-group'));
         Html::createElement("label", $desc['prompt'], array('for' => $desc['id']));
+
         if ($desc['inputType'] == 'text') {
             Html::createElement('input', null, array('class' => 'form-control', 'name' => $desc['id'], 'type'=>'text'));
         }

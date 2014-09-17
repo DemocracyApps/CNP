@@ -5,22 +5,22 @@
 
 <?php
   use \DemocracyApps\CNP\Compositions\Outputs\ComposerOutputDriver;
+  $driver = $composer->getDriver();
   $done = false;
   while (! $done ) {
-    $next = $composer->getDriver()->getNext();
+    $next = $driver->getNext();
     if (! $next) {
       $done = true;
     }
     else {
       if (ComposerOutputDriver::validForOutput($next)) {
-        ComposerOutputDriver::createOutput($topDenizen, $composer->getDriver(), $next);
+        ComposerOutputDriver::createInputDrivenOutput($topDenizen, $driver, $next);
          echo("\n");
        }
        \DemocracyApps\CNP\Utility\Html::createSelfClosingElement('br');
        echo("\n");
     }
   }
-  $driver = $composer->getDriver();
   $driver->cleanupAndSave();
 ?>
 

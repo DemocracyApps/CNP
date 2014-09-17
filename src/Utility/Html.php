@@ -27,7 +27,7 @@ class Html {
         if ( ! array_key_exists($type, self::$selfClosingElements)) {
             throw new \Exception("Attempt to create invalid self-closing HTML element " . $type);
         }
-        echo "<".$type.">";
+        echo "<".$type.">\n";
     }
 
     static public function createElement($type, $content, $properties)
@@ -37,14 +37,15 @@ class Html {
          echo " ". $key . "=\"".$value."\"";
         }
         if ($content) {
-         echo ">";
-         echo $content;
-         echo "</".$type.">";
+            echo ">";
+            echo $content;
+            echo "</".$type.">";
         }
-        else {
-        echo ">";
-        echo "</".$type.">";
+            else {
+            echo ">";
+            echo "</".$type.">";
         }
+        echo "\n";
     }
 
     static public function startElement($type, $properties)
@@ -53,11 +54,11 @@ class Html {
         foreach ($properties as $key => $value) {
          echo " ". $key . "=\"".$value."\"";
         }
-        echo ">";
+        echo ">\n";
     }
 
     static public function endElement($type)
     {
-        echo "</".$type.">";
+        echo "</".$type.">\n";
     }
 }
