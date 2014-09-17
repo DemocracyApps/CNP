@@ -19,18 +19,22 @@ class ComposerOutputDriver extends \Eloquent {
     protected $layoutsLoaded = false;
     protected $layouts = null;
 
-    public function reInitialize(Composer $composer, $denizensMap)
+    public function reInitialize(Composer $composer, $input, $denizensMap)
     {
+        $start = null;
+        if (array_key_exists('start', $input)) $start = $input['start'];
         $this->program = new ComposerProgram;
-        $this->program->restart($this->driver);
+        $this->program->restart($this->driver, $start);
         $this->denizensMap = $denizensMap;
     }
 
-    public function initialize(Composer $composer, $denizensMap) 
+    public function initialize(Composer $composer, $input, $denizensMap) 
     {
         $this->composer = $composer;
         $this->userid = \Auth::user()->getId();
         $this->expires = date('Y-m-d H:i:s', time() + 24 * 60 * 60);
+        $start = null;
+        if (array_key_exists('start', $input)) $start = $input['start'];
 
         $this->outputSpec = $composer->getOutputSpec();
         if (! $this->outputSpec) {
@@ -38,7 +42,7 @@ class ComposerOutputDriver extends \Eloquent {
             $this->usingInputSpec = true;
         }
         $this->program = new ComposerProgram;
-        $this->program->compile($this->outputSpec);
+        $this->program->compile($this->outputSpec, $start);
         $this->denizensMap = $denizensMap;
     }
 
@@ -113,7 +117,7 @@ class ComposerOutputDriver extends \Eloquent {
         return array_key_exists('location', $item);
     }
     
-    public function getOutputContent($topDenizen)
+    public function getOutputContent($topDenizen, $vista)
     {
         $defaultLayout = 'single';
         if (array_key_exists('defaultLayout', $this->outputSpec)) 
@@ -151,12 +155,12 @@ class ComposerOutputDriver extends \Eloquent {
             }
         }
         // Now output this page according to the layout
-        $content = $this->runLayout($currentLayout, $targeted, $topDenizen);
+        $content = $this->runLayout($currentLayout, $targeted, $topDenizen, $vista);
         $this->cleanupAndSave();
     }
 
 
-    private function runLayout ($layout, $targeted, $topDenizen) 
+    private function runLayout ($layout, $targeted, $topDenizen, $vista) 
     {
         $sections = $layout['content'];
 
@@ -170,7 +174,7 @@ class ComposerOutputDriver extends \Eloquent {
             Html::startElement($section['type'], $props); // Main div for the section
             // There should be either content or a target
             if (array_key_exists('content', $section)) {
-                $this->runLayout($section, $targeted, $topDenizen);
+                $this->runLayout($section, $targeted, $topDenizen, $vista);
             }
             elseif (array_key_exists('target', $section)) {
                 $target = $section['target'];
@@ -210,15 +214,16 @@ class ComposerOutputDriver extends \Eloquent {
                         }
                     }
                     foreach ($list as $item) {
-                        self::createOutput($topDenizen, $item);
+                        self::createOutput($topDenizen, $item, $vista);
                     }
                 }
             }
             Html::endElement($section['type']);
+            Html::createSelfClosingElement('br');
         }
     }
 
-    public function createOutput($anchor, $item)
+    public function createOutput($anchor, $item, $vista)
     {
         Html::startElement("div", array('class' => 'span6'));
         if (array_key_exists('header', $item)) {
@@ -232,11 +237,16 @@ class ComposerOutputDriver extends \Eloquent {
             $denizens = $this->getDenizens($item['elementId']);
             foreach($denizens as $den) {
                 Html::createElement('p', $den->getContent(), array('id'=>$den->id, 'class' => 'span6'));
-                Html::createSelfClosingElement('br');
             }
         }
+        elseif ($item['use'] == 'link') {
+            $link = "denizens/".$anchor->id."?composer=".$this->composer->id."&vista=".$vista;
+            $link .= "&start=" . $item['link'];
+            $link = link_to($link, $item['text'], array()); 
+            Html::createElement('p', $link, array());
+        }
         else {
-            Html::createElement('p', "Still TBD", array('class'=>'whoknows'));
+            Html::createElement('p', "<b>ComposerOutputDriver.createOutput: Unknown use ".$item['use']."</b>", array('class'=>'whoknows'));
         }
         Html::endElement("div");
     }

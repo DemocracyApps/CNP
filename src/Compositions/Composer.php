@@ -102,11 +102,11 @@ class Composer extends \Eloquent {
                 if ( ! $this->outputDriver) {
                     dd("No damn driver " . $driverId);
                 }
-                $this->outputDriver->reInitialize($this, $denizensMap);
+                $this->outputDriver->reInitialize($this, $input, $denizensMap);
             }
             else {
                 $this->outputDriver = new ComposerOutputDriver;
-                $this->outputDriver->initialize($this, $denizensMap);
+                $this->outputDriver->initialize($this, $input, $denizensMap);
                 $this->outputDriver->save();
             }
         }

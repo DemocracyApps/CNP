@@ -7,21 +7,23 @@ class ComposerProgram {
     private $done = false;
     private $pageBreak = false;
 
-    public function restart($savedState) {
+    public function restart($savedState, $start = null) {
         $this->runnable = json_decode($savedState, true);
         $this->done = $this->runnable['done'];
+        // No idea what to do with start here, actually.
     }
 
-    public function compile($program) 
+    public function compile($program, $start = null) 
     {
         $this->program = $program; // Just in case.
         $this->runnable = array();
-        $this->runnable['start'] = $this->runnable['current'] = null;
+        $this->runnable['start'] = $start;
+        $this->runnable['current'] = null;
         $this->runnable['done'] = false;
         $this->runnable['expecting'] = null;
         $this->runnable['map'] = array();
         $previous = null;
-
+        \Log::info("Starting at " . $start);
         $breakSequence = false;
         for ($i = 0, $size = count($program['map']); $i<$size; ++$i) {
             $item = $program['map'][$i];
@@ -32,7 +34,7 @@ class ComposerProgram {
             if (array_key_exists('id', $item) || array_key_exists('location', $item)) {
                 $id = $item['id'];
                 // If this is the first real item, set start to it.
-                if ($this->runnable['start'] == null)   $this->runnable['start']   = $id;
+                if ($this->runnable['start'] == null) $this->runnable['start']   = $id;
 
                 if ($previous && ! $breakSequence) { // A break element breaks connection
                     if ( ! $previous['next'] ) {
