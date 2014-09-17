@@ -16,12 +16,16 @@ class ComposerOutputDriver extends \Eloquent {
     protected $program = null;
 
     protected $denizensMap = null;
+    protected $layoutsLoaded = false;
+    protected $layouts = null;
 
-    public function reInitialize(Composer $composer)
+    public function reInitialize(Composer $composer, $denizensMap)
     {
         $this->program = new ComposerProgram;
         $this->program->restart($this->driver);
+        $this->denizensMap = $denizensMap;
     }
+
     public function initialize(Composer $composer, $denizensMap) 
     {
         $this->composer = $composer;
@@ -63,7 +67,7 @@ class ComposerOutputDriver extends \Eloquent {
         return array_key_exists('prompt', $next);
     }
 
-    static public function createOutput($anchor, $driver, $desc)
+    static public function createInputDrivenOutput($anchor, $driver, $desc)
     {
         Html::startElement("div", array('class' => 'span6'));
         $prompt = (array_key_exists('outputPrompt', $desc))?$desc['outputPrompt']:$desc['prompt'];
@@ -87,5 +91,110 @@ class ComposerOutputDriver extends \Eloquent {
         }
         Html::endElement("div");
     }
+    
+    private function loadLayouts()
+    {
+        \Log::info("Loading layouts");
+        $fileName = base_path()."/src/Compositions/Outputs/layouts.json";
+        $str = file_get_contents($fileName);
+        $str = json_minify($str);
+        $this->layouts = json_decode($str, true);
+        $this->layouts = $this->layouts['layouts'];
+        $this->layoutsLoaded = true;
+    }
 
+    private function validForLayoutOutput($item)
+    {
+        return array_key_exists('location', $item);
+    }
+    
+    public function getOutputContent($topDenizen)
+    {
+        $defaultLayout = 'single';
+        if (array_key_exists('defaultLayout', $this->outputSpec)) 
+            $defaultLayout = $this->outputSpec['defaultLayout'];
+        if (! $this->layoutsLoaded ) $this->loadLayouts();
+
+        if (! array_key_exists($defaultLayout, $this->layouts)) {
+            throw new \Exception ("Unknown output layout " . $defaultLayout);
+        }
+        $currentLayout = $this->layouts[$defaultLayout];
+        // Let's get all the elements that go on to this page
+        $targeted = array();
+        $done = false;
+        while (! $done ) {
+            $next = $this->getNext();
+            if (! $next) {
+                $done = true;
+            }
+            else {
+                if ($next['use'] == 'pageinfo') {
+                    if (array_key_exists('layout', $next)) {
+                        if (! array_key_exists($next['layout'], $this->layouts)) {
+                            throw new \Exception ("Unknown output layout " . $next['layout']);
+                        }
+                        $currentLayout = $this->layouts[$next['layout']];
+                    }
+                }
+                if (self::validForLayoutOutput($next)) {
+                    $location = $next['location'];
+                    if ( ! array_key_exists($location, $targeted)) {
+                        $targeted[$location] = array();
+                    }
+                    $targeted[$location][] = $next;
+                }
+            }
+        }
+        // Now output according to the layout
+        $content = $this->runLayout($currentLayout, $targeted, $topDenizen);
+        $this->cleanupAndSave();
+    }
+
+    public function createOutput($anchor, $item)
+    {
+        Html::startElement("div", array('class' => 'span6'));
+        if (array_key_exists('header', $item)) {
+            Html::createElement("h3", $item['header'], array('id' => $item['id']));
+        }
+
+        if ($item['use'] == 'title') {
+            Html::createElement('p', $anchor->getName(), array('id' => $anchor->id));
+        }
+        else if ($item['use'] == 'element') {
+            $denizens = $this->getDenizens($item['elementId']);
+            foreach($denizens as $den) {
+                Html::createElement('p', $den->getContent(), array('id'=>$den->id, 'class' => 'span6'));
+                Html::createSelfClosingElement('br');
+            }
+        }
+        else {
+            Html::createElement('p', "Still TBD", array('class'=>'whoknows'));
+        }
+        Html::endElement("div");
+    }
+
+    private function runLayout ($layout, $targeted, $topDenizen) 
+    {
+        $elements = $layout['content'];
+        foreach ($elements as $element) {
+            $props = array();
+            if (array_key_exists('class', $element)) {
+                $props['class'] = $element['class'];
+            }
+            Html::startElement($element['type'], $props);
+            // There should be either content or a target
+            if (array_key_exists('content', $element)) {
+                $this->runLayout($element, $targeted, $topDenizen);
+            }
+            elseif (array_key_exists('target', $element)) {
+                if (array_key_exists($element['target'], $targeted)) {
+                    $list = $targeted[$element['target']];
+                    foreach ($list as $item) {
+                        self::createOutput($topDenizen, $item);
+                    }
+                }
+            }
+            Html::endElement($element['type']);
+        }
+    }
 }

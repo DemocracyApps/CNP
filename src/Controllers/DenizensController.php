@@ -27,6 +27,7 @@ class DenizensController extends ApiController {
         foreach ($compositions as $id => $count) {
             DAEntity\Denizen::getCompositionDenizens($id, $denizens);
         }
+
         /*
          * Ok, so now we have a way to look up instances of any element ID. Now I guess we look for 
          * the output spec.
@@ -34,7 +35,7 @@ class DenizensController extends ApiController {
         $composer->initializeForOutput(\Input::all(), $denizens);
         
         if ( ! $composer->getDriver()->done()) {
-          return \View::make('compositions.show', array('composer' => $composer, 'topDenizen' => $denizen,
+          return \View::make('compositions.layoutdriven', array('composer' => $composer, 'topDenizen' => $denizen,
                                                         'vista' => $vista->id));
         }
         else {
