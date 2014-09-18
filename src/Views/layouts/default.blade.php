@@ -1,98 +1,61 @@
 <!doctype html>
-<html lang="en">
-<head>
-  @include('includes.head')
-
-  @yield('header')
-  
-
-  <style>
-
-        span.error {
-          color: #f00;
-        }
-        .menu ul {
-          list-style: none;
-          margin-left: 0; 
-          padding-left: 0;
-        }
-        li.menu {
-          display: inline-block;
-          font-weight: bold;
-        }
-        table th, table td {
-          border:1px solid black; padding:10px;
-        }
-        table#short-table th, table#short-table td {
-          border:1px solid black; padding:10px;
-        }
-        table#long-table th, table#long-table td {
-          border:1px solid black; padding:3px;
-        }
-        table#simple-table, table#simple-table th, table#simple-table td {
-          border:0px solid white; padding:3px;
-        }
-
-        /*
-         * Autocompletion
-         */
-
-        /* highlight results */
-        .ui-autocomplete span.hl_results {
-            background-color: #ffff66;
-        }
-         
-        /* scroll results */
-        .ui-autocomplete {
-            max-height: 250px;
-            overflow-y: auto;
-            /* prevent horizontal scrollbar */
-            overflow-x: visible;
-            /* add padding for vertical scrollbar */
-            padding-right: 5px;
-        }
-
-        .ui-autocomplete li {
-            font-size: 16px;
-        }
-
-        /* IE 6 doesn't support max-height
-        * we use height instead, but this forces the menu to always be this tall
-        */
-        * html .ui-autocomplete {
-            height: 250px;
-        }
-
-        .ui-menu .ui-menu-item {
-            height:18px;
-            font-size:14px;
-            background:white;
-        }
-  </style>
-
-</head>
+<html>
+  <head>
+      <meta charset="utf-8">
+      <title>Community Narratives Platform</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="/css/local.css">
+  </head>
 <body>
-	@include('layouts.partials.datarider')
-
-	<div class="container">
-		<header class="row">
-			@include('includes.header')
-		</header>
-
-		<div id="main" class="container">
-
-  			@yield('content')
-
-  	</div>
-
-  	@include('includes.lowermenu')
-
-  	<footer class="row">
-  		@include('includes.footer')
-  	</footer>
+  <div class="bs-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2 hdr-logo">
+          <img src="/img/DemocracyApps_logo-01_RGB.jpg" height="123" width="96" alt="DemocracyApps Logo"/>
+        </div>
+        <div class="col-md-7 hdr-main">
+          <h1>Community Narratives Platform</h1>
+          <p>The power of story</p>
+        </div>
+        <div class="col-md-3 hdr-right">
+          <div class="btn-group">
+            <button type="button" class="btn btn-default">Application</button>
+            <button type="button" class="btn btn-default active">Demo</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
-    @yield('scripts')
+
+  <div class="container app-container">
+    <div class="row">
+      <div class="col-md-3 app-navigation">
+        <h3>Demo Navigation</h3>
+        <ul class="nav bs-sidenav">
+          <a href="#overview">Overview</a>
+          <li><a href="#">A sample</a></li>
+          <li><a href="#">A sample</a></li>
+
+          <a href="#overview">Easy In/Easy Out</a>
+          <li><a href="#">A sample</a></li>
+          <li><a href="#">A sample</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-9 app-content">
+          @yield('content')
+      </div>
+      <footer class="row">
+        <div id="copyright">Copyright © 2014 DemocracyApps</div>
+      </footer>
+    </div>
+  </div>
+</div>
+  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  @yield('scripts')
 </body>
+
 </html>
+
