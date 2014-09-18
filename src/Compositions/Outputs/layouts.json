@@ -14,7 +14,7 @@
             "content": [
                 {
                     "type":"div",
-                    "class":"halves-main-div",
+                    "class":"container halves-main-div",
                     "content": [
                         {
                             "type":"div",
@@ -94,16 +94,16 @@
             "content": [
                 {
                     "type":"div",
-                    "class":"right-sidebar-main-div",
+                    "class":"container right-sidebar-main-div",
                     "content": [
                         {
                             "type":"div",
-                            "class":"right-sidebar-left",
+                            "class":"col-md-7 right-sidebar-left",
                             "target":"left"
                         },
                         {
                             "type":"div",
-                            "class":"right-sidebar-right",
+                            "class":"col-md-2 right-sidebar-right",
                             "target":"right"
                         }
                     ]
