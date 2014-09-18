@@ -22,17 +22,25 @@ class Html {
         'wbr' => true
         );
 
-    static public function createSelfClosingElement($type)
+    public static function spaces($count) {
+        $s = "";
+        for ($i=0; $i<$count; ++$i) {
+            $s .= " ";
+        }
+        return $s;
+    }
+
+    static public function createSelfClosingElement($type, $spaces=5)
     {
         if ( ! array_key_exists($type, self::$selfClosingElements)) {
             throw new \Exception("Attempt to create invalid self-closing HTML element " . $type);
         }
-        echo "<".$type.">\n";
+        echo Self::spaces($spaces) . "<".$type.">\n";
     }
 
-    static public function createElement($type, $content, $properties)
+    static public function createElement($type, $content, $properties, $spaces=5)
     {
-        echo "<".$type;
+        echo Self::spaces($spaces) . "<".$type;
         foreach ($properties as $key => $value) {
          echo " ". $key . "=\"".$value."\"";
         }
@@ -48,17 +56,17 @@ class Html {
         echo "\n";
     }
 
-    static public function startElement($type, $properties)
+    static public function startElement($type, $properties, $spaces=5)
     {
-        echo "<".$type;
+        echo Self::spaces($spaces) . "<".$type;
         foreach ($properties as $key => $value) {
          echo " ". $key . "=\"".$value."\"";
         }
         echo ">\n";
     }
 
-    static public function endElement($type)
+    static public function endElement($type, $spaces=5)
     {
-        echo "</".$type.">\n";
+        echo Self::spaces($spaces) . "</".$type.">\n";
     }
 }

@@ -155,15 +155,14 @@ class ComposerOutputDriver extends \Eloquent {
             }
         }
         // Now output this page according to the layout
-        $content = $this->runLayout($currentLayout, $targeted, $topDenizen, $vista);
+        $content = $this->runLayout($currentLayout, $targeted, $topDenizen, $vista, 10);
         $this->cleanupAndSave();
     }
 
 
-    private function runLayout ($layout, $targeted, $topDenizen, $vista) 
+    private function runLayout ($layout, $targeted, $topDenizen, $vista, $spaces = 5) 
     {
         $sections = $layout['content'];
-
         /*
          */
         foreach ($sections as $section) {
@@ -171,10 +170,11 @@ class ComposerOutputDriver extends \Eloquent {
             if (array_key_exists('class', $section)) {
                 $props['class'] = $section['class'];
             }
-            Html::startElement($section['type'], $props); // Main div for the section
+            Html::startElement($section['type'], $props, $spaces); // Main div for the section
+            $spaces += 5;
             // There should be either content or a target
             if (array_key_exists('content', $section)) {
-                $this->runLayout($section, $targeted, $topDenizen, $vista);
+                $this->runLayout($section, $targeted, $topDenizen, $vista, $spaces);
             }
             elseif (array_key_exists('target', $section)) {
                 $target = $section['target'];
@@ -210,44 +210,50 @@ class ComposerOutputDriver extends \Eloquent {
                             $content = $title['content'];
                         }
                         if ($content) {
-                            Html::createElement('h2', $content, array());
+                            Html::createElement('h2', $content, array(), $spaces);
                         }
                     }
                     foreach ($list as $item) {
-                        self::createOutput($topDenizen, $item, $vista);
+                        self::createOutput($topDenizen, $item, $vista, $spaces);
                     }
                 }
             }
-            Html::endElement($section['type']);
-            Html::createSelfClosingElement('br');
+            echo "\n";
+            $spaces -= 5;
+            Html::endElement($section['type'], $spaces);
+            Html::createSelfClosingElement('br', $spaces);
         }
     }
 
-    public function createOutput($anchor, $item, $vista)
+    public function createOutput($anchor, $item, $vista, $spaces = 5)
     {
-        Html::startElement("div", array('class' => 'span6'));
+        Html::startElement("div", array('class' => 'xxx'), $spaces);
+        $spaces += 5;
+
         if (array_key_exists('header', $item)) {
-            Html::createElement("h3", $item['header'], array('id' => $item['id']));
+            Html::createElement("h3", $item['header'], array('id' => $item['id']), $spaces);
         }
 
         if ($item['use'] == 'title') {
-            Html::createElement('p', $anchor->getName(), array('id' => $anchor->id));
+            Html::createElement('p', $anchor->getName(), array('id' => $anchor->id), $spaces);
         }
         else if ($item['use'] == 'element') {
             $denizens = $this->getDenizens($item['elementId']);
             foreach($denizens as $den) {
-                Html::createElement('p', $den->getContent(), array('id'=>$den->id, 'class' => 'span6'));
+                Html::createElement('p', $den->getContent(), array('id'=>$den->id, 'class' => 'yyy'), $spaces);
             }
         }
         elseif ($item['use'] == 'link') {
             $link = "denizens/".$anchor->id."?composer=".$this->composer->id."&vista=".$vista;
             $link .= "&start=" . $item['link'];
             $link = link_to($link, $item['text'], array()); 
-            Html::createElement('p', $link, array());
+            Html::createElement('p', $link, array(), $spaces);
         }
         else {
-            Html::createElement('p', "<b>ComposerOutputDriver.createOutput: Unknown use ".$item['use']."</b>", array('class'=>'whoknows'));
+            Html::createElement('p', "<b>ComposerOutputDriver.createOutput: Unknown use ".$item['use']."</b>", array('class'=>'zzz'), $spaces);
         }
-        Html::endElement("div");
+
+        $spaces -= 5;
+        Html::endElement("div", $spaces);
     }
 }

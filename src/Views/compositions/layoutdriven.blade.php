@@ -6,7 +6,7 @@
 <?php
   use \DemocracyApps\CNP\Compositions\Outputs\ComposerOutputDriver;
   $driver = $composer->getDriver();
-  $driver->getOutputContent($topDenizen, $vista);
+  $driver->getOutputContent($topDenizen, $vista, 2);
 ?>
 
 {{ Form::open(['url' => 'denizens/'.$topDenizen->id, 'method' => 'get']) }}
