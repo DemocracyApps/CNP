@@ -39,6 +39,7 @@ class VistasController extends ApiController {
 
 		$args = array('denizens' => $denizens, 'vista' => $vista);
 		$args['composer'] = $vista->output_composer;
+        return \View::make('vistas.index', array('denizens'=>$denizens, 'vista'=>$vista, 'composer'=>$vista->output_composer));
 		return \View::make('vistas.index', $args);
 	}
 
