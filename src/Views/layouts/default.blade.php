@@ -76,8 +76,12 @@
     </div>
   </div>
 </div>
+  <script src="/js/jquery-2.1.1.min.js"></script>
+  <script src="/js/jquery-ui-1.11.1/jquery-ui.min.js"></script>
+<!--
   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
+-->
   <script type="text/javascript">
     $('.mode-toggle').on('click', function() {
       var mode = $(this).find('input').attr('id');
@@ -85,6 +89,7 @@
     } );
 
   </script>
+
   @yield('scripts')
 </body>
 
