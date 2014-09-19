@@ -15,5 +15,5 @@
         {"name":"StoryElement", "id":"8"}
     ],
     "apiRequiresSSL": "false",
-    "silly": "32"
+    "pageLimit": "15"
 }
