@@ -19,7 +19,10 @@ class StoriesController extends BaseController {
 	 */
 	public function index()
 	{
-        $stories = DAEntity\Story::all();
+        $page = \Input::get('page', 1);
+        $pageLimit=\CNP::getConfigurationValue('pageLimit');
+        $data = DAEntity\Story::allPaged($page, $pageLimit);
+        $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
         return \View::make('stories.index')->with('stories', $stories);
 	}
 

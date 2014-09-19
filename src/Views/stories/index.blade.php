@@ -11,10 +11,7 @@
       </tr>
     @endforeach
 	</table>
-    <br/>
-        {{ Form::open(['route' => 'stories.create', 'method' => 'get']) }}
-           <div>
-             {{ Form::submit('Add a Story') }}
-           </div>
-        {{ Form::close() }}
+  <br/>
+    {{$stories->appends(\Request::except('page'))->links()}}
+
 @stop

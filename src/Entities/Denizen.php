@@ -321,6 +321,30 @@ class Denizen
         return $result;
     }
 
+    public static function allPaged ($page=1, $limit=10) 
+    {
+        if (static::$classDenizenType <= 0) { // All Denizens
+            $total = DB::table(self::$tableName)->orderBy('id')->count();
+            $d = DB::table(self::$tableName)->orderBy('id')->skip(($page-1)*$limit)->take($limit)->get();
+        }
+        else { // Specific Denizen Type
+            $total = DB::table(self::$tableName)->where('type', '=', static::$classDenizenType)->count();
+            $d = DB::table(self::$tableName)->where('type', '=', static::$classDenizenType)->orderBy('id')->skip(($page-1)*$limit)->take($limit)->get();
+        }
+
+        $result = array();
+
+        foreach ($d as $data) {
+            $item = new static($data->name, $data->userid);
+            self::fill($item,$data);
+            $result[] = $item;
+        }
+        $data = array();
+        $data['total'] = $total;
+        $data['items'] = $result;
+        return $data;
+    }
+
     public function getRelations()
     {
         return Relation::getRelations($this->id)->orderBy('id');
