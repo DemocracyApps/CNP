@@ -29,6 +29,12 @@ DemocracyApps\CNP\Entities\Tag::initialize();
 DemocracyApps\CNP\Entities\StoryElement::initialize();
 DemocracyApps\CNP\Entities\Scape::initialize();
 
-Session::put('cnpMode', 'app');
+$mode = Input::get('mode');
+if ($mode) {
+	Session::put('cnpMode', $mode);
+}
+else {
+	Session::put('cnpMode', 'app');
+}
 
 

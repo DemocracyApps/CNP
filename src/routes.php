@@ -110,15 +110,18 @@ Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
 
 Route::get('/', function()
 {
-    return Redirect::to('/account');
+    $params = array();
+    if (\Input::get('mode')) {
+        $params['mode'] = \Input::get('mode');
+    }
+    return Redirect::route('account', \Input::all());
 });
 
-Route::get('account', array('before' => 'cnp.auth', function()
+Route::get('account', array('as' => 'account', 'before' => 'cnp.auth', function()
 {
     $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
     $person = DAEntity\Person::find($user->getDenizenId());
     $scapes = DAEntity\Scape::allUserDenizens($user->getId());
-
     return View::make('account', array('user' => $user, 'person' => $person, 
                       'scapes' => $scapes));
 }));

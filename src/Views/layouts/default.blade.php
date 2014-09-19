@@ -19,9 +19,30 @@
           <p>The power of story</p>
         </div>
         <div class="col-md-3 hdr-right">
-          <div class="btn-group">
-            <button type="button" class="btn btn-default">Application</button>
-            <button type="button" class="btn btn-default active">Demo</button>
+          <div class="btn-group" data-toggle="buttons">
+            <?php
+              $mode = \Session::get('cnpMode');
+              $appClass = "btn btn-default mode-toggle";
+              $demoClass = "btn btn-default mode-toggle";
+              $appChecked = "";
+              $demoChecked = "";
+              if ($mode == 'app') {
+                $appClass .= " active";
+                $appChecked = 'checked';
+              }
+              else {
+                $demoClass .= " active";
+                $demoChecked = 'checked';
+              }
+              \Log::info("Operating mode is " . $mode);
+            ?>
+            <label class="{{$appClass}}">
+              <input type="radio" name='mode' id='app' {{$appChecked}}> Application
+            </label>
+            <label class="{{$demoClass}}">
+              <input type="radio" name='mode' id='demo' {{$demoChecked}}> Demo
+            </label>
+
           </div>
         </div>
       </div>
@@ -57,6 +78,13 @@
 </div>
   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $('.mode-toggle').on('click', function() {
+      var mode = $(this).find('input').attr('id');
+      window.location.href = "/?mode="+mode;
+    } );
+
+  </script>
   @yield('scripts')
 </body>
 
