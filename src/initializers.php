@@ -29,3 +29,6 @@ DemocracyApps\CNP\Entities\Tag::initialize();
 DemocracyApps\CNP\Entities\StoryElement::initialize();
 DemocracyApps\CNP\Entities\Scape::initialize();
 
+Session::put('cnpMode', 'app');
+
+

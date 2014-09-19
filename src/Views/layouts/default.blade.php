@@ -31,15 +31,18 @@
   <div class="container app-container">
     <div class="row">
       <div class="col-md-3 app-navigation">
-        <h3>Demo Navigation</h3>
-        <ul class="nav bs-sidenav">
-          <a href="#overview">Overview</a>
-          <li><a href="#">A sample</a></li>
-          <li><a href="#">A sample</a></li>
+        <?php
+          $menu = \DemocracyApps\CNP\Views\menus\MenuGenerator::generateMenu(0);
+        ?>
+        <h3>{{$menu['title']}}</h3>
 
-          <a href="#overview">Easy In/Easy Out</a>
-          <li><a href="#">A sample</a></li>
-          <li><a href="#">A sample</a></li>
+        <ul class="nav bs-sidenav">
+          @foreach ($menu['items'] as $majorItem)
+            <a href="{{$majorItem['url']}}">{{$majorItem['name']}}</a>
+            @foreach ($majorItem['items'] as $minorItem)
+              <li><a href="{{$minorItem['url']}}">{{$minorItem['name']}}</a></li>
+            @endforeach
+          @endforeach
         </ul>
       </div>
 

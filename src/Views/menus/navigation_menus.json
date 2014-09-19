@@ -1,0 +1,72 @@
+{
+    "version":"0.01",
+    "menus": {
+        "demo": {
+            "title": "Demo Navigation",
+            "items": [
+                {
+                    "name":"Overview",
+                    "url":"/xxx",
+                    "items": [
+                        {
+                            "name":"A Sample",
+                            "url":"/xyx"
+                        },
+                        {
+                            "name":"B Sample",
+                            "url":"/xyx"
+                        }
+                    ]
+                },
+                {
+                    "name":"Easy In/Easy Out",
+                    "url":"/xxx",
+                    "items": [
+                        {
+                            "name":"A Sample",
+                            "url":"/xyx"
+                        },
+                        {
+                            "name":"B Sample",
+                            "url":"/xyx"
+                        }
+                    ]
+                }
+            ]
+        },
+        "app": {
+            "title": "Command Panel",
+            "items": [
+                {
+                    "name":"Overview",
+                    "url":"/xxx",
+                    "items": [
+                        {
+                            "name":"A Sample",
+                            "url":"/xyx"
+                        },
+                        {
+                            "name":"B Sample",
+                            "url":"/xyx"
+                        }
+                    ]
+                },
+                {
+                    "name":"Easy In/Easy Out",
+                    "url":"/xxx",
+                    "items": [
+                        {
+                            "name":"A Sample",
+                            "url":"/xyx"
+                        },
+                        {
+                            "name":"B Sample",
+                            "url":"/xyx"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+
+}
