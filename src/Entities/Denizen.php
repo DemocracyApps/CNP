@@ -127,25 +127,48 @@ class Denizen
      *  I know this absolutely does not belong in the Denizen class. Give me 
      *  some time to get this all figured out. Sigh.
      */
-    public static function getVistaDenizens ($scape, $allowedComposers, $types)
+    public static function getVistaDenizens ($scape, $allowedComposers, $types, $page=1, $limit=3)
     {
         if ($types) {
-            $records = DB::table(self::$tableName)
+            $total = DB::table(self::$tableName)
                         ->join('relations', 'relations.fromid', '=', 'denizens.id')
                         ->where('denizens.scape', '=', $scape)
                         ->whereIn('denizens.type', $types)
                         ->whereIn('relations.composerid', $allowedComposers)
                         ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
                         ->distinct()
+                        ->count('denizens.id');
+            $records = DB::table(self::$tableName)
+                        ->join('relations', 'relations.fromid', '=', 'denizens.id')
+                        ->where('denizens.scape', '=', $scape)
+                        ->whereIn('denizens.type', $types)
+                        ->whereIn('relations.composerid', $allowedComposers)
+                        ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
+                        ->orderBy('denizens.id')
+                        ->distinct()
+                        ->skip(($page-1)*$limit)
+                        ->take($limit)
                         ->get();
+           // dd(\DB::getQueryLog());
         }
         else {
+            $total = DB::table(self::$tableName)
+                        ->join('relations', 'relations.from', '=', 'denizens.id')
+                        ->where('denizens.scape', '=', $scape)
+                        ->whereIn('relations.composerid', $allowedComposers)
+                        ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
+                        ->orderBy('denizens.id')
+                        ->distinct()
+                        ->count('denizens.id');
             $records = DB::table(self::$tableName)
                         ->join('relations', 'relations.from', '=', 'denizens.id')
                         ->where('denizens.scape', '=', $scape)
                         ->whereIn('relations.composerid', $allowedComposers)
                         ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
+                        ->orderBy('denizens.id')
                         ->distinct()
+                        ->skip(($page-1)*$limit)
+                        ->take($limit)
                         ->get();
         }
         $result = array();
@@ -155,7 +178,10 @@ class Denizen
             self::fill($item,$record);
             $result[] = $item;
         }
-        return $result;        
+        $data = array();
+        $data['total'] = $total;
+        $data['items'] = $result;
+        return $data;        
     }
 
     /**
@@ -172,6 +198,7 @@ class Denizen
         $records = DB::table(self::$tableName)
                     ->join('relations', 'relations.fromid', '=', 'denizens.id')
                     ->where('relations.compositionid', '=', $compositionId)
+                    ->orderBy('denizens.id')
                     ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name', 'denizens.content',
                              'relations.properties as rprops')
                     ->distinct()
@@ -200,14 +227,15 @@ class Denizen
         if ($types) {
             $d = DB::table(self::$tableName)->where('scape', '=', $id)
                                             ->whereIn('type', $types)
+                                            ->orderBy('id')
                                             ->get();
         }
         else {
             if (static::$classDenizenType <= 0) { // All Denizens
-                $d = DB::table(self::$tableName)->where('scape', '=', $id)->get();
+                $d = DB::table(self::$tableName)->where('scape', '=', $id)->orderBy('id')->get();
             }
             else { // Specific Denizen Type
-                $d = DB::table(self::$tableName)->where('scape', '=', $id)->get();
+                $d = DB::table(self::$tableName)->where('scape', '=', $id)->orderBy('id')->get();
             }
         }
         $result = array();
@@ -225,12 +253,14 @@ class Denizen
          if (static::$classDenizenType <= 0) { // All Denizens
             $d = DB::table(self::$tableName)->where('scape', '=', $scapeId)
                                             ->where('name', 'ILIKE', "%".$like."%")
+                                            ->orderBy('id')
                                             ->get();
         }
         else { // Specific Denizen Type
             $d = DB::table(self::$tableName)->where('scape', '=', $scapeId)
                                             ->where('type', '=', static::$classDenizenType)
                                             ->where('name', 'ILIKE', "%".$like."%")
+                                            ->orderBy('id')
                                             ->get();
         }
 
@@ -247,11 +277,12 @@ class Denizen
     public static function allUserDenizens ($id) 
     {
         if (static::$classDenizenType <= 0) { // All Denizens
-            $d = DB::table(self::$tableName)->where('userid', '=', $id)->get();
+            $d = DB::table(self::$tableName)->where('userid', '=', $id)->orderBy('id')->get();
         }
         else { // Specific Denizen Type
             $d = DB::table(self::$tableName)->where('userid', '=', $id)
                                             ->where('type', '=', static::$classDenizenType)
+                                            ->orderBy('id')
                                             ->get();
         }
 
@@ -274,10 +305,10 @@ class Denizen
     public static function all () 
     {
         if (static::$classDenizenType <= 0) { // All Denizens
-            $d = DB::table(self::$tableName)->get();
+            $d = DB::table(self::$tableName)->orderBy('id')->get();
         }
         else { // Specific Denizen Type
-            $d = DB::table(self::$tableName)->where('type', '=', static::$classDenizenType)->get();
+            $d = DB::table(self::$tableName)->where('type', '=', static::$classDenizenType)->orderBy('id')->get();
         }
 
         $result = array();
@@ -292,7 +323,7 @@ class Denizen
 
     public function getRelations()
     {
-        return Relation::getRelations($this->id);
+        return Relation::getRelations($this->id)->orderBy('id');
     }
 
 }
