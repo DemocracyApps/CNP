@@ -5,30 +5,62 @@
             "title": "Demo Navigation",
             "items": [
                 {
-                    "name":"Overview",
-                    "url":"/xxx",
+                    "name":"Introduction",
+                    "url":"/demo?stage=intro",
                     "items": [
                         {
-                            "name":"A Sample",
-                            "url":"/xyx"
+                            "name":"What is the CNP?",
+                            "url":"/demo?stage=intro_cnp"
                         },
                         {
-                            "name":"B Sample",
-                            "url":"/xyx"
+                            "name":"Why Stories?",
+                            "url":"/demo?stage=intro_stories"
+                        },
+                        {
+                            "name":"Three Foundations",
+                            "url":"/demo?stage=intro_foundations"
                         }
                     ]
                 },
                 {
-                    "name":"Easy In/Easy Out",
-                    "url":"/xxx",
+                    "name":"1. Connections, Not Collections",
+                    "url":"/demo?stage=net",
                     "items": [
                         {
-                            "name":"A Sample",
-                            "url":"/xyx"
+                            "name":"NN?",
+                            "url":"/demo?stage=net_cnp"
                         },
                         {
-                            "name":"B Sample",
-                            "url":"/xyx"
+                            "name":"NN?",
+                            "url":"/demo?stage=net_stories"
+                        }
+                    ]
+                },
+                {
+                    "name":"2. Easy In/Easy Out",
+                    "url":"/demo?stage=inout",
+                    "items": [
+                        {
+                            "name":"NN?",
+                            "url":"/demo?stage=net_cnp"
+                        },
+                        {
+                            "name":"NN?",
+                            "url":"/demo?stage=net_stories"
+                        }
+                    ]
+                },
+                {
+                    "name":"3. Catalyze the Unexpected",
+                    "url":"/demo?stage=net",
+                    "items": [
+                        {
+                            "name":"NN?",
+                            "url":"/demo?stage=net_cnp"
+                        },
+                        {
+                            "name":"NN?",
+                            "url":"/demo?stage=net_stories"
                         }
                     ]
                 }
