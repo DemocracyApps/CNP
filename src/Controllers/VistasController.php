@@ -35,7 +35,10 @@ class VistasController extends ApiController {
         $s = trim(preg_replace("([, ]+)", ' ', $vista->input_composers));
         if ($s) $allowedComposers = explode(" ", $s);
 
-        $denizens = Denizen::getVistaDenizens ($vista->scape, $allowedComposers, $typeList);
+        $page = \Input::get('page', 1);
+        $pageLimit=\CNP::getConfigurationValue('pageLimit');
+        $data = Denizen::getVistaDenizens ($vista->scape, $allowedComposers, $typeList, $page, $pageLimit);
+        $denizens = \Paginator::make($data['items'], $data['total'], $pageLimit);
 
 		$args = array('denizens' => $denizens, 'vista' => $vista);
 		$args['composer'] = $vista->output_composer;

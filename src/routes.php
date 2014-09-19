@@ -19,6 +19,12 @@ Route::get('/test', function()
     return View::make('test');
 });
 
+Route::get('/demo', function()
+{
+    $stage = Input::get('stage');
+    return View::make('demo.'.$stage, array());
+});
+
 // DenizensController doesn't actually need all the routes, but I can't 
 // figure out how to call just show($id)
 Route::resource('denizens', 'DemocracyApps\CNP\Controllers\DenizensController');

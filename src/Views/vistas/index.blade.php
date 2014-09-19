@@ -15,4 +15,5 @@
       </tr>
     @endforeach
 	</table>
+  {{$denizens->appends(\Request::except('page'))->links()}}
 @stop
