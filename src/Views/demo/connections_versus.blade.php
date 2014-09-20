@@ -11,6 +11,7 @@
 
   <p>But take them through a short sequence of:</p>
   <ul>
+    <li>Start with a visual of just the stories ... text ... no structure, no organization</li>
     <li>What those stories consist of - break down into the component parts</li>
     <li>But there's more! Talk about the number of relationships - within and between stories</li>
     <li>Show them a visualization of the full network</li>

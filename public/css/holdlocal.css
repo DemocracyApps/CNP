@@ -1,4 +1,4 @@
-﻿
+
         span.error {
           color: #f00;
         }
@@ -11,7 +11,7 @@
           display: inline-block;
           font-weight: bold;
         }
-/*        table th, table td {
+        table th, table td {
           border:1px solid black; padding:10px;
         }
         table#short-table th, table#short-table td {
@@ -22,7 +22,7 @@
         }
         table#simple-table, table#simple-table th, table#simple-table td {
           border:0px solid white; padding:3px;
-        }*/
+        }
 
         /*
          * Autocompletion
@@ -31,13 +31,6 @@
         /* highlight results */
         .ui-autocomplete span.hl_results {
             background-color: #ffff66;
-        }
-
-        .bs-header{
-          padding: 20px 0px;
-          margin-bottom: 20px;
-          border-bottom: 1px solid #ddd;
-          background: #fcfcfc;
         }
          
         /* scroll results */

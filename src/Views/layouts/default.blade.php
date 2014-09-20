@@ -128,6 +128,7 @@
     <script src="/js/jquery-2.1.1.min.js"></script>
     <script src="/js/jquery-ui-1.11.1/jquery-ui.min.js"></script>
   <script src="../js/bootstrap.min.js"></script>
+  <script src="/js/jquery.cookie.js"></script>
 
     <script type="text/javascript">
       $('.mode-toggle').on('click', function() {
@@ -136,6 +137,25 @@
       } );
 
     </script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        //when a group is shown, save it as the active accordion group
+        $("#accordion").on('shown.bs.collapse', function () {
+            var active = $("#accordion .in").attr('id');
+            $.cookie('activeAccordionGroup', active);
+          //  alert(active);
+        });
+        $("#accordion").on('hidden.bs.collapse', function () {
+            $.removeCookie('activeAccordionGroup');
+        });
+        var last = $.cookie('activeAccordionGroup');
+        if (last != null) {
+            //remove default collapse settings
+            $("#accordion .panel-collapse").removeClass('in');
+            //show the account_last visible group
+            $("#" + last).addClass("in");
+        }
+    });    </script>
 
     @yield('scripts')
   </body>

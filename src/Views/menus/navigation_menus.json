@@ -58,10 +58,6 @@
                         {
                             "name":"Simple CSV Upload",
                             "url":"/demo?stage=easy_csv&mode=demo"
-                        },
-                        {
-                            "name":"Simple Community Planning",
-                            "url":"/demo?stage=easy_planning&mode=demo"
                         }
                     ]
                 },
@@ -70,6 +66,10 @@
                     "url":"/demo?stage=catalyze?mode=demo",
                     "tag":"unexpected",
                     "items": [
+                        {
+                            "name":"Simple Community Planning",
+                            "url":"/demo?stage=easy_planning&mode=demo"
+                        },
                         {
                             "name":"What's Missing?",
                             "url":"/demo?stage=catalyze_missing&mode=demo"
