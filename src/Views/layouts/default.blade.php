@@ -17,6 +17,13 @@
         a{
           color: #EB7722;
         }
+        p, li, th, td, input, a {
+          font-size: 110%;
+        }
+        div.presentation {
+            font-size: 110%;
+        }
+
       </style>
       <!-- END STYLES TO MAKE IT NICER LOOKING -->
   </head>
@@ -114,10 +121,10 @@
         <div class="col-md-9 app-content">
             @yield('content')
         </div>
+      </div>
         <footer class="row">
           <div id="copyright">Copyright © 2014 DemocracyApps</div>
         </footer>
-      </div>
     </div>
   </div>
     <script src="/js/jquery-2.1.1.min.js"></script>

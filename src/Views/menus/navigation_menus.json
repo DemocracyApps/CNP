@@ -6,65 +6,85 @@
             "items": [
                 {
                     "name":"Introduction",
-                    "url":"/demo?stage=intro",
+                    "url":"/demo?stage=intro?mode=demo",
                     "tag":"introduction",
                     "items": [
                         {
-                            "name":"What is the CNP?",
-                            "url":"/demo?stage=intro_cnp"
-                        },
-                        {
                             "name":"Why Stories?",
-                            "url":"/demo?stage=intro_stories"
+                            "url":"/demo?stage=intro_stories&mode=demo"
                         },
                         {
-                            "name":"Three Foundations",
-                            "url":"/demo?stage=intro_foundations"
+                            "name":"What is the CNP?",
+                            "url":"/demo?stage=intro_cnp&mode=demo"
+                        },
+                        {
+                            "name":"The Three Foundations",
+                            "url":"/demo?stage=intro_foundations&mode=demo"
+                        },
+                        {
+                            "name":"Note on Sample Stories",
+                            "url":"/demo?stage=intro_data&mode=demo"
                         }
                     ]
                 },
                 {
                     "name":"1. Connections, Not Collections",
-                    "url":"/demo?stage=net",
+                    "url":"/demo?stage=connections?mode=demo",
                     "tag":"connections",
                     "items": [
                         {
-                            "name":"NN?",
-                            "url":"/demo?stage=net_cnp"
+                            "name":"Collections vs Connections",
+                            "url":"/demo?stage=connections_versus?mode=demo"
                         },
                         {
-                            "name":"NN?",
-                            "url":"/demo?stage=net_stories"
+                            "name":"The Potential of the Graph",
+                            "url":"/demo?stage=connections_graph?mode=demo"
                         }
                     ]
                 },
                 {
                     "name":"2. Easy In, Easy Out",
-                    "url":"/demo?stage=inout",
+                    "url":"/demo?stage=easy?mode=demo",
                     "tag":"easy",
                     "items": [
                         {
-                            "name":"NN?",
-                            "url":"/demo?stage=net_cnp"
+                            "name":"Easy for Project Leaders",
+                            "url":"/demo?stage=easy_projects?mode=demo"
                         },
                         {
-                            "name":"NN?",
-                            "url":"/demo?stage=net_stories"
+                            "name":"Easy for Participants",
+                            "url":"/demo?stage=easy_citizens?mode=demo"
+                        },
+                        {
+                            "name":"Simple CSV Upload",
+                            "url":"/demo?stage=easy_csv?mode=demo"
+                        },
+                        {
+                            "name":"Simple Community Planning",
+                            "url":"/demo?stage=easy_planning?mode=demo"
                         }
                     ]
                 },
                 {
                     "name":"3. Catalyze the Unexpected",
-                    "url":"/demo?stage=net",
+                    "url":"/demo?stage=catalyze?mode=demo",
                     "tag":"unexpected",
                     "items": [
                         {
-                            "name":"NN?",
-                            "url":"/demo?stage=net_cnp"
+                            "name":"What's Missing?",
+                            "url":"/demo?stage=catalyze_missing?mode=demo"
                         },
                         {
-                            "name":"NN?",
-                            "url":"/demo?stage=net_stories"
+                            "name":"Branching",
+                            "url":"/demo?stage=catalyze_branch?mode=demo"
+                        },
+                        {
+                            "name":"Reconnecting",
+                            "url":"/demo?stage=catalyze_reconnect?mode=demo"
+                        },
+                        {
+                            "name":"Simulation",
+                            "url":"/demo?stage=catalyze_simulation?mode=demo"
                         }
                     ]
                 }
@@ -75,46 +95,46 @@
             "items": [
                 {
                     "name":"Stories",
-                    "url":"/xxx",
+                    "url":"/stories?mode=app",
                     "tag":"stories",
                     "items": [
                         {
-                            "name":"A Sample",
-                            "url":"/xyx"
+                            "name":"All Stories",
+                            "url":"/stories?mode=app"
                         },
                         {
-                            "name":"B Sample",
-                            "url":"/xyx"
+                            "name":"Vistas",
+                            "url":"/vistas?mode=app"
                         }
                     ]
                 },
                 {
                     "name":"Projects",
-                    "url":"/xxx",
+                    "url":"/scapes?mode=app",
                     "tag":"projects",
                     "items": [
                         {
-                            "name":"A Sample",
-                            "url":"/xyx"
+                            "name":"My Scapes",
+                            "url":"/scapes?mode=app"
                         },
                         {
-                            "name":"B Sample",
-                            "url":"/xyx"
+                            "name":"My Composers",
+                            "url":"/composers?mode=app"
                         }
                     ]
                 },
                 {
                     "name":"Administration",
-                    "url":"/xxx",
+                    "url":"/account?mode=app",
                     "tag":"admin",
                     "items": [
                         {
                             "name":"Account Page",
-                            "url":"/account"
+                            "url":"/account?mode=app"
                         },
                         {
                             "name":"Relation Types",
-                            "url":"/relationtypes"
+                            "url":"/relationtypes?mode=app"
                         }
                     ]
                 }
