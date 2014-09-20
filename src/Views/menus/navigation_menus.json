@@ -7,6 +7,7 @@
                 {
                     "name":"Introduction",
                     "url":"/demo?stage=intro",
+                    "tag":"introduction",
                     "items": [
                         {
                             "name":"What is the CNP?",
@@ -25,6 +26,7 @@
                 {
                     "name":"1. Connections, Not Collections",
                     "url":"/demo?stage=net",
+                    "tag":"connections",
                     "items": [
                         {
                             "name":"NN?",
@@ -37,8 +39,9 @@
                     ]
                 },
                 {
-                    "name":"2. Easy In/Easy Out",
+                    "name":"2. Easy In, Easy Out",
                     "url":"/demo?stage=inout",
+                    "tag":"easy",
                     "items": [
                         {
                             "name":"NN?",
@@ -53,6 +56,7 @@
                 {
                     "name":"3. Catalyze the Unexpected",
                     "url":"/demo?stage=net",
+                    "tag":"unexpected",
                     "items": [
                         {
                             "name":"NN?",
@@ -70,8 +74,9 @@
             "title": "Command Panel",
             "items": [
                 {
-                    "name":"Overview",
+                    "name":"Stories",
                     "url":"/xxx",
+                    "tag":"stories",
                     "items": [
                         {
                             "name":"A Sample",
@@ -84,8 +89,9 @@
                     ]
                 },
                 {
-                    "name":"Easy In/Easy Out",
+                    "name":"Projects",
                     "url":"/xxx",
+                    "tag":"projects",
                     "items": [
                         {
                             "name":"A Sample",
@@ -94,6 +100,21 @@
                         {
                             "name":"B Sample",
                             "url":"/xyx"
+                        }
+                    ]
+                },
+                {
+                    "name":"Administration",
+                    "url":"/xxx",
+                    "tag":"admin",
+                    "items": [
+                        {
+                            "name":"Account Page",
+                            "url":"/account"
+                        },
+                        {
+                            "name":"Relation Types",
+                            "url":"/relationtypes"
                         }
                     ]
                 }

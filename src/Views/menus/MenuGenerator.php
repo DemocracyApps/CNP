@@ -20,6 +20,12 @@ class MenuGenerator {
         $menus = json_decode($str, true);
         //dd($menus['menus'][$menuId]);
         if (! array_key_exists($menuId, $menus['menus'])) throw new \Exception("Menu ".$menuId." not found");
+        // $menus = $menus['menus'][$menuId];
+        // foreach ($menus as $majorMenu) {
+        //     if (! array_key_exists('items', $majorMenu)) {
+        //         $majorMenu[]
+        //     }
+        // }
         return $menus['menus'][$menuId];
     }
 }
