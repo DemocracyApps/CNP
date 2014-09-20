@@ -22,13 +22,14 @@
   </head>
 
   <body>
+    @include('layouts.partials.datarider')
     <div class="cnp-header">
       <div class="container">
         <div class="row">
-          <div class="col-md-2 hdr-logo">
+          <div class="col-md-1 hdr-logo">
             <img src="/img/DemocracyApps_logo-01_RGB.jpg" height="123" width="96" alt="DemocracyApps Logo"/>
           </div>
-          <div class="col-md-7 hdr-main">
+          <div class="col-md-8 hdr-main">
             <h1>Community Narratives Platform</h1>
             <p>The power of story</p>
           </div>
@@ -70,7 +71,11 @@
           <?php
             $menu = \DemocracyApps\CNP\Views\menus\MenuGenerator::generateMenu(0);
           ?>
-          <h3>{{$menu['title']}}</h3>
+          <br>
+          <br>
+          <br>
+          <br>
+          <!-- <h2>{{$menu['title']}}</h2> -->
           <!-- Top of the menu -->
           <div class="panel-group" id="accordion">
             <?php
