@@ -23,7 +23,6 @@
         div.presentation {
             font-size: 110%;
         }
-
       </style>
       <!-- END STYLES TO MAKE IT NICER LOOKING -->
   </head>
@@ -38,7 +37,6 @@
           </div>
           <div class="col-md-8 hdr-main">
             <h1>Community Narratives Platform</h1>
-            <p>The power of story</p>
           </div>
           <div class="col-md-3 hdr-right">
             <div class="btn-group" data-toggle="buttons">

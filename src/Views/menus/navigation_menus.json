@@ -34,11 +34,11 @@
                     "items": [
                         {
                             "name":"Collections vs Connections",
-                            "url":"/demo?stage=connections_versus?mode=demo"
+                            "url":"/demo?stage=connections_versus&mode=demo"
                         },
                         {
                             "name":"The Potential of the Graph",
-                            "url":"/demo?stage=connections_graph?mode=demo"
+                            "url":"/demo?stage=connections_graph&mode=demo"
                         }
                     ]
                 },
@@ -49,19 +49,19 @@
                     "items": [
                         {
                             "name":"Easy for Project Leaders",
-                            "url":"/demo?stage=easy_projects?mode=demo"
+                            "url":"/demo?stage=easy_projects&mode=demo"
                         },
                         {
                             "name":"Easy for Participants",
-                            "url":"/demo?stage=easy_citizens?mode=demo"
+                            "url":"/demo?stage=easy_citizens&mode=demo"
                         },
                         {
                             "name":"Simple CSV Upload",
-                            "url":"/demo?stage=easy_csv?mode=demo"
+                            "url":"/demo?stage=easy_csv&mode=demo"
                         },
                         {
                             "name":"Simple Community Planning",
-                            "url":"/demo?stage=easy_planning?mode=demo"
+                            "url":"/demo?stage=easy_planning&mode=demo"
                         }
                     ]
                 },
@@ -72,19 +72,19 @@
                     "items": [
                         {
                             "name":"What's Missing?",
-                            "url":"/demo?stage=catalyze_missing?mode=demo"
+                            "url":"/demo?stage=catalyze_missing&mode=demo"
                         },
                         {
                             "name":"Branching",
-                            "url":"/demo?stage=catalyze_branch?mode=demo"
+                            "url":"/demo?stage=catalyze_branch&mode=demo"
                         },
                         {
                             "name":"Reconnecting",
-                            "url":"/demo?stage=catalyze_reconnect?mode=demo"
+                            "url":"/demo?stage=catalyze_reconnect&mode=demo"
                         },
                         {
                             "name":"Simulation",
-                            "url":"/demo?stage=catalyze_simulation?mode=demo"
+                            "url":"/demo?stage=catalyze_simulation&mode=demo"
                         }
                     ]
                 }
