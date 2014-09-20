@@ -20,7 +20,6 @@ class DenizenGenerator
     static public function generateDenizen ($elementType, $name, $content, $properties, $scapeId)
     {
         $createdDenizens = null;
-        \Log::info("In generateDenizen with name ".$name." and content=  ".$content['value']);
         if (array_key_exists($elementType, self::$fcts) && self::$fcts[$elementType]) {
             $createdDenizens = call_user_func(self::$fcts[$elementType], $elementType, $content, $properties);
         }

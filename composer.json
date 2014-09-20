@@ -8,7 +8,8 @@
 	        "artdarek/oauth-4-laravel": "dev-master",
 	        "components/normalize.css": "dev-master",
 	        "laracasts/utilities": "~1.0",
-	        "twbs/bootstrap": "3.2.*@dev"
+	        "twbs/bootstrap": "3.2.*@dev",
+		"pda/pheanstalk": "2.1.*"
 		},
 	"require-dev": {
 		"fzaninotto/faker": "dev-master"

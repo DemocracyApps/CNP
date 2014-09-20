@@ -13,6 +13,19 @@ Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
  ********************************
  *********************************/
 
+Route::get('/q', function () {
+    Queue::push(function ($job) {
+
+
+
+        \Log::info("Queues are very cool");
+
+
+        $job->delete();
+    });
+    echo "Hello";
+});
+
 Route::get('/test', function()
 {
     $s = ",  ,  a sa, ls,, l,";
@@ -31,6 +44,14 @@ Route::get('/demo', function()
 // DenizensController doesn't actually need all the routes, but I can't 
 // figure out how to call just show($id)
 Route::resource('denizens', 'DemocracyApps\CNP\Controllers\DenizensController');
+
+// /stories/export must be defined before Route::resource('stories'). Probably need
+// to come up with a different route.
+Route::get('/stories/export', array('as' => 'stories.export', function() 
+    {
+        \Log::info("Heading off to stories.export");
+        return View::make('stories.export', array('scape' => \Input::get('scape')));
+    }));
 
 
 Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
@@ -66,11 +87,6 @@ Route::group(['prefix' => 'ajax'], function ()
         });
     }
 );
-
-Route::get('/stories/export', array('as' => 'stories.export', function() 
-    {
-        return View::make('stories.export', array('scape' => \Input::get('scape')));
-    }));
 
 Route::get('/kumu', array('as' => 'kumu', function ()
 {
