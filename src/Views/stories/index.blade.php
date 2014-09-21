@@ -3,7 +3,7 @@
 @section('content')
 <h1>We Have the Stories</h1>
 
-	<table class="long-table">
+	<table class="table table-striped">
     @foreach($stories as $story)
       <tr>
         <td style="width:20%;"> {{ $story->getId() }} </td> 

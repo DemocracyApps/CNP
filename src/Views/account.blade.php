@@ -5,7 +5,7 @@
 
 <div id="user-info">
   <h2>User Information</h2>
-  <table cellpadding="10">
+  <table class="table">
     <tr>
       <td><b>Name:</b></td>  <td>{{$user->name}}</td>
     </tr>
@@ -17,7 +17,7 @@
 
 <div id="scape-list">
   <h2>Your Scapes</h2>
-  <table>
+  <table class="table table-condensed table-bordered">
     <tr>
       <th> Name </th>
       <th> Access </th>

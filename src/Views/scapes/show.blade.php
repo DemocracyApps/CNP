@@ -33,7 +33,7 @@
 
 <div>
   <h2>General Information</h2>
-  <table>
+  <table class="table">
     <tr>
       <th>Scape Name:</th>  <td>{{$scape->getName()}}</td>
     </tr>
@@ -48,7 +48,7 @@
 
 <div>
   <h2>Vistas</h2>
-  <table>
+  <table class="table">
     <tr>
       <th> ID </th>
       <th> Name </th>
@@ -81,7 +81,7 @@
 <br/>
 <div>
   <h2>Composer Specifications</h2>
-  <table>
+  <table class="table">
     <tr>
       <th> Name </th>
       <th> Description </th>

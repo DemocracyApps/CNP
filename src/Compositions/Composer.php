@@ -284,7 +284,17 @@ class Composer extends \Eloquent {
     {
         self::registerElementProcessors();
         if ($this->inputType == 'csv-simple') {
-            self::processCsvInput($input, $composition);
+            $file = \Input::file('csv');
+            $data = array();
+            $data['userId'] = \Auth::user()->getId();
+            $data['composerId'] = $this->id;
+            $data['compositionId'] = $composition->id;
+            $name = uniqid('upload');
+            \Log::info("Attempt to create /vagrant/cnp/public/downloads" . $name);
+            $file->move('/vagrant/cnp/public/downloads', $name);
+            $data['filePath'] = '/vagrant/cnp/public/downloads/' . $name;
+            \Queue::push('\DemocracyApps\CNP\Compositions\Inputs\CSVInputProcessor', $data);
+//            self::processCsvInput($input, $composition);
         }
         else if ($this->inputType == 'auto-interactive') {
             $this->inputDriver->extractSubmittedValues($input); // Import latest batch of form data into inputDriver
@@ -445,15 +455,19 @@ class Composer extends \Eloquent {
         $this->commonProcessInput($composition, $data, $this->elementsSpec, $this->relationsSpec, $this->scape);
     }
 
-    private function processCsvInput($input, Composition $composition) 
+    public function processCsvInput($filePath, Composition $composition) 
     {
         ini_set("auto_detect_line_endings", true); // Deal with Mac line endings
 
-        $file = \Input::file('csv');
-        $myfile = fopen($file->getRealPath(), "r") or die("Unable to open file!");
+        // $file = \Input::file('csv');
+        // $myfile = fopen($file->getRealPath(), "r") or die("Unable to open file!");
+        $myfile = fopen($filePath, "r") or die("Unable to open file!");
+        if (! file_exists($filePath)) {
+            \Log::info("The file doesn't exist");
+        }
 
         $map = $this->inputSpec['map'];
-        if (! $map) return "No map!";
+        if (! $map) throw new \Exception ("No map found");
         $skip = $map['skip'];
         $columnMap = $map['columnMap'];
 

@@ -27,7 +27,7 @@
 
 <div>
   <h2>General Information</h2>
-  <table>
+  <table class="table">
     <tr>
       <th>Specification Name:</th>  <td>{{$composer->name}}</td>
     </tr>
