@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateJobsTable extends Migration {
+class CreateNotificationsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,11 +12,12 @@ class CreateJobsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('jobs', function(Blueprint $table)
+		Schema::create('notifications', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->integer('user_id');
 			$table->foreign('user_id')->references('id')->on('users');
+			$table->string('type');
 			$table->text('messages')->nullable();
 			$table->string('status')->nullable();
 			$table->dateTime('completed_at')->nullable();
@@ -31,7 +32,7 @@ class CreateJobsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('jobs');
+		Schema::drop('notifications');
 	}
 
 }

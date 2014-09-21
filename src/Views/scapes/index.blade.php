@@ -32,21 +32,6 @@
 {{ link_to("/account", "Return to Account Page") }}
 
 <div>
-  <h2>General Information</h2>
-  <table class="table">
-    <tr>
-      <th>Scape Name:</th>  <td>{{$scape->getName()}}</td>
-    </tr>
-    <tr>
-      <th>Access:</th>  <td>{{$scape->getProperty('access')}}</td>
-    </tr>
-    <tr>
-      <th>Content:</th>  <td>{{$scape->getContent()}}</td>
-    </tr>
-  </table>
-</div>
-
-<div>
   <h2>Vistas</h2>
   <table class="table">
     <tr>

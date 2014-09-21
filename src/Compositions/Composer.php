@@ -293,11 +293,12 @@ class Composer extends \Eloquent {
             \Log::info("Attempt to create /vagrant/cnp/public/downloads" . $name);
             $file->move('/vagrant/cnp/public/downloads', $name);
             $data['filePath'] = '/vagrant/cnp/public/downloads/' . $name;
-            $job = new \DemocracyApps\CNP\Utility\Job;
-            $job->user_id = $data['userId'];
-            $job->status = 'Running';
-            $job->save();
-            $data['jobId'] = $job->id;
+            $notification = new \DemocracyApps\CNP\Utility\Notification;
+            $notification->user_id = $data['userId'];
+            $notification->status = 'Running';
+            $notification->type = 'CVSUpload';
+            $notification->save();
+            $data['notificationId'] = $notification->id;
             \Queue::push('\DemocracyApps\CNP\Compositions\Inputs\CSVInputProcessor', $data);
         }
         else if ($this->inputType == 'auto-interactive') {

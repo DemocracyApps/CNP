@@ -1,6 +1,6 @@
 <?php namespace DemocracyApps\CNP\Utility;
 
-class Job extends \Eloquent {
+class Notification extends \Eloquent {
 
 
 }

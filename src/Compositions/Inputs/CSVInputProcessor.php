@@ -19,13 +19,13 @@ class CSVInputProcessor
         $composer = Composer::find($composerId);
         $composer->initializeForInput(null);
         \Log::info("Starting processing of " . $filePath);
-        $job = \DemocracyApps\CNP\Utility\Job::find($data['jobId']);
-        $job->messages = $composer->processCsvInput($filePath, $composition);
-        $job->messages = $job->messages;
-        $job->status = 'Completed';
-        $job->completed_at = date('Y-m-d H:i:s');
-        $job->save();
-        \Log::info("Completed processing of job " . $job->id . " for " . $filePath);
+        $notification = \DemocracyApps\CNP\Utility\Notification::find($data['notificationId']);
+        $notification->messages = $composer->processCsvInput($filePath, $composition);
+        $notification->messages = $notification->messages;
+        $notification->status = 'Completed';
+        $notification->completed_at = date('Y-m-d H:i:s');
+        $notification->save();
+        \Log::info("Completed processing of job " . $notification->id . " for " . $filePath);
         
         unlink($filePath);
         $queueJob->delete();

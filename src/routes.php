@@ -54,6 +54,7 @@ Route::get('/stories/export', array('as' => 'stories.export', function()
     }));
 
 
+Route::resource('notifications', 'DemocracyApps\CNP\Controllers\NotificationsController');
 Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
 Route::resource('scapes', 'DemocracyApps\CNP\Controllers\ScapesController');
 Route::resource('composers', 'DemocracyApps\CNP\Controllers\ComposersController');

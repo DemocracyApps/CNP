@@ -1,5 +1,4 @@
-<?php
-namespace DemocracyApps\CNP\Controllers;
+<?php namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Compositions\Composer;
