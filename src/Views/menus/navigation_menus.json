@@ -114,7 +114,7 @@
                     "tag":"projects",
                     "items": [
                         {
-                            "name":"My Scapes",
+                            "name":"My Projects",
                             "url":"/scapes?mode=app"
                         },
                         {
@@ -131,6 +131,10 @@
                         {
                             "name":"Account Page",
                             "url":"/account?mode=app"
+                        },
+                        {
+                            "name":"Notifications",
+                            "url":"/notifications?mode=app"
                         },
                         {
                             "name":"Relation Types",

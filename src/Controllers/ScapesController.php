@@ -21,9 +21,15 @@ class ScapesController extends ApiController {
 	 */
 	public function index()
 	{
+		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
     	$scapes = DAEntity\Scape::allUserDenizens(\Auth::id());
-    	$data = $this->scapeTransformer->transformCollection($scapes);
-		return $this->respondIndex('List of API user scapes', $data);
+    	if ($isAPI) {
+	    	$data = $this->scapeTransformer->transformCollection($scapes);
+			return $this->respondIndex('List of API user scapes', $data);
+		}
+		else {
+			\View::make('scapes.index', array('scapes'=>$scapes));
+		}
 	}
 
 	public function show ($id)

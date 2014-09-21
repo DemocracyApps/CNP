@@ -293,8 +293,12 @@ class Composer extends \Eloquent {
             \Log::info("Attempt to create /vagrant/cnp/public/downloads" . $name);
             $file->move('/vagrant/cnp/public/downloads', $name);
             $data['filePath'] = '/vagrant/cnp/public/downloads/' . $name;
+            $job = new \DemocracyApps\CNP\Utility\Job;
+            $job->user_id = $data['userId'];
+            $job->status = 'Running';
+            $job->save();
+            $data['jobId'] = $job->id;
             \Queue::push('\DemocracyApps\CNP\Compositions\Inputs\CSVInputProcessor', $data);
-//            self::processCsvInput($input, $composition);
         }
         else if ($this->inputType == 'auto-interactive') {
             $this->inputDriver->extractSubmittedValues($input); // Import latest batch of form data into inputDriver
@@ -458,6 +462,7 @@ class Composer extends \Eloquent {
     public function processCsvInput($filePath, Composition $composition) 
     {
         ini_set("auto_detect_line_endings", true); // Deal with Mac line endings
+        $messages = "";
 
         // $file = \Input::file('csv');
         // $myfile = fopen($file->getRealPath(), "r") or die("Unable to open file!");
@@ -474,18 +479,33 @@ class Composer extends \Eloquent {
         while ($skip-- > 0) {
             $line = fgetcsv($myfile);
         }
-        $count = 0;
+        $count = $skip;
         while ( ! feof($myfile) ) {
             $line = fgetcsv($myfile);
+            $lmessage = null;
             $elementsIn = array();
             $title = " - ";
             $summary = null;
             if ($line) {
                 ++$count;
+                if ($count%100 == 0) {
+                    \Log::info(" ... " . $count);
+                }
+                $valid = true;
                 foreach ($columnMap as $column) {
                     $use = $column['use'];
+                    $required =  false;
+                    if (array_key_exists('required', $column)) {
+                        $required = $column['required'];
+                    }
+
                     if ($use == 'title') {
                         $title = $line[$column['column']];
+                        if ($required && ! $title) {
+                            if (! $lmessage) $lmessage = "Line " . $count . ":";
+                            $lmessage .= " missing title";
+                            $valid = false;
+                        }
                     }
                     elseif ($use == 'summary') {
                         $summary = $val;
@@ -494,17 +514,27 @@ class Composer extends \Eloquent {
                         $val = array();
                         $val['isRef'] = false;
                         $val['value'] = $line[$column['column']];
+                        if ($required && ! $val['value']) {
+                            if (! $lmessage) $lmessage = "Line " . $count . ": ";
+                            else $lmessage .= ", ";
+                            $lmessage .= "missing value in column " . $column['column'];
+                            $valid = false;
+                        }
                         $elementsIn[$column['elementId']] = $val;
                     }
                 }
-                $data = array();
-                $data['title'] = $title;
-                $data['summary'] = $summary;
-                $data['elementsIn'] = $elementsIn;
-                $childComposition = $composition->createChildComposition();
-                $this->commonProcessInput($childComposition, $data, $this->elementsSpec, $this->relationsSpec, $this->scape);
+                if ($valid) {
+                    $data = array();
+                    $data['title'] = $title;
+                    $data['summary'] = $summary;
+                    $data['elementsIn'] = $elementsIn;
+                    $childComposition = $composition->createChildComposition();
+                    $this->commonProcessInput($childComposition, $data, $this->elementsSpec, $this->relationsSpec, $this->scape);
+                }
+                if ($lmessage) $messages .= $lmessage . "\n";
             }
         }
+        return $messages;
     }
 
 }

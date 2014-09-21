@@ -5,7 +5,7 @@
     "elements": [
         {
             "id":"Story",
-            "required": false,
+            "required": true,
             "type":"Story"
         },
         {

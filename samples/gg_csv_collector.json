@@ -17,7 +17,8 @@
 	    			"column": 2,
 	    			"use":"element",
 	    			"elementId": "Story",
-	    			"columnType": "text"
+	    			"columnType": "text",
+	    			"required": true
 	    		},
 	    		{
 	    			"column": 5,
