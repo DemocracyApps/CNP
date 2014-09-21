@@ -21,6 +21,7 @@ class CSVInputProcessor
         \Log::info("Starting processing of " . $filePath);
         $composer->processCsvInput($filePath, $composition);
         \Log::info("Completed processing of " . $filePath);
+        unlink($filePath);
         $job->delete();
     }
 
