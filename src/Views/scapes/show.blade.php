@@ -97,7 +97,7 @@
         <td> {{ $composer->id }} </td>
         <td> {{ $composer->contains }}</td>
         <td> {{ $composer->dependson }}</td>
-        <td> <a href="/stories/create?composer={{$composer->id}}">Use</a></td>
+        <td> <a class="label label-primary" href="/stories/create?composer={{$composer->id}}">Use</a></td>
       </tr>    
     @endforeach
   </table>
