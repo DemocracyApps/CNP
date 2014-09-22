@@ -28,7 +28,7 @@ class ScapesController extends ApiController {
 			return $this->respondIndex('List of API user scapes', $data);
 		}
 		else {
-			\View::make('scapes.index', array('scapes'=>$scapes));
+			return \View::make('scapes.index', array('scapes'=>$scapes));
 		}
 	}
 
