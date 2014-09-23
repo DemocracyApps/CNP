@@ -10,12 +10,17 @@
   while (! $done ) {
     $next = $driver->getNext();
     if (! $next) {
+      \Log::info("We are done");
       $done = true;
     }
     else {
       if (ComposerOutputDriver::validForOutput($next)) {
+        \Log::info("Valid for input");
         ComposerOutputDriver::createInputDrivenOutput($topDenizen, $driver, $next);
          echo("\n");
+       }
+       else {
+        \Log::info("Not valid for input");
        }
        \DemocracyApps\CNP\Utility\Html::createSelfClosingElement('br');
        echo("\n");

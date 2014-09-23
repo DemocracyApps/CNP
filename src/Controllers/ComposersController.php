@@ -125,7 +125,6 @@ class ComposersController extends ApiController {
 		else {
 			$data = \Input::all();
 		}
-
         $rules = ['name'=>'required'];
         $validator = \Validator::make($data, $rules);
         if ($validator->fails()) {

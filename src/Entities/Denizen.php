@@ -347,7 +347,7 @@ class Denizen
 
     public function getRelations()
     {
-        return Relation::getRelations($this->id)->orderBy('id');
+        return Relation::getRelations($this->id);
     }
 
 }

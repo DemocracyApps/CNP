@@ -6,18 +6,18 @@
 	    "inputType": "auto-interactive",
 	    "map": [
             {
+                "id":"2",
+                "use":"summary",
+                "inputType":"textarea",
+                "prompt":"Write a summary for this story"
+            },
+            {
     			"id":"1orso",
     			"use":"element",
     			"elementId":"Story",
     			"inputType":"textarea",
     			"prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community."
     		},
-            {
-                "id":"2",
-                "use":"summary",
-                "inputType":"textarea",
-                "prompt":"Write a summary for this story"
-            },
     		{
     			"use":"pagebreak"
     		},

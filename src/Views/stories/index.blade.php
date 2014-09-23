@@ -1,7 +1,16 @@
-@extends('layouts.default')
+@extends('layouts.list')
 
-@section('content')
-<h1>We Have the Stories</h1>
+@section('title')
+  All Stories - Default Views
+@stop
+
+@section('buttons')
+    <div class="col-xs-6">
+      <button style="float:right;" class="btn btn-success btn-sm" onclick="window.location.href='/vistas'">Project Views</button>
+    </div>
+@stop
+
+@section('listContent')
 
 	<table class="table table-striped">
     @foreach($stories as $story)

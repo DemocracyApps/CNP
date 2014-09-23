@@ -39,6 +39,7 @@
             <h1>Community Narratives Platform</h1>
           </div>
           <div class="col-md-3 hdr-right">
+            <!--
             <div class="btn-group" data-toggle="buttons">
               <?php
                 $mode = \Session::get('cnpMode');
@@ -64,6 +65,7 @@
               </label>
 
             </div>
+          -->
           </div>
         </div>
       </div>

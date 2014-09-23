@@ -88,7 +88,7 @@ class Relation
 
     public static function getRelations ($fromId) 
     {
-        $d = DB::table(self::$tableName)->where('fromid', $fromId)->get();
+        $d = DB::table(self::$tableName)->where('fromid', $fromId)->orderBy('id')->get();
 
         $relations = array();
 

@@ -23,6 +23,11 @@ class ComposerOutputDriver extends \Eloquent {
     {
         $start = null;
         if (array_key_exists('start', $input)) $start = $input['start'];
+        $this->outputSpec = $composer->getOutputSpec();
+        if (! $this->outputSpec) {
+            $this->outputSpec = $composer->getInputSpec();
+            $this->usingInputSpec = true;
+        }
         $this->program = new ComposerProgram;
         $this->program->restart($this->driver, $start);
         $this->denizensMap = $denizensMap;
@@ -44,6 +49,7 @@ class ComposerOutputDriver extends \Eloquent {
         $this->program = new ComposerProgram;
         $this->program->compile($this->outputSpec, $start);
         $this->denizensMap = $denizensMap;
+        //dd($this->program);
     }
 
     public function usingInputForOutput() 
@@ -73,13 +79,22 @@ class ComposerOutputDriver extends \Eloquent {
 
     public static function validForOutput($next)
     {
-        return array_key_exists('prompt', $next);
+        return (array_key_exists('prompt', $next) || array_key_exists('column', $next));
     }
 
     static public function createInputDrivenOutput($anchor, $driver, $desc)
     {
         Html::startElement("div", array('class' => 'span6'));
-        $prompt = (array_key_exists('outputPrompt', $desc))?$desc['outputPrompt']:$desc['prompt'];
+        $prompt = "Unknown prompt";
+        if (array_key_exists('outputPrompt', $desc)) {
+            $prompt = $desc['outputPrompt'];
+        }
+        else if (array_key_exists('prompt', $desc)) {
+            $prompt = $desc['prompt'];
+        }
+        else if (array_key_exists('column', $desc)) {
+            $prompt = 'Column ' . $desc['column'];
+        }
         Html::createElement("h3", $prompt, array('id' => $desc['id']));
 
         if ($desc['use'] == 'title') {
@@ -131,6 +146,7 @@ class ComposerOutputDriver extends \Eloquent {
         // Let's get all the elements that go on to this page
         $targeted = array();
         $done = false;
+        dd($this);
         while (! $done ) {
             $next = $this->getNext();
             if (! $next) {
@@ -186,6 +202,7 @@ class ComposerOutputDriver extends \Eloquent {
                     $list = array();
                     foreach ($tmpList as $item) {
                         if ($item['use'] == 'title') $title = $item;
+                        else if ($item['use'] == 'summary') $summary = $item;
                         else {
                             $list[] = $item;
                         }
@@ -199,6 +216,9 @@ class ComposerOutputDriver extends \Eloquent {
                                 if (sizeof($source) == 2) {
                                     if ($source[1] == 'name') {
                                         $content = $den[0]->getName();
+                                    }
+                                    else if ($source[1] == 'content') {
+                                        $content = $den[0]->getContent();
                                     }
                                     else {
                                         $content = $den[0]->getContent();

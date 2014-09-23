@@ -21,6 +21,7 @@ class VistasController extends ApiController {
 	 */
 	public function index()
 	{
+
 		$vista = Vista::find(\Input::get('vista'));
 		$typeList = null;
 		$denizens = null;

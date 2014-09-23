@@ -24,43 +24,57 @@ class ComposerProgram {
         $this->runnable['map'] = array();
         $previous = null;
         \Log::info("Starting at " . $start);
+        if (array_key_exists('columnMap', $program['map'])) {
+            $inputMap = &$program['map']['columnMap'];
+        }
+        else {
+            $inputMap = &$program['map'];
+        }
         $breakSequence = false;
-        for ($i = 0, $size = count($program['map']); $i<$size; ++$i) {
-            $item = $program['map'][$i];
+        for ($i = 0, $size = count($inputMap); $i<$size; ++$i) {
+            $item = $inputMap[$i];
             $item['prev'] = null;
             if (!array_key_exists('next', $item)) $item['next'] = null;
             $item['pagebreak'] = false;
 
-            if (array_key_exists('id', $item) || array_key_exists('location', $item)) {
-                $id = $item['id'];
-                // If this is the first real item, set start to it.
-                if ($this->runnable['start'] == null) $this->runnable['start']   = $id;
-
-                if ($previous && ! $breakSequence) { // A break element breaks connection
-                    if ( ! $previous['next'] ) {
-                        $previous['next'] = $id; // don't override
+            if (array_key_exists('use', $item)) {
+                if ($item['use'] == 'break' || $item['use'] == 'pagebreak') {
+                    if ($item['use'] == 'pagebreak') {
+                        if ($previous) $previous['pagebreak'] = true;
                     }
-                    $item['prev'] = $previous['id'];
-                }
-                $breakSequence = false;
+                    elseif ($item['use'] == 'break') {
+                        if ($this->runnable['start'] != null) { // We just ignore stop elements at the beginning.
+                            $breakSequence = true; // This will suppress next/prev calculation above
+                        }
 
-                $this->runnable['map'][$id] = $item;
-                $previous = &$this->runnable['map'][$id];
-
-                $item['value'] = null;
-
-                // If next item is contingent, set
-                //    $item['pagebreak'] = true;
-            }
-            else {
-                if ($item['use'] == 'pagebreak') {
-                    if ($previous) $previous['pagebreak'] = true;
-                }
-                elseif ($item['use'] == 'break') {
-                    if ($this->runnable['start'] != null) { // We just ignore stop elements at the beginning.
-                        $breakSequence = true; // This will suppress next/prev calculation above
                     }
+                }
+                else  {
+                    if (array_key_exists('id', $item)) {
+                        $id = $item['id'];
+                    }
+                    else {
+                        $id = '__' . $i . '__';
+                        $item['id'] = $id;
+                    }
+                    // If this is the first real item, set start to it.
+                    if ($this->runnable['start'] == null) $this->runnable['start']   = $id;
 
+                    if ($previous && ! $breakSequence) { // A break element breaks connection
+                        if ( ! $previous['next'] ) {
+                            $previous['next'] = $id; // don't override
+                        }
+                        $item['prev'] = $previous['id'];
+                    }
+                    $breakSequence = false;
+
+                    $this->runnable['map'][$id] = $item;
+                    $previous = &$this->runnable['map'][$id];
+
+                    $item['value'] = null;
+
+                    // If next item is contingent, set
+                    //    $item['pagebreak'] = true;
                 }
             }
         }

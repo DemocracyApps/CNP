@@ -3,6 +3,8 @@ namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Compositions\Composer as Composer;
+use \DemocracyApps\CNP\Compositions\Outputs\Vista;
+use \DemocracyApps\CNP\Entities\Denizen;
 
 class StoriesController extends BaseController {
     protected $story;
@@ -19,11 +21,38 @@ class StoriesController extends BaseController {
 	 */
 	public function index()
 	{
-        $page = \Input::get('page', 1);
-        $pageLimit=\CNP::getConfigurationValue('pageLimit');
-        $data = DAEntity\Story::allPaged($page, $pageLimit);
-        $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
-        return \View::make('stories.index')->with('stories', $stories);
+        if (\Input::has('vista')) {
+            $vista = Vista::find(\Input::get('vista'));
+            $typeList = null;
+            $denizens = null;
+            if ($vista->selector) {
+                $typeList = array();
+                $s = trim(preg_replace("([, ]+)", ' ', $vista->selector));
+                if ($s) $types = explode(" ", $s);
+                foreach ($types as $type) {
+                    $typeList [] = \CNP::getDenizenTypeId($type);
+                }
+            }
+            $s = trim(preg_replace("([, ]+)", ' ', $vista->input_composers));
+            if ($s) $allowedComposers = explode(" ", $s);
+
+            $page = \Input::get('page', 1);
+            $pageLimit=\CNP::getConfigurationValue('pageLimit');
+            $data = Denizen::getVistaDenizens ($vista->scape, $allowedComposers, $typeList, $page, $pageLimit);
+            $denizens = \Paginator::make($data['items'], $data['total'], $pageLimit);
+
+            $args = array('denizens' => $denizens, 'vista' => $vista);
+            $args['composer'] = $vista->output_composer;
+            return \View::make('vistas.index', array('denizens'=>$denizens, 'vista'=>$vista, 'composer'=>$vista->output_composer));
+            return \View::make('vistas.index', $args);
+        }
+        else { // just raw
+            $page = \Input::get('page', 1);
+            $pageLimit=\CNP::getConfigurationValue('pageLimit');
+            $data = DAEntity\Story::allPaged($page, $pageLimit);
+            $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
+            return \View::make('stories.index')->with('stories', $stories);
+        }
 	}
 
 	/**

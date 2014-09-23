@@ -15,7 +15,6 @@ class DenizensController extends ApiController {
     public function show($id)
     {
         $denizen = DAEntity\Denizen::find($id);
-
         // We have to have a composer for this. Hoo boy.
         $composer = \Input::get('composer');
         $composer = Composer::find($composer);

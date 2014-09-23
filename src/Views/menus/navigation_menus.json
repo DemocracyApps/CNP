@@ -94,17 +94,40 @@
             "title": "Command Panel",
             "items": [
                 {
+                    "name":"Welcome",
+                    "url":"/welcome?mode=app",
+                    "tag":"welcome",
+                    "items": [
+                        {
+                            "name":"Why Stories?",
+                            "url":"/demo?stage=intro_stories&mode=demo"
+                        },
+                        {
+                            "name":"What is the CNP?",
+                            "url":"/demo?stage=intro_cnp&mode=demo"
+                        },
+                        {
+                            "name":"The Three Foundations",
+                            "url":"/demo?stage=intro_foundations&mode=demo"
+                        },
+                        {
+                            "name":"Note on Sample Stories",
+                            "url":"/demo?stage=intro_data&mode=demo"
+                        }
+                    ]
+                },
+                {
                     "name":"Stories",
                     "url":"/stories?mode=app",
                     "tag":"stories",
                     "items": [
                         {
-                            "name":"All Stories",
-                            "url":"/stories?mode=app"
+                            "name":"Project Views",
+                            "url":"/vistas?mode=app"
                         },
                         {
-                            "name":"Vistas",
-                            "url":"/vistas?mode=app"
+                            "name":"All Stories",
+                            "url":"/stories?mode=app"
                         }
                     ]
                 },
@@ -116,6 +139,10 @@
                         {
                             "name":"My Projects",
                             "url":"/scapes?mode=app"
+                        },
+                        {
+                            "name":"Scape 2",
+                            "url":"/scapes/2?mode=app"
                         },
                         {
                             "name":"My Composers",

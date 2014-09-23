@@ -1,28 +1,17 @@
-@extends('layouts.default')
+@extends('layouts.list')
 
-@section('content')
-<div class="row">
-  <div class="col-md-6">
-    <h1>{{ Auth::user()->name }}'s Projects </h1>
-    <br>
-  </div>
-  <div class="col-md-3">
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-9">
-  </div>
-  <div class="col-md-3" style="margin-bottom:10px;">
-    <div style="float:right;">
-      {{ Form::open(['route' => 'scapes.create', 'method' => 'get']) }}
-         <div>
-           {{ Form::submit('New Project',['class' => 'btn btn-info']) }}
-         </div>
-      {{ Form::close() }}
+@section('title')
+      {{ Auth::user()->name }}'s Projects 
+@stop
+
+@section('buttons')
+    <div class="col-xs-6">
+      <button style="float:right;" class="btn btn-success btn-sm" onclick="window.location.href='/scapes/create'">New</button>
     </div>
-  </div>
-</div>
-<div class="row">
+@stop
+
+@section('listContent')
+
   <table class="table">
     <tr>
       <th> ID </th>
@@ -39,6 +28,5 @@
       </tr>    
     @endforeach
   </table>
-</div>
 
 @stop
