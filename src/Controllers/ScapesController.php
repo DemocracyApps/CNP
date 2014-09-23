@@ -99,7 +99,7 @@ class ScapesController extends ApiController {
 	        // Now let's create the relations with the creator Person
 	        $person = DAEntity\Person::find($user->getDenizenId());
 	        $relations = DAEntity\Relation::createRelationPair($person->getId(), $this->scape->getId(),
-	                                                          "CreatorOf");
+	                                                          "is-creator-of");
 	        foreach($relations as $relation) {
 	            $relation->save();
 	        }

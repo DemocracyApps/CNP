@@ -19,12 +19,12 @@
     ],
     "relations": [
         {
-            "type": "Causes",
+            "type": "causes",
             "from": "Person",
             "to":   "Story"
         },
         {
-            "type": "Tags",
+            "type": "tags",
             "from": "Topic",
             "to":   "Story"
         }

@@ -22,17 +22,17 @@
     ],
     "relations": [
         {
-            "type": "Causes",
+            "type": "causes",
             "from": "Organization",
             "to":   "Story"
         },
         {
-            "type":"Link",
+            "type":"links",
             "from":"Summary",
             "to":"Story"
         },
         {
-            "type": "Tags",
+            "type": "tags",
             "from": "Topic",
             "to":   "Story"
         }

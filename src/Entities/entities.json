@@ -4,19 +4,19 @@
     // add to a production system, add here (for future installs) and
     // add via /relationtypes route.
     "relationTypes": [
-        {"name":"Link"},
-        {"name":"CreatedBy", "allowedTo":"Person", "inverse":"CreatorOf"},
-        {"name":"CreatorOf", "allowedFrom":"Person", "inverse":"CreatedBy"},
-        {"name":"Tags", "allowedFrom":"Tag", "inverse":"IsTaggedBy"},
-        {"name":"IsTaggedBy", "allowedTo":"Tag", "inverse":"Tags"},
-        {"name":"References", "inverse":"IsReferencedBy"},
-        {"name":"IsReferencedBy", "inverse":"References"},
-        {"name":"IsPartOf", "inverse":"HasPart"},
-        {"name":"HasPart", "inverse":"IsPartOf"},
-        {"name":"Causes", "inverse":"IsCausedBy"},
-        {"name":"IsCausedBy", "inverse":"Causes"},
-        {"name":"BranchesTo", "inverse":"BranchesFrom"},
-        {"name":"BranchesFrom", "inverse":"BranchesTo"}
+        {"name":"links"},
+        {"name":"is-created-by", "allowedTo":"Person", "inverse":"is-creator-of"},
+        {"name":"is-creator-of", "allowedFrom":"Person", "inverse":"is-created-by"},
+        {"name":"tags", "allowedFrom":"Tag", "inverse":"is-tagged-by"},
+        {"name":"is-tagged-by", "allowedTo":"Tag", "inverse":"tags"},
+        {"name":"references", "inverse":"is-referenced-by"},
+        {"name":"is-referenced-by", "inverse":"references"},
+        {"name":"is-part-of", "inverse":"has-part"},
+        {"name":"has-part", "inverse":"is-part-of"},
+        {"name":"causes", "inverse":"is-caused-by"},
+        {"name":"is-caused-by", "inverse":"causes"},
+        {"name":"branches-to", "inverse":"branches-from"},
+        {"name":"branches-from", "inverse":"branches-to"}
     ],
     "silly": "32"
 }
