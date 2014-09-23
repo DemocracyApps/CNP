@@ -48,10 +48,8 @@
   <div class="col-sm-4">
     <p><b>Access:</b></p>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-8">
     <p>{{$scape->getProperty('access')}}</p>
-  </div>
-  <div class="col-sm-6">
   </div>
 </div>
 @stop
@@ -72,7 +70,7 @@
 <br>
   <div class="row">
     <div class="col-xs-6">
-      <h3>Input & Output Specifications</h3>
+      <h3>Input & Output Templates</h3>
     </div>
     <div class="col-xs-6">
       <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/composers/create?scape={{$scape->id}}'">New</button>

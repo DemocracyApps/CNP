@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-<h1>Create New Composer</h1>
+<h1>Create New Project Template</h1>
 
 {{ Form::open(['route' => 'composers.store', 'files' => true]) }}
    {{ Form::hidden('scape', $scape)}}
@@ -25,7 +25,7 @@
    </div>
    <br/>
    <div class="form-group">
-	  {{ Form::submit('Create Composer', ['class' => 'btn btn-primary']) }}
+	  {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
    </div>
 {{ Form::close() }}
 

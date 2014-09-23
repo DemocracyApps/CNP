@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-<h1>Auto-Output for <em>{{ $topDenizen->getName() }} </em></h1>
+<h1> <em>{{ $topDenizen->getName() }} </em></h1>
 
 <?php
   use \DemocracyApps\CNP\Compositions\Outputs\ComposerOutputDriver;

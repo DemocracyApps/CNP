@@ -1,53 +1,57 @@
-@extends('layouts.default')
+@extends('layouts.detail')
 
-@section('content')
-<h1>Account Page</h1>
+@section('title')
+Account Page
+@stop
 
-<div id="user-info">
-  <h2>User Information</h2>
-  <table class="table">
-    <tr>
-      <td><b>Name:</b></td>  <td>{{$user->name}}</td>
-    </tr>
-    <tr>
-      <td><b>Email:</b></td>  <td>{{$user->email}}</td>
-    </tr>
-  </table>
+@section('upperLeft')
+
+<div class="row">
+  <div class="col-sm-4">
+    <p><b>User Name</b></p>
+  </div>
+  <div class="col-sm-8">
+    <p>{{$user->name}}</p>
+  </div>
 </div>
-
-<div id="scape-list">
-  <h2>Your Scapes</h2>
-  <table class="table table-condensed table-bordered">
-    <tr>
-      <th> Name </th>
-      <th> Access </th>
-      <th> Content </th>
-      <th> ID </th>
-    @foreach($scapes as $scape)
-      <tr>
-        <td> {{ link_to("scapes/".$scape->getID(), $scape->getName()) }} </td>
-        <td> {{ $scape->getProperty('access') }} </td>
-        <td> {{ $scape->getContent() }} </td>
-        <td> {{ $scape->getId() }} </td>
-      </tr>
-    @endforeach
-  </table>
-  <br/>
-        {{ Form::open(['route' => 'scapes.create', 'method' => 'get']) }}
-           <div>
-             {{ Form::submit('Add a Scape',['class' => 'btn btn-info']) }}
-           </div>
-        {{ Form::close() }}
-
+<div class="row">
+  <div class="col-sm-4">
+    <p><b>User ID:</b></p>
+  </div>
+  <div class="col-sm-2">
+    <p>{{$user->id}}</p>
+  </div>
+  <div class="col-sm-6">
+  </div>
 </div>
+<div class="row">
+  <div class="col-sm-4">
+    <p><b>Email:</b></p>
+  </div>
+  <div class="col-sm-2">
+    <p>{{$user->email}}</p>
+  </div>
+  <div class="col-sm-6">
+  </div>
+</div>
+@stop
+
+@section('detailContent')
+
 <div id="api-info">
-  <h2>API Access Information</h2>
+  <h3>API Access Information</h3>
   <p>Most operations may be performed via the CNP RESTful API - see documentation <a href="api-docs">here</a>. All API access requires the use of SSL and your API key in the Authorization header:</p>
+
   @if ($apikey = $user->getApiKey(true))
-    <div id="api-key"><p>{{$apikey}}</p></div>
+    <div id="api-key">
+      <p>{{$apikey}}</p>
+    </div>
   @else
-    <div id="api-key"><input type="button" value="Get API Key"/></div>
+    <div id="api-key"><input type="button" value="Get API Key"/>
+
+    </div>
   @endif
+</div>
 </div>
 
 @stop

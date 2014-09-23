@@ -1,13 +1,16 @@
-@extends('layouts.default')
+@extends('layouts.list')
 
-@section('content')
-<h1>Vista: {{$vista->name}}</h1>
+@section('title')
+  {{$vista->name}}
+@stop
+
+@section('listContent')
   <?php
     $getParams = null;
     if ($composer) $getParams = '?composer='.$composer.'&vista='.$vista->id;
   ?>
 
-	<table class="long-table">
+	<table class="table table-striped">
     @foreach($denizens as $denizen)
       <tr>
         <td style="width:20%;"> {{ $denizen->getId() }} </td> 

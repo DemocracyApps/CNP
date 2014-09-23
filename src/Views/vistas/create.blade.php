@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-<h1>Create New Vista</h1>
+<h1>Create New Project View</h1>
 
 {{ Form::open(['route' => 'vistas.store', 'files' => true]) }}
    {{ Form::hidden('scape', $scape)}}
@@ -36,7 +36,7 @@
    </div>
    <br/>
    <div class="form-group">
-	  {{ Form::submit('Create Vista', ['class' => 'btn btn-primary']) }}
+	  {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
    </div>
 {{ Form::close() }}
 

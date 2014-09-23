@@ -117,21 +117,6 @@
                     ]
                 },
                 {
-                    "name":"Stories",
-                    "url":"/stories?mode=app",
-                    "tag":"stories",
-                    "items": [
-                        {
-                            "name":"Project Views",
-                            "url":"/vistas?mode=app"
-                        },
-                        {
-                            "name":"All Stories",
-                            "url":"/stories?mode=app"
-                        }
-                    ]
-                },
-                {
                     "name":"Projects",
                     "url":"/scapes?mode=app",
                     "tag":"projects",
@@ -141,12 +126,27 @@
                             "url":"/scapes?mode=app"
                         },
                         {
-                            "name":"Scape 2",
-                            "url":"/scapes/2?mode=app"
+                            "name":"My Templates",
+                            "url":"/composers?mode=app"
                         },
                         {
-                            "name":"My Composers",
-                            "url":"/composers?mode=app"
+                            "name":"My Views",
+                            "url":"/vistas?mode=app"
+                        }
+                    ]
+                },
+                {
+                    "name":"Stories",
+                    "url":"/stories?mode=app",
+                    "tag":"stories",
+                    "items": [
+                        {
+                            "name":"My Views",
+                            "url":"/vistas?mode=app"
+                        },
+                        {
+                            "name":"All Stories",
+                            "url":"/stories?mode=app"
                         }
                     ]
                 },

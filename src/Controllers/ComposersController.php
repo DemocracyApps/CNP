@@ -157,7 +157,7 @@ class ComposersController extends ApiController {
 			\Session::forget('CNP_RETURN_URL');
 			if ( ! $returnURL) $returnURL = '/';
 			\Log::info("Redirecting to " . $returnURL);
-			return \Redirect::to('/composers/'.$this->composer->id);
+			return \Redirect::to('/scapes/'.$data['scape']);
 			return \Redirect::to($returnURL);
         }
 	}

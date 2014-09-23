@@ -146,7 +146,6 @@ class ComposerOutputDriver extends \Eloquent {
         // Let's get all the elements that go on to this page
         $targeted = array();
         $done = false;
-        dd($this);
         while (! $done ) {
             $next = $this->getNext();
             if (! $next) {
