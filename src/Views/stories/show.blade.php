@@ -28,7 +28,7 @@
     <p><b>Branch:</b></p>
   </div>
   <div class="col-sm-2">
-    <p><a href="/stories/create?composer=7&referent={{$story->getId()}}">Fly!</a></p>
+    <p><a href="/stories/create?composer=6&referent={{$story->getId()}}">Create Branch</a></p>
   </div>
   <div class="col-sm-6">
   </div>

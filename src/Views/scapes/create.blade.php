@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-<h1>Create New Scape</h1>
+<h1>Create New Project</h1>
 
 {{ Form::open(['route' => 'scapes.store']) }}
    <div class="form-group">

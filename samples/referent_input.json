@@ -31,7 +31,7 @@
     "input": {
 	    "inputType": "auto-interactive",
         "anchor":"Story",
-        "referentRelation":"BranchesTo",
+        "referentRelation":"branches-to",
         "referentLaunchText":"10...9...8...",
 	    "map": [
             {
