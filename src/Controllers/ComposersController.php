@@ -52,7 +52,7 @@ class ComposersController extends ApiController {
         \Log::info("Test composer");        
 		if (\Input::hasFile('composer')) {
             \Log::info("Yes, we have a composer");
-            $ok = $this->loadComposerCsvSpecification($composer, \Input::file('composer'));
+            $ok = $this->loadComposerSpecification($composer, \Input::file('composer'));
             \Log::info("And OK = " . $ok);
 			if ( ! $ok) {
 				return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
@@ -80,7 +80,7 @@ class ComposersController extends ApiController {
     	return \View::make('composers.create', array('scape' => \Input::get('scape')));
 	}
 
-    private function loadComposerCsvSpecification($composer, $file)
+    private function loadComposerSpecification($composer, $file)
     {
         $composer->specification = \File::get($file->getRealPath());
         $str = json_minify($composer->specification);
@@ -106,6 +106,12 @@ class ComposersController extends ApiController {
                 $composer->contains .= ', input';
             else
                 $composer->contains .= 'input';
+        }
+        if (array_key_exists('output', $cfig)) {
+            if ($composer->contains)
+                $composer->contains .= ', output';
+            else
+                $composer->contains .= 'output';
         }
         $composer->dependson = null;
         if (array_key_exists('baseSpecificationId', $cfig))
@@ -143,7 +149,7 @@ class ComposersController extends ApiController {
 
 		// Now load in the file
         if (\Input::hasFile('composer')) {
-            $ok = $this->loadComposerCsvSpecification($this->composer, \Input::file('composer'));
+            $ok = $this->loadComposerSpecification($this->composer, \Input::file('composer'));
             if ( ! $ok) {
                 return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
             }
