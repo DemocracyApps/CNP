@@ -42,8 +42,45 @@ class Composer extends \Eloquent {
 	 *
 	 * @var string
 	 */
-	protected $table = 'composers';
+    protected $table = 'composers';
+    protected static $tableName = 'composers';
 
+    public static function getUserComposers ($userId)
+    {
+        $records = \DB::table(self::$tableName)
+                    ->join('denizens', 'composers.scape', '=', 'denizens.id')
+//                    ->where('denizens.userid', '=', $userId)
+                    ->select('composers.id', 'composers.name', 'composers.scape', 'composers.description',
+                             'composers.dependson', 'composers.contains')
+                    //->orderBy('composers.scape', 'composers.id')
+                    ->distinct()
+                    ->get();
+        $result = array();
+        foreach($records as $record)
+        {
+            $item = new static();
+            self::fillData($item, $record);
+            $result[] = $item;
+        }
+        return $result;
+    }
+
+    protected static function fillData($instance, $data)
+    {
+        $instance->{'id'} = $data->id;
+        $instance->{'name'} = $data->name;
+        $instance->{'scape'} = $data->scape;
+        if (property_exists($data, 'description')) {
+            $instance->{'description'} = $data->description;
+        }
+
+        if (property_exists($data, 'dependson')) {
+            $instance->{'dependson'} = $data->dependson;
+        }
+        if (property_exists($data, 'contains')) {
+            $instance->{'contains'} = $data->contains;
+        }
+    }
     /**
      * Load the full specification and initialize pointers to individual sections
      */

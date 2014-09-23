@@ -20,6 +20,12 @@ class ComposersController extends ApiController {
 		return \Redirect::to('/scapes/'.$scape);
 	}
 
+    public function index()
+    {
+        $composers = Composer::getUserComposers(\Auth::id());
+        return \View::make('composers.index', array('composers' => $composers));
+    }
+
 	public function show ($id)
 	{
 		$composer = Composer::find($id);
