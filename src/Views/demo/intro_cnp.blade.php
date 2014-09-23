@@ -5,7 +5,7 @@
   <h1>What is the Community Narratives Platform?</h1>
   <br>
 
-  <p>The CNP is a story-based, collaborative sense-making platform for communities. </p>
+  <p>The CNP is a storytelling and collaborative sense-making platform for communities. </p>
 
   <p>By allowing the collection, analysis and sharing of stories in ways that capture the rich internal structures and interrelationships that these stories embody individually and collectively, the CNP provides a scalable tool that communities can use to learn about themselves, tell about themselves, and engage in community planning and decision-making using the power of story.</p>
 

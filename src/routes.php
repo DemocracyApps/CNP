@@ -94,23 +94,23 @@ Route::get('/kumu', array('as' => 'kumu', function ()
     $scape = \Input::get('scape');
     $file= public_path(). "/downloads/kumu1.csv";
     $fptr = fopen($file, "w");
-    $line = "Label,Type,Tags,Description,Attribution\n";
+    $line = "Label,Type,Description\n";
     fwrite($fptr,$line);
     $denizens = DAEntity\Denizen::allScapeDenizens($scape);
     foreach($denizens as $d) {
-        $line = $d->id . "," . CNP::getDenizenTypeName($d->type) . ",,\"" . $d->name . "\",\n";
+        $line = $d->id . "," . CNP::getDenizenTypeName($d->type) . ",\"" . $d->name . "\"\n";
         fwrite($fptr,$line);
     }
-    $line = ",,,,\n";
+    $line = "\n";
     fwrite($fptr,$line);
-    $line = ",,,,\n";
+    $line = "\n";
     fwrite($fptr,$line);
-    $line = "From,To,Label,Type,Tags\n";
+    $line = "From,To,Type\n";
     fwrite($fptr,$line);
     $relations = DAEntity\Relation::getScapeRelations($scape);
     $relationsTypesMap = DAEntity\Eloquent\RelationType::getRelationTypesMap();
     foreach($relations as $d) {
-        $line = $d->fromId . "," . $d->toId . ",," . $relationsTypesMap[$d->relationId] . ",\n";
+        $line = $d->fromId . "," . $d->toId . "," . $relationsTypesMap[$d->relationId] . "\n";
         fwrite($fptr,$line);
     }
     fclose($fptr);
