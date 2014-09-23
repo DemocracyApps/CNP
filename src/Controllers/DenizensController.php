@@ -36,7 +36,7 @@ class DenizensController extends ApiController {
             if (! $composer->getDriver()->usingInputForOutput()) {
                 return \View::make('compositions.layoutdriven', array('composer' => $composer,
                                                                       'topDenizen' => $denizen,
-                                                                      'vista' => $vista->id));
+                                                                      'vista' => $vista));
             }
             else {
                 return \View::make('compositions.show', array('composer' => $composer,

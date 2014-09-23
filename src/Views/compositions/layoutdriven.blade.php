@@ -1,12 +1,12 @@
 @extends('layouts.default')
 
 @section('content')
-<h1>Auto-Output Generated for Vista <em>{{ $vista }} </em></h1>
+<h1>Presentation Using View: {{ $vista->name }}</h1>
 
 <?php
   use \DemocracyApps\CNP\Compositions\Outputs\ComposerOutputDriver;
   $driver = $composer->getDriver();
-  $driver->getOutputContent($topDenizen, $vista, 2);
+  $driver->getOutputContent($topDenizen, $vista->id, 2);
 ?>
 
 {{ Form::open(['url' => 'denizens/'.$topDenizen->id, 'method' => 'get']) }}
