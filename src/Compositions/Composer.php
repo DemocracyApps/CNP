@@ -49,10 +49,10 @@ class Composer extends \Eloquent {
     {
         $records = \DB::table(self::$tableName)
                     ->join('denizens', 'composers.scape', '=', 'denizens.id')
-//                    ->where('denizens.userid', '=', $userId)
+                    ->where('denizens.userid', '=', $userId)
                     ->select('composers.id', 'composers.name', 'composers.scape', 'composers.description',
-                             'composers.dependson', 'composers.contains')
-                    //->orderBy('composers.scape', 'composers.id')
+                             'composers.dependson', 'composers.contains', 'denizens.userid')
+                    ->orderBy('composers.scape', 'composers.id')
                     ->distinct()
                     ->get();
         $result = array();

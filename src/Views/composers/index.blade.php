@@ -13,6 +13,7 @@
       <td> Name </td>
       <td> Defines </td>
       <td> Dependency</td>
+      <td> Project </td>
     </tr>
     @foreach ($composers as $composer)
       <tr>
@@ -21,6 +22,7 @@
         <th> {{ link_to("composers/".$composer->id, $composer->name) }} </th>
         <td> {{ $composer->contains }}</td>
         <td> {{ $composer->dependson }}</td>
+        <td> {{ $composer->scape }} </td>
       </tr>    
     @endforeach
   </table>

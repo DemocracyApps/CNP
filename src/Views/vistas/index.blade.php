@@ -1,22 +1,34 @@
 @extends('layouts.list')
 
 @section('title')
-  {{$vista->name}}
+      Project Views 
 @stop
 
 @section('listContent')
-  <?php
-    $getParams = null;
-    if ($composer) $getParams = '?composer='.$composer.'&vista='.$vista->id;
-  ?>
 
-	<table class="table table-striped">
-    @foreach($denizens as $denizen)
+  <table class="table">
+    <tr>
+      <td>  </td>
+      <td> ID </td>
+      <td> Name </td>
+      <td> Description </td>
+      <td> Allowed Inputs </td>
+      <td> Allowed Outputs </td>
+      <td> Selectors </td>
+      <td> Project </td>
+    </tr>
+    @foreach ($vistas as $vista)
       <tr>
-        <td style="width:20%;"> {{ $denizen->getId() }} </td> 
-        <td style="width:80%;"> <a href="/denizens/{{$denizen->id}}{{$getParams}}">{{ $denizen->getName()}} </a></td>
-      </tr>
+        <td> <a class="label label-info" href="/stories?vista={{$vista->id}}">View</a></td>
+        <td> {{ $vista->id }} </td>
+        <td> {{ $vista->name }} </td>
+        <td> {{ $vista->description }} </td>
+        <td> {{ $vista->input_composers }}</td>
+        <td> {{ $vista->output_composer }}</td>
+        <td> {{ $vista->selector }}</td>
+        <td> {{ $vista->scape }}</td>
+      </tr>    
     @endforeach
-	</table>
-  {{$denizens->appends(\Request::except('page'))->links()}}
+  </table>
+
 @stop

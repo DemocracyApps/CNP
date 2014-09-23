@@ -43,7 +43,7 @@ class StoriesController extends BaseController {
 
             $args = array('denizens' => $denizens, 'vista' => $vista);
             $args['composer'] = $vista->output_composer;
-            return \View::make('vistas.index', array('denizens'=>$denizens, 'vista'=>$vista, 'composer'=>$vista->output_composer));
+            return \View::make('stories.vistaindex', array('denizens'=>$denizens, 'vista'=>$vista, 'composer'=>$vista->output_composer));
             return \View::make('vistas.index', $args);
         }
         else { // just raw

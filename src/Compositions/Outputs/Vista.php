@@ -5,12 +5,54 @@ use \DemocracyApps\CNP\Entities as DAEntity;
 class Vista extends \Eloquent
 {
     protected $table = 'vistas';
+    protected static $tableName = 'vistas';
     protected $allowedComposers = null;
 
     private function initialize()
     {
         $this->allowedComposers = explode(",", $this->input_composers);
 
+    }
+    public static function getUserVistas($userId)
+    {
+        $records = \DB::table(self::$tableName)
+                    ->join('denizens', 'vistas.scape', '=', 'denizens.id')
+                    ->where('denizens.userid', '=', $userId)
+                    ->select('vistas.id', 'vistas.name', 'vistas.scape', 'vistas.description',
+                             'vistas.input_composers', 'vistas.output_composer', 'vistas.selector')
+                    ->orderBy('vistas.scape', 'vistas.id')
+                    ->distinct()
+                    ->get();
+        $result = array();
+        foreach($records as $record)
+        {
+            $item = new static();
+            self::fillData($item, $record);
+            $result[] = $item;
+        }
+        return $result;
+    }
+
+    protected static function fillData($instance, $data)
+    {
+        $instance->{'id'} = $data->id;
+        $instance->{'name'} = $data->name;
+        $instance->{'scape'} = $data->scape;
+
+        if (property_exists($data, 'description')) {
+            $instance->{'description'} = $data->description;
+        }
+
+        if (property_exists($data, 'selector')) {
+            $instance->{'selector'} = $data->selector;
+        }
+
+        if (property_exists($data, 'input_composers')) {
+            $instance->{'input_composers'} = $data->input_composers;
+        }
+        if (property_exists($data, 'output_composer')) {
+            $instance->{'output_composer'} = $data->output_composer;
+        }
     }
 
     public function extractCompositions ($denizen)
