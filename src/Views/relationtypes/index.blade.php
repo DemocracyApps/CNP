@@ -3,7 +3,7 @@
 @section('content')
   <h1>Available RelationTypes</h1>
 
-  <table class="long-table">
+  <table class="table">
     <tr>
       <th>ID</th><th>Name</th><th>Inverse</th>
     </tr>
