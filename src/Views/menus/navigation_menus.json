@@ -99,24 +99,16 @@
                     "tag":"welcome",
                     "items": [
                         {
-                            "name":"Introducing the CNP",
+                            "name":"Welcome",
                             "url":"/demo?stage=intro_intro&mode=app"
-                        },
-                        {
-                            "name":"Why Stories?",
-                            "url":"/demo?stage=intro_stories&mode=app"
                         },
                         {
                             "name":"What is the CNP?",
                             "url":"/demo?stage=intro_cnp&mode=app"
                         },
                         {
-                            "name":"The Three Foundations",
-                            "url":"/demo?stage=intro_foundations&mode=app"
-                        },
-                        {
-                            "name":"Note on Sample Stories",
-                            "url":"/demo?stage=intro_data&mode=app"
+                            "name":"Why Stories?",
+                            "url":"/demo?stage=intro_stories&mode=app"
                         }
                     ]
                 },
