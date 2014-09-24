@@ -109,6 +109,10 @@
                         {
                             "name":"Why Stories?",
                             "url":"/demo?stage=intro_stories&mode=app"
+                        },
+                        {
+                            "name":"The Network of Stories",
+                            "url":"/demo?stage=intro_net1&mode=app"
                         }
                     ]
                 },
