@@ -45,7 +45,7 @@ class DenizensController extends ApiController {
             }
         }
         else {
-          return \Redirect::to('/vistas?vista='.$vista->id);
+          return \Redirect::to('/stories?vista='.$vista->id);
         }
 /*
         $graph = $composer ->generateGraph();
