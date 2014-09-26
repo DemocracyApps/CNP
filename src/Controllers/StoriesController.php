@@ -16,7 +16,7 @@ class StoriesController extends BaseController {
 
     public function curate()
     {
-        echo "Curate!";
+        return \View::make('stories.curate');
     }
 
 	/**
