@@ -14,6 +14,11 @@ class StoriesController extends BaseController {
         $this->story = $story;
     }
 
+    public function curate()
+    {
+        echo "Curate!";
+    }
+
 	/**
 	 * Display a listing of the resource.
 	 *

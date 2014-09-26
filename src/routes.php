@@ -53,6 +53,8 @@ Route::get('/stories/export', array('as' => 'stories.export', function()
         return View::make('stories.export', array('scape' => \Input::get('scape')));
     }));
 
+Route::get('/stories/curate', array('as' => 'stories.curate', 'uses' => 'DemocracyApps\CNP\Controllers\StoriesController@curate'));
+
 
 Route::resource('notifications', 'DemocracyApps\CNP\Controllers\NotificationsController');
 Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');

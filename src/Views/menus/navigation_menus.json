@@ -100,15 +100,15 @@
                     "items": [
                         {
                             "name":"Welcome",
+                            "url":"/demo?stage=intro_start&mode=app"
+                        },
+                        {
+                            "name":"Introduction",
                             "url":"/demo?stage=intro_intro&mode=app"
                         },
                         {
                             "name":"What is the CNP?",
                             "url":"/demo?stage=intro_cnp&mode=app"
-                        },
-                        {
-                            "name":"Why Stories?",
-                            "url":"/demo?stage=intro_stories&mode=app"
                         },
                         {
                             "name":"The Network of Stories",
@@ -147,6 +147,10 @@
                         {
                             "name":"All Stories",
                             "url":"/stories?mode=app"
+                        },
+                        {
+                            "name":"Curate",
+                            "url":"/stories/curate"
                         }
                     ]
                 },
