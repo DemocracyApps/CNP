@@ -88,6 +88,13 @@ Route::group(['prefix' => 'ajax'], function ()
 //            $ret = array(new PP('Johnjohn', 101), new PP('Wilma', 102), new PP('Barney', 301), new PP('Bloomberg', 333), new PP('abc', 122));
             return json_encode($ret);            
         });
+
+        Route::get('curate', function()
+        {
+            $value = implode(':', \Input::all());
+
+            return json_encode($value);
+        });
     }
 );
 

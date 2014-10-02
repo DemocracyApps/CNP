@@ -16,7 +16,26 @@ class StoriesController extends BaseController {
 
     public function curate()
     {
-        return \View::make('stories.curate');
+        if (\Input::has('scape')) {
+            $scape = \Input::get('scape');
+            $composers = \DemocracyApps\CNP\Compositions\Composer::where('scape', '=', $scape)->get();
+            $ctmp = array();
+            foreach($composers as $c) {
+                if (strstr($c->contains, 'input')) $ctmp[] = $c;
+                \Log::info("Composer contains: " . $c->contains);
+            }
+            $selectedComposers = null;
+            if (\Input::has('templates')) {
+                $selectedComposers = \Input::get('templates');
+            }
+            return \View::make('stories.curate', 
+                           array('scape' => $scape,
+                                 'composers' => $ctmp,
+                                 'selectedComposers' => $selectedComposers));
+        }
+        else {
+            return \View::make('stories.curate');
+        }
     }
 
 	/**
