@@ -5,83 +5,10 @@
             "title": "Demo Navigation",
             "items": [
                 {
-                    "name":"Introduction",
-                    "url":"/demo?stage=intro?mode=demo",
-                    "tag":"introduction",
-                    "items": [
-                        {
-                            "name":"Why Stories?",
-                            "url":"/demo?stage=intro_stories&mode=demo"
-                        },
-                        {
-                            "name":"What is the CNP?",
-                            "url":"/demo?stage=intro_cnp&mode=demo"
-                        },
-                        {
-                            "name":"The Three Foundations",
-                            "url":"/demo?stage=intro_foundations&mode=demo"
-                        },
-                        {
-                            "name":"Note on Sample Stories",
-                            "url":"/demo?stage=intro_data&mode=demo"
-                        }
-                    ]
-                },
-                {
-                    "name":"1. Connections, Not Collections",
-                    "url":"/demo?stage=connections?mode=demo",
-                    "tag":"connections",
-                    "items": [
-                        {
-                            "name":"Collections vs Connections",
-                            "url":"/demo?stage=connections_versus&mode=demo"
-                        },
-                        {
-                            "name":"The Potential of the Graph",
-                            "url":"/demo?stage=connections_graph&mode=demo"
-                        }
-                    ]
-                },
-                {
-                    "name":"2. Easy In, Easy Out",
-                    "url":"/demo?stage=easy?mode=demo",
-                    "tag":"easy",
-                    "items": [
-                        {
-                            "name":"Easy for Project Leaders",
-                            "url":"/demo?stage=easy_projects&mode=demo"
-                        },
-                        {
-                            "name":"Easy for Participants",
-                            "url":"/demo?stage=easy_citizens&mode=demo"
-                        },
-                        {
-                            "name":"Simple CSV Upload",
-                            "url":"/demo?stage=easy_csv&mode=demo"
-                        }
-                    ]
-                },
-                {
                     "name":"3. Catalyze the Unexpected",
                     "url":"/demo?stage=catalyze?mode=demo",
                     "tag":"unexpected",
                     "items": [
-                        {
-                            "name":"Simple Community Planning",
-                            "url":"/demo?stage=easy_planning&mode=demo"
-                        },
-                        {
-                            "name":"What's Missing?",
-                            "url":"/demo?stage=catalyze_missing&mode=demo"
-                        },
-                        {
-                            "name":"Branching",
-                            "url":"/demo?stage=catalyze_branch&mode=demo"
-                        },
-                        {
-                            "name":"Reconnecting",
-                            "url":"/demo?stage=catalyze_reconnect&mode=demo"
-                        },
                         {
                             "name":"Simulation",
                             "url":"/demo?stage=catalyze_simulation&mode=demo"
@@ -109,6 +36,10 @@
                         {
                             "name":"What is the CNP?",
                             "url":"/demo?stage=intro_cnp&mode=app"
+                        },
+                        {
+                            "name":"The Process",
+                            "url":"/demo?stage=intro_process&mode=app"
                         },
                         {
                             "name":"The Network of Stories",

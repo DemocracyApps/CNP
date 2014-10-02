@@ -7,7 +7,7 @@
 
   <h4>A storytelling and collaborative sense-making platform for communities that builds on three foundational ideas:</h4>
 <ul>
-    <li><b>Connections, Not Collections</b> <br>Move beyond posts and comments and discussions. Stories are about structure and context. Focus on the rich relationships in and between a community's stories. </li>
+    <li><b>Connections, Not Collections</b> <br>Move beyond posts and comments and discussions. Unlock the structure within traditionally unstructured data. In fact, stories are about structure and context. Focus on the rich relationships in and between a community's stories. </li>
     <li><b>Easy In, Easy Out</b><br>To scale, show up <em>in the stream</em> of people's normal activities and maintain focus on simplicity of use.</li>
     <li><b>Catalyze the Unexpected</b><br>Let citizens pose and answer and have others answer questions that we don't know to ask so we can learn the things we don't know we don't know.</li>
   </ul>
