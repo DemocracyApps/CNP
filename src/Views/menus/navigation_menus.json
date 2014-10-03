@@ -82,6 +82,10 @@
                         {
                             "name":"Curate",
                             "url":"/stories/curate"
+                        },
+                        {
+                            "name":"Explore",
+                            "url":"/stories/explore"
                         }
                     ]
                 },

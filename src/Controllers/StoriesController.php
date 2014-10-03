@@ -13,6 +13,10 @@ class StoriesController extends BaseController {
     {
         $this->story = $story;
     }
+    public function explore()
+    {
+        return \View::make('stories.explore');
+    }
 
     public function curate()
     {
