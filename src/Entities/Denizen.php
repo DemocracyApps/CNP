@@ -7,7 +7,7 @@ class Denizen
     use ImplementsProperties;
 
     static    $classDenizenType = -1;
-    static $tableName = 'denizens';
+    static $tableName = 'elements';
     protected $denizenType = null;
     public $id = null;
     public $scapeId = -1;
