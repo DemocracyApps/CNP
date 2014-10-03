@@ -16,7 +16,7 @@ class CreateProjectsTable extends Migration {
 		{
 			$table->increments('id');
             $table->string('name');
-            $table->text('content')->nullable();
+            $table->text('description')->nullable();
             $table->text('properties')->nullable();
             $table->integer('userid');
             $table->foreign('userid')->references('id')->on('users');
