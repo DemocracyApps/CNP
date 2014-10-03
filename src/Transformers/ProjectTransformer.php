@@ -4,10 +4,10 @@
 
  	public function transform ($project) {
 		return [
-		'id'  			=> $project->getId(),
-		'name' 			=> $project->getName(),
+		'id'  			=> $project->id,
+		'name' 			=> $project->name,
 		'access' => $project->getProperty('access'),
-		'content' => $project->getContent()
+		'content' => $project->description
 		];
 	}
 }

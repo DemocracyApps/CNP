@@ -24,7 +24,7 @@
         <td> {{ $project->id}} </td>
         <th> {{ link_to("projects/".$project->id, $project->name) }} </th>
         <td> {{ $project->getProperty('access')}} </td>
-        <td> {{ $project->content }} </td>
+        <td> {{ $project->description }} </td>
       </tr>    
     @endforeach
   </table>

@@ -110,7 +110,7 @@
         "inputType": "auto-interactive",
         "map": [
             {
-                "id":"1orso",
+                "id":"1",
                 "use":"element",
                 "elementId":"Story",
                 "inputType":"textarea",
@@ -140,7 +140,7 @@
                 "prompt":"What is this story about?"
             },
             {
-                "id":"anythingIwant",
+                "id":"5",
                 "use":"element",
                 "elementId": "Organization",
                 "inputType":"text",

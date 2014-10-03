@@ -1,7 +1,7 @@
 @extends('layouts.detail')
 
 @section('title')
-{{ $project->getName() }}
+{{ $project->name }}
 @stop
 
 @section('buttons')
@@ -59,7 +59,7 @@
   <p><b>Description:</b></p>
 </div>
 <div class="row">
-  <p>{{$project->getContent()}}</p>
+  <p>{{$project->description}}</p>
 </div>
 
 @stop

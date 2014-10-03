@@ -22,7 +22,7 @@ class ProjectsController extends ApiController {
 	public function index()
 	{
 		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
-    	$projects = DAEntity\Project::allUserElements(\Auth::id());
+    	$projects = DAEntity\Project::allUserProjects(\Auth::id());
     	if ($isAPI) {
 	    	$data = $this->projectTransformer->transformCollection($projects);
 			return $this->respondIndex('List of API user projects', $data);
@@ -90,19 +90,19 @@ class ProjectsController extends ApiController {
 	        // Validation OK, let's create the project
 	        $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
 
-	        $this->project->setName($data['name']);
+	        $this->project->name = $data['name'];
 	        $this->project->setProperty('access', $data['access']);
-	        if ($data['content']) $this->project->setContent($data['content']);
-	        $this->project->setUserId($user->getId());
+	        if ($data['content']) $this->project->description = $data['content'];
+	        $this->project->userid = $user->getId();
 	        $this->project->save();
 
 	        // Now let's create the relations with the creator Person
-	        $person = DAEntity\Person::find($user->getElementId());
-	        $relations = DAEntity\Relation::createRelationPair($person->getId(), $this->project->getId(),
-	                                                          "is-creator-of");
-	        foreach($relations as $relation) {
-	            $relation->save();
-	        }
+	        // $person = DAEntity\Person::find($user->getElementId());
+	        // $relations = DAEntity\Relation::createRelationPair($person->getId(), $this->project->getId(),
+	        //                                                   "is-creator-of");
+	        // foreach($relations as $relation) {
+	        //     $relation->save();
+	        // }
 
 	        if ($isAPI) {
 				$data = $this->projectTransformer->transform($this->project);
