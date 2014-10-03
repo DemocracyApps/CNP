@@ -14,10 +14,10 @@ class ElementGenerator
      * @param  [type] $elementType [description]
      * @param  [type] $content     [description]
      * @param  [type] $properties  [description]
-     * @param  [type] $scapeId     [description]
+     * @param  [type] $projectId     [description]
      * @return array               Array of elements
      */
-    static public function generateElement ($elementType, $name, $content, $properties, $scapeId)
+    static public function generateElement ($elementType, $name, $content, $properties, $projectId)
     {
         $createdElements = null;
         if (array_key_exists($elementType, self::$fcts) && self::$fcts[$elementType]) {
@@ -38,7 +38,7 @@ class ElementGenerator
         }
         if ($createdElements) {
             foreach ($createdElements as $d) {
-                $d->scapeId = $scapeId;
+                $d->projectId = $projectId;
             }
         }
         return $createdElements;

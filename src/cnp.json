@@ -9,7 +9,7 @@
         {"name":"Person",      "id":"2"},
         {"name":"Story",       "id":"3"},
         {"name":"Tag",         "id":"4"},
-        {"name":"Scape",       "id":"5"},
+        {"name":"Project",     "id":"5"},
         {"name":"Government",  "id":"6"},
         {"name":"Business",    "id":"7"},
         {"name":"StoryElement", "id":"8"}

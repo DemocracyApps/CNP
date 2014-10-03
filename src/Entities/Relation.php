@@ -44,11 +44,11 @@ class Relation
         $this->compositionid = $id;
     }
 
-    public static function getScapeRelations ($scape)
+    public static function getProjectRelations ($project)
     {
         $records = DB::table(self::$tableName)
                     ->join('elements', 'elements.id', '=', 'relations.fromid')
-                    ->where('elements.scape', '=', $scape)
+                    ->where('elements.project', '=', $project)
                     ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
                              'relations.properties', 'relations.composerid', 'relations.compositionid')
                     ->get();

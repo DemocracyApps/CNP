@@ -3,7 +3,7 @@
 @section('content')
 <h1>Create New Project</h1>
 
-{{ Form::open(['route' => 'scapes.store']) }}
+{{ Form::open(['route' => 'projects.store']) }}
    <div class="form-group">
       {{ Form::label('name', 'Name: ') }}
       {{ Form::text('name', null, ['class' => 'form-control']) }}

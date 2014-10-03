@@ -44,8 +44,6 @@ Explore Stories
 
 @section('scripts')
 <script type="text/javascript">
-  var scapeId = -1;
-
   function getUrlParam(nm) {
     var params = window.location.search.substr(1).split("&");
     var result = null;

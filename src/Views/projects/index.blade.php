@@ -6,7 +6,7 @@
 
 @section('buttons')
     <div class="col-xs-6">
-      <button style="float:right;" class="btn btn-success btn-sm" onclick="window.location.href='/scapes/create'">New</button>
+      <button style="float:right;" class="btn btn-success btn-sm" onclick="window.location.href='/projects/create'">New</button>
     </div>
 @stop
 
@@ -19,12 +19,12 @@
       <th> Access </th>
       <th> Description </th>
     </tr>
-    @foreach ($scapes as $scape)
+    @foreach ($projects as $project)
       <tr>
-        <td> {{ $scape->id}} </td>
-        <th> {{ link_to("scapes/".$scape->id, $scape->name) }} </th>
-        <td> {{ $scape->getProperty('access')}} </td>
-        <td> {{ $scape->content }} </td>
+        <td> {{ $project->id}} </td>
+        <th> {{ link_to("projects/".$project->id, $project->name) }} </th>
+        <td> {{ $project->getProperty('access')}} </td>
+        <td> {{ $project->content }} </td>
       </tr>    
     @endforeach
   </table>

@@ -27,7 +27,7 @@ DemocracyApps\CNP\Entities\Person::initialize();
 DemocracyApps\CNP\Entities\Story::initialize();
 DemocracyApps\CNP\Entities\Tag::initialize();
 DemocracyApps\CNP\Entities\StoryElement::initialize();
-DemocracyApps\CNP\Entities\Scape::initialize();
+DemocracyApps\CNP\Entities\Project::initialize();
 
 $mode = Input::get('mode');
 if ($mode) {

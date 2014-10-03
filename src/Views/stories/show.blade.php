@@ -18,7 +18,7 @@
     <p><b>Project ID:</b></p>
   </div>
   <div class="col-sm-2">
-    <p>{{$story->scapeId}}</p>
+    <p>{{$story->projectId}}</p>
   </div>
   <div class="col-sm-6">
   </div>
@@ -36,6 +36,7 @@
 @stop
 
 @section('upperRight')
+
   <!-- Decorators section start -->
   <!-- See Laravel template section on how to pass parameters to an include. 
    -->
@@ -71,7 +72,9 @@
 
 @section('detailContent')
 
+
   @if (sizeof($elements) > 0)
+
     <h3>Story Elements</h3>
     <table class="table">
       <td>ID</td>

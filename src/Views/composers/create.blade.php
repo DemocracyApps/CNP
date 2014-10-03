@@ -4,7 +4,7 @@
 <h1>Create New Project Template</h1>
 
 {{ Form::open(['route' => 'composers.store', 'files' => true]) }}
-   {{ Form::hidden('scape', $scape)}}
+   {{ Form::hidden('project', $project)}}
    <div class="form-group">
       {{ Form::label('name', 'Name: ') }}
       {{ Form::text('name', null, ['class' => 'form-control']) }}

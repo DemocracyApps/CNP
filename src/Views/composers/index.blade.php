@@ -22,7 +22,7 @@
         <th> {{ link_to("composers/".$composer->id, $composer->name) }} </th>
         <td> {{ $composer->contains }}</td>
         <td> {{ $composer->dependson }}</td>
-        <td> {{ $composer->scape }} </td>
+        <td> {{ $composer->project }} </td>
       </tr>    
     @endforeach
   </table>

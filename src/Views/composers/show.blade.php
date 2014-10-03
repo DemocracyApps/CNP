@@ -22,7 +22,7 @@
   <button type="submit" class="btn btn-danger btn-mini">Delete</button>
 {{ Form::close() }}
 
-{{ link_to("scapes/".$composer->scape, "Return to Scape Page") }}
+{{ link_to("projects/".$composer->project, "Return to Project Page") }}
 <br/>
 
 <div>
@@ -32,7 +32,7 @@
       <th>Specification Name:</th>  <td>{{$composer->name}}</td>
     </tr>
     <tr>
-      <th>Scape:</th>  <td>{{$composer->scape}}</td>
+      <th>Project:</th>  <td>{{$composer->project}}</td>
     </tr>
     <tr>
       <th>Description:</th>  <td>{{$composer->description}}</td

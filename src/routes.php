@@ -50,7 +50,7 @@ Route::resource('elements', 'DemocracyApps\CNP\Controllers\ElementsController');
 Route::get('/stories/export', array('as' => 'stories.export', function() 
     {
         \Log::info("Heading off to stories.export");
-        return View::make('stories.export', array('scape' => \Input::get('scape')));
+        return View::make('stories.export', array('project' => \Input::get('project')));
     }));
 
 Route::get('/stories/curate', array('as' => 'stories.curate', 'uses' => 'DemocracyApps\CNP\Controllers\StoriesController@curate'));
@@ -59,7 +59,7 @@ Route::get('/stories/explore', array('as' => 'stories.explore', 'uses' => 'Democ
 
 Route::resource('notifications', 'DemocracyApps\CNP\Controllers\NotificationsController');
 Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
-Route::resource('scapes', 'DemocracyApps\CNP\Controllers\ScapesController');
+Route::resource('projects', '\DemocracyApps\CNP\Controllers\ProjectsController');
 Route::resource('composers', 'DemocracyApps\CNP\Controllers\ComposersController');
 Route::resource('vistas', 'DemocracyApps\CNP\Controllers\VistasController');
 
@@ -80,8 +80,8 @@ Route::group(['prefix' => 'ajax'], function ()
         {
             $term = Input::get('term');
             $composer = \DemocracyApps\CNP\Compositions\Composer::find(\Input::get('composer'));
-            $scape = $composer->scape;
-            $list = DAEntity\Person::getElementsLike($scape, $term);
+            $project = $composer->project;
+            $list = DAEntity\Person::getElementsLike($project, $term);
             $ret = array();
             foreach ($list as $item) {
                 $ret[] = new PP($item->name, $item->id);
@@ -101,12 +101,12 @@ Route::group(['prefix' => 'ajax'], function ()
 
 Route::get('/kumu', array('as' => 'kumu', function ()
 {
-    $scape = \Input::get('scape');
+    $project = \Input::get('project');
     $file= public_path(). "/downloads/kumu1.csv";
     $fptr = fopen($file, "w");
     $line = "Label,Type,Description\n";
     fwrite($fptr,$line);
-    $elements = DAEntity\Element::allScapeElements($scape);
+    $elements = DAEntity\Element::allProjectElements($project);
     foreach($elements as $d) {
         $line = $d->id . "," . CNP::getElementTypeName($d->type) . ",\"" . $d->name . "\"\n";
         fwrite($fptr,$line);
@@ -117,7 +117,7 @@ Route::get('/kumu', array('as' => 'kumu', function ()
     fwrite($fptr,$line);
     $line = "From,To,Type\n";
     fwrite($fptr,$line);
-    $relations = DAEntity\Relation::getScapeRelations($scape);
+    $relations = DAEntity\Relation::getProjectRelations($project);
     $relationsTypesMap = DAEntity\Eloquent\RelationType::getRelationTypesMap();
     foreach($relations as $d) {
         $line = $d->fromId . "," . $d->toId . "," . $relationsTypesMap[$d->relationId] . "\n";
@@ -155,9 +155,9 @@ Route::get('account', array('as' => 'account', 'before' => 'cnp.auth', function(
 {
     $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
     $person = DAEntity\Person::find($user->getElementId());
-    $scapes = DAEntity\Scape::allUserElements($user->getId());
+    $projects = DAEntity\Project::allUserElements($user->getId());
     return View::make('account', array('user' => $user, 'person' => $person, 
-                      'scapes' => $scapes));
+                      'projects' => $projects));
 }));
 
 Route::when('relationtypes*', 'cnp.auth');
@@ -197,7 +197,7 @@ Route::when('api/v1/*', 'api.key'); // Logs user in based on API key - see User.
 
 Route::group(['prefix' => 'api/v1'], function () 
     {
-        Route::resource('scapes', 'DemocracyApps\CNP\Controllers\ScapesController');
+        Route::resource('projects', 'DemocracyApps\CNP\Controllers\ProjectsController');
     }
 );
 

@@ -4,7 +4,7 @@
 <h1>Account Page</h1>
 
 <div>
-<form method="POST" action="http://cnp.dev/scapes" accept-charset="UTF-8">
+<form method="POST" action="http://cnp.dev/projects" accept-charset="UTF-8">
   <div class="form-group">
     <label for="content">Notes: </label>
     <textarea class="form-control" name="content" cols="50" rows="10" id="content"></textarea>

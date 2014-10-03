@@ -26,7 +26,7 @@
         <td> {{ $vista->input_composers }}</td>
         <td> {{ $vista->output_composer }}</td>
         <td> {{ $vista->selector }}</td>
-        <td> {{ $vista->scape }}</td>
+        <td> {{ $vista->project }}</td>
       </tr>    
     @endforeach
   </table>

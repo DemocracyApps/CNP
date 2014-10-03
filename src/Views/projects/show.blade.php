@@ -1,7 +1,7 @@
 @extends('layouts.detail')
 
 @section('title')
-{{ $scape->getName() }}
+{{ $project->getName() }}
 @stop
 
 @section('buttons')
@@ -9,25 +9,25 @@
 <!-- Download Stories Button -->
 {{ Form::open(array('route' => array('stories.export'), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
-  <input type="hidden" name="scape" value="{{$scape->id}}"/>
+  <input type="hidden" name="project" value="{{$project->id}}"/>
   <button type="submit" class="btn btn-info btn-sm"><b>Export Stories</b></button>
 {{ Form::close() }}
 
 <!-- View Stories Button -->
 {{ Form::open(array('route' => array('stories.index'), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
-  <input type="hidden" name="scape" value="{{$scape->id}}"/>
+  <input type="hidden" name="project" value="{{$project->id}}"/>
   <button type="submit" class="btn btn-info btn-sm"><b>View Stories</b></button>
 {{ Form::close() }}
 
-<!-- Edit Scape Button -->
-{{ Form::open(array('route' => array('scapes.edit', $scape->id), 'method' => 'get', 
+<!-- Edit Project Button -->
+{{ Form::open(array('route' => array('projects.edit', $project->id), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
-  <button style="display:inline-block;" type="submit" href="{{ URL::route('scapes.edit', $scape->id) }}" class="btn btn-info btn-sm"><b>Edit</b></button>
+  <button style="display:inline-block;" type="submit" href="{{ URL::route('projects.edit', $project->id) }}" class="btn btn-info btn-sm"><b>Edit</b></button>
 {{ Form::close() }}
 
-<!-- Delete Scape Button -->
-{{ Form::open(array('route' => array('scapes.destroy', $scape->id), 'method' => 'delete',
+<!-- Delete Project Button -->
+{{ Form::open(array('route' => array('projects.destroy', $project->id), 'method' => 'delete',
                                             'style' => 'display:inline-block')) }}
   <button type="submit" class="btn btn-danger btn-sm"><b>Delete</b></button>
 {{ Form::close() }}
@@ -39,7 +39,7 @@
     <p><b>Project ID:</b></p>
   </div>
   <div class="col-sm-2">
-    <p>{{$scape->id}}</p>
+    <p>{{$project->id}}</p>
   </div>
   <div class="col-sm-6">
   </div>
@@ -49,7 +49,7 @@
     <p><b>Access:</b></p>
   </div>
   <div class="col-sm-8">
-    <p>{{$scape->getProperty('access')}}</p>
+    <p>{{$project->getProperty('access')}}</p>
   </div>
 </div>
 @stop
@@ -59,7 +59,7 @@
   <p><b>Description:</b></p>
 </div>
 <div class="row">
-  <p>{{$scape->getContent()}}</p>
+  <p>{{$project->getContent()}}</p>
 </div>
 
 @stop
@@ -73,7 +73,7 @@
       <h3>Input & Output Templates</h3>
     </div>
     <div class="col-xs-6">
-      <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/composers/create?scape={{$scape->id}}'">New</button>
+      <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/composers/create?project={{$project->id}}'">New</button>
     </div>
   </div>
 
@@ -103,7 +103,7 @@
       <h3>Project Views</h3>
     </div>
     <div class="col-xs-6">
-      <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/vistas/create?scape={{$scape->id}}'">New</button>
+      <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/vistas/create?project={{$project->id}}'">New</button>
     </div>
   </div>
   <table class="table">

@@ -20,9 +20,9 @@ class StoriesController extends BaseController {
 
     public function curate()
     {
-        if (\Input::has('scape')) {
-            $scape = \Input::get('scape');
-            $composers = \DemocracyApps\CNP\Compositions\Composer::where('scape', '=', $scape)->get();
+        if (\Input::has('project')) {
+            $project = \Input::get('project');
+            $composers = \DemocracyApps\CNP\Compositions\Composer::where('project', '=', $project)->get();
             $ctmp = array();
             foreach($composers as $c) {
                 if (strstr($c->contains, 'input')) $ctmp[] = $c;
@@ -33,7 +33,7 @@ class StoriesController extends BaseController {
                 $selectedComposers = \Input::get('templates');
             }
             return \View::make('stories.curate', 
-                           array('scape' => $scape,
+                           array('project' => $project,
                                  'composers' => $ctmp,
                                  'selectedComposers' => $selectedComposers));
         }
@@ -66,7 +66,7 @@ class StoriesController extends BaseController {
 
             $page = \Input::get('page', 1);
             $pageLimit=\CNP::getConfigurationValue('pageLimit');
-            $data = Element::getVistaElements ($vista->scape, $allowedComposers, $typeList, $page, $pageLimit);
+            $data = Element::getVistaElements ($vista->project, $allowedComposers, $typeList, $page, $pageLimit);
             $elements = \Paginator::make($data['items'], $data['total'], $pageLimit);
 
             $args = array('elements' => $elements, 'vista' => $vista);

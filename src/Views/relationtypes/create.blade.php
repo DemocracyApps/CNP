@@ -11,12 +11,12 @@
       <span class="error">{{ $errors->first('name') }}</span>
    </div>
    <div>
-      {{ Form::label('allowedfrom', 'Allowed FROM Scapes: ') }}
+      {{ Form::label('allowedfrom', 'Allowed FROM Element Types: ') }}
       {{ Form::input('text', 'allowedfrom') }}
       <span>&nbsp; Leave blank if no restriction. Separate multiple with commas.</span>
    </div>
    <div>
-      {{ Form::label('allowedto', 'Allowed TO Scapes: ') }}
+      {{ Form::label('allowedto', 'Allowed TO Element Types: ') }}
       {{ Form::input('text', 'allowedto') }}
       <span>&nbsp; Leave blank if no restriction. Separate multiple with commas.</span>
    </div>

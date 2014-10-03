@@ -48,11 +48,11 @@ class Composer extends \Eloquent {
     public static function getUserComposers ($userId)
     {
         $records = \DB::table(self::$tableName)
-                    ->join('elements', 'composers.scape', '=', 'elements.id')
+                    ->join('elements', 'composers.project', '=', 'elements.id')
                     ->where('elements.userid', '=', $userId)
-                    ->select('composers.id', 'composers.name', 'composers.scape', 'composers.description',
+                    ->select('composers.id', 'composers.name', 'composers.project', 'composers.description',
                              'composers.dependson', 'composers.contains', 'elements.userid')
-                    ->orderBy('composers.scape', 'composers.id')
+                    ->orderBy('composers.project', 'composers.id')
                     ->distinct()
                     ->get();
         $result = array();
@@ -69,7 +69,7 @@ class Composer extends \Eloquent {
     {
         $instance->{'id'} = $data->id;
         $instance->{'name'} = $data->name;
-        $instance->{'scape'} = $data->scape;
+        $instance->{'project'} = $data->project;
         if (property_exists($data, 'description')) {
             $instance->{'description'} = $data->description;
         }
@@ -357,7 +357,7 @@ class Composer extends \Eloquent {
         //ElementGenerator::registerElementGenerator('Tag', 'DemocracyApps\CNP\Inputs\Composer::tryit');
     }
 
-    private function commonProcessInput (Composition $composition, $data, $elementsSpec, $relationsSpec, $scape)
+    private function commonProcessInput (Composition $composition, $data, $elementsSpec, $relationsSpec, $project)
     {
         $elements = array();
 
@@ -379,7 +379,7 @@ class Composer extends \Eloquent {
                 $properties = null;
                 if (array_key_exists('properties', $elementsIn[$id])) $properties = $elementsIn[$id]['properties'];
                 $createdElements = ElementGenerator::generateElement($espec['type'], $id, 
-                                                                     $elementsIn[$id], $properties, $scape);
+                                                                     $elementsIn[$id], $properties, $project);
                 if ($anchorId == $espec['id']) {
                     if (count($createdElements) > 1) throw new \Exception("Cannot set multiple elements as anchors " . count($createdElements));
                     if ($createdElements) {
@@ -494,7 +494,7 @@ class Composer extends \Eloquent {
         $data['title'] = $title;
         $data['summary'] = $summary;
         $data['elementsIn'] = $elementsIn;
-        $this->commonProcessInput($composition, $data, $this->elementsSpec, $this->relationsSpec, $this->scape);
+        $this->commonProcessInput($composition, $data, $this->elementsSpec, $this->relationsSpec, $this->project);
     }
 
     public function processCsvInput($filePath, Composition $composition) 
@@ -567,7 +567,7 @@ class Composer extends \Eloquent {
                     $data['summary'] = $summary;
                     $data['elementsIn'] = $elementsIn;
                     $childComposition = $composition->createChildComposition();
-                    $this->commonProcessInput($childComposition, $data, $this->elementsSpec, $this->relationsSpec, $this->scape);
+                    $this->commonProcessInput($childComposition, $data, $this->elementsSpec, $this->relationsSpec, $this->project);
                 }
                 if ($lmessage) $messages .= $lmessage . "\n";
             }

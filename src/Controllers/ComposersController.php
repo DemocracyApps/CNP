@@ -15,9 +15,9 @@ class ComposersController extends ApiController {
 	public function destroy ($id)
 	{
 		$composer = Composer::find($id);
-		$scape = $composer->scape;
+		$project = $composer->project;
 		$composer->delete();
-		return \Redirect::to('/scapes/'.$scape);
+		return \Redirect::to('/projects/'.$project);
 	}
 
     public function index()
@@ -75,7 +75,7 @@ class ComposersController extends ApiController {
 	public function edit($id) 
 	{
 		$composer = Composer::find($id);
-    	return \View::make('composers.edit', array('scape' => \Input::get('scape'), 
+    	return \View::make('composers.edit', array('project' => \Input::get('project'), 
     												'composer' => $composer,
     												'fileerror' => null));
 	}
@@ -83,7 +83,7 @@ class ComposersController extends ApiController {
 	public function create() 
 	{
     	\Session::put('CNP_RETURN_URL', \Request::server('HTTP_REFERER'));
-    	return \View::make('composers.create', array('scape' => \Input::get('scape')));
+    	return \View::make('composers.create', array('project' => \Input::get('project')));
 	}
 
     private function loadComposerSpecification($composer, $file)
@@ -150,7 +150,7 @@ class ComposersController extends ApiController {
 	        // Validation OK, let's create the composer
 
         $this->composer->name = $data['name'];
-        $this->composer->scape = $data['scape'];
+        $this->composer->project = $data['project'];
         if ($data['description']) $this->composer->description = $data['description'];
 
 		// Now load in the file
@@ -169,7 +169,7 @@ class ComposersController extends ApiController {
 			\Session::forget('CNP_RETURN_URL');
 			if ( ! $returnURL) $returnURL = '/';
 			\Log::info("Redirecting to " . $returnURL);
-			return \Redirect::to('/scapes/'.$data['scape']);
+			return \Redirect::to('/projects/'.$data['project']);
 			return \Redirect::to($returnURL);
         }
 	}

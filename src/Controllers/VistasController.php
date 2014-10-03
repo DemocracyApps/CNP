@@ -31,7 +31,7 @@ class VistasController extends ApiController {
 	 */
 	public function create()
 	{
-    	return \View::make('vistas.create', array('scape' => \Input::get('scape')));
+    	return \View::make('vistas.create', array('project' => \Input::get('project')));
 	}
 
 
@@ -65,7 +65,7 @@ class VistasController extends ApiController {
 	    // Validation OK, let's create the vista
 
         $this->vista->name = $data['name'];
-        $this->vista->scape = $data['scape'];
+        $this->vista->project = $data['project'];
         $this->vista->input_composers = $data['input_composers'];
         $this->vista->output_composer = $data['output_composer'];
         if ($data['description']) $this->vista->description = $data['description'];
@@ -82,7 +82,7 @@ class VistasController extends ApiController {
         if ($isAPI) {
         }
         else {
-			return \Redirect::to('/scapes/'.$data['scape']);
+			return \Redirect::to('/projects/'.$data['project']);
         }
 	}
 

@@ -16,11 +16,11 @@ class Vista extends \Eloquent
     public static function getUserVistas($userId)
     {
         $records = \DB::table(self::$tableName)
-                    ->join('elements', 'vistas.scape', '=', 'elements.id')
+                    ->join('elements', 'vistas.project', '=', 'elements.id')
                     ->where('elements.userid', '=', $userId)
-                    ->select('vistas.id', 'vistas.name', 'vistas.scape', 'vistas.description',
+                    ->select('vistas.id', 'vistas.name', 'vistas.project', 'vistas.description',
                              'vistas.input_composers', 'vistas.output_composer', 'vistas.selector')
-                    ->orderBy('vistas.scape', 'vistas.id')
+                    ->orderBy('vistas.project', 'vistas.id')
                     ->distinct()
                     ->get();
         $result = array();
@@ -37,7 +37,7 @@ class Vista extends \Eloquent
     {
         $instance->{'id'} = $data->id;
         $instance->{'name'} = $data->name;
-        $instance->{'scape'} = $data->scape;
+        $instance->{'project'} = $data->project;
 
         if (property_exists($data, 'description')) {
             $instance->{'description'} = $data->description;

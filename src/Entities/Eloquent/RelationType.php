@@ -17,13 +17,6 @@ class RelationType extends \Eloquent {
      *                  otherwise id of inverse relation
      * @property integer
      *
-     * NOTE:
-     *   The allowedfrom/allowedto parameters are string versions of lists
-     *   of element types that the relation is allowed to come from/go to.
-     *   I think the format should be a comma-separated list of the form S[:D],
-     *   where S is a scape id and D is a element type id from that scape.
-     *   When we actually start verifying this, we may want to convert to arrays
-     *   here internally
      */
 
 	protected $table = 'relation_types';

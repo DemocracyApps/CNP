@@ -10,7 +10,7 @@ class Element
     static $tableName = 'elements';
     protected $elementType = null;
     public $id = null;
-    public $scapeId = -1;
+    public $projectId = -1;
     public $name = null;
     public $content = null;
     public $userid = null;
@@ -61,7 +61,7 @@ class Element
             $this->id = DB::table(self::$tableName)->insertGetId(
                 array(
                     'name' => $this->name,
-                    'scape'=> $this->scapeId,
+                    'project'=> $this->projectId,
                     'type' => $this->elementType,
                     'content' => $this->content,
                     'properties' => json_encode($this->properties), // How do I move this to ImplementsProperties trait?
@@ -77,7 +77,7 @@ class Element
                 ->update(
                     array(
                         'name' => $this->name,
-                        'scape'=> $this->scapeId,
+                        'project'=> $this->projectId,
                         'type' => $this->elementType,
                         'content' => $this->content,
                         'properties' => json_encode($this->properties),
@@ -96,7 +96,7 @@ class Element
             $instance->{'userid'} = $data->userid;
         }
         $instance->{'name'} = $data->name;
-        $instance->{'scapeId'} = $data->scape;
+        $instance->{'projectId'} = $data->project;
         if (property_exists($data, 'content')) {
             $instance->{'content'} = $data->content;
         }
@@ -127,23 +127,23 @@ class Element
      *  I know this absolutely does not belong in the Element class. Give me 
      *  some time to get this all figured out. Sigh.
      */
-    public static function getVistaElements ($scape, $allowedComposers, $types, $page=1, $limit=3)
+    public static function getVistaElements ($project, $allowedComposers, $types, $page=1, $limit=3)
     {
         if ($types) {
             $total = DB::table(self::$tableName)
                         ->join('relations', 'relations.fromid', '=', 'elements.id')
-                        ->where('elements.scape', '=', $scape)
+                        ->where('elements.project', '=', $project)
                         ->whereIn('elements.type', $types)
                         ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('elements.id', 'elements.type', 'elements.scape', 'elements.name')
+                        ->select('elements.id', 'elements.type', 'elements.project', 'elements.name')
                         ->distinct()
                         ->count('elements.id');
             $records = DB::table(self::$tableName)
                         ->join('relations', 'relations.fromid', '=', 'elements.id')
-                        ->where('elements.scape', '=', $scape)
+                        ->where('elements.project', '=', $project)
                         ->whereIn('elements.type', $types)
                         ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('elements.id', 'elements.type', 'elements.scape', 'elements.name')
+                        ->select('elements.id', 'elements.type', 'elements.project', 'elements.name')
                         ->orderBy('elements.id')
                         ->distinct()
                         ->skip(($page-1)*$limit)
@@ -154,17 +154,17 @@ class Element
         else {
             $total = DB::table(self::$tableName)
                         ->join('relations', 'relations.from', '=', 'elements.id')
-                        ->where('elements.scape', '=', $scape)
+                        ->where('elements.project', '=', $project)
                         ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('elements.id', 'elements.type', 'elements.scape', 'elements.name')
+                        ->select('elements.id', 'elements.type', 'elements.project', 'elements.name')
                         ->orderBy('elements.id')
                         ->distinct()
                         ->count('elements.id');
             $records = DB::table(self::$tableName)
                         ->join('relations', 'relations.from', '=', 'elements.id')
-                        ->where('elements.scape', '=', $scape)
+                        ->where('elements.project', '=', $project)
                         ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('elements.id', 'elements.type', 'elements.scape', 'elements.name')
+                        ->select('elements.id', 'elements.type', 'elements.project', 'elements.name')
                         ->orderBy('elements.id')
                         ->distinct()
                         ->skip(($page-1)*$limit)
@@ -199,7 +199,7 @@ class Element
                     ->join('relations', 'relations.fromid', '=', 'elements.id')
                     ->where('relations.compositionid', '=', $compositionId)
                     ->orderBy('elements.id')
-                    ->select('elements.id', 'elements.type', 'elements.scape', 'elements.name', 'elements.content',
+                    ->select('elements.id', 'elements.type', 'elements.project', 'elements.name', 'elements.content',
                              'relations.properties as rprops')
                     ->distinct()
                     ->get();
@@ -222,20 +222,20 @@ class Element
         }
     }
 
-    public static function allScapeElements ($id, $types = null)
+    public static function allProjectElements ($id, $types = null)
     {
         if ($types) {
-            $d = DB::table(self::$tableName)->where('scape', '=', $id)
+            $d = DB::table(self::$tableName)->where('project', '=', $id)
                                             ->whereIn('type', $types)
                                             ->orderBy('id')
                                             ->get();
         }
         else {
             if (static::$classElementType <= 0) { // All Elements
-                $d = DB::table(self::$tableName)->where('scape', '=', $id)->orderBy('id')->get();
+                $d = DB::table(self::$tableName)->where('project', '=', $id)->orderBy('id')->get();
             }
             else { // Specific Element Type
-                $d = DB::table(self::$tableName)->where('scape', '=', $id)->orderBy('id')->get();
+                $d = DB::table(self::$tableName)->where('project', '=', $id)->orderBy('id')->get();
             }
         }
         $result = array();
@@ -248,16 +248,16 @@ class Element
         return $result;        
     }
 
-    public static function getElementsLike ($scapeId, $like)
+    public static function getElementsLike ($projectId, $like)
     {
          if (static::$classElementType <= 0) { // All Elements
-            $d = DB::table(self::$tableName)->where('scape', '=', $scapeId)
+            $d = DB::table(self::$tableName)->where('project', '=', $projectId)
                                             ->where('name', 'ILIKE', "%".$like."%")
                                             ->orderBy('id')
                                             ->get();
         }
         else { // Specific Element Type
-            $d = DB::table(self::$tableName)->where('scape', '=', $scapeId)
+            $d = DB::table(self::$tableName)->where('project', '=', $projectId)
                                             ->where('type', '=', static::$classElementType)
                                             ->where('name', 'ILIKE', "%".$like."%")
                                             ->orderBy('id')
