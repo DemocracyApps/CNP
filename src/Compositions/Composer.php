@@ -419,6 +419,7 @@ class Composer extends \Eloquent {
                         $relations = Relation::createRelationPair($df->id, 
                                                                   $dt->id,
                                                                   $relType,
+                                                                  $project,
                                                                   array('composerElements'
                                                                         => $from.','.$to),
                                                                   array('composerElements'

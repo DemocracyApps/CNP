@@ -13,11 +13,13 @@ class Relation
     public $relationId = null;
     public $composerid = null;
     public $compositionid = null;
+    public $project = null;
 
-    function __construct($from, $to, $type) {
+    function __construct($from, $to, $type, $project) {
         $this->fromId = $from;
         $this->toId   = $to;
         $this->relationId = $type;
+        $this->project = $project;
     }
 
     protected static function fill ($instance, $data) 
@@ -26,6 +28,7 @@ class Relation
         $instance->{'fromId'} = $data->fromid;
         $instance->{'toId'} = $data->toid;
         $instance->{'relationId'} = $data->relationid;
+        $instance->{'project'} = $data->project;
         if (property_exists($data, 'properties'))
             $instance->{'properties'} = (array) json_decode($data->properties);
         if (property_exists($data, 'composerid'))
@@ -93,7 +96,7 @@ class Relation
         $relations = array();
 
         foreach ($d as $data) {
-            $item = new static($data->fromid, $data->toid, $data->relationid);
+            $item = new static($data->fromid, $data->toid, $data->relationid, $data->project);
             self::fill($item,$data);
             $relations[] = $item;
         }
@@ -101,14 +104,14 @@ class Relation
         return $relations;
     }
 
-    public static function createRelationPair($fromId, $toId, $relationName, $props1 = null, $props2=null) 
+    public static function createRelationPair($fromId, $toId, $relationName, $projectId, $props1 = null, $props2=null) 
     {
         $relation = array();
         $relRecord = DB::table(self::$relTypesTableName)->where('name',$relationName)->first();
-        $relation[] = new static ($fromId, $toId, $relRecord->{'id'});
+        $relation[] = new static ($fromId, $toId, $relRecord->{'id'}, $projectId);
         if ($props1) $relation[0]->properties = $props1;
         $inverse = $relRecord->{'inverse'}?$relRecord->{'inverse'}:$relRecord->{'id'};
-        $relation[] = new static ($toId, $fromId, $inverse);
+        $relation[] = new static ($toId, $fromId, $inverse, $projectId);
         if ($props2) $relation[1]->properties = $props2;
         return $relation;
     }
@@ -131,6 +134,7 @@ class Relation
                     'fromid'     => $this->fromId,
                     'toid'       => $this->toId,
                     'relationid' => $this->relationId,
+                    'project'    => $this->project,
                     'properties' => json_encode($this->properties),
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
@@ -147,6 +151,7 @@ class Relation
                         'fromid'     => $this->fromId,
                         'toid'       => $this->toId,
                         'relationid' => $this->relationId,
+                        'project'    => $this->project,
                         'properties' => json_encode($this->properties),
                         'updated_at' => date('Y-m-d H:i:s'),
                         'composerid' => $this->composerid,
