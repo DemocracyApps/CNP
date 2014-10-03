@@ -10,12 +10,12 @@
     if ($composer) $getParams = '?composer='.$composer.'&vista='.$vista->id;
 ?>
     <table class="table table-striped">
-        @foreach($denizens as $denizen)
+        @foreach($elements as $element)
             <tr>
-                <td style="width:20%;"> {{ $denizen->getId() }} </td>
-                <td style="width:80%;"> <a href="/denizens/{{$denizen->id}}{{$getParams}}">{{ $denizen->getName()}} </a></td>
+                <td style="width:20%;"> {{ $element->getId() }} </td>
+                <td style="width:80%;"> <a href="/elements/{{$element->id}}{{$getParams}}">{{ $element->getName()}} </a></td>
             </tr>
         @endforeach
     </table>
-    {{$denizens->appends(\Request::except('page'))->links()}}
+    {{$elements->appends(\Request::except('page'))->links()}}
 @stop

@@ -1,11 +1,11 @@
 <?php
 namespace DemocracyApps\CNP\Compositions;
 use \DemocracyApps\CNP\Entities as DAEntity;
-use \DemocracyApps\CNP\Graph\DenizenSet;
+use \DemocracyApps\CNP\Graph\ElementSet;
 use \DemocracyApps\CNP\Entities\Relation;
 use \DemocracyApps\CNP\Compositions\Outputs\ComposerOutputDriver;
 use \DemocracyApps\CNP\Compositions\Inputs\ComposerInputDriver;
-use \DemocracyApps\CNP\Compositions\Inputs\DenizenGenerator;
+use \DemocracyApps\CNP\Compositions\Inputs\ElementGenerator;
 
 class Composer extends \Eloquent {
     protected $fullSpecification = null;
@@ -14,8 +14,8 @@ class Composer extends \Eloquent {
     // A story is commonly about something or is an extension of something
     // and so a relationship should be created when the story is created.
     // 
-    // Because a story may refer to more than one denizens, the referent is
-    // a DemocracyApps\CNP\Graph\DenizenSet.
+    // Because a story may refer to more than one elements, the referent is
+    // a DemocracyApps\CNP\Graph\ElementSet.
     protected $referent = null; 
     protected $referentRelation = null; 
 
@@ -48,10 +48,10 @@ class Composer extends \Eloquent {
     public static function getUserComposers ($userId)
     {
         $records = \DB::table(self::$tableName)
-                    ->join('denizens', 'composers.scape', '=', 'denizens.id')
-                    ->where('denizens.userid', '=', $userId)
+                    ->join('elements', 'composers.scape', '=', 'elements.id')
+                    ->where('elements.userid', '=', $userId)
                     ->select('composers.id', 'composers.name', 'composers.scape', 'composers.description',
-                             'composers.dependson', 'composers.contains', 'denizens.userid')
+                             'composers.dependson', 'composers.contains', 'elements.userid')
                     ->orderBy('composers.scape', 'composers.id')
                     ->distinct()
                     ->get();
@@ -128,7 +128,7 @@ class Composer extends \Eloquent {
         }
     }
 
-    public function initializeForOutput($input, $denizensMap)
+    public function initializeForOutput($input, $elementsMap)
     {
         $this->checkReady();
         $this->doingInput = false;
@@ -139,11 +139,11 @@ class Composer extends \Eloquent {
                 if ( ! $this->outputDriver) {
                     dd("No damn driver " . $driverId);
                 }
-                $this->outputDriver->reInitialize($this, $input, $denizensMap);
+                $this->outputDriver->reInitialize($this, $input, $elementsMap);
             }
             else {
                 $this->outputDriver = new ComposerOutputDriver;
-                $this->outputDriver->initialize($this, $input, $denizensMap);
+                $this->outputDriver->initialize($this, $input, $elementsMap);
                 $this->outputDriver->save();
             }
         }
@@ -187,23 +187,23 @@ class Composer extends \Eloquent {
 
     public function setReferentByReferentId ($id)
     {
-        $this->referent = DenizenSet::find($id);
+        $this->referent = ElementSet::find($id);
     }
 
-    public function setReferentByDenizenId ($id) {
-        $d = DAEntity\Denizen::find($id);
-        $this->referent = new DenizenSet;
+    public function setReferentByElementId ($id) {
+        $d = DAEntity\Element::find($id);
+        $this->referent = new ElementSet;
         $this->referent->initialize();
-        $this->referent->addDenizen($d);
+        $this->referent->addElement($d);
         $this->referent->save();
         return $this->referent->id;
     }
 
     public function setReferent ($d) 
     {
-        $this->referent = new DenizenSet;
+        $this->referent = new ElementSet;
         $this->referent->initialize();
-        $this->referent->addDenizen($d);
+        $this->referent->addElement($d);
         $this->referent->save();
         return $this->referent->id;
     }
@@ -359,7 +359,7 @@ class Composer extends \Eloquent {
 
     private function commonProcessInput (Composition $composition, $data, $elementsSpec, $relationsSpec, $scape)
     {
-        $denizens = array();
+        $elements = array();
 
         $title = $data['title'];
         $summary = $data['summary'];
@@ -372,23 +372,23 @@ class Composer extends \Eloquent {
             $anchorId = $this->elementsSpec[0]['id'];
         }
         $topElement = null;
-        // So now we create output denizens
+        // So now we create output elements
         foreach ($elementsSpec as $espec) {
             $id = $espec['id'];
             if (array_key_exists($id, $elementsIn)) {
                 $properties = null;
                 if (array_key_exists('properties', $elementsIn[$id])) $properties = $elementsIn[$id]['properties'];
-                $createdDenizens = DenizenGenerator::generateDenizen($espec['type'], $id, 
+                $createdElements = ElementGenerator::generateElement($espec['type'], $id, 
                                                                      $elementsIn[$id], $properties, $scape);
                 if ($anchorId == $espec['id']) {
-                    if (count($createdDenizens) > 1) throw new \Exception("Cannot set multiple denizens as anchors " . count($createdDenizens));
-                    if ($createdDenizens) {
-                        if ($title) $createdDenizens[0]->name = $title;
-                        if ($summary) $createdDenizens[0]->content = $summary;
-                        $topElement = $createdDenizens[0];
+                    if (count($createdElements) > 1) throw new \Exception("Cannot set multiple elements as anchors " . count($createdElements));
+                    if ($createdElements) {
+                        if ($title) $createdElements[0]->name = $title;
+                        if ($summary) $createdElements[0]->content = $summary;
+                        $topElement = $createdElements[0];
                     }
                 }
-                if ($createdDenizens) $denizens[$id] = $createdDenizens;
+                if ($createdElements) $elements[$id] = $createdElements;
             }
             else {
                 if (array_key_exists('required', $espec) && $espec['required'] == true) {
@@ -396,9 +396,9 @@ class Composer extends \Eloquent {
                 }
             }
         }
-        foreach($denizens as $denizenList) {
-            foreach ($denizenList as $denizen) {
-                $denizen->save();
+        foreach($elements as $elementList) {
+            foreach ($elementList as $element) {
+                $element->save();
             }
         }
 
@@ -406,10 +406,10 @@ class Composer extends \Eloquent {
             $from = $relation['from'];
             $to   = $relation['to'];
             $relType = $relation['type'];
-            if (array_key_exists($from, $denizens) && array_key_exists($to,$denizens)) {
-                $dfrom = $denizens[$from];
-                $dto   = $denizens[$to];
-                // One or the other may expand to multiple denizens (e.g., tags), but let's not
+            if (array_key_exists($from, $elements) && array_key_exists($to,$elements)) {
+                $dfrom = $elements[$from];
+                $dto   = $elements[$to];
+                // One or the other may expand to multiple elements (e.g., tags), but let's not
                 // let things get out of hand.
                 if (count($dfrom) > 1 && count($dto) > 1) {
                     throw new \Exception("Composer processing - N X M relation generation not allowed");
@@ -435,7 +435,7 @@ class Composer extends \Eloquent {
         }
         $haveit = ($this->referent != null);
         if ($this->referent) {
-            $referents = $this->referent->getDenizens();
+            $referents = $this->referent->getElements();
             $referentRelation = $this->inputSpec['referentRelation'];
             foreach($referents as $ref) {
                 $relations = DAEntity\Relation::createRelationPair($ref->id, 

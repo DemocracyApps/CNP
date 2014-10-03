@@ -39,9 +39,9 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
         return $this->id;
     }
 
-    public function getDenizenId()
+    public function getElementId()
     {
-        return $this->denizenid;
+        return $this->elementid;
     }
 
     public function getRememberToken()

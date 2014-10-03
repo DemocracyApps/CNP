@@ -5,20 +5,20 @@ namespace DemocracyApps\CNP\Entities;
 /**
  * 
  */
-class Scape extends Denizen
+class Scape extends Element
 {
-    static      $classDenizenType = -1;
+    static      $classElementType = -1;
     protected   $user;
 
     function __construct ($nm = null, $userid = null) {
-        parent::__construct($nm, $userid, static::$classDenizenType);
+        parent::__construct($nm, $userid, static::$classElementType);
     }
 
  
     static public function initialize() 
     {
-        if (static::$classDenizenType < 0) {
-            static::$classDenizenType = \CNP::getDenizenTypeId('Scape');
+        if (static::$classElementType < 0) {
+            static::$classElementType = \CNP::getElementTypeId('Scape');
         }
     }
 }

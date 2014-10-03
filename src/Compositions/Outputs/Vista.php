@@ -16,8 +16,8 @@ class Vista extends \Eloquent
     public static function getUserVistas($userId)
     {
         $records = \DB::table(self::$tableName)
-                    ->join('denizens', 'vistas.scape', '=', 'denizens.id')
-                    ->where('denizens.userid', '=', $userId)
+                    ->join('elements', 'vistas.scape', '=', 'elements.id')
+                    ->where('elements.userid', '=', $userId)
                     ->select('vistas.id', 'vistas.name', 'vistas.scape', 'vistas.description',
                              'vistas.input_composers', 'vistas.output_composer', 'vistas.selector')
                     ->orderBy('vistas.scape', 'vistas.id')
@@ -55,11 +55,11 @@ class Vista extends \Eloquent
         }
     }
 
-    public function extractCompositions ($denizen)
+    public function extractCompositions ($element)
     {
         if (! $this->allowedComposers) $this->initialize();
         $result = array();
-        $relations = $denizen->getRelations();
+        $relations = $element->getRelations();
         foreach($relations as $relation) {
             if (in_array($relation->composerid, $this->allowedComposers, false)) {
                 if ($relation->compositionid) {
@@ -76,14 +76,14 @@ class Vista extends \Eloquent
     }
 
     /*
-     * We get denizen and we want to figure out what role(s) it plays in the composer
+     * We get element and we want to figure out what role(s) it plays in the composer
      * spec.
      */
-    public function extractComposerRoles($denizen)
+    public function extractComposerRoles($element)
     {
         if (! $this->allowedComposers) $this->initialize();
         $result = array();
-        $relations = $denizen->getRelations();
+        $relations = $element->getRelations();
         foreach($relations as $relation) {
             if (in_array($relation->composerid, $this->allowedComposers, false)) {
                 $roleProp = $relation->getProperty('composerElements');

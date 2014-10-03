@@ -37,8 +37,8 @@ class Graph
      * to the graph node using a key appropriate to the object (e.g., its own ID)
      * 
      * @param  string $key     Native key of graph
-     * @param  object $object  The payload (e.g., denizen)
-     * @param  string $altkey  Optional alternate key to use (e.g., denizen ID)
+     * @param  object $object  The payload (e.g., element)
+     * @param  string $altkey  Optional alternate key to use (e.g., element ID)
      * @param  string $mapName Name of map to store the alternate key in
      * @return boolean         True if we succeeded in finding a place to assign the payload
      */

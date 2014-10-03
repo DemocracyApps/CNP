@@ -2,7 +2,7 @@
 
 namespace DemocracyApps\CNP\Entities;
 
-class DenizenType
+class ElementType
 {
     public $id = null;
     public $name = null;

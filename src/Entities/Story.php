@@ -1,19 +1,19 @@
 <?php
 namespace DemocracyApps\CNP\Entities;
 
-class Story extends Denizen 
+class Story extends Element 
 {
-    static    $classDenizenType = -1;
+    static    $classElementType = -1;
     protected $author;
 
     function __construct ($nm = null, $userid = null) {
-        parent::__construct($nm, $userid, static::$classDenizenType);
+        parent::__construct($nm, $userid, static::$classElementType);
     }
 
     static public function initialize() 
     {
-        if (static::$classDenizenType < 0) {
-            static::$classDenizenType = \CNP::getDenizenTypeId('Story');
+        if (static::$classElementType < 0) {
+            static::$classElementType = \CNP::getElementTypeId('Story');
         }
     }
 

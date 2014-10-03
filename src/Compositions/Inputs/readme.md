@@ -1,6 +1,6 @@
 # Story Input, Composers and the Composer Cycle
 
-All story input is done via a Composer whose behavior is defined by a Composer Specification. In the simplest case the composer just provides a map between inputs (e.g., data in columns of a spreadsheet) and outputs (a set of denizens and the relations between them). In a more complex case, the specification tells the system how to create an interactive storytelling experience for the user.
+All story input is done via a Composer whose behavior is defined by a Composer Specification. In the simplest case the composer just provides a map between inputs (e.g., data in columns of a spreadsheet) and outputs (a set of elements and the relations between them). In a more complex case, the specification tells the system how to create an interactive storytelling experience for the user.
 
 ## Composer Specification
 
@@ -8,7 +8,7 @@ A composer specification is a JSON file that contains one or more of the followi
 
 ### Element and Relations
 
-Elements provide a list of the denizens that will be created, relations specify the relations between them. More documentation on these to be done later. Here is a simple example of a JSON file containing only these two sections:
+Elements provide a list of the elements that will be created, relations specify the relations between them. More documentation on these to be done later. Here is a simple example of a JSON file containing only these two sections:
 
 ```
 {
@@ -49,7 +49,7 @@ Elements provide a list of the denizens that will be created, relations specify 
 
 The input section specifies how to map data to fill the structure defined by elements and relations. Inputs can also specify ways to generate structures beyond those defined statically.
 
-The first thing the input section defines is the 'inputType'. Right now there are 2 types: csv-simple and auto-interactive. The csv-simple type just maps columns of a CSV file to the denizens in the elements section. Here is an example for the specification above (assuming that the ID of the spec above is 1):
+The first thing the input section defines is the 'inputType'. Right now there are 2 types: csv-simple and auto-interactive. The csv-simple type just maps columns of a CSV file to the elements in the elements section. Here is an example for the specification above (assuming that the ID of the spec above is 1):
 
 ```
 {
@@ -142,7 +142,7 @@ Here is a simple example (again applicable to the base specification above, assu
 }
 
 ```
-I think we want to allow the input to optionally define an *anchor*. If no anchor is defined, a Story denizen will be created and all elements will be placed in an *is-part-of* relation to it. If an anchor *is* defined, then no Story denizen is created. Have to think about whether (a) the title and summary uses work and (b) whether we have create *is-part-of* relations [probably not, on the latter].
+I think we want to allow the input to optionally define an *anchor*. If no anchor is defined, a Story element will be created and all elements will be placed in an *is-part-of* relation to it. If an anchor *is* defined, then no Story element is created. Have to think about whether (a) the title and summary uses work and (b) whether we have create *is-part-of* relations [probably not, on the latter].
 
 
 ## Composer

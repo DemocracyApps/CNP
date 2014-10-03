@@ -2,7 +2,6 @@
 
 use \DemocracyApps\CNP\Utility\Api as Api;
 use \DemocracyApps\CNP\Compositions\Outputs\Vista;
-use \DemocracyApps\CNP\Entities\Denizen;
 
 class VistasController extends ApiController {
 

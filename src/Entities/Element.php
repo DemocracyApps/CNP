@@ -2,13 +2,13 @@
 use Illuminate\Support\Facades\DB as DB;
 use Illuminate\Support\Collection;
 
-class Denizen
+class Element
 {
     use ImplementsProperties;
 
-    static    $classDenizenType = -1;
+    static    $classElementType = -1;
     static $tableName = 'elements';
-    protected $denizenType = null;
+    protected $elementType = null;
     public $id = null;
     public $scapeId = -1;
     public $name = null;
@@ -18,7 +18,7 @@ class Denizen
     public function __construct($nm, $userid, $dtype=0) {
         $this->name = $nm;
         $this->userid = $userid;
-        $this->denizenType = $dtype;
+        $this->elementType = $dtype;
     }
 
     static public function initialize()
@@ -62,7 +62,7 @@ class Denizen
                 array(
                     'name' => $this->name,
                     'scape'=> $this->scapeId,
-                    'type' => $this->denizenType,
+                    'type' => $this->elementType,
                     'content' => $this->content,
                     'properties' => json_encode($this->properties), // How do I move this to ImplementsProperties trait?
                     'created_at' => date('Y-m-d H:i:s'),
@@ -78,7 +78,7 @@ class Denizen
                     array(
                         'name' => $this->name,
                         'scape'=> $this->scapeId,
-                        'type' => $this->denizenType,
+                        'type' => $this->elementType,
                         'content' => $this->content,
                         'properties' => json_encode($this->properties),
                         'updated_at' => date('Y-m-d H:i:s'),
@@ -106,7 +106,7 @@ class Denizen
     }
 
     /**
-     * Find a denizen by its primary key
+     * Find a element by its primary key
      *
      * @param  mixed $id
      * @return static
@@ -124,27 +124,27 @@ class Denizen
     }
 
     /*
-     *  I know this absolutely does not belong in the Denizen class. Give me 
+     *  I know this absolutely does not belong in the Element class. Give me 
      *  some time to get this all figured out. Sigh.
      */
-    public static function getVistaDenizens ($scape, $allowedComposers, $types, $page=1, $limit=3)
+    public static function getVistaElements ($scape, $allowedComposers, $types, $page=1, $limit=3)
     {
         if ($types) {
             $total = DB::table(self::$tableName)
-                        ->join('relations', 'relations.fromid', '=', 'denizens.id')
-                        ->where('denizens.scape', '=', $scape)
-                        ->whereIn('denizens.type', $types)
+                        ->join('relations', 'relations.fromid', '=', 'elements.id')
+                        ->where('elements.scape', '=', $scape)
+                        ->whereIn('elements.type', $types)
                         ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
+                        ->select('elements.id', 'elements.type', 'elements.scape', 'elements.name')
                         ->distinct()
-                        ->count('denizens.id');
+                        ->count('elements.id');
             $records = DB::table(self::$tableName)
-                        ->join('relations', 'relations.fromid', '=', 'denizens.id')
-                        ->where('denizens.scape', '=', $scape)
-                        ->whereIn('denizens.type', $types)
+                        ->join('relations', 'relations.fromid', '=', 'elements.id')
+                        ->where('elements.scape', '=', $scape)
+                        ->whereIn('elements.type', $types)
                         ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
-                        ->orderBy('denizens.id')
+                        ->select('elements.id', 'elements.type', 'elements.scape', 'elements.name')
+                        ->orderBy('elements.id')
                         ->distinct()
                         ->skip(($page-1)*$limit)
                         ->take($limit)
@@ -153,19 +153,19 @@ class Denizen
         }
         else {
             $total = DB::table(self::$tableName)
-                        ->join('relations', 'relations.from', '=', 'denizens.id')
-                        ->where('denizens.scape', '=', $scape)
+                        ->join('relations', 'relations.from', '=', 'elements.id')
+                        ->where('elements.scape', '=', $scape)
                         ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
-                        ->orderBy('denizens.id')
+                        ->select('elements.id', 'elements.type', 'elements.scape', 'elements.name')
+                        ->orderBy('elements.id')
                         ->distinct()
-                        ->count('denizens.id');
+                        ->count('elements.id');
             $records = DB::table(self::$tableName)
-                        ->join('relations', 'relations.from', '=', 'denizens.id')
-                        ->where('denizens.scape', '=', $scape)
+                        ->join('relations', 'relations.from', '=', 'elements.id')
+                        ->where('elements.scape', '=', $scape)
                         ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name')
-                        ->orderBy('denizens.id')
+                        ->select('elements.id', 'elements.type', 'elements.scape', 'elements.name')
+                        ->orderBy('elements.id')
                         ->distinct()
                         ->skip(($page-1)*$limit)
                         ->take($limit)
@@ -185,21 +185,21 @@ class Denizen
     }
 
     /**
-     * This gets all the denizens involved in the given composition in each of their unique 
-     * relationships (i.e., a specific denizen will be returned as many times as it has 
-     * relations). We return a hash by composer element ID, ensuring that a denizen is 
+     * This gets all the elements involved in the given composition in each of their unique 
+     * relationships (i.e., a specific element will be returned as many times as it has 
+     * relations). We return a hash by composer element ID, ensuring that a element is 
      * only stored once for a given hash index.
      * 
      * @param  Integer $compositionid      ID of the composition that created the relations
-     * @param  Array                       Hash of denizens by composer element ID
+     * @param  Array                       Hash of elements by composer element ID
      */
-    public static function getCompositionDenizens ($compositionId, &$resultArray)
+    public static function getCompositionElements ($compositionId, &$resultArray)
     {
         $records = DB::table(self::$tableName)
-                    ->join('relations', 'relations.fromid', '=', 'denizens.id')
+                    ->join('relations', 'relations.fromid', '=', 'elements.id')
                     ->where('relations.compositionid', '=', $compositionId)
-                    ->orderBy('denizens.id')
-                    ->select('denizens.id', 'denizens.type', 'denizens.scape', 'denizens.name', 'denizens.content',
+                    ->orderBy('elements.id')
+                    ->select('elements.id', 'elements.type', 'elements.scape', 'elements.name', 'elements.content',
                              'relations.properties as rprops')
                     ->distinct()
                     ->get();
@@ -222,7 +222,7 @@ class Denizen
         }
     }
 
-    public static function allScapeDenizens ($id, $types = null)
+    public static function allScapeElements ($id, $types = null)
     {
         if ($types) {
             $d = DB::table(self::$tableName)->where('scape', '=', $id)
@@ -231,10 +231,10 @@ class Denizen
                                             ->get();
         }
         else {
-            if (static::$classDenizenType <= 0) { // All Denizens
+            if (static::$classElementType <= 0) { // All Elements
                 $d = DB::table(self::$tableName)->where('scape', '=', $id)->orderBy('id')->get();
             }
-            else { // Specific Denizen Type
+            else { // Specific Element Type
                 $d = DB::table(self::$tableName)->where('scape', '=', $id)->orderBy('id')->get();
             }
         }
@@ -248,17 +248,17 @@ class Denizen
         return $result;        
     }
 
-    public static function getDenizensLike ($scapeId, $like)
+    public static function getElementsLike ($scapeId, $like)
     {
-         if (static::$classDenizenType <= 0) { // All Denizens
+         if (static::$classElementType <= 0) { // All Elements
             $d = DB::table(self::$tableName)->where('scape', '=', $scapeId)
                                             ->where('name', 'ILIKE', "%".$like."%")
                                             ->orderBy('id')
                                             ->get();
         }
-        else { // Specific Denizen Type
+        else { // Specific Element Type
             $d = DB::table(self::$tableName)->where('scape', '=', $scapeId)
-                                            ->where('type', '=', static::$classDenizenType)
+                                            ->where('type', '=', static::$classElementType)
                                             ->where('name', 'ILIKE', "%".$like."%")
                                             ->orderBy('id')
                                             ->get();
@@ -274,14 +274,14 @@ class Denizen
         return $result;        
     }
 
-    public static function allUserDenizens ($id) 
+    public static function allUserElements ($id) 
     {
-        if (static::$classDenizenType <= 0) { // All Denizens
+        if (static::$classElementType <= 0) { // All Elements
             $d = DB::table(self::$tableName)->where('userid', '=', $id)->orderBy('id')->get();
         }
-        else { // Specific Denizen Type
+        else { // Specific Element Type
             $d = DB::table(self::$tableName)->where('userid', '=', $id)
-                                            ->where('type', '=', static::$classDenizenType)
+                                            ->where('type', '=', static::$classElementType)
                                             ->orderBy('id')
                                             ->get();
         }
@@ -297,18 +297,18 @@ class Denizen
     }
 
     /**
-     * Find all denizens or all by type
+     * Find all elements or all by type
      *
      * @param  mixed $id
      * @return array of static
      */
     public static function all () 
     {
-        if (static::$classDenizenType <= 0) { // All Denizens
+        if (static::$classElementType <= 0) { // All Elements
             $d = DB::table(self::$tableName)->orderBy('id')->get();
         }
-        else { // Specific Denizen Type
-            $d = DB::table(self::$tableName)->where('type', '=', static::$classDenizenType)->orderBy('id')->get();
+        else { // Specific Element Type
+            $d = DB::table(self::$tableName)->where('type', '=', static::$classElementType)->orderBy('id')->get();
         }
 
         $result = array();
@@ -323,13 +323,13 @@ class Denizen
 
     public static function allPaged ($page=1, $limit=10) 
     {
-        if (static::$classDenizenType <= 0) { // All Denizens
+        if (static::$classElementType <= 0) { // All Elements
             $total = DB::table(self::$tableName)->orderBy('id')->count();
             $d = DB::table(self::$tableName)->orderBy('id')->skip(($page-1)*$limit)->take($limit)->get();
         }
-        else { // Specific Denizen Type
-            $total = DB::table(self::$tableName)->where('type', '=', static::$classDenizenType)->count();
-            $d = DB::table(self::$tableName)->where('type', '=', static::$classDenizenType)->orderBy('id')->skip(($page-1)*$limit)->take($limit)->get();
+        else { // Specific Element Type
+            $total = DB::table(self::$tableName)->where('type', '=', static::$classElementType)->count();
+            $d = DB::table(self::$tableName)->where('type', '=', static::$classElementType)->orderBy('id')->skip(($page-1)*$limit)->take($limit)->get();
         }
 
         $result = array();

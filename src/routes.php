@@ -41,9 +41,9 @@ Route::get('/demo', function()
     return View::make('demo.'.$stage, array());
 });
 
-// DenizensController doesn't actually need all the routes, but I can't 
+// ElementsController doesn't actually need all the routes, but I can't 
 // figure out how to call just show($id)
-Route::resource('denizens', 'DemocracyApps\CNP\Controllers\DenizensController');
+Route::resource('elements', 'DemocracyApps\CNP\Controllers\ElementsController');
 
 // /stories/export must be defined before Route::resource('stories'). Probably need
 // to come up with a different route.
@@ -81,7 +81,7 @@ Route::group(['prefix' => 'ajax'], function ()
             $term = Input::get('term');
             $composer = \DemocracyApps\CNP\Compositions\Composer::find(\Input::get('composer'));
             $scape = $composer->scape;
-            $list = DAEntity\Person::getDenizensLike($scape, $term);
+            $list = DAEntity\Person::getElementsLike($scape, $term);
             $ret = array();
             foreach ($list as $item) {
                 $ret[] = new PP($item->name, $item->id);
@@ -106,9 +106,9 @@ Route::get('/kumu', array('as' => 'kumu', function ()
     $fptr = fopen($file, "w");
     $line = "Label,Type,Description\n";
     fwrite($fptr,$line);
-    $denizens = DAEntity\Denizen::allScapeDenizens($scape);
-    foreach($denizens as $d) {
-        $line = $d->id . "," . CNP::getDenizenTypeName($d->type) . ",\"" . $d->name . "\"\n";
+    $elements = DAEntity\Element::allScapeElements($scape);
+    foreach($elements as $d) {
+        $line = $d->id . "," . CNP::getElementTypeName($d->type) . ",\"" . $d->name . "\"\n";
         fwrite($fptr,$line);
     }
     $line = "\n";
@@ -154,8 +154,8 @@ Route::get('/', function()
 Route::get('account', array('as' => 'account', 'before' => 'cnp.auth', function()
 {
     $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
-    $person = DAEntity\Person::find($user->getDenizenId());
-    $scapes = DAEntity\Scape::allUserDenizens($user->getId());
+    $person = DAEntity\Person::find($user->getElementId());
+    $scapes = DAEntity\Scape::allUserElements($user->getId());
     return View::make('account', array('user' => $user, 'person' => $person, 
                       'scapes' => $scapes));
 }));

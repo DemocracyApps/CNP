@@ -4,7 +4,7 @@ namespace DemocracyApps\CNP\Controllers;
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Compositions\Composer as Composer;
 use \DemocracyApps\CNP\Compositions\Outputs\Vista;
-use \DemocracyApps\CNP\Entities\Denizen;
+use \DemocracyApps\CNP\Entities\Element;
 
 class StoriesController extends BaseController {
     protected $story;
@@ -52,13 +52,13 @@ class StoriesController extends BaseController {
         if (\Input::has('vista')) {
             $vista = Vista::find(\Input::get('vista'));
             $typeList = null;
-            $denizens = null;
+            $elements = null;
             if ($vista->selector) {
                 $typeList = array();
                 $s = trim(preg_replace("([, ]+)", ' ', $vista->selector));
                 if ($s) $types = explode(" ", $s);
                 foreach ($types as $type) {
-                    $typeList [] = \CNP::getDenizenTypeId($type);
+                    $typeList [] = \CNP::getElementTypeId($type);
                 }
             }
             $s = trim(preg_replace("([, ]+)", ' ', $vista->input_composers));
@@ -66,12 +66,12 @@ class StoriesController extends BaseController {
 
             $page = \Input::get('page', 1);
             $pageLimit=\CNP::getConfigurationValue('pageLimit');
-            $data = Denizen::getVistaDenizens ($vista->scape, $allowedComposers, $typeList, $page, $pageLimit);
-            $denizens = \Paginator::make($data['items'], $data['total'], $pageLimit);
+            $data = Element::getVistaElements ($vista->scape, $allowedComposers, $typeList, $page, $pageLimit);
+            $elements = \Paginator::make($data['items'], $data['total'], $pageLimit);
 
-            $args = array('denizens' => $denizens, 'vista' => $vista);
+            $args = array('elements' => $elements, 'vista' => $vista);
             $args['composer'] = $vista->output_composer;
-            return \View::make('stories.vistaindex', array('denizens'=>$denizens, 'vista'=>$vista, 'composer'=>$vista->output_composer));
+            return \View::make('stories.vistaindex', array('elements'=>$elements, 'vista'=>$vista, 'composer'=>$vista->output_composer));
             return \View::make('vistas.index', $args);
         }
         else { // just raw
@@ -92,14 +92,14 @@ class StoriesController extends BaseController {
     public function show($id)
     {
         $story = DAEntity\Story::find($id);
-        $denizens = array();
-        $denizens[$story->id] = $story;
+        $elements = array();
+        $elements[$story->id] = $story;
         $elementRelations = array();
        
-        $elements = DAEntity\Relation::getRelatedDenizens($story->id, null);
+        $elements = DAEntity\Relation::getRelatedElements($story->id, null);
         array_unshift($elements, $story);
         foreach ($elements as $element) { // Get the relations
-            if ( ! array_key_exists($element->id, $denizens)) $denizens[$element->id] = $element;
+            if ( ! array_key_exists($element->id, $elements)) $elements[$element->id] = $element;
             $relations = DAEntity\Relation::getRelations($element->id);
             //if ($element->type != 3) dd($relations);
             $elementRelations[$element->id] = array();
@@ -107,11 +107,11 @@ class StoriesController extends BaseController {
                 $to = $relation->toId;
                 $relType = DAEntity\Eloquent\RelationType::find($relation->relationId);
                 $relationName = $relType->name;
-                if ( ! array_key_exists($to, $denizens)) {
-                    $denizens[$to] = DAEntity\Denizen::find($to);
+                if ( ! array_key_exists($to, $elements)) {
+                    $elements[$to] = DAEntity\Element::find($to);
                 }
                 $elementRelations[$element->id][] = array($relationName, 
-                                                          $denizens[$to]->name . " (".$denizens[$to]->id.")");
+                                                          $elements[$to]->name . " (".$elements[$to]->id.")");
             }
         }
 
@@ -139,7 +139,7 @@ class StoriesController extends BaseController {
         $composer->initializeForInput(\Input::all());
 
         if (\Input::get('referent')) {
-            $composer->setReferentByDenizenId(\Input::get('referent'));
+            $composer->setReferentByElementId(\Input::get('referent'));
         }
 
     	$inputType = $composer->getInputType();

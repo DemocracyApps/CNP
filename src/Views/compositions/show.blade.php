@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-<h1> <em>{{ $topDenizen->getName() }} </em></h1>
+<h1> <em>{{ $topElement->getName() }} </em></h1>
 
 <?php
   use \DemocracyApps\CNP\Compositions\Outputs\ComposerOutputDriver;
@@ -16,7 +16,7 @@
     else {
       if (ComposerOutputDriver::validForOutput($next)) {
         \Log::info("Valid for input");
-        ComposerOutputDriver::createInputDrivenOutput($topDenizen, $driver, $next);
+        ComposerOutputDriver::createInputDrivenOutput($topElement, $driver, $next);
          echo("\n");
        }
        else {
@@ -29,7 +29,7 @@
   $driver->cleanupAndSave();
 ?>
 
-{{ Form::open(['url' => 'denizens/'.$topDenizen->id, 'method' => 'get']) }}
+{{ Form::open(['url' => 'elements/'.$topElement->id, 'method' => 'get']) }}
    <input type="hidden" name="driver" value="{{$composer->getDriver()->id}}"/>
    <input type="hidden" name="composer" value="{{$composer->id}}"/>
    <input type="hidden" name="vista" value="{{$vista}}"/>

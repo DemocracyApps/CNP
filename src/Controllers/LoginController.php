@@ -25,7 +25,7 @@ class LoginController extends BaseController {
             $person->save();
             \Log::info("Got a person id of " . $person->getId());
 
-            $user->denizenid = $person->getId();
+            $user->elementid = $person->getId();
             $user->save();
 
             $socialProfile = new \DemocracyApps\CNP\Entities\Eloquent\Social();

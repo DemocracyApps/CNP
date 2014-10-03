@@ -22,7 +22,7 @@ class ScapesController extends ApiController {
 	public function index()
 	{
 		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
-    	$scapes = DAEntity\Scape::allUserDenizens(\Auth::id());
+    	$scapes = DAEntity\Scape::allUserElements(\Auth::id());
     	if ($isAPI) {
 	    	$data = $this->scapeTransformer->transformCollection($scapes);
 			return $this->respondIndex('List of API user scapes', $data);
@@ -97,7 +97,7 @@ class ScapesController extends ApiController {
 	        $this->scape->save();
 
 	        // Now let's create the relations with the creator Person
-	        $person = DAEntity\Person::find($user->getDenizenId());
+	        $person = DAEntity\Person::find($user->getElementId());
 	        $relations = DAEntity\Relation::createRelationPair($person->getId(), $this->scape->getId(),
 	                                                          "is-creator-of");
 	        foreach($relations as $relation) {

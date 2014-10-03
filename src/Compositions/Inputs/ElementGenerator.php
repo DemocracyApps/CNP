@@ -2,30 +2,30 @@
 namespace DemocracyApps\CNP\Compositions\Inputs;
 use \DemocracyApps\CNP\Entities as DAEntity;
 
-class DenizenGenerator 
+class ElementGenerator 
 {
     static $fcts = array(
-        'Tag' => '\DemocracyApps\CNP\Compositions\Inputs\DenizenGenerator::tagGenerator',
-        'Person' => '\DemocracyApps\CNP\Compositions\Inputs\DenizenGenerator::personGenerator'
+        'Tag' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::tagGenerator',
+        'Person' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::personGenerator'
         );
 
     /**
-     * [generateDenizen description]
+     * [generateElement description]
      * @param  [type] $elementType [description]
      * @param  [type] $content     [description]
      * @param  [type] $properties  [description]
      * @param  [type] $scapeId     [description]
-     * @return array               Array of denizens
+     * @return array               Array of elements
      */
-    static public function generateDenizen ($elementType, $name, $content, $properties, $scapeId)
+    static public function generateElement ($elementType, $name, $content, $properties, $scapeId)
     {
-        $createdDenizens = null;
+        $createdElements = null;
         if (array_key_exists($elementType, self::$fcts) && self::$fcts[$elementType]) {
-            $createdDenizens = call_user_func(self::$fcts[$elementType], $elementType, $content, $properties);
+            $createdElements = call_user_func(self::$fcts[$elementType], $elementType, $content, $properties);
         }
         else {
             $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
-            if (!class_exists($className)) throw new \Exception("Cannot find denizen class " . $className);
+            if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
             $d = new $className($name, \Auth::user()->getId());
             $d->content = $content['value'];
 
@@ -34,14 +34,14 @@ class DenizenGenerator
                     $d->setProperty($propName, $propValue);
                 }
             }
-            $createdDenizens = array($d);
+            $createdElements = array($d);
         }
-        if ($createdDenizens) {
-            foreach ($createdDenizens as $d) {
+        if ($createdElements) {
+            foreach ($createdElements as $d) {
                 $d->scapeId = $scapeId;
             }
         }
-        return $createdDenizens;
+        return $createdElements;
     }
 
     static public function registerElementGenerator ($elementType, $methodName) {
@@ -50,7 +50,7 @@ class DenizenGenerator
 
     static private function personGenerator($elementType, $content, $properties)
     {
-        $createdDenizens = null;
+        $createdElements = null;
         // We want to create separate tags for each word in the content;
         if ($content) {
             $d = null;
@@ -59,7 +59,7 @@ class DenizenGenerator
             }
             else {
                 $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
-                if (!class_exists($className)) throw new \Exception("Cannot find denizen class " . $className);
+                if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
                 $d = new $className($content['value'], \Auth::user()->getId());
                 $d->content = $content['value'];
                 if ($properties) {
@@ -68,15 +68,15 @@ class DenizenGenerator
                     }
                 }
             }
-            $createdDenizens = array($d);
+            $createdElements = array($d);
         }
-        // Must return an array of Denizens
-        return $createdDenizens;
+        // Must return an array of Elements
+        return $createdElements;
     }
 
     static private function tagGenerator($elementType, $content, $properties)
     {
-        $createdDenizens = null;
+        $createdElements = null;
         // We want to create separate tags for each word in the content;
         if ($content) {
             $tags = null;
@@ -84,8 +84,8 @@ class DenizenGenerator
             if ($s) $tags = explode(" ", $s);
             if ($tags && count($tags) > 0) {
                 $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
-                if (!class_exists($className)) throw new \Exception("Cannot find denizen class " . $className);
-                $createdDenizens = array();
+                if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
+                $createdElements = array();
                 foreach ($tags as $tag) {
                     $tag = strtolower($tag);
                     $d = DAEntity\Tag::findByName($tag);
@@ -98,13 +98,13 @@ class DenizenGenerator
                             }
                         }
                     }
-                    $createdDenizens[] = $d;
+                    $createdElements[] = $d;
                 }
 
             }
         }
-        // Must return an array of Denizens
-        return $createdDenizens;
+        // Must return an array of Elements
+        return $createdElements;
     }
 
 }

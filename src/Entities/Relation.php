@@ -47,8 +47,8 @@ class Relation
     public static function getScapeRelations ($scape)
     {
         $records = DB::table(self::$tableName)
-                    ->join('denizens', 'denizens.id', '=', 'relations.fromid')
-                    ->where('denizens.scape', '=', $scape)
+                    ->join('elements', 'elements.id', '=', 'relations.fromid')
+                    ->where('elements.scape', '=', $scape)
                     ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
                              'relations.properties', 'relations.composerid', 'relations.compositionid')
                     ->get();
@@ -62,7 +62,7 @@ class Relation
         return $relations;
     }
 
-    public static function getRelatedDenizens ($fromId, $relationName) 
+    public static function getRelatedElements ($fromId, $relationName) 
     {
         $relId = null;
         if ($relationName) {
@@ -76,14 +76,14 @@ class Relation
             $d = DB::table(self::$tableName)->where('fromid', $fromId)->get();
         }
 
-        $denizens = array();
+        $elements = array();
 
         foreach ($d as $data) {
-            $denizen = Denizen::find($data->toid);
-            $denizens[] = $denizen;
+            $element = Element::find($data->toid);
+            $elements[] = $element;
         }
 
-        return $denizens;
+        return $elements;
     }
 
     public static function getRelations ($fromId) 

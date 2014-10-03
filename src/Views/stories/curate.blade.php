@@ -47,7 +47,7 @@ Story Curation
         <h4 class="modal-title" id="myModalLabel">Select Project</h4>
       </div>
       <?php
-              $scapes = \DemocracyApps\CNP\Entities\Scape::allUserDenizens(\Auth::id());
+              $scapes = \DemocracyApps\CNP\Entities\Scape::allUserElements(\Auth::id());
       ?>
       <div class="modal-body"> 
         <select id="projectselect">

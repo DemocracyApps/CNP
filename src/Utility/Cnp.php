@@ -7,8 +7,8 @@ use Illuminate\Container\Container;
 class Cnp {
     private $configuration = null;
 
-    protected $denizenTypesByName = array();
-    protected $denizenTypesById = array();
+    protected $elementTypesByName = array();
+    protected $elementTypesById = array();
 
     /**
      * Container instance used to resolve classes.
@@ -40,39 +40,39 @@ class Cnp {
     public function loadConfiguration ($cfg) {
         $this->configuration = $cfg;
 
-        // Load information on DenizenTypes
-        $arr = $cfg['denizenTypes'];
-        foreach ($arr as $denizenTypeSpec) {
-            $denizenType = new Cnpm\DenizenType ($denizenTypeSpec['id'], $denizenTypeSpec['name']);
-            $this->denizenTypesByName[strtolower($denizenType->getName())] = $denizenType;
-            $this->denizenTypesById[$denizenType->getId()] = $denizenType;
+        // Load information on ElementTypes
+        $arr = $cfg['elementTypes'];
+        foreach ($arr as $elementTypeSpec) {
+            $elementType = new Cnpm\ElementType ($elementTypeSpec['id'], $elementTypeSpec['name']);
+            $this->elementTypesByName[strtolower($elementType->getName())] = $elementType;
+            $this->elementTypesById[$elementType->getId()] = $elementType;
         }
     }
 
     /**
      *
-     * DenizenType-related functions
+     * ElementType-related functions
      *
      */
-    public function getDenizenTypeId ($name) {
+    public function getElementTypeId ($name) {
         $nm = strtolower($name);
-        if (array_key_exists($nm, $this->denizenTypesByName)) {
-            return $this->denizenTypesByName[$nm]->getId();
+        if (array_key_exists($nm, $this->elementTypesByName)) {
+            return $this->elementTypesByName[$nm]->getId();
         }
-        throw new \OutOfBoundsException('Unknown Denizen Type ' . $name);
+        throw new \OutOfBoundsException('Unknown Element Type ' . $name);
     }
 
-    public function getDenizenTypeName ($id) {
-        if (array_key_exists($id, $this->denizenTypesById)) {
-            return $this->denizenTypesById[$id]->getName();
+    public function getElementTypeName ($id) {
+        if (array_key_exists($id, $this->elementTypesById)) {
+            return $this->elementTypesById[$id]->getName();
         }
-        throw new \OutOfBoundsException('Unknown Denizen Type ' . $name);
+        throw new \OutOfBoundsException('Unknown Element Type ' . $name);
     }
 
-    public function getDenizenTypes ($asHash)
+    public function getElementTypes ($asHash)
     {
         $result = array();
-        foreach ($this->denizenTypesById as $type) {
+        foreach ($this->elementTypesById as $type) {
             if ($asHash) {
                 $result[$type->id] = $type->name;
             }
