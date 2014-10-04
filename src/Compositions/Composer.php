@@ -336,6 +336,8 @@ class Composer extends \Eloquent {
             $notification->type = 'CVSUpload';
             $notification->save();
             $data['notificationId'] = $notification->id;
+            $composition->title = 'CSV Upload ' . date('Y-m-d H:i:s');
+            $composition->save();
             \Queue::push('\DemocracyApps\CNP\Compositions\Inputs\CSVInputProcessor', $data);
         }
         else if ($this->inputType == 'auto-interactive') {
@@ -363,10 +365,6 @@ class Composer extends \Eloquent {
     {
         $elements = array();
 
-        if ($data['title']) {
-            $composition->title = $data['title'];
-            $composition->save();
-        }
         $elementsIn = $data['elementsIn'];
         $anchorId = null;
         if (array_key_exists('anchor', $this->inputSpec)) {
@@ -447,6 +445,11 @@ class Composer extends \Eloquent {
 
             }
         }
+        if ($data['title']) {
+            $composition->title = $data['title'];
+        }
+        $composition->top = $topElement->id;
+        $composition->save();
 
     }
 
@@ -564,7 +567,7 @@ class Composer extends \Eloquent {
                     $data['title'] = $title;
                     $data['summary'] = $summary;
                     $data['elementsIn'] = $elementsIn;
-                    $childComposition = $composition->createChildComposition();
+                    $childComposition = $composition->createChildComposition($title);
                     $this->commonProcessInput($childComposition, $data, $this->elementsSpec, $this->relationsSpec, $this->project);
                 }
                 if ($lmessage) $messages .= $lmessage . "\n";

@@ -6,6 +6,7 @@ use \DemocracyApps\CNP\Compositions\Composer as Composer;
 use \DemocracyApps\CNP\Compositions\Composition;
 use \DemocracyApps\CNP\Compositions\Outputs\Vista;
 use \DemocracyApps\CNP\Entities\Element;
+use \DemocracyApps\CNP\Entities\Project;
 
 class StoriesController extends BaseController {
     protected $story;
@@ -76,11 +77,17 @@ class StoriesController extends BaseController {
             return \View::make('vistas.index', $args);
         }
         else { // just raw
-            $page = \Input::get('page', 1);
-            $pageLimit=\CNP::getConfigurationValue('pageLimit');
-            $data = DAEntity\Story::allPaged($page, $pageLimit);
-            $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
-            return \View::make('stories.index')->with('stories', $stories);
+            if (\Input::has('project')) {
+                $project = Project::find(\Input::get('project'));
+                $page = \Input::get('page', 1);
+                $pageLimit=\CNP::getConfigurationValue('pageLimit');
+                $data = Composition::allProjectCompositionsPaged($project->id, $page, $pageLimit);
+                $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
+                return \View::make('stories.index', array('stories' => $stories, 'project' => $project));
+            }
+            else {
+                return \Redirect::to('/projects');
+            }
         }
 	}
 
@@ -191,6 +198,6 @@ class StoriesController extends BaseController {
                 return \View::make('stories.autoinput', array('composer' => $composer, 'composition' => $composition));
             }
         }
-        return \Redirect::to('/stories');
+        return \Redirect::to('/stories?project='.$composer->project);
     }
 }

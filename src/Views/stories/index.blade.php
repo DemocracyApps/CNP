@@ -1,13 +1,7 @@
 @extends('layouts.list')
 
 @section('title')
-  All Stories - Default Views
-@stop
-
-@section('buttons')
-    <div class="col-xs-6">
-      <button style="float:right;" class="btn btn-success btn-sm" onclick="window.location.href='/vistas'">Project Views</button>
-    </div>
+  {{$project->name}} Stories
 @stop
 
 @section('listContent')
@@ -15,8 +9,8 @@
 	<table class="table table-striped">
     @foreach($stories as $story)
       <tr>
-        <td style="width:20%;"> {{ $story->getId() }} </td> 
-        <td style="width:80%;"> <a href="/stories/{{$story->id}}">{{ $story->getName()}} </a></td>
+        <td style="width:20%;"> {{ $story->id }} </td> 
+        <td style="width:80%;"> <a href="/stories/{{$story->top}}">{{ $story->title}} </a></td>
       </tr>
     @endforeach
 	</table>
