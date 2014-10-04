@@ -6,13 +6,7 @@
 	    "inputType": "auto-interactive",
 	    "map": [
             {
-                "id":"2",
-                "use":"summary",
-                "inputType":"textarea",
-                "prompt":"Write a summary for this story"
-            },
-            {
-    			"id":"1orso",
+    			"id":"1",
     			"use":"element",
     			"elementId":"Story",
     			"inputType":"textarea",

@@ -5,7 +5,7 @@
 
 {{ Form::open(['route' => 'stories.store']) }}
    <input type="hidden" name="driver" value="{{$composer->getDriver()->id}}"/>
-   <input type="hidden" name="composer" value="{{$composer->id}}"/>
+   <input type="hidden" name="composition" value="{{$composition->id}}"/>
    @if ($composer->getReferentId())
       <input type="hidden" name="referentId" value="{{$composer->getReferentId()}}"/>
    @endif

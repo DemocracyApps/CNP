@@ -3,6 +3,7 @@ namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Compositions\Composer as Composer;
+use \DemocracyApps\CNP\Compositions\Composition;
 use \DemocracyApps\CNP\Compositions\Outputs\Vista;
 use \DemocracyApps\CNP\Entities\Element;
 
@@ -142,12 +143,19 @@ class StoriesController extends BaseController {
             $composer->setReferentByElementId(\Input::get('referent'));
         }
 
+        $composition = new \DemocracyApps\CNP\Compositions\Composition;
+        $composition->input_composer_id = $composer->id;
+        $composition->userid = \Auth::user()->getId();
+        $composition->title = "No title";
+        $composition->project = $composer->project;
+        $composition->save();
+
     	$inputType = $composer->getInputType();
     	if ($inputType == 'csv-simple') {
-	    	return \View::make('stories.csvUpload', array('composer' => $composer));
+	    	return \View::make('stories.csvUpload', array('composer' => $composer, 'composition' => $composition));
     	}
     	elseif ($inputType == 'auto-interactive') {
-            return \View::make('stories.autoinput', array('composer' => $composer));
+            return \View::make('stories.autoinput', array('composer' => $composer, 'composition' => $composition));
     	}
     	else {
     		return "Unknown input type " . $inputType;
@@ -161,28 +169,26 @@ class StoriesController extends BaseController {
 	 */
 	public function store()
 	{
+        \Log::info("In store");
 		if (\Auth::guest()) {
             return \Redirect::to('/login');			
 		}
         $input = \Input::all();
-        $composer = Composer::find(\Input::get('composer'));
+        $composition = Composition::find(\Input::get('composition'));
+        $composer = Composer::find($composition->input_composer_id);
         if ( ! $composer->validateInput($input)) {
             return \Redirect::back()->withInput()->withErrors($composer->messages());
         }
         if (\Input::get('referentId')) {
             $composer->setReferentByReferentId(\Input::get('referentId'));
         }
-
         $inputType = $composer->getInputType();
 
         $composer->initializeForInput($input);
-        $composition = new \DemocracyApps\CNP\Compositions\Composition;
-        $composition->input_composer_id = $composer->id;
-        $composition->save();
         $composer->processInput($input, $composition);
         if ($inputType == 'auto-interactive') {
             if ( ! $composer->getDriver()->done()) {
-                return \View::make('stories.autoinput', array('composer' => $composer));
+                return \View::make('stories.autoinput', array('composer' => $composer, 'composition' => $composition));
             }
         }
         return \Redirect::to('/stories');

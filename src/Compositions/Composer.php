@@ -339,8 +339,10 @@ class Composer extends \Eloquent {
             \Queue::push('\DemocracyApps\CNP\Compositions\Inputs\CSVInputProcessor', $data);
         }
         else if ($this->inputType == 'auto-interactive') {
+            \Log::info("Extract values");
             $this->inputDriver->extractSubmittedValues($input); // Import latest batch of form data into inputDriver
             if ($this->inputDriver->done()) {
+                \Log::info("All done - process the input");
                 self::processAutoInput($input, $composition);
                 $this->inputDriver->delete();
             }
@@ -361,8 +363,10 @@ class Composer extends \Eloquent {
     {
         $elements = array();
 
-        $title = $data['title'];
-        $summary = $data['summary'];
+        if ($data['title']) {
+            $composition->title = $data['title'];
+            $composition->save();
+        }
         $elementsIn = $data['elementsIn'];
         $anchorId = null;
         if (array_key_exists('anchor', $this->inputSpec)) {
@@ -383,8 +387,6 @@ class Composer extends \Eloquent {
                 if ($anchorId == $espec['id']) {
                     if (count($createdElements) > 1) throw new \Exception("Cannot set multiple elements as anchors " . count($createdElements));
                     if ($createdElements) {
-                        if ($title) $createdElements[0]->name = $title;
-                        if ($summary) $createdElements[0]->content = $summary;
                         $topElement = $createdElements[0];
                     }
                 }
@@ -456,7 +458,6 @@ class Composer extends \Eloquent {
 
         $elementsIn = array();
         $title = "No Title";
-        $summary = null;
         foreach ($map as $item) {
             // If no id, then it wasn't used to get input (e.g., page breaks).
             if (array_key_exists('use', $item) && array_key_exists('id', $item)) {
@@ -480,9 +481,6 @@ class Composer extends \Eloquent {
                     if ($use == 'title') {
                         $title = $val['value'];
                     }
-                    elseif ($use == 'summary') {
-                        $summary = $val['value'];
-                    }
                     else {
                         $elementId = $item['elementId'];
                         $elementsIn[$elementId] = $val;
@@ -493,7 +491,6 @@ class Composer extends \Eloquent {
 
         $data = array();
         $data['title'] = $title;
-        $data['summary'] = $summary;
         $data['elementsIn'] = $elementsIn;
         $this->commonProcessInput($composition, $data, $this->elementsSpec, $this->relationsSpec, $this->project);
     }
