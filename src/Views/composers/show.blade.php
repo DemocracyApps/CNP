@@ -10,10 +10,10 @@
 {{ Form::close() }}
 
 <!-- Run Composer Button -->
-{{ Form::open(array('route' => array('stories.create'), 'method' => 'get', 
+{{ Form::open(array('route' => array('compositions.create'), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
   <input type="hidden" name="composer" value="{{$composer->id}}"/>
-  <button type="submit" class="btn btn-info btn-mini">Run</button>
+  <button type="submit" class="btn btn-info btn-mini">Use</button>
 {{ Form::close() }}
 
 <!-- Delete Composer Button -->

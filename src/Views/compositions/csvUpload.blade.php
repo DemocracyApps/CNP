@@ -5,7 +5,7 @@
 
 <p>We will use Composer specification {{ $composer->id }} ({{$composer->name}}) to process your stories.</p>
 <br/>
-{{ Form::open(['route' => array('stories.store'), 'files' => true]) }}
+{{ Form::open(['route' => array('compositions.store'), 'files' => true]) }}
    {{ Form::hidden('composition', $composition->id)}}
    <div class="form-group">
       {{ Form::label('csv', 'CSV File')}}

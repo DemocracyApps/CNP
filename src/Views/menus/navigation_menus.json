@@ -59,21 +59,10 @@
                         {
                             "name":"My Templates",
                             "url":"/composers?mode=app"
-                        }
-                    ]
-                },
-                {
-                    "name":"Stories",
-                    "url":"/stories?mode=app",
-                    "tag":"stories",
-                    "items": [
-                        {
-                            "name":"Curate",
-                            "url":"/stories/curate"
                         },
                         {
                             "name":"Explore",
-                            "url":"/stories/explore"
+                            "url":"/compositions/explore"
                         }
                     ]
                 },

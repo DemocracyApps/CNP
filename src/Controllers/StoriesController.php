@@ -14,10 +14,6 @@ class StoriesController extends BaseController {
     {
         $this->story = $story;
     }
-    public function explore()
-    {
-        return \View::make('stories.explore');
-    }
 
     public function curate()
     {
@@ -49,72 +45,4 @@ class StoriesController extends BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create()
-	{
-		if (\Auth::guest()) {
-            return \Redirect::to('/login');			
-		}
-
-        if ( ! \Input::has('composer')) throw new \Exception("No composer id specified.");
-
-    	$composer = Composer::find(\Input::get('composer'));
-    	if ( ! $composer ) throw new \Exception("Composer ".\Input::get('composer'). " not found.");
-
-        if ( ! $composer->validForInput()) throw new \Exception("Composer ".\Input::get('composer') . " not valid for input.");
-        $composer->initializeForInput(\Input::all());
-
-        if (\Input::get('referent')) {
-            $composer->setReferentByElementId(\Input::get('referent'));
-        }
-
-        $composition = new \DemocracyApps\CNP\Compositions\Composition;
-        $composition->input_composer_id = $composer->id;
-        $composition->userid = \Auth::user()->getId();
-        $composition->title = "No title";
-        $composition->project = $composer->project;
-        $composition->save();
-
-    	$inputType = $composer->getInputType();
-    	if ($inputType == 'csv-simple') {
-	    	return \View::make('stories.csvUpload', array('composer' => $composer, 'composition' => $composition));
-    	}
-    	elseif ($inputType == 'auto-interactive') {
-            return \View::make('stories.autoinput', array('composer' => $composer, 'composition' => $composition));
-    	}
-    	else {
-    		return "Unknown input type " . $inputType;
-    	}
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-        \Log::info("In store");
-		if (\Auth::guest()) {
-            return \Redirect::to('/login');			
-		}
-        $input = \Input::all();
-        $composition = Composition::find(\Input::get('composition'));
-        $composer = Composer::find($composition->input_composer_id);
-        if ( ! $composer->validateInput($input)) {
-            return \Redirect::back()->withInput()->withErrors($composer->messages());
-        }
-        if (\Input::get('referentId')) {
-            $composer->setReferentByReferentId(\Input::get('referentId'));
-        }
-        $inputType = $composer->getInputType();
-
-        $composer->initializeForInput($input);
-        $composer->processInput($input, $composition);
-        if ($inputType == 'auto-interactive') {
-            if ( ! $composer->getDriver()->done()) {
-                return \View::make('stories.autoinput', array('composer' => $composer, 'composition' => $composition));
-            }
-        }
-        return \Redirect::to('/compositions?project='.$composer->project);
-    }
 }

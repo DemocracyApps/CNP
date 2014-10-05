@@ -42,24 +42,19 @@ Route::get('/demo', function()
     return View::make('demo.'.$stage, array());
 });
 
-// ElementsController doesn't actually need all the routes, but I can't 
-// figure out how to call just show($id)
-Route::resource('elements', 'DemocracyApps\CNP\Controllers\ElementsController');
-
-// /stories/export must be defined before Route::resource('stories'). Probably need
+// /compositions/export must be defined before Route::resource('compositions'). Probably need
 // to come up with a different route.
-Route::get('/stories/export', array('as' => 'stories.export', function() 
+Route::get('/compositions/export', array('as' => 'compositions.export', function() 
     {
-        \Log::info("Heading off to stories.export");
-        return View::make('stories.export', array('project' => \Input::get('project')));
+        return View::make('compositions.export', array('project' => \Input::get('project')));
     }));
 
-Route::get('/stories/curate', array('as' => 'stories.curate', 'uses' => 'DemocracyApps\CNP\Controllers\StoriesController@curate'));
-Route::get('/stories/explore', array('as' => 'stories.explore', 'uses' => 'DemocracyApps\CNP\Controllers\StoriesController@explore'));
+Route::get('/compositions/explore', 
+            array('as' => 'compositions.explore', 
+                  'uses' => 'DemocracyApps\CNP\Controllers\CompositionsController@explore'));
 
 
 Route::resource('notifications', 'DemocracyApps\CNP\Controllers\NotificationsController');
-Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
 Route::resource('compositions', 'DemocracyApps\CNP\Controllers\CompositionsController');
 Route::resource('projects', '\DemocracyApps\CNP\Controllers\ProjectsController');
 Route::resource('composers', 'DemocracyApps\CNP\Controllers\ComposersController');
