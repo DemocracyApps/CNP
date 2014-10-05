@@ -68,10 +68,6 @@
                     "tag":"stories",
                     "items": [
                         {
-                            "name":"All Stories",
-                            "url":"/stories?mode=app"
-                        },
-                        {
                             "name":"Curate",
                             "url":"/stories/curate"
                         },

@@ -43,61 +43,6 @@ class StoriesController extends BaseController {
         }
     }
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-        if (\Input::has('project')) {
-            $project = Project::find(\Input::get('project'));
-            $page = \Input::get('page', 1);
-            $pageLimit=\CNP::getConfigurationValue('pageLimit');
-            $data = Composition::allProjectCompositionsPaged($project->id, $page, $pageLimit);
-            $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
-            return \View::make('stories.index', array('stories' => $stories, 'project' => $project));
-        }
-        else {
-            return \Redirect::to('/projects');
-        }
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-    public function show($id)
-    {
-        $story = DAEntity\Story::find($id);
-        $elements = array();
-        $elements[$story->id] = $story;
-        $elementRelations = array();
-       
-        $elements = DAEntity\Relation::getRelatedElements($story->id, null);
-        array_unshift($elements, $story);
-        foreach ($elements as $element) { // Get the relations
-            if ( ! array_key_exists($element->id, $elements)) $elements[$element->id] = $element;
-            $relations = DAEntity\Relation::getRelations($element->id);
-            //if ($element->type != 3) dd($relations);
-            $elementRelations[$element->id] = array();
-            foreach ($relations as $relation) {
-                $to = $relation->toId;
-                $relType = DAEntity\Eloquent\RelationType::find($relation->relationId);
-                $relationName = $relType->name;
-                if ( ! array_key_exists($to, $elements)) {
-                    $elements[$to] = DAEntity\Element::find($to);
-                }
-                $elementRelations[$element->id][] = array($relationName, 
-                                                          $elements[$to]->name . " (".$elements[$to]->id.")");
-            }
-        }
-
-        return \View::make('stories.show', array('story' => $story, 'elements' => $elements,
-                                                 'relations' => $elementRelations));
-    }
 
 	/**
 	 * Show the form for creating a new resource.
@@ -170,6 +115,6 @@ class StoriesController extends BaseController {
                 return \View::make('stories.autoinput', array('composer' => $composer, 'composition' => $composition));
             }
         }
-        return \Redirect::to('/stories?project='.$composer->project);
+        return \Redirect::to('/compositions?project='.$composer->project);
     }
 }

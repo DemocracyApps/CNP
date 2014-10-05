@@ -41,6 +41,10 @@
   <!-- See Laravel template section on how to pass parameters to an include. 
    -->
 <div class="row">
+    <p><a href="/compositions/{{$composition->id}}?view=normal">Normal View</a></p>
+</div>
+
+<div class="row">
   <p><b>Branches:</b></p>
 </div>
 <div class="row">

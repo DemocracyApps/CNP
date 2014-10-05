@@ -25,7 +25,7 @@
         <th> {{ link_to("projects/".$project->id, $project->name) }} </th>
         <td> {{ $project->getProperty('access')}} </td>
         <td> <a class="label label-info" style="position:relative; top:5px;"
-                href="/stories?project={{$project->id}}">View Stories</a></td>
+                href="/compositions?project={{$project->id}}">View Stories</a></td>
       </tr>    
     @endforeach
   </table>
