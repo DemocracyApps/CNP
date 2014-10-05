@@ -28,7 +28,9 @@ class Relation
         $instance->{'fromId'} = $data->fromid;
         $instance->{'toId'} = $data->toid;
         $instance->{'relationId'} = $data->relationid;
-        $instance->{'project'} = $data->project;
+        if (property_exists($data, 'project')) {
+            $instance->{'project'} = $data->project;
+        }
         if (property_exists($data, 'properties'))
             $instance->{'properties'} = (array) json_decode($data->properties);
         if (property_exists($data, 'composerid'))
@@ -58,7 +60,7 @@ class Relation
         $relations = array();
 
         foreach ($records as $rec) {
-            $item = new static($rec->fromid, $rec->toid, $rec->relationid);
+            $item = new static($rec->fromid, $rec->toid, $rec->relationid, $project);
             self::fill($item,$rec);
             $relations[] = $item;
         }
