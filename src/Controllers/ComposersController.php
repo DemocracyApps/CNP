@@ -54,7 +54,9 @@ class ComposersController extends ApiController {
 
 		$composer = Composer::find($id);
         $composer->name = $data['name'];
-        $composer->output = $data['output'];
+        if (array_key_exists('output', $data)) {
+            $composer->output = $data['output'];
+        }
 		if (\Input::has('description')) $composer->description = $data['description'];
         \Log::info("Test composer");        
 		if (\Input::hasFile('composer')) {
