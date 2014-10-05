@@ -63,7 +63,6 @@ Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
 Route::resource('compositions', 'DemocracyApps\CNP\Controllers\CompositionsController');
 Route::resource('projects', '\DemocracyApps\CNP\Controllers\ProjectsController');
 Route::resource('composers', 'DemocracyApps\CNP\Controllers\ComposersController');
-Route::resource('vistas', 'DemocracyApps\CNP\Controllers\VistasController');
 
 class PP {
 
@@ -157,7 +156,7 @@ Route::get('account', array('as' => 'account', 'before' => 'cnp.auth', function(
 {
     $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
     $person = DAEntity\Person::find($user->getElementId());
-    $projects = DAEntity\Project::allUserElements($user->getId());
+    $projects = DAEntity\Project::where('userid', '=', $user->getId())->get();
     return View::make('account', array('user' => $user, 'person' => $person, 
                       'projects' => $projects));
 }));

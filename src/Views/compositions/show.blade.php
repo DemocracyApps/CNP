@@ -33,7 +33,6 @@
    <input type="hidden" name="driver" value="{{$composer->getDriver()->id}}"/>
    <input type="hidden" name="composer" value="{{$composer->id}}"/>
    <input type="hidden" name="composition" value="{{$composition->id}}"/>
-   <input type="hidden" name="vista" value="{{$vista}}"/>
 
    <div class="form-group">
       @if ($composer->getDriver()->done())

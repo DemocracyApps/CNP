@@ -95,39 +95,5 @@
       </tr>    
     @endforeach
   </table>
-  <br/>
-
-<div>
-  <div class="row">
-    <div class="col-xs-6">
-      <h3>Project Views</h3>
-    </div>
-    <div class="col-xs-6">
-      <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/vistas/create?project={{$project->id}}'">New</button>
-    </div>
-  </div>
-  <table class="table">
-    <tr>
-      <td>  </td>
-      <td> ID </td>
-      <td> Name </td>
-      <td> Description </td>
-      <td> Allowed Inputs </td>
-      <td> Allowed Outputs </td>
-      <td> Selectors </td>
-    </tr>
-    @foreach ($vistas as $vista)
-      <tr>
-        <td> <a class="label label-info" href="/stories?vista={{$vista->id}}">View</a></td>
-        <td> {{ $vista->id }} </td>
-        <td> {{ $vista->name }} </td>
-        <td> {{ $vista->description }} </td>
-        <td> {{ $vista->input_composers }}</td>
-        <td> {{ $vista->output_composer }}</td>
-        <td> {{ $vista->selector }}</td>
-      </tr>    
-    @endforeach
-  </table>
-</div>
 
 @stop

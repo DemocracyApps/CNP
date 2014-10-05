@@ -3,7 +3,6 @@
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Utility\Api as Api;
 use \DemocracyApps\CNP\Compositions\Composer as Composer;
-use \DemocracyApps\CNP\Compositions\Outputs\Vista as Vista;
 
 class ProjectsController extends ApiController {
 	protected $project;
@@ -36,7 +35,6 @@ class ProjectsController extends ApiController {
 	{
 		$project = DAEntity\Project::find($id);
 		$composers = Composer::where('project', '=', $id)->get();
-		$vistas = Vista::where('project', '=', $id)->get();
 		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
 		if ($isAPI) {
 			if (!$project) {
@@ -48,7 +46,7 @@ class ProjectsController extends ApiController {
 			}
 		}
 		else {
-			return \View::make('projects.show', array('project' => $project, 'composers' => $composers, 'vistas' => $vistas));
+			return \View::make('projects.show', array('project' => $project, 'composers' => $composers));
 		}
 	}
 

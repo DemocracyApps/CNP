@@ -123,67 +123,6 @@ class Element
         return $result;
     }
 
-    /*
-     *  I know this absolutely does not belong in the Element class. Give me 
-     *  some time to get this all figured out. Sigh.
-     */
-    public static function getVistaElements ($project, $allowedComposers, $types, $page=1, $limit=3)
-    {
-        if ($types) {
-            $total = DB::table(self::$tableName)
-                        ->join('relations', 'relations.fromid', '=', 'elements.id')
-                        ->where('elements.project', '=', $project)
-                        ->whereIn('elements.type', $types)
-                        ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('elements.id', 'elements.type', 'elements.project', 'elements.name')
-                        ->distinct()
-                        ->count('elements.id');
-            $records = DB::table(self::$tableName)
-                        ->join('relations', 'relations.fromid', '=', 'elements.id')
-                        ->where('elements.project', '=', $project)
-                        ->whereIn('elements.type', $types)
-                        ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('elements.id', 'elements.type', 'elements.project', 'elements.name')
-                        ->orderBy('elements.id')
-                        ->distinct()
-                        ->skip(($page-1)*$limit)
-                        ->take($limit)
-                        ->get();
-           // dd(\DB::getQueryLog());
-        }
-        else {
-            $total = DB::table(self::$tableName)
-                        ->join('relations', 'relations.from', '=', 'elements.id')
-                        ->where('elements.project', '=', $project)
-                        ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('elements.id', 'elements.type', 'elements.project', 'elements.name')
-                        ->orderBy('elements.id')
-                        ->distinct()
-                        ->count('elements.id');
-            $records = DB::table(self::$tableName)
-                        ->join('relations', 'relations.from', '=', 'elements.id')
-                        ->where('elements.project', '=', $project)
-                        ->whereIn('relations.composerid', $allowedComposers)
-                        ->select('elements.id', 'elements.type', 'elements.project', 'elements.name')
-                        ->orderBy('elements.id')
-                        ->distinct()
-                        ->skip(($page-1)*$limit)
-                        ->take($limit)
-                        ->get();
-        }
-        $result = array();
-
-        foreach ($records as $record) {
-            $item = new static($record->name, null);
-            self::fill($item,$record);
-            $result[] = $item;
-        }
-        $data = array();
-        $data['total'] = $total;
-        $data['items'] = $result;
-        return $data;        
-    }
-
     /**
      * This gets all the elements involved in the given composition in each of their unique 
      * relationships (i.e., a specific element will be returned as many times as it has 

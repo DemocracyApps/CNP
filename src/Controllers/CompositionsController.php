@@ -31,8 +31,7 @@ class CompositionsController extends ApiController {
             else {
                 return \View::make('compositions.show', array('composer' => $composer,
                                                                       'topElement' => $topElement,
-                                                                      'composition' => $composition,
-                                                                      'vista' => null));
+                                                                      'composition' => $composition));
             }
         }
         else {

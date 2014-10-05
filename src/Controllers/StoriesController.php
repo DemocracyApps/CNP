@@ -4,7 +4,6 @@ namespace DemocracyApps\CNP\Controllers;
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Compositions\Composer as Composer;
 use \DemocracyApps\CNP\Compositions\Composition;
-use \DemocracyApps\CNP\Compositions\Outputs\Vista;
 use \DemocracyApps\CNP\Entities\Element;
 use \DemocracyApps\CNP\Entities\Project;
 
@@ -51,43 +50,16 @@ class StoriesController extends BaseController {
 	 */
 	public function index()
 	{
-        if (\Input::has('vista')) {
-            $vista = Vista::find(\Input::get('vista'));
-            $typeList = null;
-            $elements = null;
-            if ($vista->selector) {
-                $typeList = array();
-                $s = trim(preg_replace("([, ]+)", ' ', $vista->selector));
-                if ($s) $types = explode(" ", $s);
-                foreach ($types as $type) {
-                    $typeList [] = \CNP::getElementTypeId($type);
-                }
-            }
-            $s = trim(preg_replace("([, ]+)", ' ', $vista->input_composers));
-            if ($s) $allowedComposers = explode(" ", $s);
-
+        if (\Input::has('project')) {
+            $project = Project::find(\Input::get('project'));
             $page = \Input::get('page', 1);
             $pageLimit=\CNP::getConfigurationValue('pageLimit');
-            $data = Element::getVistaElements ($vista->project, $allowedComposers, $typeList, $page, $pageLimit);
-            $elements = \Paginator::make($data['items'], $data['total'], $pageLimit);
-
-            $args = array('elements' => $elements, 'vista' => $vista);
-            $args['composer'] = $vista->output_composer;
-            return \View::make('stories.vistaindex', array('elements'=>$elements, 'vista'=>$vista, 'composer'=>$vista->output_composer));
-            return \View::make('vistas.index', $args);
+            $data = Composition::allProjectCompositionsPaged($project->id, $page, $pageLimit);
+            $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
+            return \View::make('stories.index', array('stories' => $stories, 'project' => $project));
         }
-        else { // just raw
-            if (\Input::has('project')) {
-                $project = Project::find(\Input::get('project'));
-                $page = \Input::get('page', 1);
-                $pageLimit=\CNP::getConfigurationValue('pageLimit');
-                $data = Composition::allProjectCompositionsPaged($project->id, $page, $pageLimit);
-                $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
-                return \View::make('stories.index', array('stories' => $stories, 'project' => $project));
-            }
-            else {
-                return \Redirect::to('/projects');
-            }
+        else {
+            return \Redirect::to('/projects');
         }
 	}
 
