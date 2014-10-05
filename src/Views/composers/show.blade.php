@@ -43,6 +43,9 @@
     <tr>
       <th>Depends On:</th> <td>{{$composer->dependson}}</td>
     </tr>
+    <tr>
+      <th>Preferred Output Composer:</th> <td>{{$composer->output}}</td>
+    </tr>
   </table>
 </div>
 

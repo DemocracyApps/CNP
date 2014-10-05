@@ -17,6 +17,11 @@
       <br/>
    </div>
    <div class="form-group">
+      {{ Form::label('output', 'Preferred Output Composer: ') }}
+      {{ Form::text('output', $composer->output, ['class' => 'form-control']) }}
+      <br/>
+   </div>
+   <div class="form-group">
       {{ Form::label('composer', 'Replace Specification')}}
       {{ Form::file('composer')}}
       <br/>
