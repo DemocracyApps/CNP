@@ -10,7 +10,7 @@
     @foreach($stories as $story)
       <tr>
         <td style="width:20%;"> {{ $story->id }} </td> 
-        <td style="width:80%;"> <a href="/stories/{{$story->top}}">{{ $story->title}} </a></td>
+        <td style="width:80%;"> <a href="/compositions/{{$story->id}}">{{ $story->title}} </a></td>
       </tr>
     @endforeach
 	</table>

@@ -29,9 +29,10 @@
   $driver->cleanupAndSave();
 ?>
 
-{{ Form::open(['url' => 'elements/'.$topElement->id, 'method' => 'get']) }}
+{{ Form::open(['url' => 'compositions/'.$composition->id, 'method' => 'get']) }}
    <input type="hidden" name="driver" value="{{$composer->getDriver()->id}}"/>
    <input type="hidden" name="composer" value="{{$composer->id}}"/>
+   <input type="hidden" name="composition" value="{{$composition->id}}"/>
    <input type="hidden" name="vista" value="{{$vista}}"/>
 
    <div class="form-group">

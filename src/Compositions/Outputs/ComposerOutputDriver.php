@@ -131,8 +131,9 @@ class ComposerOutputDriver extends \Eloquent {
         return array_key_exists('location', $item);
     }
     
-    public function getOutputContent($topElement, $vista)
+    public function getOutputContent($topElement, $composition)
     {
+        \Log::info("a1");
         $defaultLayout = 'single';
         if (array_key_exists('defaultLayout', $this->outputSpec)) 
             $defaultLayout = $this->outputSpec['defaultLayout'];
@@ -141,6 +142,7 @@ class ComposerOutputDriver extends \Eloquent {
         if (! array_key_exists($defaultLayout, $this->layouts)) {
             throw new \Exception ("Unknown output layout " . $defaultLayout);
         }
+        \Log::info("a2");
         $currentLayout = $this->layouts[$defaultLayout];
         // Let's get all the elements that go on to this page
         $targeted = array();
@@ -168,13 +170,15 @@ class ComposerOutputDriver extends \Eloquent {
                 }
             }
         }
+        \Log::info("a3");
         // Now output this page according to the layout
-        $content = $this->runLayout($currentLayout, $targeted, $topElement, $vista, 10);
+        $content = $this->runLayout($composition, $currentLayout, $targeted, $topElement, 10);
+        \Log::info("a4");
         $this->cleanupAndSave();
     }
 
 
-    private function runLayout ($layout, $targeted, $topElement, $vista, $spaces = 5) 
+    private function runLayout ($composition, $layout, $targeted, $topElement, $spaces = 5) 
     {
         $sections = $layout['content'];
         /*
@@ -188,7 +192,7 @@ class ComposerOutputDriver extends \Eloquent {
             $spaces += 5;
             // There should be either content or a target
             if (array_key_exists('content', $section)) {
-                $this->runLayout($section, $targeted, $topElement, $vista, $spaces);
+                $this->runLayout($composition, $section, $targeted, $topElement, $spaces);
             }
             elseif (array_key_exists('target', $section)) {
                 $target = $section['target'];
@@ -232,7 +236,7 @@ class ComposerOutputDriver extends \Eloquent {
                         }
                     }
                     foreach ($list as $item) {
-                        self::createOutput($topElement, $item, $vista, $spaces);
+                        self::createOutput($composition, $topElement, $item, $spaces);
                     }
                 }
             }
@@ -243,7 +247,7 @@ class ComposerOutputDriver extends \Eloquent {
         }
     }
 
-    public function createOutput($anchor, $item, $vista, $spaces = 5)
+    public function createOutput($composition, $anchor, $item, $spaces = 5)
     {
         Html::startElement("div", array('class' => 'xxx'), $spaces);
         $spaces += 5;
@@ -262,7 +266,7 @@ class ComposerOutputDriver extends \Eloquent {
             }
         }
         elseif ($item['use'] == 'link') {
-            $link = "elements/".$anchor->id."?composer=".$this->composer->id."&vista=".$vista;
+            $link = "compositions/".$composition->id."?composer=".$this->composer->id;
             $link .= "&start=" . $item['link'];
             $link = link_to($link, $item['text'], array()); 
             Html::createElement('p', $link, array(), $spaces);

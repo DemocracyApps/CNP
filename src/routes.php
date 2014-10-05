@@ -60,6 +60,7 @@ Route::get('/stories/explore', array('as' => 'stories.explore', 'uses' => 'Democ
 
 Route::resource('notifications', 'DemocracyApps\CNP\Controllers\NotificationsController');
 Route::resource('stories', 'DemocracyApps\CNP\Controllers\StoriesController');
+Route::resource('compositions', 'DemocracyApps\CNP\Controllers\CompositionsController');
 Route::resource('projects', '\DemocracyApps\CNP\Controllers\ProjectsController');
 Route::resource('composers', 'DemocracyApps\CNP\Controllers\ComposersController');
 Route::resource('vistas', 'DemocracyApps\CNP\Controllers\VistasController');

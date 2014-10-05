@@ -132,7 +132,7 @@ class Composer extends \Eloquent {
     {
         $this->checkReady();
         $this->doingInput = false;
-        if ($input) {
+        if (isset($input)) {
             if (array_key_exists('driver', $input)) {
                 $driverId = \Input::get('driver');
                 $this->outputDriver = ComposerOutputDriver::find($driverId);

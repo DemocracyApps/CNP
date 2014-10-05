@@ -152,7 +152,9 @@ class ComposersController extends ApiController {
 
         $this->composer->name = $data['name'];
         $this->composer->project = $data['project'];
-        $this->composer->output = $data['output'];
+        if (array_key_exists('output', $data)) {
+            $this->composer->output = $data['output'];
+        }
         if ($data['description']) $this->composer->description = $data['description'];
 
 		// Now load in the file
