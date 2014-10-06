@@ -87,30 +87,31 @@ class CompositionsController extends ApiController {
             }
         }
         else if ($viewMode == 'structure') {
-            $elements = array();
-            $elements[$topElement->id] = $topElement;
-            $elementRelations = array();
-           
+            $elementRelations = array(); 
+            $elementsById = array();
             $elements = Relation::getRelatedElements($topElement->id, null);
             array_unshift($elements, $topElement);
+
             foreach ($elements as $element) { // Get the relations
-                if ( ! array_key_exists($element->id, $elements)) $elements[$element->id] = $element;
+                if ( ! array_key_exists($element->id, $elementsById)) $elementsById[$element->id] = $element;
                 $relations = Relation::getRelations($element->id);
-                //if ($element->type != 3) dd($relations);
+
                 $elementRelations[$element->id] = array();
+                \Log::info("Dealing with element " . $element->id);
                 foreach ($relations as $relation) {
                     $to = $relation->toId;
                     $relType = \DemocracyApps\CNP\Entities\Eloquent\RelationType::find($relation->relationId);
                     $relationName = $relType->name;
-                    if ( ! array_key_exists($to, $elements)) {
-                        $elements[$to] = Element::find($to);
+                    if ( ! array_key_exists($to, $elementsById)) {
+                        $elementsById[$to] = Element::find($to);
                     }
                     $elementRelations[$element->id][] = array($relationName, 
-                                                              $elements[$to]->name . " (".$elements[$to]->id.")");
+                                                              $elementsById[$to]->name . " (".$elementsById[$to]->id.")");
                 }
             }
-
-            return \View::make('compositions.show_structure', array('story' => $topElement, 'elements' => $elements,
+            return \View::make('compositions.show_structure', array('story' => $topElement, 
+                                                     'elements' => $elements,
+                                                     'elementsById' => $elementsById,
                                                      'relations' => $elementRelations,
                                                      'composition' => $composition));
         }

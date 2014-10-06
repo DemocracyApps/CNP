@@ -1,7 +1,7 @@
 @extends('layouts.detail')
 
 @section('title')
-{{ $story->getName() }}
+{{ $composition->title }}
 @stop
 
 @section('upperLeft')
@@ -10,7 +10,7 @@
     <p><b>Story ID:</b></p>
   </div>
   <div class="col-sm-8">
-    <p>{{$story->id}}</p>
+    <p>{{$composition->id}}</p>
   </div>
 </div>
 <div class="row">
@@ -18,7 +18,7 @@
     <p><b>Project ID:</b></p>
   </div>
   <div class="col-sm-2">
-    <p>{{$story->projectId}}</p>
+    <p>{{$composition->project}}</p>
   </div>
   <div class="col-sm-6">
   </div>
@@ -85,12 +85,16 @@
       <td >Name</td>
       <td>Content</td>
       <td >Relations</td>
+
       @foreach ($elements as $element)
         <tr>
           <td>{{$element->id}}</td>
           <td>{{$element->name}}</td>
           <td>{{$element->content}} </td>
           <td>
+            <?php
+              \Log::info("Element " . $element->id . " - " . $element->name);
+            ?>
             <table style="border:none;" class="table simple-table">
               @foreach ($relations[$element->id] as $rel)
                 <tr>
