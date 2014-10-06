@@ -21,7 +21,7 @@ class Tag extends Element
     static public function findByName($nm)
     {
         $data = DB::table(self::$tableName)
-                  ->where('name', $nm)->first();
+                  ->where('content', '=', $nm)->first();
         $result = null;
         if ($data != null) {
             $result = new static($data->name, $data->userid);

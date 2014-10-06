@@ -21,6 +21,10 @@ class Element
         $this->elementType = $dtype;
     }
 
+    public static function getTableName() {
+        return $tableName;
+    }
+
     static public function initialize()
     {
         
@@ -88,7 +92,7 @@ class Element
         }
     }
     
-    protected static function fill ($instance, $data) 
+    protected static function fill ($instance, $data, $projectId = -1) 
     {
         $instance->{'id'} = $data->id;
         $instance->{'type'} = $data->type;
@@ -96,7 +100,12 @@ class Element
             $instance->{'userid'} = $data->userid;
         }
         $instance->{'name'} = $data->name;
-        $instance->{'projectId'} = $data->project;
+        if (property_exists($data, 'projectId')) {
+            $instance->{'projectId'} = $data->project;
+        }
+        else {
+            $instance->{'projectId'} = $projectId;
+        }
         if (property_exists($data, 'content')) {
             $instance->{'content'} = $data->content;
         }
@@ -161,6 +170,25 @@ class Element
         }
     }
 
+    public static function getProjectElements ($project) {
+       $records = DB::table(self::$tableName)
+                    ->join('relations', 'relations.fromid', '=', 'elements.id')
+                    ->where('relations.project', '=', $project)
+                    ->orderBy('elements.id')
+                    ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'elements.userid')
+                    ->distinct()
+                    ->get();
+        $result = array();
+
+        foreach ($records as $record) {
+            $item = new static($record->name, $record->userid);
+            self::fill($item,$record, $project);
+            $result[] = $item;
+        }
+        return $result;        
+
+    }
+
     public static function allProjectElements ($id, $types = null)
     {
         if ($types) {
@@ -191,14 +219,14 @@ class Element
     {
          if (static::$classElementType <= 0) { // All Elements
             $d = DB::table(self::$tableName)->where('project', '=', $projectId)
-                                            ->where('name', 'ILIKE', "%".$like."%")
+                                            ->where('content', 'ILIKE', "%".$like."%")
                                             ->orderBy('id')
                                             ->get();
         }
         else { // Specific Element Type
             $d = DB::table(self::$tableName)->where('project', '=', $projectId)
                                             ->where('type', '=', static::$classElementType)
-                                            ->where('name', 'ILIKE', "%".$like."%")
+                                            ->where('content', 'ILIKE', "%".$like."%")
                                             ->orderBy('id')
                                             ->get();
         }

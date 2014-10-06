@@ -21,7 +21,7 @@ class ElementGenerator
     {
         $createdElements = null;
         if (array_key_exists($elementType, self::$fcts) && self::$fcts[$elementType]) {
-            $createdElements = call_user_func(self::$fcts[$elementType], $elementType, $content, $properties);
+            $createdElements = call_user_func(self::$fcts[$elementType], $name, $elementType, $content, $properties);
         }
         else {
             $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
@@ -48,7 +48,7 @@ class ElementGenerator
         self::$fcts[$elementType] = $methodName;
     }
 
-    static private function personGenerator($elementType, $content, $properties)
+    static private function personGenerator($name, $elementType, $content, $properties)
     {
         $createdElements = null;
         // We want to create separate tags for each word in the content;
@@ -60,7 +60,7 @@ class ElementGenerator
             else {
                 $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
                 if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
-                $d = new $className($content['value'], \Auth::user()->getId());
+                $d = new $className($name, \Auth::user()->getId());
                 $d->content = $content['value'];
                 if ($properties) {
                     foreach ($properties as $propName => $propValue) {
@@ -74,7 +74,7 @@ class ElementGenerator
         return $createdElements;
     }
 
-    static private function tagGenerator($elementType, $content, $properties)
+    static private function tagGenerator($name, $elementType, $content, $properties)
     {
         $createdElements = null;
         // We want to create separate tags for each word in the content;
@@ -90,8 +90,10 @@ class ElementGenerator
                     $tag = strtolower($tag);
                     $d = DAEntity\Tag::findByName($tag);
                     if ( ! $d) {
-                        $d = new $className($tag, \Auth::user()->getId());
+                        $d = new $className($name, \Auth::user()->getId());
+
                         $d->content = $tag;
+                        \Log::info("Created a tag with name " . $name . " and content " . $tag);                        
                         if ($properties) {
                             foreach ($properties as $propName => $propValue) {
                                 $d->setProperty($propName, $propValue);
