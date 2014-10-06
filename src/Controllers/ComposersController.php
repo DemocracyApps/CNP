@@ -32,49 +32,6 @@ class ComposersController extends ApiController {
 		return \View::make('composers.show', array('composer' => $composer));
 	}
 
-	public function update($id) 
-	{
-		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
-		if ($isAPI) {
-			throw new \Exception("API Composer update not yet implemented");
-		}
-		else {
-			$data = \Input::all();
-		}
-        $rules = ['name'=>'required'];
-        $validator = \Validator::make($data, $rules);
-        if ($validator->fails()) {
-        	if ($isAPI) {
-        		return $this->respondFailedValidation(Api::compactMessages($validator->messages()));
-        	}
-        	else {
-            	return \Redirect::back()->withInput()->with('fileerror', null)->withErrors($validator->messages());
-            }
-        }
-
-		$composer = Composer::find($id);
-        $composer->name = $data['name'];
-        if (array_key_exists('output', $data)) {
-            $composer->output = $data['output'];
-        }
-		if (\Input::has('description')) $composer->description = $data['description'];
-        \Log::info("Test composer");        
-		if (\Input::hasFile('composer')) {
-            \Log::info("Yes, we have a composer");
-            $ok = $this->loadComposerSpecification($composer, \Input::file('composer'));
-            \Log::info("And OK = " . $ok);
-			if ( ! $ok) {
-				return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
-			}
-		}
-        $composer->save();
-        if ($isAPI) {
-        }
-        else {
-			return \Redirect::to('/composers/'.$composer->id);
-        }
-	}
-
 	public function edit($id) 
 	{
 		$composer = Composer::find($id);
@@ -154,7 +111,8 @@ class ComposersController extends ApiController {
 
         $this->composer->name = $data['name'];
         $this->composer->project = $data['project'];
-        if (array_key_exists('output', $data)) {
+
+        if ($data['output']) {
             $this->composer->output = $data['output'];
         }
         if ($data['description']) $this->composer->description = $data['description'];
@@ -179,5 +137,48 @@ class ComposersController extends ApiController {
 			return \Redirect::to($returnURL);
         }
 	}
+
+    public function update($id) 
+    {
+        $isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
+        if ($isAPI) {
+            throw new \Exception("API Composer update not yet implemented");
+        }
+        else {
+            $data = \Input::all();
+        }
+        $rules = ['name'=>'required'];
+        $validator = \Validator::make($data, $rules);
+        if ($validator->fails()) {
+            if ($isAPI) {
+                return $this->respondFailedValidation(Api::compactMessages($validator->messages()));
+            }
+            else {
+                return \Redirect::back()->withInput()->with('fileerror', null)->withErrors($validator->messages());
+            }
+        }
+
+        $composer = Composer::find($id);
+        $composer->name = $data['name'];
+        if ($data['output']) {
+            $composer->output = $data['output'];
+        }
+        if (\Input::has('description')) $composer->description = $data['description'];
+        \Log::info("Test composer");        
+        if (\Input::hasFile('composer')) {
+            \Log::info("Yes, we have a composer");
+            $ok = $this->loadComposerSpecification($composer, \Input::file('composer'));
+            \Log::info("And OK = " . $ok);
+            if ( ! $ok) {
+                return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
+            }
+        }
+        $composer->save();
+        if ($isAPI) {
+        }
+        else {
+            return \Redirect::to('/composers/'.$composer->id);
+        }
+    }
 
 }

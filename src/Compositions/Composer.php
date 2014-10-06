@@ -426,7 +426,6 @@ class Composer extends \Eloquent {
                                                                         => $to.','.$from)
                                                                );
                         foreach ($relations as $relation) {
-                            $relation->setComposerId($this->id);
                             $relation->setCompositionId($composition->id);
                             $relation->save(); 
                         }                        

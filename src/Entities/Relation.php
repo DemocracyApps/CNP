@@ -11,7 +11,6 @@ class Relation
     public $fromId = null;
     public $toId = null;
     public $relationId = null;
-    public $composerid = null;
     public $compositionid = null;
     public $project = null;
 
@@ -33,15 +32,8 @@ class Relation
         }
         if (property_exists($data, 'properties'))
             $instance->{'properties'} = (array) json_decode($data->properties);
-        if (property_exists($data, 'composerid'))
-            $instance->{'composerid'} = $data->composerid;
         if (property_exists($data, 'compositionid'))
             $instance->{'compositionid'} = $data->compositionid;
-    }
-
-    public function setComposerId ($id)
-    {
-        $this->composerid = $id;
     }
 
     public function setCompositionId ($id)
@@ -55,7 +47,7 @@ class Relation
                     ->join('elements', 'elements.id', '=', 'relations.fromid')
                     ->where('elements.project', '=', $project)
                     ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
-                             'relations.properties', 'relations.composerid', 'relations.compositionid')
+                             'relations.properties', 'relations.compositionid')
                     ->get();
         $relations = array();
 
@@ -140,7 +132,6 @@ class Relation
                     'properties' => json_encode($this->properties),
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
-                    'composerid' => $this->composerid,
                     'compositionid' => $this->compositionid
                 )
             );
@@ -156,7 +147,6 @@ class Relation
                         'project'    => $this->project,
                         'properties' => json_encode($this->properties),
                         'updated_at' => date('Y-m-d H:i:s'),
-                        'composerid' => $this->composerid,
                         'compositionid' => $this->compositionid
                     )
                 );
