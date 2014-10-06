@@ -61,7 +61,7 @@
                             "url":"/composers?mode=app"
                         },
                         {
-                            "name":"Explore",
+                            "name":"Collections",
                             "url":"/compositions/explore"
                         }
                     ]

@@ -25,29 +25,26 @@ class CompositionsController extends ApiController {
 
     public function explore()
     {
-        return \View::make('compositions.explore');
-    }
-    public function curate()
-    {
         if (\Input::has('project')) {
             $project = \Input::get('project');
-            $composers = \DemocracyApps\CNP\Compositions\Composer::where('project', '=', $project)->get();
-            $ctmp = array();
-            foreach($composers as $c) {
-                if (strstr($c->contains, 'input')) $ctmp[] = $c;
-                \Log::info("Composer contains: " . $c->contains);
+            $compositions = Composition::where('project', '=', $project)->get();
+            $elements = Element::getProjectElements($project);
+            $types = array();
+            foreach ($elements as $element) {
+                if (array_key_exists($element->name, $types)) {
+                    ++$types[$element->name];
+                }
+                else {
+                    $types[$element->name] = 1;
+                }
             }
-            $selectedComposers = null;
-            if (\Input::has('templates')) {
-                $selectedComposers = \Input::get('templates');
-            }
-            return \View::make('stories.curate', 
-                           array('project' => $project,
-                                 'composers' => $ctmp,
-                                 'selectedComposers' => $selectedComposers));
+            return \View::make('compositions.explore', array('compositions' => $compositions, 
+                                                             'count' => count($compositions),
+                                                             'types' => $types
+                                                             ));
         }
         else {
-            return \View::make('stories.curate');
+            \Redirect::to('/projects');
         }
     }
 

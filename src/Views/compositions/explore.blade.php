@@ -9,7 +9,13 @@
     </h1>
   </div>
   <div class="col-sm-6" style="height:40px;" >
-    <p style="position:absolute; bottom:0;">Some stuff</p>
+    <div class="col-xs-6">
+      <b>Total:</b> &nbsp; {{$count}}
+    </div>
+    <div class="col-xs-6">
+      <b>Selected:</b> &nbsp; {{$count}}
+    </div>
+<!--    <p style="position:absolute; bottom:0;">Some stuff</p>-->
   </div>
 </div>
 
@@ -24,22 +30,28 @@
   <div class="tab-pane active row" id="search">
     <div class="row">
       <div class="col-sm-6">
-        <h1>
+        <h4>
           Search 
-        </h1>
+        </h4>
         <br>
       </div>
       <div class="col-sm-3">
       </div>
     </div>
-    <p>And some search stuff here</p>
+    <table class="table">
+      @foreach ($types as $typeName => $typeCount)
+        <tr>
+          <td>{{$typeName}}:</td><td>{{$typeCount}}</td>
+        </tr>
+      @endforeach
+    </table>
   </div>
   <div class="tab-pane row" id="serendipity">
   <div class="row">
       <div class="col-sm-6">
-        <h1>
+        <h4>
           Serendipity 
-        </h1>
+        </h4>
         <br>
       </div>
       <div class="col-sm-3">
