@@ -152,7 +152,7 @@ class Relation
                         'project'    => $this->project,
                         'properties' => json_encode($this->properties),
                         'updated_at' => date('Y-m-d H:i:s'),
-                        'compositionid' => $this->compositionid
+                        'compositionid' => $this->compositionid,
                         'modifier' => $this->modifier
                     )
                 );
