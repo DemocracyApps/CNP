@@ -132,9 +132,7 @@ class ComposersController extends ApiController {
 			$returnURL = \Session::get('CNP_RETURN_URL');
 			\Session::forget('CNP_RETURN_URL');
 			if ( ! $returnURL) $returnURL = '/';
-			\Log::info("Redirecting to " . $returnURL);
 			return \Redirect::to('/projects/'.$data['project']);
-			return \Redirect::to($returnURL);
         }
 	}
 
@@ -164,11 +162,8 @@ class ComposersController extends ApiController {
             $composer->output = $data['output'];
         }
         if (\Input::has('description')) $composer->description = $data['description'];
-        \Log::info("Test composer");        
         if (\Input::hasFile('composer')) {
-            \Log::info("Yes, we have a composer");
             $ok = $this->loadComposerSpecification($composer, \Input::file('composer'));
-            \Log::info("And OK = " . $ok);
             if ( ! $ok) {
                 return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
             }
