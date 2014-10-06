@@ -1,11 +1,19 @@
-@extends('layouts.tabs')
+@extends('layouts.default')
 
-@section('title')
-Explore Stories
-@stop
+@section('content')
+
+<div class="row">
+  <div class="col-sm-6">
+    <h1 style="display:inline;">
+      Explore Stories
+    </h1>
+  </div>
+  <div class="col-sm-6" style="height:40px;" >
+    <p style="position:absolute; bottom:0;">Some stuff</p>
+  </div>
+</div>
 
 
-@section('tabsContent')
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
   <li class="active"><a href="#search" role="tab" data-toggle="tab"><b>Search</b></a></li>

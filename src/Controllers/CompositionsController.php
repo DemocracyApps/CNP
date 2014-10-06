@@ -27,6 +27,29 @@ class CompositionsController extends ApiController {
     {
         return \View::make('compositions.explore');
     }
+    public function curate()
+    {
+        if (\Input::has('project')) {
+            $project = \Input::get('project');
+            $composers = \DemocracyApps\CNP\Compositions\Composer::where('project', '=', $project)->get();
+            $ctmp = array();
+            foreach($composers as $c) {
+                if (strstr($c->contains, 'input')) $ctmp[] = $c;
+                \Log::info("Composer contains: " . $c->contains);
+            }
+            $selectedComposers = null;
+            if (\Input::has('templates')) {
+                $selectedComposers = \Input::get('templates');
+            }
+            return \View::make('stories.curate', 
+                           array('project' => $project,
+                                 'composers' => $ctmp,
+                                 'selectedComposers' => $selectedComposers));
+        }
+        else {
+            return \View::make('stories.curate');
+        }
+    }
 
     public function show($id)
     {
