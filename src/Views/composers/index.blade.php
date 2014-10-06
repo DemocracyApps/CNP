@@ -17,7 +17,7 @@
     </tr>
     @foreach ($composers as $composer)
       <tr>
-        <td> <a class="label label-info" href="/stories/create?composer={{$composer->id}}">Use</a></td>
+        <td> <a class="label label-info" href="/compositions/create?composer={{$composer->id}}">Use</a></td>
         <td> {{ $composer->id }} </td>
         <th> {{ link_to("composers/".$composer->id, $composer->name) }} </th>
         <td> {{ $composer->contains }}</td>

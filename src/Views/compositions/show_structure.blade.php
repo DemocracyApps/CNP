@@ -28,7 +28,7 @@
     <p><b>Branch:</b></p>
   </div>
   <div class="col-sm-2">
-    <p><a href="/stories/create?composer=5&referent={{$story->getId()}}">Create Branch</a></p>
+    <p><a href="/compositions/create?composer=5&referent={{$story->getId()}}">Create Branch</a></p>
   </div>
   <div class="col-sm-6">
   </div>
@@ -63,7 +63,7 @@
         }
         if ($launchText == null) $launchText = "Branch to Comment";
       ?>
-      <li><a href="/stories/create?composer={{$decorator}}&referent={{$story->getId()}}">{{$launchText}}</a></li>
+      <li><a href="/compositions/create?composer={{$decorator}}&referent={{$story->getId()}}">{{$launchText}}</a></li>
     @endforeach
     </ul>
   @else
