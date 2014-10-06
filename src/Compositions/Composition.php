@@ -16,7 +16,6 @@ class Composition extends \Eloquent {
 
     public static function allProjectCompositionsPaged ($project, $page=1, $limit=10) 
     {
-        \Log::info("get the data");
         $total = self::where('project', '=', $project)->count();
         $result = self::where('project', '=', $project)
                         ->whereNotNull('top') // Skip the batch compositions
