@@ -12,6 +12,7 @@ class Relation
     public $toId = null;
     public $relationId = null;
     public $compositionid = null;
+    public $modifier = null;
     public $project = null;
 
     function __construct($from, $to, $type, $project) {
@@ -30,6 +31,9 @@ class Relation
         if (property_exists($data, 'project')) {
             $instance->{'project'} = $data->project;
         }
+        if (property_exists($data, 'modifier')) {
+            $instance->{'modifier'} = $data->modifier;
+        }
         if (property_exists($data, 'properties'))
             $instance->{'properties'} = (array) json_decode($data->properties);
         if (property_exists($data, 'compositionid'))
@@ -47,7 +51,7 @@ class Relation
                     ->join('elements', 'elements.id', '=', 'relations.fromid')
                     ->where('elements.project', '=', $project)
                     ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
-                             'relations.properties', 'relations.compositionid')
+                             'relations.properties', 'relations.modifier', 'relations.compositionid')
                     ->get();
         $relations = array();
 
@@ -132,7 +136,8 @@ class Relation
                     'properties' => json_encode($this->properties),
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
-                    'compositionid' => $this->compositionid
+                    'compositionid' => $this->compositionid,
+                    'modifier' => $this->modifier
                 )
             );
         }
@@ -148,6 +153,7 @@ class Relation
                         'properties' => json_encode($this->properties),
                         'updated_at' => date('Y-m-d H:i:s'),
                         'compositionid' => $this->compositionid
+                        'modifier' => $this->modifier
                     )
                 );
         }
