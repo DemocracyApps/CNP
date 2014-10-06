@@ -28,23 +28,35 @@
 
 <div class="tab-content">
   <div class="tab-pane active row" id="search">
+    <br>
     <div class="row">
-      <div class="col-sm-6">
-        <h4>
-          Search 
-        </h4>
-        <br>
-      </div>
-      <div class="col-sm-3">
+      <div class="col-sm-12">
+        &nbsp;
+        <div class="btn-group" data-toggle="buttons">
+              <?php 
+                $first = true;
+              ?>
+            @foreach ($types as $typeName => $typeCount)
+              <?php
+                $cls = "btn btn-info";
+                if ($first) {
+                  $cls .= " active";
+                }
+              ?>
+              <label style="width:150px;" class="{{$cls}}">
+                <input type="radio" name="type" value="{{$typeName}}"
+                  @if ($first)
+                    checked 
+                  @endif
+                >{{$typeName}} ({{$typeCount}})</input>
+              </label>
+              <?php 
+                $first = false;
+              ?>
+            @endforeach
+        </div>
       </div>
     </div>
-    <table class="table">
-      @foreach ($types as $typeName => $typeCount)
-        <tr>
-          <td>{{$typeName}}:</td><td>{{$typeCount}}</td>
-        </tr>
-      @endforeach
-    </table>
   </div>
   <div class="tab-pane row" id="serendipity">
   <div class="row">
