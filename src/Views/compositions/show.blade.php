@@ -1,7 +1,7 @@
 @extends('layouts.default')
 
 @section('content')
-<h1> <em>{{ $topElement->getName() }} </em></h1>
+<h1> <em>{{ $composition->title }} </em></h1>
 <div class="row">
   <div class="col-md-8"></div>
   <div class="col-md-4">

@@ -45,6 +45,20 @@ class Composer extends \Eloquent {
     protected $table = 'composers';
     protected static $tableName = 'composers';
 
+    protected function getAnchorId()
+    {
+        $anchorId = null;
+        if ($this->elementsSpec) {
+            foreach ($this->elementsSpec as $e) {
+                if ($e['type'] == 'Composition') {
+                    $anchorId = $e['id'];
+                    break;
+                }
+            }
+        }
+        return $anchorId;
+    }
+
     public static function getUserComposers ($userId)
     {
         $records = \DB::table(self::$tableName)
@@ -327,7 +341,6 @@ class Composer extends \Eloquent {
             $data['composerId'] = $this->id;
             $data['compositionId'] = $composition->id;
             $name = uniqid('upload');
-            \Log::info("Attempt to create /vagrant/cnp/public/downloads" . $name);
             $file->move('/vagrant/cnp/public/downloads', $name);
             $data['filePath'] = '/vagrant/cnp/public/downloads/' . $name;
             $notification = new \DemocracyApps\CNP\Utility\Notification;
@@ -336,15 +349,11 @@ class Composer extends \Eloquent {
             $notification->type = 'CVSUpload';
             $notification->save();
             $data['notificationId'] = $notification->id;
-            $composition->title = 'CSV Upload ' . date('Y-m-d H:i:s');
-            $composition->save();
             \Queue::push('\DemocracyApps\CNP\Compositions\Inputs\CSVInputProcessor', $data);
         }
         else if ($this->inputType == 'auto-interactive') {
-            \Log::info("Extract values");
             $this->inputDriver->extractSubmittedValues($input); // Import latest batch of form data into inputDriver
             if ($this->inputDriver->done()) {
-                \Log::info("All done - process the input");
                 self::processAutoInput($input, $composition);
                 $this->inputDriver->delete();
             }
@@ -366,13 +375,15 @@ class Composer extends \Eloquent {
         $elements = array();
 
         $elementsIn = $data['elementsIn'];
-        $anchorId = null;
-        if (array_key_exists('anchor', $this->inputSpec)) {
-            $anchorId = $this->inputSpec['anchor'];
-        }
-        else {
-            $anchorId = $this->elementsSpec[0]['id'];
-        }
+        $anchorId = $this->getAnchorId(); // This is the 'Composition' element
+        if (!$anchorId) throw new Exception("Spec lacks anchor id");
+        // if (array_key_exists('anchor', $this->inputSpec)) {
+        //     $anchorId = $this->inputSpec['anchor'];
+        // }
+        // else {
+        //     $anchorId = $this->elementsSpec[0]['id'];
+        // }
+        // dd($this->elementsSpec);
         $topElement = null;
         // So now we create output elements
         foreach ($elementsSpec as $espec) {
@@ -396,9 +407,24 @@ class Composer extends \Eloquent {
                 }
             }
         }
-        foreach($elements as $elementList) {
+        foreach($elements as $eid => $elementList) {
             foreach ($elementList as $element) {
                 $element->save();
+                if ($element != $topElement) {
+                    $relations = Relation::createRelationPair($topElement->id, 
+                                                              $element->id,
+                                                              'has-part',
+                                                              $project,
+                                                              array('composerElements'
+                                                                    => $anchorId.','.$eid),
+                                                              array('composerElements'
+                                                                    => $eid.','.$anchorId)
+                                                           );
+                    foreach ($relations as $relation) {
+                        $relation->setCompositionId($composition->id);
+                        $relation->save(); 
+                    }                        
+                }
             }
         }
 
@@ -444,9 +470,7 @@ class Composer extends \Eloquent {
 
             }
         }
-        if ($data['title']) {
-            $composition->title = $data['title'];
-        }
+        $composition->title = $topElement->content;
         $composition->top = $topElement->id;
         $composition->save();
 
@@ -459,7 +483,6 @@ class Composer extends \Eloquent {
         if (! $map) return "No map!";
 
         $elementsIn = array();
-        $title = "No Title";
         foreach ($map as $item) {
             // If no id, then it wasn't used to get input (e.g., page breaks).
             if (array_key_exists('use', $item) && array_key_exists('id', $item)) {
@@ -480,19 +503,13 @@ class Composer extends \Eloquent {
                         $val['properties'] = $properties;
                     }
                     $use = $item['use'];
-                    if ($use == 'title') {
-                        $title = $val['value'];
-                    }
-                    else {
-                        $elementId = $item['elementId'];
-                        $elementsIn[$elementId] = $val;
-                    }
+                    $elementId = $item['elementId'];
+                    $elementsIn[$elementId] = $val;
                 }
             }
         }
 
         $data = array();
-        $data['title'] = $title;
         $data['elementsIn'] = $elementsIn;
         $this->commonProcessInput($composition, $data, $this->elementsSpec, $this->relationsSpec, $this->project);
     }
@@ -537,34 +554,19 @@ class Composer extends \Eloquent {
                         $required = $column['required'];
                     }
 
-                    if ($use == 'title') {
-                        $title = $line[$column['column']];
-                        if ($required && ! $title) {
-                            if (! $lmessage) $lmessage = "Line " . $count . ":";
-                            $lmessage .= " missing title";
-                            $valid = false;
-                        }
+                    $val = array();
+                    $val['isRef'] = false;
+                    $val['value'] = $line[$column['column']];
+                    if ($required && ! $val['value']) {
+                        if (! $lmessage) $lmessage = "Line " . $count . ": ";
+                        else $lmessage .= ", ";
+                        $lmessage .= "missing value in column " . $column['column'];
+                        $valid = false;
                     }
-                    elseif ($use == 'summary') {
-                        $summary = $val;
-                    }
-                    else {
-                        $val = array();
-                        $val['isRef'] = false;
-                        $val['value'] = $line[$column['column']];
-                        if ($required && ! $val['value']) {
-                            if (! $lmessage) $lmessage = "Line " . $count . ": ";
-                            else $lmessage .= ", ";
-                            $lmessage .= "missing value in column " . $column['column'];
-                            $valid = false;
-                        }
-                        $elementsIn[$column['elementId']] = $val;
-                    }
+                    $elementsIn[$column['elementId']] = $val;
                 }
                 if ($valid) {
                     $data = array();
-                    $data['title'] = $title;
-                    $data['summary'] = $summary;
                     $data['elementsIn'] = $elementsIn;
                     $childComposition = $composition->createChildComposition($title);
                     $this->commonProcessInput($childComposition, $data, $this->elementsSpec, $this->relationsSpec, $this->project);

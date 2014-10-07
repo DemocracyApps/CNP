@@ -139,9 +139,9 @@ class CompositionsController extends ApiController {
         }
 
         $composition = new \DemocracyApps\CNP\Compositions\Composition;
+        $composition->title = "No Title";
         $composition->input_composer_id = $composer->id;
         $composition->userid = \Auth::user()->getId();
-        $composition->title = "No title";
         $composition->project = $composer->project;
         $composition->save();
 
