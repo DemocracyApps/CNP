@@ -2,7 +2,7 @@
 namespace DemocracyApps\CNP\Entities;
 use Illuminate\Support\Facades\DB as DB;
 
-class Composition extends Element 
+class CnpComposition extends Element 
 {
     static  $classElementType = -1;
     protected $author;
