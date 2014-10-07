@@ -14,6 +14,9 @@ class AddTitleAndUseridColumnsToCompositions extends Migration {
 	{
 		Schema::table('compositions', function(Blueprint $table)
 		{
+			/*
+			 * Actually - deleted title 10/7/14 - no longer using it due to Composition element
+			 */
             $table->integer('userid');
             $table->foreign('userid')->references('id')->on('users');
             $table->integer('project');
