@@ -80,27 +80,30 @@ class ElementGenerator
         // We want to create separate tags for each word in the content;
         if ($content) {
             $tags = null;
-            $s = trim(preg_replace("([, ]+)", ' ', $content['value']));
-            if ($s) $tags = explode(" ", $s);
+            $s = trim($content['value']);
+            if ($s) $tags = explode(",", $s);
+
             if ($tags && count($tags) > 0) {
                 $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
                 if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
                 $createdElements = array();
                 foreach ($tags as $tag) {
-                    $tag = strtolower($tag);
-                    $d = DAEntity\Tag::findByName($tag);
-                    if ( ! $d) {
-                        $d = new $className($name, \Auth::user()->getId());
+                    $tag = trim(strtolower($tag));
+                    if ($tag && strlen($tag) > 0) {
+                        $d = DAEntity\Tag::findByName($tag);
+                        if ( ! $d) {
+                            $d = new $className($name, \Auth::user()->getId());
 
-                        $d->content = $tag;
-                        \Log::info("Created a tag with name " . $name . " and content " . $tag);                        
-                        if ($properties) {
-                            foreach ($properties as $propName => $propValue) {
-                                $d->setProperty($propName, $propValue);
+                            $d->content = $tag;
+                            \Log::info("Created a tag with name " . $name . " and content " . $tag);                        
+                            if ($properties) {
+                                foreach ($properties as $propName => $propValue) {
+                                    $d->setProperty($propName, $propValue);
+                                }
                             }
                         }
+                        $createdElements[] = $d;
                     }
-                    $createdElements[] = $d;
                 }
 
             }

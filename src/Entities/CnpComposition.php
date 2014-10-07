@@ -14,7 +14,7 @@ class CnpComposition extends Element
     static public function initialize() 
     {
         if (static::$classElementType < 0) {
-            static::$classElementType = \CNP::getElementTypeId('Composition');
+            static::$classElementType = \CNP::getElementTypeId('CnpComposition');
         }
     }
 }

@@ -23,7 +23,7 @@ if (Schema::hasTable('app_state') && Schema::hasTable('relation_types')) {
 }
 
 // We need to do some intializations on all the Element types
-DemocracyApps\CNP\Entities\Composition::initialize();
+DemocracyApps\CNP\Entities\CnpComposition::initialize();
 DemocracyApps\CNP\Entities\Person::initialize();
 DemocracyApps\CNP\Entities\Story::initialize();
 DemocracyApps\CNP\Entities\Tag::initialize();
