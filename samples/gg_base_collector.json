@@ -6,7 +6,7 @@
         {
             "id":"Title",
             "required": true,
-            "type":"Composition"
+            "type":"CnpComposition"
         },
         {
             "id":"Story",

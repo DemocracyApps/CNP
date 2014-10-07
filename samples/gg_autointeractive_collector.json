@@ -30,7 +30,7 @@
     			"prompt":"What is this story about?"
     		},
     		{
-    			"id":"anythingIwant",
+    			"id":"5",
     			"use":"element",
     			"elementId": "Organization",
     			"inputType":"text",

@@ -5,15 +5,16 @@
     // Do not change the IDs of the element types in a production environment - 
     // they may only be changed prior to initialization (and why would you?).
     "elementTypes": [
-        {"name":"Composition", "id":"0"},
-        {"name":"Place",       "id":"1"},
-        {"name":"Person",      "id":"2"},
-        {"name":"Story",       "id":"3"},
-        {"name":"Tag",         "id":"4"},
-        {"name":"Project",     "id":"5"},
-        {"name":"Government",  "id":"6"},
-        {"name":"Business",    "id":"7"},
-        {"name":"StoryElement", "id":"8"}
+        {"name":"CnpComposition", "id":"0"},
+        {"name":"Place",          "id":"1"},
+        {"name":"Person",         "id":"2"},
+        {"name":"Story",          "id":"3"},
+        {"name":"Tag",            "id":"4"},
+        {"name":"Project",        "id":"5"},
+        {"name":"Government",     "id":"6"},
+        {"name":"Business",       "id":"7"},
+        {"name":"StoryElement",   "id":"8"},
+        {"name":"CnpCollection",  "id":"9"}
     ],
     "apiRequiresSSL": "false",
     "pageLimit": "15"

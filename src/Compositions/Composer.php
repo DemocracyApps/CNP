@@ -50,7 +50,7 @@ class Composer extends \Eloquent {
         $anchorId = null;
         if ($this->elementsSpec) {
             foreach ($this->elementsSpec as $e) {
-                if ($e['type'] == 'Composition') {
+                if ($e['type'] == 'CnpComposition') {
                     $anchorId = $e['id'];
                     break;
                 }
