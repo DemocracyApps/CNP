@@ -14,7 +14,6 @@ class AddTitleAndUseridColumnsToCompositions extends Migration {
 	{
 		Schema::table('compositions', function(Blueprint $table)
 		{
-			$table->string('title');
             $table->integer('userid');
             $table->foreign('userid')->references('id')->on('users');
             $table->integer('project');
@@ -31,7 +30,6 @@ class AddTitleAndUseridColumnsToCompositions extends Migration {
 	{
 		Schema::table('compositions', function(Blueprint $table)
 		{
-			$table->dropColumn('title');
 			$table->dropColumn('userid');
 			$table->dropColumn('project');
 		});
