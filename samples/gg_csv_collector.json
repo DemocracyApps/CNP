@@ -10,7 +10,8 @@
 	    	"columnMap": [
 	    		{
 	    			"column": 3,
-	    			"use":"title",
+	    			"use":"element",
+	    			"elementId":"Title",
 	    			"columnType": "text"
 	    		},
 	    		{

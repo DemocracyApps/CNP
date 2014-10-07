@@ -17,8 +17,9 @@
     		},
     		{
     			"id":"3",
-    			"use":"title",
+    			"use":"element",
     			"inputType":"text",
+                "elementId":"Title",
     			"prompt":"Give your story a title"
     		},
     		{

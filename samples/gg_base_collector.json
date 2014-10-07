@@ -4,6 +4,11 @@
     // The ID here is used by input specs to refer to these elements. IDs must be unique within this file.
     "elements": [
         {
+            "id":"Title",
+            "required": true,
+            "type":"Composition"
+        },
+        {
             "id":"Story",
             "required": true,
             "type":"Story"
