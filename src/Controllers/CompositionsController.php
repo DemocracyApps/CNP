@@ -26,9 +26,10 @@ class CompositionsController extends ApiController {
     public function explore()
     {
         if (\Input::has('project')) {
-            $project = \Input::get('project');
-            $compositions = Composition::where('project', '=', $project)->get();
-            $elements = Element::getProjectElements($project);
+            $projectId = \Input::get('project');
+            $project = Project::find($projectId);
+            $compositions = Composition::where('project', '=', $projectId)->get();
+            $elements = Element::getProjectElements($projectId);
             $types = array();
             foreach ($elements as $element) {
                 if (array_key_exists($element->name, $types)) {
@@ -40,7 +41,8 @@ class CompositionsController extends ApiController {
             }
             return \View::make('compositions.explore', array('compositions' => $compositions, 
                                                              'count' => count($compositions),
-                                                             'types' => $types
+                                                             'types' => $types,
+                                                             'project' => $project
                                                              ));
         }
         else {

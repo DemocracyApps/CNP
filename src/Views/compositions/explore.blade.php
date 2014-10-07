@@ -5,7 +5,7 @@
 <div class="row">
   <div class="col-sm-6">
     <h1 style="display:inline;">
-      Explore Stories
+      Exploring: {{$project->name}}
     </h1>
   </div>
   <div class="col-sm-6" style="height:40px;" >
@@ -22,8 +22,9 @@
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs" role="tablist">
-  <li class="active"><a href="#search" role="tab" data-toggle="tab"><b>Search</b></a></li>
-  <li><a href="#serendipity" role="tab" data-toggle="tab"><b>Serendipity</b></a></li>
+  <li class="active"><a href="#search" role="tab" data-toggle="tab"><b>Select</b></a></li>
+  <li><a href="#serendipity" role="tab" data-toggle="tab"><b>View</b></a></li>
+  <li><a href="#share" role="tab" data-toggle="tab"><b>Share</b></a></li>
 </ul>
 
 <div class="tab-content">
