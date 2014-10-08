@@ -8,6 +8,12 @@ use \DemocracyApps\CNP\Entities\Project;
 
 class CompositionsController extends ApiController {
 
+    public function test($param, $another)
+    {
+        $params = array($param, $another);
+        dd($params);
+        dd(\Input::all());
+    }
     public function index()
     {
         if (\Input::has('project')) {

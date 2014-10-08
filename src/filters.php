@@ -7,6 +7,15 @@ use DemocracyApps\CNP\Entities\Eloquent\User as User;
 |--------------------------------------------------------------------------
 */
 
+Route::filter('cnp.ext', function() 
+{
+	$pattern = '/[0-9]+/';
+	$project = \Request::segment(1);
+	if (!preg_match($pattern, $project)) {
+		return \Redirect::to('/unknownproject');
+	}
+});
+
 Route::filter('cnp.auth', function()
 {
 	if (Auth::guest()) {

@@ -5,7 +5,7 @@ use \DemocracyApps\CNP\Entities as DAEntity;
 // Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
 //           " and method " .\Request::server('REQUEST_METHOD'));
 $environment = App::environment();
-//dd($environment);
+
 /********************************
  ********************************
  *
@@ -14,26 +14,14 @@ $environment = App::environment();
  ********************************
  *********************************/
 
-Route::get('/q', function () {
-    Queue::push(function ($job) {
-
-
-
-        \Log::info("Queues are very cool");
-
-
-        $job->delete();
-    });
-    echo "Hello";
-});
 
 Route::get('/test', function()
 {
-    $s = ",  ,  a sa, ls,, l,";
-    $s = trim(preg_replace("([, ]+)", ' ', $s));
-    $s = explode(" ", $s);
-    dd($s);
-    return View::make('test');
+    $c = new \DemocracyApps\CNP\Entities\Eloquent\Collection;
+    $c->set = array();
+    $c->set[] = "1-100";
+    $c->project = 1;
+    $c->save();
 });
 
 Route::get('/demo', function()
@@ -55,9 +43,29 @@ Route::get('/compositions/explore',
 
 
 Route::resource('notifications', 'DemocracyApps\CNP\Controllers\NotificationsController');
+Route::resource('collections', 'DemocracyApps\CNP\Controllers\CollectionsController');
 Route::resource('compositions', 'DemocracyApps\CNP\Controllers\CompositionsController');
 Route::resource('projects', '\DemocracyApps\CNP\Controllers\ProjectsController');
 Route::resource('composers', 'DemocracyApps\CNP\Controllers\ComposersController');
+
+/*
+ * Right now the route pattern and the cnp.ext filter are checking for the same thing.
+ */
+Route::pattern('projectId', '[0-9]+');
+
+Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
+
+    Route::get('/', function() {
+        return "I got here!";
+    });
+    Route::get('stories/{another}', array('as' => 'ext.stories',
+                                                  'uses' => 'DemocracyApps\CNP\Controllers\CompositionsController@test'));
+
+});
+
+Route::get("/unknownproject", function () {
+    return "Unknown Project";
+});
 
 class PP {
 
