@@ -48,6 +48,13 @@ class Project extends \Eloquent
         return $hasProperty;
     }
 
+    public function deleteProperty ($propName) 
+    {
+        if ($this->hasProperty($propName)) {
+            unset($this->properties[$propName]);
+        }
+    }
+
     public function getProperty ($propName)
     {
         $this->checkProperties();

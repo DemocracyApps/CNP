@@ -52,6 +52,38 @@
     <p>{{$project->getProperty('access')}}</p>
   </div>
 </div>
+<div class="row">
+  <div class="col-sm-4">
+    <p><b>Default Composer:</b></p>
+  </div>
+  <div class="col-sm-8">
+    <?php
+      $defaultComposer = null;
+      if ($project->hasProperty('defaultComposer')) {
+        $defaultComposer = $project->getProperty('defaultComposer');
+      }
+    ?>
+    <select id="default-composer-select">
+      @if (! $defaultComposer) {
+        <option value="-1"> --- </option>
+      }
+      @else {
+        <option value="-1" selected> --- </option>
+      }
+      @endif
+
+      @foreach ($composers as $composer)
+        @if ($defaultComposer == $composer->id) {
+          <option value="{{$composer->id}}" selected>{{$composer->name}}</option>
+        }
+        @else {
+          <option value="{{$composer->id}}">{{$composer->name}}</option>
+        }
+        @endif
+      @endforeach
+    </select>
+  </div>
+</div>
 @stop
 
 @section('upperRight')
@@ -97,3 +129,22 @@
   </table>
 
 @stop
+@section('listScripts')
+  <script type="text/javascript">
+    function setDefaultComposer(event, ui)
+    {
+      var source ="http://cnp.dev/ajax/setProjectDefaultComposer?project={{$project->id}}&defaultComposer="
+                  + $("select#default-composer-select").val();
+      $.get( source, function( r ) {
+        //alert("Got r = " + r.message);
+      }).fail(function(r) {
+        alert("Error saving default composer: "+r.responseJSON.error.message);
+      });
+    }
+    $("select#default-composer-select").change (setDefaultComposer);
+
+
+  </script>
+  
+@stop
+

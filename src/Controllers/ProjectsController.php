@@ -1,6 +1,7 @@
 <?php namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities as DAEntity;
+use \DemocracyApps\CNP\Entities\Project;
 use \DemocracyApps\CNP\Utility\Api as Api;
 use \DemocracyApps\CNP\Compositions\Composer as Composer;
 
@@ -118,4 +119,27 @@ class ProjectsController extends ApiController {
 		}
 	}
 
+	/*
+	 * AJAX
+	 */
+	
+	public function setDefaultComposer()
+	{
+		if (!\Input::has('project')) return $this->respondFormatError('No project specified');
+		if (!\Input::has('defaultComposer')) return $this->respondFormatError('No default composer specified');
+		$project = Project::find(\Input::get('project')); 
+		if (!$project) return $this->respondNotFound('Project with ID '.\Input::get('project').' not found');
+		if (\Input::get('defaultComposer') < 0) {
+			$project->deleteProperty('defaultComposer');
+		}
+		else {
+			$composer = Composer::find(\Input::get('defaultComposer'));
+			if (!$composer) {
+				return $this->respondNotFound('Composer with ID '.\Input::get('defaultComposer').' not found');
+			}
+			$project->setProperty('defaultComposer', \Input::get('defaultComposer'));
+		}
+		$project->save();
+		return $this->respondOK('Successfully set default composer', null);
+	}
 }

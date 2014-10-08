@@ -57,6 +57,15 @@ class ApiController extends BaseController {
 		return $this->setStatusCode(IResponse::HTTP_UNPROCESSABLE_ENTITY)->respondWithError($message);
 	}
 
+	public function respondOK($message = 'Operation succeeded', $data)
+	{
+		return $this->setStatusCode(IResponse::HTTP_OK)->respond([
+											'message' => $message,
+											'status_code'	=> $this->getStatusCode(),
+											'data' => $data
+											]);
+	}
+
 	public function respondCreated($message = 'Successfully created', $data) 
 	{
 		return $this->setStatusCode(IResponse::HTTP_CREATED)->respond([

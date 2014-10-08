@@ -94,6 +94,8 @@ Route::group(['prefix' => 'ajax'], function ()
             return json_encode($ret);            
         });
 
+        Route::get('setProjectDefaultComposer', '\DemocracyApps\CNP\Controllers\ProjectsController@setDefaultComposer');
+
         Route::get('curate', function()
         {
             $value = implode(':', \Input::all());
