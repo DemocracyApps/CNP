@@ -97,7 +97,8 @@ class CompositionsController extends ApiController {
         else if ($viewMode == 'structure') {
             $elementRelations = array(); 
             $elementsById = array();
-            $elements = Relation::getRelatedElements($topElement->id, null);
+            // $elements = Relation::getRelatedElements($topElement->id, null);
+            $elements = Element::getRelatedElements($topElement->id, null);
             array_unshift($elements, $topElement);
 
             foreach ($elements as $element) { // Get the relations

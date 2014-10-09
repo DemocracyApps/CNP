@@ -132,6 +132,27 @@ class Element
         return $result;
     }
 
+    static public function findByContent($nm, $ignoreType = false)
+    {
+        if ($ignoreType) {
+            $data = DB::table(self::$tableName)
+                      ->where('content', '=', $nm)->first();
+        }
+        else {
+            \Log::info("Looking by type = " . static::$classElementType);
+            $data = DB::table(self::$tableName)
+                      ->where('content', '=', $nm)
+                      ->where('type', '=', static::$classElementType)
+                      ->first();            
+        }
+        $result = null;
+        if ($data != null) {
+            $result = new static($data->name, $data->userid);
+            self::fill($result, $data);
+        }
+        return $result;
+    }
+
     /**
      * This gets all the elements involved in the given composition in each of their unique 
      * relationships (i.e., a specific element will be returned as many times as it has 
@@ -186,7 +207,42 @@ class Element
             $result[] = $item;
         }
         return $result;        
+    }
 
+    public static function getRelatedElements ($fromId, $relationName) 
+    {
+        $relId = null;
+        if ($relationName) {
+            $relId = Relation::getRelationType($relationName);
+        }
+        if ($relId) {
+            $records = DB::table(self::$tableName)
+                        ->join('relations', 'relations.toid', '=', 'elements.id')
+                        ->where('relations.fromid', $fromId)
+                        ->andWhere('relationid', '=', $relId)
+                        ->orderBy('elements.id')
+                        ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'elements.userid', 'elements.project')
+                        ->distinct()
+                        ->get();
+        }
+        else {
+            $records = DB::table(self::$tableName)
+                        ->join('relations', 'relations.toid', '=', 'elements.id')
+                        ->where('relations.fromid', $fromId)
+                        ->orderBy('elements.id')
+                        ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'elements.userid', 'elements.project')
+                        ->distinct()
+                        ->get();
+        }
+
+        $result = array();
+
+        foreach ($records as $record) {
+            $item = new static($record->name, $record->userid);
+            self::fill($item,$record, $record->project);
+            $result[] = $item;
+        }
+        return $result;        
     }
 
     public static function allProjectElements ($id, $types = null)

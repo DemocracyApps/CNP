@@ -63,30 +63,6 @@ class Relation
         return $relations;
     }
 
-    public static function getRelatedElements ($fromId, $relationName) 
-    {
-        $relId = null;
-        if ($relationName) {
-            $relRecord = DB::table(self::$relTypesTableName)->where('name',$relationName)->first();
-            if ($relRecord) $relId = $relRecord->{'id'};
-        }
-        if ($relId) {
-            $d = DB::table(self::$tableName)->where('fromid', $fromId)->where('relationid', $relId)->get();
-        }
-        else {
-            $d = DB::table(self::$tableName)->where('fromid', $fromId)->get();
-        }
-
-        $elements = array();
-
-        foreach ($d as $data) {
-            $element = Element::find($data->toid);
-            $elements[] = $element;
-        }
-
-        return $elements;
-    }
-
     public static function getRelations ($fromId) 
     {
         $d = DB::table(self::$tableName)->where('fromid', $fromId)->orderBy('id')->get();
@@ -119,6 +95,13 @@ class Relation
         $inverse = $relRecord->{'inverse'}?$relRecord->{'inverse'}:$relRecord->{'id'};
         $inverseRecord = DB::table(self::$relTypesTableName)->where('id',$inverse)->first();
         return $inverseRecord->{'name'};
+    }
+
+    public static function getRelationType($relationName) {
+        $relId = null;
+        $relRecord = DB::table(self::$relTypesTableName)->where('name',$relationName)->first();
+        if ($relRecord) $relId = $relRecord->{'id'};
+        return $relId;
     }
 
     public function getId() {
