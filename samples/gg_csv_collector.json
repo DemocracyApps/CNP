@@ -33,13 +33,20 @@
 	    			"elementId": "Organization",
 	    			"columnType": "text"
 	    		},
-	    		// {
-	    		// 	"column": 11,
-	    		// 	"use":"relation",
-	    		// 	"from":"Storyteller",
-	    		// 	"to":"Story",
-	    		// 	"columnType": "text"
-	    		// },
+	            {
+	                "column": 11,
+	                "use":"relation",
+	                "from":"Storyteller",
+	                "to":"Story",
+	    			"columnType": "text",
+	                "relationMap": {
+						"Helped make it happen":"helped",
+	                    "Was affected by what happened":"was-affected-by",
+	                    "Saw it happen":"saw",
+	                    "Heard about it happening":"heard-about",
+	                    "Unknown":"unknown-relation-to"
+                    }
+	            },
 	    		{
 	    			"column": 29,
 	    			"use":"element",

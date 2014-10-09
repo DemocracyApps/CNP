@@ -536,7 +536,6 @@ class Composer extends \Eloquent {
                     $value = $this->inputDriver->getCompositionElementById($id);
                 }
 
-                //if (array_key_exists($id, $values)) {
                 if ($value) {
                     $base = ucfirst($value['inputType']);
                     $inputControllerClassName = '\DemocracyApps\CNP\Compositions\Inputs\\'.$base."InputHandler";
@@ -602,6 +601,7 @@ class Composer extends \Eloquent {
             $line = fgetcsv($myfile);
             $lmessage = null;
             $elementsIn = array();
+            $relationsIn = array();
             $title = " - ";
             $summary = null;
             if ($line) {
@@ -626,11 +626,26 @@ class Composer extends \Eloquent {
                         $lmessage .= "missing value in column " . $column['column'];
                         $valid = false;
                     }
-                    $elementsIn[$column['elementId']] = $val;
+                    if ($use == 'element') {
+                        $elementsIn[$column['elementId']] = $val;
+                    }
+                    else if ($use == 'relation' && $val['value']) {
+                        $relationMap = $column['relationMap'];
+                        if (array_key_exists($val['value'], $relationMap)) {
+                            $val['value'] = $relationMap[$val['value']];
+                            $rel = array();
+                            $rel['from'] = $column['from'];
+                            $rel['to'] = $column['to'];
+                            $rel['relation'] = $val;
+
+                            $relationsIn[] = $rel;
+                        }
+                    }
                 }
                 if ($valid) {
                     $data = array();
                     $data['elementsIn'] = $elementsIn;
+                    $data['relationsIn'] = $relationsIn;
                     $childComposition = $composition->createChildComposition($title);
                     $this->commonProcessInput($childComposition, $data, $this->elementsSpec, $this->relationsSpec, $this->project);
                 }
