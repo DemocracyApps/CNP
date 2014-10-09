@@ -59,7 +59,17 @@ Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
     Route::get('/', function() {
         $project = Project::find(\Request::segment(1));
         $owner = ($project->userid == \Auth::user()->getId());
-        return View::make('world.home', array('project' => $project, 'owner' => $owner));
+        $composerId = ($project->hasProperty('defaultComposer'))?$project->getProperty('defaultComposer'):-1;
+        return View::make('world.home', array('project' => $project, 'owner' => $owner, 'defaultComposer' => $composerId));
+    });
+    Route::get('compositions', function () {
+        $project = Project::find(\Request::segment(1));
+        $owner = ($project->userid == \Auth::user()->getId());
+        $page = \Input::get('page', 1);
+        $pageLimit=\CNP::getConfigurationValue('pageLimit');
+        $data = \DemocracyApps\CNP\Compositions\Composition::allProjectCompositionsPaged($project->id, $page, $pageLimit);
+        $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
+        return \View::make('world.index', array('stories' => $stories, 'project' => $project, 'owner' => $owner));
     });
     Route::get('stories/{another}', array('as' => 'ext.stories',
                                                   'uses' => 'DemocracyApps\CNP\Controllers\CompositionsController@test'));
