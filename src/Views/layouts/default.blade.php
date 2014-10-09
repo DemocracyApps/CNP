@@ -122,9 +122,17 @@
             @yield('content')
         </div>
       </div>
-        <footer class="row">
+    <br>
+      <footer class="row">
+        <div class="col-md-6">
           <div id="copyright">Copyright © 2014 DemocracyApps</div>
-        </footer>
+        </div>
+        <div class="col-md-5" style="text-align:right;">
+          @yield('footer_right')
+        <div class="col-md-1">
+        </div>
+      </footer>
+    <br>
     </div>
   </div>
     <script src="/js/jquery-2.1.1.min.js"></script>
