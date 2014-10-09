@@ -129,6 +129,10 @@
   </table>
 
 @stop
+
+@section('footer_right')
+  <a href="/{{$project->id}}">External Page</a>
+@stop
 @section('listScripts')
   <script type="text/javascript">
     function setDefaultComposer(event, ui)
