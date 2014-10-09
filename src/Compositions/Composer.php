@@ -375,6 +375,8 @@ class Composer extends \Eloquent {
         $elements = array();
 
         $elementsIn = $data['elementsIn'];
+        $relationsIn = $data['relationsIn'];
+
         $anchorId = $this->getAnchorId(); // This is the 'Composition' element
         if (!$anchorId) throw new Exception("Spec lacks anchor id");
         // if (array_key_exists('anchor', $this->inputSpec)) {
@@ -459,6 +461,37 @@ class Composer extends \Eloquent {
                 }
             }
         }
+        foreach ($relationsIn as $relation) {
+            $from = $relation['from'];
+            $to   = $relation['to'];
+            $relType = $relation['relation']['value'];
+            if (array_key_exists($from, $elements) && array_key_exists($to,$elements)) {
+                $dfrom = $elements[$from];
+                $dto   = $elements[$to];
+                // One or the other may expand to multiple elements (e.g., tags), but let's not
+                // let things get out of hand.
+                if (count($dfrom) > 1 && count($dto) > 1) {
+                    throw new \Exception("Composer processing - N X M relation generation not allowed");
+                }
+                foreach ($dfrom as $df) {
+                    foreach ($dto as $dt) {
+                        $relations = Relation::createRelationPair($df->id, 
+                                                                  $dt->id,
+                                                                  $relType,
+                                                                  $project,
+                                                                  array('composerElements'
+                                                                        => $from.','.$to),
+                                                                  array('composerElements'
+                                                                        => $to.','.$from)
+                                                               );
+                        foreach ($relations as $relation) {
+                            $relation->setCompositionId($composition->id);
+                            $relation->save(); 
+                        }                        
+                    }
+                }
+            }            
+        }
         $haveit = ($this->referent != null);
         if ($this->referent) {
             $referents = $this->referent->getElements();
@@ -483,6 +516,7 @@ class Composer extends \Eloquent {
         if (! $map) return "No map!";
 
         $elementsIn = array();
+        $relationsIn = array();
         foreach ($map as $item) {
             // If no id, then it wasn't used to get input (e.g., page breaks).
             if (array_key_exists('use', $item) && array_key_exists('id', $item)) {
@@ -515,9 +549,17 @@ class Composer extends \Eloquent {
                         }
                         $val['properties'] = $properties;
                     }
-                    //$use = $item['use'];
-                    $elementId = $item['elementId'];
-                    $elementsIn[$elementId] = $val;
+                    if ($item['use'] == 'element') {
+                        $elementId = $item['elementId'];
+                        $elementsIn[$elementId] = $val;
+                    }
+                    else if ($item['use'] == 'relation' && $val['value']) {
+                        $rel = array();
+                        $rel['from'] = $item['from'];
+                        $rel['to'] = $item['to'];
+                        $rel['relation'] = $val;
+                        $relationsIn[] = $rel;
+                    }
                 }
                 else if ($isRef) {
                     $elementId = $item['elementId'];
@@ -531,6 +573,7 @@ class Composer extends \Eloquent {
 
         $data = array();
         $data['elementsIn'] = $elementsIn;
+        $data['relationsIn'] = $relationsIn;
         $this->commonProcessInput($composition, $data, $this->elementsSpec, $this->relationsSpec, $this->project);
     }
 

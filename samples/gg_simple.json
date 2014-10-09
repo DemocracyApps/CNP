@@ -50,18 +50,41 @@
                         "value":"MSW"
                     }
                 ]
+            },
+            {
+                "id": "connexionselector",
+                "use":"relation",
+                "from":"Storyteller",
+                "to":"Story",
+                "inputType":"select",
+                "prompt":"What is your connection to what happened in the story?",
+                "options": [
+                    {
+                        "display":"---",
+                        "value":null                        
+                    },
+                    {
+                        "display":"Helped make it happen",
+                        "value":"helped"                        
+                    },
+                    {
+                        "display":"Was affected by what happened",
+                        "value":"was-affected-by"                        
+                    },
+                    {
+                        "display":"Saw it happen",
+                        "value":"saw"                        
+                    },
+                    {
+                        "display":"Heard about it happening",
+                        "value":"heard-about"                        
+                    },
+                    {
+                        "display":"Unknown",
+                        "value":"unknown-relation-to"                        
+                    }
+                ]
             }
-            // {
-            //     "id": "select",
-            //     "use":"relation",
-            //     "from":"Storyteller",
-            //     "to":"Story",
-            //     "inputType":"select",
-            //     "prompt":"Pick one of these, fool!",
-            //     "options": [
-            //         ""
-            //     ]
-            // }
 	   ]
     }
 }

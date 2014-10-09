@@ -16,7 +16,16 @@
         {"name":"causes", "inverse":"is-caused-by"},
         {"name":"is-caused-by", "inverse":"causes"},
         {"name":"branches-to", "inverse":"branches-from"},
-        {"name":"branches-from", "inverse":"branches-to"}
+        {"name":"branches-from", "inverse":"branches-to"},
+        {"name":"helped", "inverse":"was-helped-by"},
+        {"name":"was-helped-by", "inverse":"helped"},
+        {"name":"saw", "inverse":"was-seen-by"},
+        {"name":"was-seen-by", "inverse":"saw"},
+        {"name":"heard-about", "inverse":"was-heard-about-by"},
+        {"name":"was-heard-about-by", "inverse":"heard-about"},
+        {"name":"was-affected-by", "inverse":"affected"},
+        {"name":"affected", "inverse":"was-affected-by"},
+        {"name":"unknown-relation-to"}
     ],
     "silly": "32"
 }
