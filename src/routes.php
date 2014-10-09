@@ -1,6 +1,7 @@
 <?php 
 
 use \DemocracyApps\CNP\Entities as DAEntity;
+use \DemocracyApps\CNP\Entities\Project;
 
 // Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
 //           " and method " .\Request::server('REQUEST_METHOD'));
@@ -56,7 +57,9 @@ Route::pattern('projectId', '[0-9]+');
 Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
 
     Route::get('/', function() {
-        return "I got here!";
+        $project = Project::find(\Request::segment(1));
+        $owner = ($project->userid == \Auth::user()->getId());
+        return View::make('world.home', array('project' => $project, 'owner' => $owner));
     });
     Route::get('stories/{another}', array('as' => 'ext.stories',
                                                   'uses' => 'DemocracyApps\CNP\Controllers\CompositionsController@test'));
