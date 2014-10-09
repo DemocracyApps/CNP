@@ -26,13 +26,42 @@
                 "inputType":"auto",
                 "inputValue":"!user"
             },
-    		{
-    			"id":"5",
-    			"use":"element",
-    			"elementId": "Organization",
-    			"inputType":"text",
-    			"prompt":"Name the organization or group most involved in what happened."
-    		}
+            {
+                "id": "orgselector",
+                "use":"element",
+                "elementId":"Organization",
+                "inputType":"select",
+                "prompt":"Pick one of these, fool!",
+                "options": [
+                    {
+                        "display":"---",
+                        "value":"None"                        
+                    },
+                    {
+                        "display":"Central Intelligence Agency",
+                        "value":"CIA"                        
+                    },
+                    {
+                        "display":"Federal Bureau of Investigation",
+                        "value":"FBI"                        
+                    },
+                    {
+                        "display":"Ministry of Silly Walks",
+                        "value":"MSW"
+                    }
+                ]
+            }
+            // {
+            //     "id": "select",
+            //     "use":"relation",
+            //     "from":"Storyteller",
+            //     "to":"Story",
+            //     "inputType":"select",
+            //     "prompt":"Pick one of these, fool!",
+            //     "options": [
+            //         ""
+            //     ]
+            // }
 	   ]
     }
 }

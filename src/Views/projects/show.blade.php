@@ -63,7 +63,7 @@
         $defaultComposer = $project->getProperty('defaultComposer');
       }
     ?>
-    <select id="default-composer-select">
+    <select class="form-control" id="default-composer-select">
       @if (! $defaultComposer) {
         <option value="-1"> --- </option>
       }
