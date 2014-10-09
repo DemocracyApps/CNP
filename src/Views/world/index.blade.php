@@ -2,14 +2,15 @@
 @extends('layouts.default_ext')
 
 @section('title')
- {{$project->name}} Stories
+All Contributions to {{$project->name}}
+@stop
+
+@section('buttons')
+    <button class="btn btn-warning" style="width:100px;" onclick="window.location.href='/{{$project->id}}'">Home</button>
 @stop
 
 @section('content')
-    <div class="row">
-        <h1>All Contributions to {{$project->name}}!</h1>
-        <br>
-    </div>
+    <br>
     <div class="row">
          <table class="table table-striped">
          @foreach($stories as $story)
