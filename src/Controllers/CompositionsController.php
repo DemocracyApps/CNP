@@ -171,7 +171,6 @@ class CompositionsController extends ApiController {
      */
     public function store()
     {
-        \Log::info("In store");
         if (\Auth::guest()) {
             return \Redirect::to('/login');         
         }

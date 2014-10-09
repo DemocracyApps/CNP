@@ -6,21 +6,18 @@
 	    "inputType": "auto-interactive",
 	    "map": [
             {
+                "id":"3",
+                "use":"element",
+                "inputType":"text",
+                "elementId":"Title",
+                "prompt":"Give your story a title"
+            },
+            {
     			"id":"1",
     			"use":"element",
     			"elementId":"Story",
     			"inputType":"textarea",
     			"prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community."
-    		},
-    		{
-    			"use":"pagebreak"
-    		},
-    		{
-    			"id":"3",
-    			"use":"element",
-    			"inputType":"text",
-                "elementId":"Title",
-    			"prompt":"Give your story a title"
     		},
             {
                 "id":"user",
@@ -29,13 +26,6 @@
                 "inputType":"auto",
                 "inputValue":"!user"
             },
-    		{
-    			"id":"4",
-    			"use":"element",
-    			"elementId": "Topic",
-    			"inputType":"text",
-    			"prompt":"What is this story about?"
-    		},
     		{
     			"id":"5",
     			"use":"element",

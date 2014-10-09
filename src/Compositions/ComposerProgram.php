@@ -49,6 +49,9 @@ class ComposerProgram {
 
                     }
                 }
+                else if (array_key_exists('inputType', $item) && $item['inputType'] == 'auto') {
+                    // Nothing!
+                }
                 else  {
                     if (array_key_exists('id', $item)) {
                         $id = $item['id'];

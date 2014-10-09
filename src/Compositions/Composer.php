@@ -487,7 +487,20 @@ class Composer extends \Eloquent {
             // If no id, then it wasn't used to get input (e.g., page breaks).
             if (array_key_exists('use', $item) && array_key_exists('id', $item)) {
                 $id = $item['id'];
-                $value = $this->inputDriver->getCompositionElementById($id);
+                $isRef = false;
+                $value = null;
+                if (array_key_exists('inputType', $item) && $item['inputType'] == 'auto') {
+                    if (array_key_exists('inputValue', $item)) {
+                        if ($item['inputValue'] == '!user') {
+                            $user = \Auth::user();
+                            $isRef = true;
+                            $refId = $user->elementid;
+                        }
+                    }
+                }
+                else {
+                    $value = $this->inputDriver->getCompositionElementById($id);
+                }
 
                 //if (array_key_exists($id, $values)) {
                 if ($value) {
@@ -502,8 +515,15 @@ class Composer extends \Eloquent {
                         }
                         $val['properties'] = $properties;
                     }
-                    $use = $item['use'];
+                    //$use = $item['use'];
                     $elementId = $item['elementId'];
+                    $elementsIn[$elementId] = $val;
+                }
+                else if ($isRef) {
+                    $elementId = $item['elementId'];
+                    $val = array();
+                    $val['isRef'] = true;
+                    $val['id'] = $refId;
                     $elementsIn[$elementId] = $val;
                 }
             }
