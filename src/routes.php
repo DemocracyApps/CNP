@@ -71,6 +71,11 @@ Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
         $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
         return \View::make('world.index', array('stories' => $stories, 'project' => $project, 'owner' => $owner));
     });
+    Route::get('sos_start', function () {
+        $project = Project::find(\Request::segment(1));
+        $owner = ($project->userid == \Auth::user()->getId());
+        return \View::make('world.sos_start', array('project' => $project, 'owner' => $owner));
+    });
     Route::get('stories/{another}', array('as' => 'ext.stories',
                                                   'uses' => 'DemocracyApps\CNP\Controllers\CompositionsController@test'));
 

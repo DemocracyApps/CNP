@@ -14,7 +14,8 @@
         {"name":"Government",     "id":"6"},
         {"name":"Business",       "id":"7"},
         {"name":"StoryElement",   "id":"8"},
-        {"name":"CnpCollection",  "id":"9"}
+        {"name":"CnpCollection",  "id":"9"},
+        {"name":"Organization",   "id":"10"}
     ],
     "apiRequiresSSL": "false",
     "pageLimit": "15"

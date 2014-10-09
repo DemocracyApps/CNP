@@ -6,7 +6,8 @@ class ElementGenerator
 {
     static $fcts = array(
         'Tag' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::tagGenerator',
-        'Person' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::personGenerator'
+        'Person' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::personGenerator',
+        'Organization' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::organizationGenerator'
         );
 
     /**
@@ -51,7 +52,6 @@ class ElementGenerator
     static private function personGenerator($name, $elementType, $content, $properties)
     {
         $createdElements = null;
-        // We want to create separate tags for each word in the content;
         if ($content) {
             $d = null;
             if ($content['isRef']) {
@@ -62,6 +62,34 @@ class ElementGenerator
                 if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
                 $d = new $className($name, \Auth::user()->getId());
                 $d->content = $content['value'];
+                if ($properties) {
+                    foreach ($properties as $propName => $propValue) {
+                        $d->setProperty($propName, $propValue);
+                    }
+                }
+            }
+            $createdElements = array($d);
+        }
+        // Must return an array of Elements
+        return $createdElements;
+    }
+
+    static private function organizationGenerator($name, $elementType, $content, $properties)
+    {
+        $createdElements = null;
+        if ($content) {
+            $d = null;
+            if ($content['isRef']) {
+                $d = DAEntity\Organization::find($content['id']);
+            }
+            else {
+                $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
+                if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
+                $d = DAEntity\Tag::findByContent($content['value']);
+                if (! $d) {
+                    $d = new $className($name, \Auth::user()->getId());
+                    $d->content = $content['value'];
+                }
                 if ($properties) {
                     foreach ($properties as $propName => $propValue) {
                         $d->setProperty($propName, $propValue);
@@ -90,7 +118,7 @@ class ElementGenerator
                 foreach ($tags as $tag) {
                     $tag = trim(strtolower($tag));
                     if ($tag && strlen($tag) > 0) {
-                        $d = DAEntity\Tag::findByName($tag);
+                        $d = DAEntity\Tag::findByContent($tag);
                         if ( ! $d) {
                             $d = new $className($name, \Auth::user()->getId());
 

@@ -17,17 +17,4 @@ class Tag extends Element
             static::$classElementType = \CNP::getElementTypeId('Tag');
         }
     }
-
-    static public function findByName($nm)
-    {
-        $data = DB::table(self::$tableName)
-                  ->where('content', '=', $nm)->first();
-        $result = null;
-        if ($data != null) {
-            $result = new static($data->name, $data->userid);
-            self::fill($result, $data);
-        }
-        return $result;
-    }
-
 }

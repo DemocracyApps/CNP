@@ -32,6 +32,19 @@
 	    			"use":"element",
 	    			"elementId": "Organization",
 	    			"columnType": "text"
+	    		},
+	    		// {
+	    		// 	"column": 11,
+	    		// 	"use":"relation",
+	    		// 	"from":"Storyteller",
+	    		// 	"to":"Story",
+	    		// 	"columnType": "text"
+	    		// },
+	    		{
+	    			"column": 29,
+	    			"use":"element",
+	    			"elementId":"Storyteller",
+	    			"columnType": "text"
 	    		}
 	    	]
 	    }
