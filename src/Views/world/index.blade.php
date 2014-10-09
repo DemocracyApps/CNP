@@ -16,7 +16,7 @@ All Contributions to {{$project->name}}
          @foreach($stories as $story)
          <tr>
          <td style="width:20%;"> {{ $story->id }} </td>
-         <td style="width:70%;"> <a href="/compositions/{{$story->id}}">{{ $story->title}} </a></td>
+         <td style="width:70%;"> <a href="/{{$project->id}}/compositions/{{$story->id}}">{{ $story->title}} </a></td>
          <td> {{$story->created_at}} </td>
          </tr>
          @endforeach

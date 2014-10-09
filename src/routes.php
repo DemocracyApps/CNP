@@ -2,6 +2,10 @@
 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Entities\Project;
+use \DemocracyApps\CNP\Entities\Element;
+use \DemocracyApps\CNP\Entities\Relation;
+use \DemocracyApps\CNP\Compositions\Composition;
+use \DemocracyApps\CNP\Compositions\Composer;
 
 // Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
 //           " and method " .\Request::server('REQUEST_METHOD'));
@@ -71,6 +75,87 @@ Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
         $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
         return \View::make('world.index', array('stories' => $stories, 'project' => $project, 'owner' => $owner));
     });
+
+    Route::get('compositions/{compositionId}', function () {
+        $project = Project::find(\Request::segment(1));
+        $owner = ($project->userid == \Auth::user()->getId());
+        $composition = Composition::find(\Request::segment(3));
+        $viewMode='normal';
+        if (\Input::has('view')) {
+            $viewMode=\Input::get('view');
+        }
+        $composer = Composer::find($composition->input_composer_id);
+        if ($composer->output) {
+            $ctmp = Composer::find($composer->output);
+            if ($ctmp) $composer = $ctmp;
+        }
+
+        $topElement = Element::find($composition->top);
+
+        if ($viewMode == 'normal') {
+            // Get all the elements associated with this composition.
+            // We get back a hash by Composer element ID.
+            $elements = array();
+            Element::getCompositionElements($composition->id, $elements);
+
+            $composer->initializeForOutput(\Input::all(), $elements);
+            if ( ! $composer->getDriver()->done()) {
+                if (! $composer->getDriver()->usingInputForOutput()) {
+                    return \View::make('world.layoutdriven', array('composer' => $composer,
+                                                                          'topElement' => $topElement,
+                                                                          'composition' => $composition,
+                                                                          'project' => $project->id));
+                }
+                else {
+                    return \View::make('world.show', array('composer' => $composer,
+                                                                          'topElement' => $topElement,
+                                                                          'composition' => $composition,
+                                                                          'project' => $project->id));
+                }
+            }
+            else {
+              return \Redirect::to('/compositions?project='.$composer->project);
+            }
+        }
+        else if ($viewMode == 'structure') {
+            if (\Input::has('element')) {
+                $topElement = Element::find(\Input::get('element'));
+            }
+            $elementRelations = array(); 
+            $elementsById = array();
+            // $elements = Relation::getRelatedElements($topElement->id, null);
+            $elements = Element::getRelatedElements($topElement->id, null);
+            array_unshift($elements, $topElement);
+
+            foreach ($elements as $element) { // Get the relations
+                if ( ! array_key_exists($element->id, $elementsById)) $elementsById[$element->id] = $element;
+                $relations = Relation::getRelations($element->id);
+
+                $elementRelations[$element->id] = array();
+                foreach ($relations as $relation) {
+                    $to = $relation->toId;
+                    $relType = \DemocracyApps\CNP\Entities\Eloquent\RelationType::find($relation->relationId);
+                    $relationName = $relType->name;
+                    if ( ! array_key_exists($to, $elementsById)) {
+                        $elementsById[$to] = Element::find($to);
+                    }
+                    //<a href="/{{$project}}/compositions/{{$composition->id}}?view=structure&element={{$element->id}}">{{$element->id}}</a>
+                    $link = '<a href="/' . $project->id . "/compositions" . "/" . $composition->id . "?view=structure&element=" . 
+                            $elementsById[$to]->id . '">' .  $elementsById[$to]->id . "</a>";
+                    $elementRelations[$element->id][] = array($relationName, 
+                                                              $elementsById[$to]->name . " (".$link .")");
+                }
+            }
+            return \View::make('world.show_structure', array('story' => $topElement, 
+                                                     'elements' => $elements,
+                                                     'elementsById' => $elementsById,
+                                                     'relations' => $elementRelations,
+                                                     'composition' => $composition,
+                                                     'project' => $project->id));
+        }
+
+    });
+
     Route::get('sos_start', function () {
         $project = Project::find(\Request::segment(1));
         $owner = ($project->userid == \Auth::user()->getId());
