@@ -76,6 +76,71 @@ Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
         return \View::make('world.index', array('stories' => $stories, 'project' => $project, 'owner' => $owner));
     });
 
+    Route::get('compositions/create', function () {
+        if (\Auth::guest()) {
+            return \Redirect::to('/login');         
+        }
+
+        $project = Project::find(\Request::segment(1));
+
+        if ( ! \Input::has('composer')) throw new \Exception("No composer id specified.");
+
+        $composer = Composer::find(\Input::get('composer'));
+        if ( ! $composer ) throw new \Exception("Composer ".\Input::get('composer'). " not found.");
+
+        if ( ! $composer->validForInput()) throw new \Exception("Composer ".\Input::get('composer') . " not valid for input.");
+        $composer->initializeForInput(\Input::all());
+
+        if (\Input::get('referent')) {
+            $composer->setReferentByElementId(\Input::get('referent'));
+        }
+
+        $composition = new \DemocracyApps\CNP\Compositions\Composition;
+        $composition->title = "No Title";
+        $composition->input_composer_id = $composer->id;
+        $composition->userid = \Auth::user()->getId();
+        $composition->project = $composer->project;
+        $composition->save();
+
+        $inputType = $composer->getInputType();
+        if ($inputType == 'csv-simple') {
+            return \View::make('world.csvUpload', array('composer' => $composer, 'composition' => $composition));
+        }
+        elseif ($inputType == 'auto-interactive') {
+            return \View::make('world.autoinput', array('composer' => $composer, 'composition' => $composition));
+        }
+        else {
+            return "Unknown input type " . $inputType;
+        }
+
+    });
+
+    Route::post('compositions', function() {
+        if (\Auth::guest()) {
+            return \Redirect::to('/login');         
+        }
+        $project = Project::find(\Request::segment(1));
+        $input = \Input::all();
+        $composition = Composition::find(\Input::get('composition'));
+        $composer = Composer::find($composition->input_composer_id);
+        if ( ! $composer->validateInput($input)) {
+            return \Redirect::back()->withInput()->withErrors($composer->messages());
+        }
+        if (\Input::get('referentId')) {
+            $composer->setReferentByReferentId(\Input::get('referentId'));
+        }
+        $inputType = $composer->getInputType();
+
+        $composer->initializeForInput($input);
+        $composer->processInput($input, $composition);
+        if ($inputType == 'auto-interactive') {
+            if ( ! $composer->getDriver()->done()) {
+                return \View::make('world.autoinput', array('composer' => $composer, 'composition' => $composition));
+            }
+        }
+        return \Redirect::to('/'.$composer->project.'/compositions');
+    });
+
     Route::get('compositions/{compositionId}', function () {
         $project = Project::find(\Request::segment(1));
         $owner = ($project->userid == \Auth::user()->getId());

@@ -13,7 +13,7 @@
                     <div class="col-xs-1">
                     </div>
                     <div class="col-xs-11">
-                        <button class="btn btn-warning" style="width:200px;" onclick="window.location.href='/compositions/create?composer={{$defaultComposer}}'">Share Your Story</button>
+                        <button class="btn btn-warning" style="width:200px;" onclick="window.location.href='/{{$project->id}}/compositions/create?composer={{$defaultComposer}}'">Share Your Story</button>
                     </div>
                 </div>
                 <br>
