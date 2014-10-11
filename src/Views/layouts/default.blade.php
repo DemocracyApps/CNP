@@ -129,6 +129,7 @@
         </div>
         <div class="col-md-5" style="text-align:right;">
           @yield('footer_right')
+        </div>
         <div class="col-md-1">
         </div>
       </footer>

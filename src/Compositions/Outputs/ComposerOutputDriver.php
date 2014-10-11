@@ -153,7 +153,7 @@ class ComposerOutputDriver extends \Eloquent {
                 $done = true;
             }
             else {
-                if ($next['use'] == 'pageinfo') {
+                if ($next['use'] == 'pageinfo') { // Allows us to change the layout from the default
                     if (array_key_exists('layout', $next)) {
                         if (! array_key_exists($next['layout'], $this->layouts)) {
                             throw new \Exception ("Unknown output layout " . $next['layout']);
@@ -268,6 +268,18 @@ class ComposerOutputDriver extends \Eloquent {
         elseif ($item['use'] == 'link') {
             $link = "compositions/".$composition->id."?composer=".$this->composer->id;
             $link .= "&start=" . $item['link'];
+            $link = link_to($link, $item['text'], array()); 
+            Html::createElement('p', $link, array(), $spaces);
+        }
+        elseif ($item['use'] == 'branch') {
+            $link = "/".$this->composer->project."/compositions/create?composer=".$item['composer']."&referent=";
+            $elements = $this->getElements($item['referentId']);
+            if ($elements && sizeof($elements) > 0) {
+                $link .= array_shift($elements)->id;
+                while (sizeof($elements) > 0) {
+                    $link .= ',' . array_shift($elements)->id;
+                }
+            }
             $link = link_to($link, $item['text'], array()); 
             Html::createElement('p', $link, array(), $spaces);
         }

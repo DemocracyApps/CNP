@@ -39,7 +39,7 @@
   $driver->cleanupAndSave();
 ?>
 
-{{ Form::open(['url' => 'compositions/'.$composition->id, 'method' => 'get']) }}
+{{ Form::open(['url' => '/'.$composer->project.'/compositions/'.$composition->id, 'method' => 'get']) }}
    <input type="hidden" name="driver" value="{{$composer->getDriver()->id}}"/>
    <input type="hidden" name="composer" value="{{$composer->id}}"/>
    <input type="hidden" name="composition" value="{{$composition->id}}"/>

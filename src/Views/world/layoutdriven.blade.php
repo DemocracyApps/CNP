@@ -5,7 +5,13 @@
 @stop
 
 @section('content')
-<h1>Presentation Using View: {{ $composition->title }}</h1>
+<h1>{{ $composition->title }}</h1>
+<div class="row">
+  <div class="col-md-8"></div>
+  <div class="col-md-4">
+    <p><a href="/{{$composer->project}}/compositions/{{$composition->id}}?view=structure">Structure View</a></p>
+  </div>
+</div>
 
 <?php
   use \DemocracyApps\CNP\Compositions\Outputs\ComposerOutputDriver;
@@ -13,7 +19,7 @@
   $driver->getOutputContent($topElement, $composition);
 ?>
 
-{{ Form::open(['url' => '/compositions/'.$composition->id, 'method' => 'get']) }}
+{{ Form::open(['url' => '/'.$composer->project.'/compositions/'.$composition->id, 'method' => 'get']) }}
    <input type="hidden" name="driver" value="{{$composer->getDriver()->id}}"/>
    <input type="hidden" name="composer" value="{{$composer->id}}"/>
 

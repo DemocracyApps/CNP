@@ -22,6 +22,7 @@ class LoginController extends BaseController {
             $user->save();
             \Log::info("Got a user id of " . $user->getId());
             $person = new \DemocracyApps\CNP\Entities\Person($userName, $user->getId());
+            $person->setContent($userName);
             $person->save();
             \Log::info("Got a person id of " . $person->getId());
 

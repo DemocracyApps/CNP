@@ -52,6 +52,7 @@ Account Page
     </div>
   @endif
 </div>
+<a href="/logout">Log Out</a>
 </div>
 
 @stop

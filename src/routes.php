@@ -149,6 +149,7 @@ Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
         if (\Input::has('view')) {
             $viewMode=\Input::get('view');
         }
+        $defaultComposer = null;
         if ($project->hasProperty('defaultOutputComposer')) {
             $defaultComposer = Composer::find($project->getProperty('defaultOutputComposer'));
         }
@@ -191,7 +192,7 @@ Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
                 }
             }
             else {
-              return \Redirect::to('/compositions?project='.$composer->project);
+              return \Redirect::to('/'.$composer->project.'/compositions?project='.$composer->project);
             }
         }
         else if ($viewMode == 'structure') {
