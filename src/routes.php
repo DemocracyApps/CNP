@@ -263,6 +263,7 @@ Route::group(['prefix' => 'ajax'], function ()
         });
 
         Route::get('setProjectDefaultInputComposer', '\DemocracyApps\CNP\Controllers\ProjectsController@setDefaultInputComposer');
+        Route::get('setProjectDefaultOutputComposer', '\DemocracyApps\CNP\Controllers\ProjectsController@setDefaultOutputComposer');
 
         Route::get('curate', function()
         {

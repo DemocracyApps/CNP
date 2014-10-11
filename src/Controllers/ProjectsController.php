@@ -141,6 +141,27 @@ class ProjectsController extends ApiController {
 			$project->setProperty('defaultInputComposer', \Input::get('defaultInputComposer'));
 		}
 		$project->save();
-		return $this->respondOK('Successfully set default composer', null);
+		return $this->respondOK('Successfully set default input composer', null);
+	}
+
+	public function setDefaultOutputComposer()
+	{
+		if (!\Input::has('project')) return $this->respondFormatError('No project specified');
+		if (!\Input::has('defaultOutputComposer')) return $this->respondFormatError('No default composer specified');
+		$project = Project::find(\Input::get('project')); 
+		if (!$project) return $this->respondNotFound('Project with ID '.\Input::get('project').' not found');
+		\Log::info("Default output composer is: " . \Input::get('defaultOutputComposer'));
+		if (\Input::get('defaultOutputComposer') < 0) {
+			$project->deleteProperty('defaultOutputComposer');
+		}
+		else {
+			$composer = Composer::find(\Input::get('defaultOutputComposer'));
+			if (!$composer) {
+				return $this->respondNotFound('Composer with ID '.\Input::get('defaultOutputComposer').' not found');
+			}
+			$project->setProperty('defaultOutputComposer', \Input::get('defaultOutputComposer'));
+		}
+		$project->save();
+		return $this->respondOK('Successfully set default output composer', null);
 	}
 }

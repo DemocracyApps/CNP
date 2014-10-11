@@ -34,6 +34,13 @@
 @stop
 
 @section('upperLeft')
+<?php
+  if (! $project->hasProperty('access')) {
+    $project->setProperty('access', 'Open');
+    $project->save();
+  }
+?>
+
 <div class="row">
   <div class="col-sm-4">
     <p><b>Project ID:</b></p>
@@ -87,17 +94,17 @@
 
 <div class="row">
   <div class="col-sm-4">
-    <p><b>Default Composer:</b></p>
+    <p><b>Default Output Composer:</b></p>
   </div>
   <div class="col-sm-8">
     <?php
-      $defaultInputComposer = null;
-      if ($project->hasProperty('defaultInputComposer')) {
-        $defaultInputComposer = $project->getProperty('defaultInputComposer');
+      $defaultOutputComposer = null;
+      if ($project->hasProperty('defaultOutputComposer')) {
+        $defaultOutputComposer = $project->getProperty('defaultOutputComposer');
       }
     ?>
-    <select class="form-control" id="default-composer-select">
-      @if (! $defaultInputComposer) {
+    <select class="form-control" id="default-output-composer-select">
+      @if (! $defaultOutputComposer) {
         <option value="-1"> --- </option>
       }
       @else {
@@ -106,7 +113,7 @@
       @endif
 
       @foreach ($composers as $composer)
-        @if ($defaultInputComposer == $composer->id) {
+        @if ($defaultOutputComposer == $composer->id) {
           <option value="{{$composer->id}}" selected>{{$composer->name}}</option>
         }
         @else {
@@ -170,15 +177,30 @@
   <script type="text/javascript">
     function setDefaultInputComposer(event, ui)
     {
+      alert("Setting input composer");
       var source ="http://cnp.dev/ajax/setProjectDefaultInputComposer?project={{$project->id}}&defaultInputComposer="
                   + $("select#default-input-composer-select").val();
       $.get( source, function( r ) {
         //alert("Got r = " + r.message);
       }).fail(function(r) {
-        alert("Error saving default composer: "+r.responseJSON.error.message);
+        alert("Error saving default input composer: "+r.responseJSON.error.message);
       });
     }
+
+    function setDefaultOutputComposer(event, ui)
+    {
+      alert("Setting output composer");
+      var source ="http://cnp.dev/ajax/setProjectDefaultOutputComposer?project={{$project->id}}&defaultOutputComposer="
+                  + $("select#default-output-composer-select").val();
+      $.get( source, function( r ) {
+      }).fail(function(r) {
+        alert("Error saving default output composer: "+r.responseJSON.error.message);
+      });
+    }
+
     $("select#default-input-composer-select").change (setDefaultInputComposer);
+
+    $("select#default-output-composer-select").change (setDefaultOutputComposer);
 
 
   </script>
