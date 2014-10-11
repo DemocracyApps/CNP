@@ -129,7 +129,6 @@ class ProjectsController extends ApiController {
 		if (!\Input::has('defaultInputComposer')) return $this->respondFormatError('No default composer specified');
 		$project = Project::find(\Input::get('project')); 
 		if (!$project) return $this->respondNotFound('Project with ID '.\Input::get('project').' not found');
-		\Log::info("Default input composer is: " . \Input::get('defaultInputComposer'));
 		if (\Input::get('defaultInputComposer') < 0) {
 			$project->deleteProperty('defaultInputComposer');
 		}
@@ -150,7 +149,6 @@ class ProjectsController extends ApiController {
 		if (!\Input::has('defaultOutputComposer')) return $this->respondFormatError('No default composer specified');
 		$project = Project::find(\Input::get('project')); 
 		if (!$project) return $this->respondNotFound('Project with ID '.\Input::get('project').' not found');
-		\Log::info("Default output composer is: " . \Input::get('defaultOutputComposer'));
 		if (\Input::get('defaultOutputComposer') < 0) {
 			$project->deleteProperty('defaultOutputComposer');
 		}

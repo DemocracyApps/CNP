@@ -149,10 +149,22 @@ Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
         if (\Input::has('view')) {
             $viewMode=\Input::get('view');
         }
-        $composer = Composer::find($composition->input_composer_id);
-        if ($composer->output) {
+        if ($project->hasProperty('defaultOutputComposer')) {
+            $defaultComposer = Composer::find($project->getProperty('defaultOutputComposer'));
+        }
+        /*
+         * In order of preference:
+         *    1. Preferred output composer defined by input composer
+         *    2. Project-level default output composer
+         *    3. Original input composer
+         */
+        $composer = Composer::find($composition->input_composer_id); // the default if nothing else found
+        if ($composer->output) { // Top preference if defined
             $ctmp = Composer::find($composer->output);
             if ($ctmp) $composer = $ctmp;
+        }
+        else if ($defaultComposer) { // Second preference if defined
+            $composer = $defaultComposer;
         }
 
         $topElement = Element::find($composition->top);

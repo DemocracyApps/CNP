@@ -177,7 +177,6 @@
   <script type="text/javascript">
     function setDefaultInputComposer(event, ui)
     {
-      alert("Setting input composer");
       var source ="http://cnp.dev/ajax/setProjectDefaultInputComposer?project={{$project->id}}&defaultInputComposer="
                   + $("select#default-input-composer-select").val();
       $.get( source, function( r ) {
@@ -189,7 +188,6 @@
 
     function setDefaultOutputComposer(event, ui)
     {
-      alert("Setting output composer");
       var source ="http://cnp.dev/ajax/setProjectDefaultOutputComposer?project={{$project->id}}&defaultOutputComposer="
                   + $("select#default-output-composer-select").val();
       $.get( source, function( r ) {
