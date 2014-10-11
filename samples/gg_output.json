@@ -31,6 +31,15 @@
                 "header":"Storyteller",
                 "elementId":"Storyteller",
                 "location":"right"
+            },
+            {
+                "id":"5",
+                "use":"branch",
+                "text":"Branch here!",
+                "composer":"2",
+                "referentId":"Title",
+                "relation":"branches-to",
+                "location":"right"
             }
         ]
     }
