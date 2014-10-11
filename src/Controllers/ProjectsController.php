@@ -123,21 +123,22 @@ class ProjectsController extends ApiController {
 	 * AJAX
 	 */
 	
-	public function setDefaultComposer()
+	public function setDefaultInputComposer()
 	{
 		if (!\Input::has('project')) return $this->respondFormatError('No project specified');
-		if (!\Input::has('defaultComposer')) return $this->respondFormatError('No default composer specified');
+		if (!\Input::has('defaultInputComposer')) return $this->respondFormatError('No default composer specified');
 		$project = Project::find(\Input::get('project')); 
 		if (!$project) return $this->respondNotFound('Project with ID '.\Input::get('project').' not found');
-		if (\Input::get('defaultComposer') < 0) {
-			$project->deleteProperty('defaultComposer');
+		\Log::info("Default input composer is: " . \Input::get('defaultInputComposer'));
+		if (\Input::get('defaultInputComposer') < 0) {
+			$project->deleteProperty('defaultInputComposer');
 		}
 		else {
-			$composer = Composer::find(\Input::get('defaultComposer'));
+			$composer = Composer::find(\Input::get('defaultInputComposer'));
 			if (!$composer) {
-				return $this->respondNotFound('Composer with ID '.\Input::get('defaultComposer').' not found');
+				return $this->respondNotFound('Composer with ID '.\Input::get('defaultInputComposer').' not found');
 			}
-			$project->setProperty('defaultComposer', \Input::get('defaultComposer'));
+			$project->setProperty('defaultInputComposer', \Input::get('defaultInputComposer'));
 		}
 		$project->save();
 		return $this->respondOK('Successfully set default composer', null);

@@ -54,17 +54,17 @@
 </div>
 <div class="row">
   <div class="col-sm-4">
-    <p><b>Default Composer:</b></p>
+    <p><b>Default Input Composer:</b></p>
   </div>
   <div class="col-sm-8">
     <?php
-      $defaultComposer = null;
-      if ($project->hasProperty('defaultComposer')) {
-        $defaultComposer = $project->getProperty('defaultComposer');
+      $defaultInputComposer = null;
+      if ($project->hasProperty('defaultInputComposer')) {
+        $defaultInputComposer = $project->getProperty('defaultInputComposer');
       }
     ?>
-    <select class="form-control" id="default-composer-select">
-      @if (! $defaultComposer) {
+    <select class="form-control" id="default-input-composer-select">
+      @if (! $defaultInputComposer) {
         <option value="-1"> --- </option>
       }
       @else {
@@ -73,7 +73,40 @@
       @endif
 
       @foreach ($composers as $composer)
-        @if ($defaultComposer == $composer->id) {
+        @if ($defaultInputComposer == $composer->id) {
+          <option value="{{$composer->id}}" selected>{{$composer->name}}</option>
+        }
+        @else {
+          <option value="{{$composer->id}}">{{$composer->name}}</option>
+        }
+        @endif
+      @endforeach
+    </select>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-4">
+    <p><b>Default Composer:</b></p>
+  </div>
+  <div class="col-sm-8">
+    <?php
+      $defaultInputComposer = null;
+      if ($project->hasProperty('defaultInputComposer')) {
+        $defaultInputComposer = $project->getProperty('defaultInputComposer');
+      }
+    ?>
+    <select class="form-control" id="default-composer-select">
+      @if (! $defaultInputComposer) {
+        <option value="-1"> --- </option>
+      }
+      @else {
+        <option value="-1" selected> --- </option>
+      }
+      @endif
+
+      @foreach ($composers as $composer)
+        @if ($defaultInputComposer == $composer->id) {
           <option value="{{$composer->id}}" selected>{{$composer->name}}</option>
         }
         @else {
@@ -135,17 +168,17 @@
 @stop
 @section('listScripts')
   <script type="text/javascript">
-    function setDefaultComposer(event, ui)
+    function setDefaultInputComposer(event, ui)
     {
-      var source ="http://cnp.dev/ajax/setProjectDefaultComposer?project={{$project->id}}&defaultComposer="
-                  + $("select#default-composer-select").val();
+      var source ="http://cnp.dev/ajax/setProjectDefaultInputComposer?project={{$project->id}}&defaultInputComposer="
+                  + $("select#default-input-composer-select").val();
       $.get( source, function( r ) {
         //alert("Got r = " + r.message);
       }).fail(function(r) {
         alert("Error saving default composer: "+r.responseJSON.error.message);
       });
     }
-    $("select#default-composer-select").change (setDefaultComposer);
+    $("select#default-input-composer-select").change (setDefaultInputComposer);
 
 
   </script>

@@ -63,8 +63,8 @@ Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
     Route::get('/', function() {
         $project = Project::find(\Request::segment(1));
         $owner = ($project->userid == \Auth::user()->getId());
-        $composerId = ($project->hasProperty('defaultComposer'))?$project->getProperty('defaultComposer'):-1;
-        return View::make('world.home', array('project' => $project, 'owner' => $owner, 'defaultComposer' => $composerId));
+        $composerId = ($project->hasProperty('defaultInputComposer'))?$project->getProperty('defaultInputComposer'):-1;
+        return View::make('world.home', array('project' => $project, 'owner' => $owner, 'defaultInputComposer' => $composerId));
     });
     Route::get('compositions', function () {
         $project = Project::find(\Request::segment(1));
@@ -262,7 +262,7 @@ Route::group(['prefix' => 'ajax'], function ()
             return json_encode($ret);            
         });
 
-        Route::get('setProjectDefaultComposer', '\DemocracyApps\CNP\Controllers\ProjectsController@setDefaultComposer');
+        Route::get('setProjectDefaultInputComposer', '\DemocracyApps\CNP\Controllers\ProjectsController@setDefaultInputComposer');
 
         Route::get('curate', function()
         {
