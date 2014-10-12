@@ -21,17 +21,17 @@
             "title": "Command Panel",
             "items": [
                 {
-                    "name":"Welcome",
+                    "name":"Demo Slides",
                     "url":"/welcome?mode=app",
                     "tag":"welcome",
                     "items": [
                         {
-                            "name":"Welcome",
-                            "url":"/demo?stage=intro_start&mode=app"
+                            "name":"Value of Engagement",
+                            "url":"/demo?stage=value&mode=app"
                         },
                         {
-                            "name":"Introduction",
-                            "url":"/demo?stage=intro_intro&mode=app"
+                            "name":"Power of Story",
+                            "url":"/demo?stage=story1"
                         },
                         {
                             "name":"What is the CNP?",

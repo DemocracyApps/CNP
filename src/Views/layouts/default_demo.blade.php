@@ -121,6 +121,20 @@
         </div> <!-- End of the app-navigation DIV -->
 
         <div class="col-md-9 app-content">
+            <div class="container">
+              <div class="row">
+                <div class="col-xs-7">
+                  <h1>
+                    @yield('title')
+                  </h1>
+                </div>
+                <div class="col-xs-3">
+                  <div >
+                    @yield('buttons')
+                  </div>
+                </div>
+              </div>
+            </div>
             @yield('content')
         </div>
       </div>
