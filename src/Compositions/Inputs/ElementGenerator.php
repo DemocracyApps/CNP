@@ -27,12 +27,17 @@ class ElementGenerator
         else {
             $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
             if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
-            $d = new $className($name, \Auth::user()->getId());
-            $d->content = $content['value'];
+            if ($content['isRef']) {
+                $d = DAEntity\Element::find($content['value']);
+            }
+            else {
+                $d = new $className($name, \Auth::user()->getId());
+                $d->content = $content['value'];
 
-            if ($properties) {
-                foreach ($properties as $propName => $propValue) {
-                    $d->setProperty($propName, $propValue);
+                if ($properties) {
+                    foreach ($properties as $propName => $propValue) {
+                        $d->setProperty($propName, $propValue);
+                    }
                 }
             }
             $createdElements = array($d);

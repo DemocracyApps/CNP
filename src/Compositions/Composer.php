@@ -359,11 +359,8 @@ class Composer extends \Eloquent {
             \Queue::push('\DemocracyApps\CNP\Compositions\Inputs\CSVInputProcessor', $data);
         }
         else if ($this->inputType == 'auto-interactive') {
-            \Log::info("Extract submitted values");
             $this->inputDriver->extractSubmittedValues($input); // Import latest batch of form data into inputDriver
-            \Log::info("Back from extracting submitted values");
             if ($this->inputDriver->done()) {
-                \Log::info("And we are done");
                 self::processAutoInput($input, $composition);
                 $this->inputDriver->delete();
             }

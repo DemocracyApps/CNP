@@ -4,6 +4,7 @@ namespace DemocracyApps\CNP\Compositions\Inputs;
 use \DemocracyApps\CNP\Compositions\Composer;
 use \DemocracyApps\CNP\Compositions\ComposerProgram;
 use \DemocracyApps\CNP\Utility\Html;
+use \DemocracyApps\CNP\Entities\Element;
 
 /**
  * This class is generated from an 'auto-interactive' input
@@ -89,6 +90,17 @@ class ComposerInputDriver extends \Eloquent {
         elseif ($desc['inputType'] == 'person') {
             Html::createElement('input', null, 
                 array( 'class' => 'form-control auto-person', 'name' => $desc['id'], 'type'=>'text'));
+        }
+        elseif ($desc['inputType'] == 'pickElement') {
+            $type = \CNP::getElementTypeId($desc['pickType']);
+            $elements = Element::allUserElements(\Auth::user()->getId(), $type);
+            Html::startElement('select', array('class' => 'form-control', 'name' => $desc['id']));
+            foreach ($elements as $elem) {
+                $display = $elem->content;
+                $value = $elem->id;
+                Html::createElement('option', $display, array('value'=>$value));
+            }
+            Html::endElement('select');
         }
         elseif ($desc['inputType'] == 'select') {
             Html::startElement('select', array('class' => 'form-control', 'name' => $desc['id']));

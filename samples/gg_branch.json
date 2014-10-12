@@ -6,13 +6,6 @@
 	    "inputType": "auto-interactive",
 	    "map": [
             {
-                "id":"test0",
-                "use":"element",
-                "elementId":"Topic",
-                "inputType":"text",
-                "prompt":"Pre-tag your story"
-            },
-            {
                 "id":"1",
                 "use":"decision",
                 "inputType":"select",
@@ -63,16 +56,10 @@
             {
                 "id":"old1",
                 "use":"element",
-                "inputType":"text",
                 "elementId":"Title",
-                "prompt":"Give your story a title"
-            },
-            {
-                "id":"old2",
-                "use":"element",
-                "elementId":"Organization",
-                "inputType":"text",
-                "prompt":"What Organization is it?"
+                "inputType":"pickElement",
+                "pickType":"CnpComposition",
+                "prompt":"Pick your story"
             }
             // {
             //     "id":"old1",

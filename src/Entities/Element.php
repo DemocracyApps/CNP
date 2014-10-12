@@ -297,14 +297,15 @@ class Element
         return $result;        
     }
 
-    public static function allUserElements ($id) 
+    public static function allUserElements ($id, $type = null) 
     {
-        if (static::$classElementType <= 0) { // All Elements
+        if (static::$classElementType <= 0 && $type == null) { // All Elements
             $d = DB::table(self::$tableName)->where('userid', '=', $id)->orderBy('id')->get();
         }
         else { // Specific Element Type
+            if ($type == null) $type = static::$classElementType;
             $d = DB::table(self::$tableName)->where('userid', '=', $id)
-                                            ->where('type', '=', static::$classElementType)
+                                            ->where('type', '=', $type)
                                             ->orderBy('id')
                                             ->get();
         }

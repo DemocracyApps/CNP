@@ -28,7 +28,8 @@ abstract class PersonInputHandler extends InputHandler {
             $val['value'] = $inputMapItem['value'];
         else 
             $val['value'] = null;
-        return $val;
+        return $inputMapItem['value']; // See above
+        //return $val;
     }
 
 }
