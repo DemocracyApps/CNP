@@ -4,14 +4,14 @@
 The Power of Story
 @stop
 @section('buttons')
-<button class="btn btn-warning" onclick="window.location.href='/demo?stage=value2';">Next</button>
+<button class="btn btn-warning" onclick="window.location.href='/demo?stage=cnp1';">Next</button>
 @stop
 @section('content')
 <div class="presentation container">
-    <p><em> Ordinary people can convey complex, interesting and valuable information<br> 
+    <p><em> Ordinary people are able to convey complex, interesting and valuable information<br> 
          when they can present it in a form that is natural for them.</em></p>
 
-    <h3>Stories:</h3>
+    Stories:
     <ul>
         <li>Are an efficient way to store and convey rich information</li>
         <li>Allow for the unexpected</li>

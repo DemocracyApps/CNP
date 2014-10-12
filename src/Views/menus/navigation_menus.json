@@ -35,15 +35,23 @@
                         },
                         {
                             "name":"What is the CNP?",
-                            "url":"/demo?stage=intro_cnp&mode=app"
+                            "url":"/demo?stage=cnp1"
                         },
                         {
-                            "name":"The Process",
-                            "url":"/demo?stage=intro_process&mode=app"
+                            "name":"The Connected Story",
+                            "url":"/demo?stage=cnp1"
                         },
                         {
-                            "name":"The Network of Stories",
-                            "url":"/demo?stage=intro_net1&mode=app"
+                            "name":"Easy In, Easy Out",
+                            "url":"/demo?stage=cnp1"
+                        },
+                        {
+                            "name":"The Business",
+                            "url":"/demo?stage=cnp1"
+                        },
+                        {
+                            "name":"Next Steps",
+                            "url":"/demo?stage=cnp1"
                         }
                     ]
                 },
