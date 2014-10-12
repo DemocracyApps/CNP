@@ -92,7 +92,7 @@ Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
         $composer->initializeForInput(\Input::all());
 
         if (\Input::get('referent')) {
-            $composer->setReferentByElementId(\Input::get('referent'));
+            $composer->setReferentByElementId(\Input::get('referent'), \Input::get('referentRelation'));
         }
 
         $composition = new \DemocracyApps\CNP\Compositions\Composition;
@@ -114,7 +114,7 @@ Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
         }
 
     });
-
+    /* Store */
     Route::post('compositions', function() {
         if (\Auth::guest()) {
             return \Redirect::to('/login');         
@@ -127,7 +127,7 @@ Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], function () {
             return \Redirect::back()->withInput()->withErrors($composer->messages());
         }
         if (\Input::get('referentId')) {
-            $composer->setReferentByReferentId(\Input::get('referentId'));
+            $composer->setReferentByReferentId(\Input::get('referentId'), \Input::get('referentRelation'));
         }
         $inputType = $composer->getInputType();
 

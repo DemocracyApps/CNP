@@ -199,17 +199,19 @@ class Composer extends \Eloquent {
         return $value;
     }
 
-    public function setReferentByReferentId ($id)
+    public function setReferentByReferentId ($id, $relation)
     {
         $this->referent = ElementSet::find($id);
+        $this->referentRelation = $relation;
     }
 
-    public function setReferentByElementId ($id) {
+    public function setReferentByElementId ($id, $relation) {
         $d = DAEntity\Element::find($id);
         $this->referent = new ElementSet;
         $this->referent->initialize();
         $this->referent->addElement($d);
         $this->referent->save();
+        $this->referentRelation = $relation;
         return $this->referent->id;
     }
 
@@ -248,6 +250,11 @@ class Composer extends \Eloquent {
         $refId = null;
         if ($this->referent) $refId = $this->referent->id;
         return $refId;
+    }
+
+    public function getReferentRelation()
+    {
+        return $this->referentRelation;
     }
 
     public function validForInput() // For now, just check input. Should do full validity check.
@@ -495,10 +502,9 @@ class Composer extends \Eloquent {
         $haveit = ($this->referent != null);
         if ($this->referent) {
             $referents = $this->referent->getElements();
-            $referentRelation = $this->inputSpec['referentRelation'];
             foreach($referents as $ref) {
                 $relations = DAEntity\Relation::createRelationPair($ref->id, 
-                                                                   $topElement->id, $referentRelation);
+                                                                   $topElement->id, $this->referentRelation, $project);
                 foreach ($relations as $relation) { $relation->save(); }
 
             }

@@ -4,6 +4,7 @@ namespace DemocracyApps\CNP\Compositions\Outputs;
 use \DemocracyApps\CNP\Compositions\Composer;
 use \DemocracyApps\CNP\Compositions\ComposerProgram;
 use \DemocracyApps\CNP\Utility\Html;
+use \DemocracyApps\CNP\Entities\Relation;
 
 class ComposerOutputDriver extends \Eloquent {
     protected $table = 'composer_output_drivers';
@@ -272,6 +273,11 @@ class ComposerOutputDriver extends \Eloquent {
             Html::createElement('p', $link, array(), $spaces);
         }
         elseif ($item['use'] == 'branch') {
+            /*
+             * Note that (a) we deal with multiple referent elements here, but it's not implemented on the input end, and
+             * (b) in principle it would be good to allow multiple referents (and maybe multiple relations) to be specified
+             * in the branch element.
+             */
             $link = "/".$this->composer->project."/compositions/create?composer=".$item['composer']."&referent=";
             $elements = $this->getElements($item['referentId']);
             if ($elements && sizeof($elements) > 0) {
@@ -280,6 +286,8 @@ class ComposerOutputDriver extends \Eloquent {
                     $link .= ',' . array_shift($elements)->id;
                 }
             }
+            $link .= "&referentRelation=";
+            $link .= $item['relation'];
             $link = link_to($link, $item['text'], array()); 
             Html::createElement('p', $link, array(), $spaces);
         }

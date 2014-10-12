@@ -9,6 +9,7 @@
    <input type="hidden" name="composition" value="{{$composition->id}}"/>
    @if ($composer->getReferentId())
       <input type="hidden" name="referentId" value="{{$composer->getReferentId()}}"/>
+      <input type="hidden" name="referentRelation" value="{{$composer->getReferentRelation()}}"/>
    @endif
    <?php
       use \DemocracyApps\CNP\Compositions\Inputs\ComposerInputDriver;
