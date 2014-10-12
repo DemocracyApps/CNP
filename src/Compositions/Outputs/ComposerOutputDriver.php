@@ -134,7 +134,6 @@ class ComposerOutputDriver extends \Eloquent {
     
     public function getOutputContent($topElement, $composition)
     {
-        \Log::info("a1");
         $defaultLayout = 'single';
         if (array_key_exists('defaultLayout', $this->outputSpec)) 
             $defaultLayout = $this->outputSpec['defaultLayout'];
@@ -143,7 +142,6 @@ class ComposerOutputDriver extends \Eloquent {
         if (! array_key_exists($defaultLayout, $this->layouts)) {
             throw new \Exception ("Unknown output layout " . $defaultLayout);
         }
-        \Log::info("a2");
         $currentLayout = $this->layouts[$defaultLayout];
         // Let's get all the elements that go on to this page
         $targeted = array();
@@ -171,10 +169,8 @@ class ComposerOutputDriver extends \Eloquent {
                 }
             }
         }
-        \Log::info("a3");
         // Now output this page according to the layout
         $content = $this->runLayout($composition, $currentLayout, $targeted, $topElement, 10);
-        \Log::info("a4");
         $this->cleanupAndSave();
     }
 

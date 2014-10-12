@@ -5,6 +5,7 @@ abstract class TextInputHandler extends InputHandler {
 
     public static function extractValue($id, $input, &$inputMapItem)
     {
+        \Log::info("In text input handler with id = ". $id);
         $inputMapItem['value'] = null;
         if (array_key_exists($id, $input)) {
             $inputMapItem['value'] = $input[$id];
@@ -14,7 +15,11 @@ abstract class TextInputHandler extends InputHandler {
     {
         $val = array();
         $val['isRef'] = false;
-        $val['value'] = $inputMapItem['value'];
+        if (array_key_exists('value', $inputMapItem))
+            $val['value'] = $inputMapItem['value'];
+        else 
+            $val['value'] = null;
+
         return $val;
     }
 

@@ -24,8 +24,10 @@ abstract class PersonInputHandler extends InputHandler {
     {
         $val = array();
         $val['isRef'] = false;
-        $val['value'] = $inputMapItem['value'];
-        return $inputMapItem['value'];
+        if (array_key_exists('value', $inputMapItem))
+            $val['value'] = $inputMapItem['value'];
+        else 
+            $val['value'] = null;
         return $val;
     }
 

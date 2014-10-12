@@ -15,6 +15,7 @@
 
 <?php
   use \DemocracyApps\CNP\Compositions\Outputs\ComposerOutputDriver;
+
   $driver = $composer->getDriver();
   $driver->getOutputContent($topElement, $composition);
 ?>
@@ -31,5 +32,4 @@
       @endif
    </div>
 {{ Form::close() }}
-
 @stop

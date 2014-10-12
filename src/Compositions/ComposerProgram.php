@@ -23,7 +23,6 @@ class ComposerProgram {
         $this->runnable['expecting'] = null;
         $this->runnable['map'] = array();
         $previous = null;
-        \Log::info("Starting at " . $start);
         if (array_key_exists('columnMap', $program['map'])) {
             $inputMap = &$program['map']['columnMap'];
         }
@@ -68,6 +67,9 @@ class ComposerProgram {
                             $previous['next'] = $id; // don't override
                         }
                         $item['prev'] = $previous['id'];
+                    }
+                    if ($item['use'] == 'decision') {
+                        $item['next'] = '!value';
                     }
                     $breakSequence = false;
 
@@ -144,11 +146,21 @@ class ComposerProgram {
         }
         else {
             $result = $data['map'][$current];
-            if ($result['next']) {
+            if (array_key_exists('use', $result) && $result['use'] == 'decision') {
+                if (array_key_exists('value', $result)) {
+                    $data['current'] = $result['value'];
+                    $data['expecting'][] = $data['current'];
+                    $result = $data['map'][$result['value']];
+                }
+                else {
+                    $result = null;
+                }
+            }
+            else if ($result['next']) {
                 $data['current'] = $result['next'];
                 $data['expecting'][] = $data['current'];
                 $result = $data['map'][$result['next']];
-            }
+            }            
             else {
                 $this->done = true;
                 $data['done'] = true;

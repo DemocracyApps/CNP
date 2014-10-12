@@ -359,8 +359,11 @@ class Composer extends \Eloquent {
             \Queue::push('\DemocracyApps\CNP\Compositions\Inputs\CSVInputProcessor', $data);
         }
         else if ($this->inputType == 'auto-interactive') {
+            \Log::info("Extract submitted values");
             $this->inputDriver->extractSubmittedValues($input); // Import latest batch of form data into inputDriver
+            \Log::info("Back from extracting submitted values");
             if ($this->inputDriver->done()) {
+                \Log::info("And we are done");
                 self::processAutoInput($input, $composition);
                 $this->inputDriver->delete();
             }
@@ -412,7 +415,7 @@ class Composer extends \Eloquent {
             }
             else {
                 if (array_key_exists('required', $espec) && $espec['required'] == true) {
-                    return "Required element " . $id . " doesn't exist on datum ". $count;
+                    dd("Required element " . $id . " doesn't exist");
                 }
             }
         }
@@ -547,23 +550,25 @@ class Composer extends \Eloquent {
                     $inputControllerClassName = '\DemocracyApps\CNP\Compositions\Inputs\\'.$base."InputHandler";
                     $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'getValue');
                     $val = $reflectionMethod->invoke(null, $value);
-                    if (array_key_exists('properties', $value)) {
-                        $properties = [];
-                        foreach ($value['properties'] as $prop) {
-                            $properties[$prop['name']] = $prop['value'];
+                    if ($val['value']) {
+                        if (array_key_exists('properties', $value)) {
+                            $properties = [];
+                            foreach ($value['properties'] as $prop) {
+                                $properties[$prop['name']] = $prop['value'];
+                            }
+                            $val['properties'] = $properties;
                         }
-                        $val['properties'] = $properties;
-                    }
-                    if ($item['use'] == 'element') {
-                        $elementId = $item['elementId'];
-                        $elementsIn[$elementId] = $val;
-                    }
-                    else if ($item['use'] == 'relation' && $val['value']) {
-                        $rel = array();
-                        $rel['from'] = $item['from'];
-                        $rel['to'] = $item['to'];
-                        $rel['relation'] = $val;
-                        $relationsIn[] = $rel;
+                        if ($item['use'] == 'element') {
+                            $elementId = $item['elementId'];
+                            $elementsIn[$elementId] = $val;
+                        }
+                        else if ($item['use'] == 'relation' && $val['value']) {
+                            $rel = array();
+                            $rel['from'] = $item['from'];
+                            $rel['to'] = $item['to'];
+                            $rel['relation'] = $val;
+                            $relationsIn[] = $rel;
+                        }
                     }
                 }
                 else if ($isRef) {

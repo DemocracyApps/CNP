@@ -10,7 +10,6 @@
         },
         {
             "id":"Story",
-            "required": true,
             "type":"Story"
         },
         {
