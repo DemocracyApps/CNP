@@ -4,7 +4,7 @@
 What is the CNP?
 @stop
 @section('buttons')
-<button class="btn btn-warning" onclick="window.location.href='/demo?stage=test1';">Next</button>
+<button class="btn btn-warning" onclick="window.location.href='/demo?stage=connected';">Next</button>
 @stop
 @section('content')
 <div class="presentation container">
