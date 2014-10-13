@@ -1,10 +1,10 @@
 @extends('layouts.default_demo')
 
 @section('title')
-The Connected Story
+The Connected Story 
 @stop
 @section('buttons')
-<button class="btn btn-warning" onclick="window.location.href='/demo?stage=story2';">Next</button>
+<button class="btn btn-warning" onclick="window.location.href='/demo?stage=connected2';">Next</button>
 @stop
 @section('content')
 <div class="presentation container">

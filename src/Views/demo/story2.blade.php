@@ -15,8 +15,8 @@ The Power of Story
     <ul>
         <li>Are an efficient way to store and convey rich information</li>
         <li>Allow for the unexpected</li>
-        <li>Address peoples' need to be listened to</li>
         <li>Are sticky and memorable</li>
+        <li>Address peoples' need to be listened to</li>
     </ul>
     <p>But there are practical problems with stories.</p>
     <ul>

@@ -38,12 +38,16 @@
                             "url":"/demo?stage=cnp1"
                         },
                         {
+                            "name":"Demo Data",
+                            "url":"/demo?stage=data1"
+                        },
+                        {
                             "name":"The Connected Story",
-                            "url":"/demo?stage=connected"
+                            "url":"/demo?stage=connected1"
                         },
                         {
                             "name":"Easy In, Easy Out",
-                            "url":"/demo?stage=cnp1"
+                            "url":"/demo?stage=easy1"
                         },
                         {
                             "name":"The Business",

@@ -21,6 +21,10 @@
           font-size: 19px;
           line-height:36px;
         }
+        ul.small li {
+          font-size: 12px;
+          line-height:24px;
+        }
         div.presentation {
           font-size: 19px;
           line-height:36px;
