@@ -24,6 +24,18 @@
 	    		{
 	    			"column": 5,
 	    			"use":"element",
+	    			"elementId": "Summary",
+	    			"columnType": "text"
+	    		},
+	    		{
+	    			"column": 7,
+	    			"use":"element",
+	    			"elementId": "City",
+	    			"columnType": "text"
+	    		},
+	    		{
+	    			"column": 18,
+	    			"use":"element",
 	    			"elementId": "Topic",
 	    			"columnType": "text"
 	    		},
@@ -32,6 +44,12 @@
 	    			"use":"element",
 	    			"elementId": "Organization",
 	    			"columnType": "text"
+	    		},
+	    		{
+	    			"column": 12,
+	    			"use": "element",
+	    			"elementId": "Benefitees",
+	    			"columnType":"text"
 	    		},
 	            {
 	                "column": 11,
