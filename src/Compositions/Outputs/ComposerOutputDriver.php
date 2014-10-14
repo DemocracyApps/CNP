@@ -110,6 +110,9 @@ class ComposerOutputDriver extends \Eloquent {
                 Html::createSelfClosingElement('br');
             }
         }
+        else if ($desc['use'] == 'relation') {
+            Html::createElement('p', "Not an element - used to create a relation", array('class'=>'whoknows'));
+        }
         else {
             Html::createElement('p', "Still TBD", array('class'=>'whoknows'));
         }
