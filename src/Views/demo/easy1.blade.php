@@ -19,9 +19,23 @@ Easy In, Easy Out
     <p>We are only beginning, but we've taken some crucial initial steps</p>
 
     <ul>
-        <li>Getting stories<br>CSV upload and auto-generated web form for now, but extension to FB, SMS,<br>mobile web are easy, plus API for extensions. Everything we're doing now is text, <br>but trivial to extend to video and pics.</li>
-        <li>Presenting stories - Rudimentary output system for now, but it already gives reasonable <br>output with no effort and decent output with minimal effort. </li>
-        <li>Stories of stories - One of the most exciting tasks: enable ordinary people to identify <br>patterns within a collection of stories and share that back with the community.</li>
+        <li>Getting stories
+            <ul>
+                <li> CSV upload and auto-generated web form so far</li>
+                <li> Extension to FB, SMS, mobile web is easy, plus API for extensions</li>
+                <li> Everything currently is text, but trivial to extend to video and pics.</li>
+            </ul>
+        </li>
+        <li>Presenting stories
+            <ul>
+                <li> Rudimentary output system for now, but already follows key principles:<br>reasonable output with no effort and decent output with minimal effort. </li>
+            </ul>
+        </li>
+        <li>Stories of stories
+            <ul>
+                <li>One of the most exciting tasks: enable ordinary people to identify <br>patterns within a collection of stories and share that back with the community.</li>
+            </ul>
+        </li>
     </ul>
 
 </div>
