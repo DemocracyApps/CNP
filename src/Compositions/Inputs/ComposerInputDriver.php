@@ -112,6 +112,16 @@ class ComposerInputDriver extends \Eloquent {
             }
             Html::endElement('select');
         }
+        elseif ($desc['inputType'] == 'multiselect') {
+            Html::startElement('select', array('class' => 'form-control', 'name' => $desc['id'].'[]', 'multiple' => null));
+            $optionList = $desc['options'];
+            foreach ($optionList as $opt) {
+                $display = $opt['display'];
+                $value = $opt['value'];
+                Html::createElement('option', $display, array('value'=>$value));
+            }
+            Html::endElement('select');
+        }
         Html::endElement("div");
     }
 
