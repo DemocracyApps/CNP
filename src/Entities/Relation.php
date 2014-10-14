@@ -62,6 +62,35 @@ class Relation
         }
         return $relations;
     }
+    public static function getProjectRelationsPaged ($project, $start, $count)
+    {
+        $records = DB::table(self::$tableName)
+                    ->join('elements', 'elements.id', '=', 'relations.fromid')
+                    ->where('elements.project', '=', $project)
+                    ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
+                             'relations.properties', 'relations.modifier', 'relations.compositionid')
+                    ->skip($start)
+                    ->take($count)
+                    ->get();
+        $relations = array();
+
+        foreach ($records as $rec) {
+            $item = new static($rec->fromid, $rec->toid, $rec->relationid, $project);
+            self::fill($item,$rec);
+            $relations[] = $item;
+        }
+        return $relations;
+    }
+    public static function countProjectRelations ($project)
+    {
+        $count = DB::table(self::$tableName)
+                    ->join('elements', 'elements.id', '=', 'relations.fromid')
+                    ->where('elements.project', '=', $project)
+                    ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
+                             'relations.properties', 'relations.modifier', 'relations.compositionid')
+                    ->count();
+        return $count;
+    }
 
     public static function getRelations ($fromId) 
     {
