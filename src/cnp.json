@@ -15,7 +15,8 @@
         {"name":"Business",       "id":"7"},
         {"name":"StoryElement",   "id":"8"},
         {"name":"CnpCollection",  "id":"9"},
-        {"name":"Organization",   "id":"10"}
+        {"name":"Organization",   "id":"10"},
+        {"name":"Group",          "id":"11"}
     ],
     "apiRequiresSSL": "false",
     "pageLimit": "15"

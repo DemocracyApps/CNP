@@ -7,7 +7,9 @@ class ElementGenerator
     static $fcts = array(
         'Tag' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::tagGenerator',
         'Person' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::personGenerator',
-        'Organization' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::organizationGenerator'
+        'Organization' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::organizationGenerator',
+        'Group' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::groupGenerator',
+        'Place' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::placeGenerator'
         );
 
     /**
@@ -67,6 +69,62 @@ class ElementGenerator
                 if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
                 $d = new $className($name, \Auth::user()->getId());
                 $d->content = $content['value'];
+                if ($properties) {
+                    foreach ($properties as $propName => $propValue) {
+                        $d->setProperty($propName, $propValue);
+                    }
+                }
+            }
+            $createdElements = array($d);
+        }
+        // Must return an array of Elements
+        return $createdElements;
+    }
+
+    static private function groupGenerator($name, $elementType, $content, $properties)
+    {
+        $createdElements = null;
+        if ($content) {
+            $d = null;
+            if ($content['isRef']) {
+                $d = DAEntity\Group::find($content['id']);
+            }
+            else {
+                $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
+                if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
+                $d = DAEntity\Tag::findByContent($content['value']);
+                if (! $d) {
+                    $d = new $className($name, \Auth::user()->getId());
+                    $d->content = $content['value'];
+                }
+                if ($properties) {
+                    foreach ($properties as $propName => $propValue) {
+                        $d->setProperty($propName, $propValue);
+                    }
+                }
+            }
+            $createdElements = array($d);
+        }
+        // Must return an array of Elements
+        return $createdElements;
+    }
+
+    static private function placeGenerator($name, $elementType, $content, $properties)
+    {
+        $createdElements = null;
+        if ($content) {
+            $d = null;
+            if ($content['isRef']) {
+                $d = DAEntity\Place::find($content['id']);
+            }
+            else {
+                $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
+                if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
+                $d = DAEntity\Tag::findByContent($content['value']);
+                if (! $d) {
+                    $d = new $className($name, \Auth::user()->getId());
+                    $d->content = $content['value'];
+                }
                 if ($properties) {
                     foreach ($properties as $propName => $propValue) {
                         $d->setProperty($propName, $propValue);
