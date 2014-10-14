@@ -25,8 +25,6 @@ Demo Data & Questions
 
 <li>   Q5: What is this story about?</li>
 
-<li>   Q6: Where did this story take place? (country)</li>
-
 <li>   Q7: Where did this story take place? (city or district)</li>
 
 <li>   Q12: What is your connection to what happened in the story (saw/affected by/etc.)?</li>
@@ -35,7 +33,6 @@ Demo Data & Questions
 
 <li>   Q19: Which of these relate to your story (topic areas)?</li>
 
-<li>   Q37: This story describes a [good idea that succeeded/bad idea that will never work/mixed/unknown]</li>
 </ul>
     <img align="middle" src="/img/table.png"  alt="table"/>
 
