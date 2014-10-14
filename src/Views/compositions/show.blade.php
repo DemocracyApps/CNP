@@ -16,12 +16,10 @@
   while (! $done ) {
     $next = $driver->getNext();
     if (! $next) {
-      \Log::info("We are done");
       $done = true;
     }
     else {
       if (ComposerOutputDriver::validForOutput($next)) {
-        \Log::info("Valid for input");
         ComposerOutputDriver::createInputDrivenOutput($topElement, $driver, $next);
          echo("\n");
        }

@@ -186,7 +186,6 @@ class ElementGenerator
                             $d = new $className($name, \Auth::user()->getId());
 
                             $d->content = $tag;
-                            \Log::info("Created a tag with name " . $name . " and content " . $tag);                        
                             if ($properties) {
                                 foreach ($properties as $propName => $propValue) {
                                     $d->setProperty($propName, $propValue);

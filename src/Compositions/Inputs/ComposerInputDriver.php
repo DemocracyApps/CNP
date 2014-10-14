@@ -70,7 +70,6 @@ class ComposerInputDriver extends \Eloquent {
 
     static public function validForInput($next)
     {
-        if (array_key_exists('prompt', $next)) \Log::info(" and the prompt is: " . $next['prompt']);
         return array_key_exists('prompt', $next);
     }
 

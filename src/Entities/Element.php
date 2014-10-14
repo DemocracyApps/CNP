@@ -139,7 +139,6 @@ class Element
                       ->where('content', '=', $nm)->first();
         }
         else {
-            \Log::info("Looking by type = " . static::$classElementType);
             $data = DB::table(self::$tableName)
                       ->where('content', '=', $nm)
                       ->where('type', '=', static::$classElementType)

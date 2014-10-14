@@ -614,9 +614,6 @@ class Composer extends \Eloquent {
             $summary = null;
             if ($line) {
                 ++$count;
-                if ($count%100 == 0) {
-                    \Log::info(" ... " . $count);
-                }
                 $valid = true;
                 foreach ($columnMap as $column) {
                     $use = $column['use'];
