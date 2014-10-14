@@ -1,0 +1,59 @@
+{
+    "name": "Global Giving CSV Input Composer",
+    "version": "0.01",
+    "baseSpecificationId": 1,
+    "input": {
+	    "inputType": "csv-simple",
+        "anchor":"Story",
+	    "map": {
+	    	"skip": 1,
+	    	"columnMap": [
+	    		{
+	    			"column": 3,
+	    			"use":"element",
+	    			"elementId":"Title",
+	    			"columnType": "text"
+	    		},
+	    		{
+	    			"column": 2,
+	    			"use":"element",
+	    			"elementId": "Story",
+	    			"columnType": "text",
+	    			"required": true
+	    		},
+	    		{
+	    			"column": 5,
+	    			"use":"element",
+	    			"elementId": "Topic",
+	    			"columnType": "text"
+	    		},
+	    		{
+	    			"column": 4,
+	    			"use":"element",
+	    			"elementId": "Organization",
+	    			"columnType": "text"
+	    		},
+	            {
+	                "column": 11,
+	                "use":"relation",
+	                "from":"Storyteller",
+	                "to":"Story",
+	    			"columnType": "text",
+	                "relationMap": {
+						"Helped make it happen":"helped",
+	                    "Was affected by what happened":"was-affected-by",
+	                    "Saw it happen":"saw",
+	                    "Heard about it happening":"heard-about",
+	                    "Unknown":"unknown-relation-to"
+                    }
+	            },
+	    		{
+	    			"column": 29,
+	    			"use":"element",
+	    			"elementId":"Storyteller",
+	    			"columnType": "text"
+	    		}
+	    	]
+	    }
+    }
+}
