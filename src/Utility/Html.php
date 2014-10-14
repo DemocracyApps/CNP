@@ -60,7 +60,12 @@ class Html {
     {
         echo Self::spaces($spaces) . "<".$type;
         foreach ($properties as $key => $value) {
-         echo " ". $key . "=\"".$value."\"";
+            if ($value != null) {
+                echo " ". $key . "=\"".$value."\"";
+            }
+            else {
+                echo " ". $key;                
+            }
         }
         echo ">\n";
     }
