@@ -2,6 +2,29 @@
     "name": "Global Giving Auto-Interactive Input Composer",
     "version": "0.01",
     "baseSpecificationId": 1,
+    "elements": [
+        {
+            "id":"Title",
+            "required": true,
+            "type":"CnpComposition"
+        },
+        {
+            "id":"Story",
+            "type":"Story"
+        },
+        {
+            "id":"Storyteller",
+            "required": true,
+            "type":"Person"
+        }
+    ],
+    "relations": [
+        {
+            "type": "is-creator-of",
+            "from": "Storyteller",
+            "to":   "Title"
+        }
+    ],
     "input": {
 	    "inputType": "auto-interactive",
 	    "map": [
@@ -9,7 +32,7 @@
                 "id":"1",
                 "use":"decision",
                 "inputType":"select",
-                "prompt":"Do you want to share a new story or connect to one you've already share?",
+                "prompt":"Do you want to share a new story or connect to one you've already shared?",
                 "options": [
                     {
                         "display":"---",
@@ -37,19 +60,18 @@
             },
             {
                 "id":"new1",
-                "use":"element",
-                "inputType":"text",
-                "elementId":"Title",
-                "prompt":"Give your story a title"
+                "prompt":"Tell your own story.",
+                "inputType":"textarea",
+                "elementId":"Story",
+                "use":"element"
             },
             {
-    			"id":"new2",
-    			"use":"element",
-    			"elementId":"Story",
-    			"inputType":"textarea",
-                "pickType":"CnpComposition",
-    			"prompt":"Tell your own story."
-    		},
+                "id":"new2",
+                "use":"element",
+                "elementId":"Title",
+                "inputType":"text",
+                "prompt":"Give your story a title."
+            },
             {
                 "use":"break"
             },
@@ -60,15 +82,13 @@
                 "inputType":"pickElement",
                 "pickType":"CnpComposition",
                 "prompt":"Pick your story"
+            },
+            {
+                "id":"old2",
+                "use":"compositionTitle",
+                "inputType":"text",
+                "prompt":"Tell us how your story is related in a brief sentence or phrase."
             }
-            // {
-            //     "id":"old1",
-            //     "use":"element",
-            //     "elementId":"Story",
-            //     "inputType":"textarea",
-            //     "pickType":"CnpComposition",
-            //     "prompt":"Tell your own story."
-            // }
 	   ]
     }
 }

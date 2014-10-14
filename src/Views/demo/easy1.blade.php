@@ -4,7 +4,7 @@
 Easy In, Easy Out
 @stop
 @section('buttons')
-<button class="btn btn-warning" onclick="window.location.href='/demo?stage=story2';">Next</button>
+<button class="btn btn-warning" onclick="window.location.href='/demo?stage=business1';">Next</button>
 @stop
 @section('content')
 <div class="presentation container">
@@ -21,7 +21,7 @@ Easy In, Easy Out
     <ul>
         <li>Getting stories
             <ul>
-                <li> CSV upload and auto-generated web form so far</li>
+                <li> CSV upload and auto-generated web form so far (web and interviews)</li>
                 <li> Extension to FB, SMS, mobile web is easy, plus API for extensions</li>
                 <li> Everything currently is text, but trivial to extend to video and pics.</li>
             </ul>

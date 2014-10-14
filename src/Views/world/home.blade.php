@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <br>
-                <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years.</p>
+                <p>Cras ante neque, fringilla eget libero non, maximus congue justo. Quisque dictum ligula in lacinia dignissim. Duis aliquam ullamcorper metus vitae bibendum. Ut consectetur dignissim laoreet. Ut convallis faucibus ultricies. Quisque vel nunc condimentum metus vulputate efficitur. Duis laoreet nunc quis justo lacinia porttitor. In ornare nisi et placerat vehicula. Pellentesque dapibus eget felis et aliquam. Sed aliquet velit nec accumsan pellentesque. Curabitur vehicula vitae libero non malesuada. In commodo ex nunc, sit amet dictum est pharetra vel. </p>
             </div>
             <div class="col-md-4">
                 <div class="row">
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <br>
-                <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words.</p>
+                <p>TQuisque libero mi, consequat in hendrerit at, tristique quis massa. Nullam urna risus, mattis vel commodo vel, tincidunt vitae turpis. Praesent auctor sed leo in sodales. In sed finibus lacus, sit amet vestibulum urna. Phasellus auctor odio nulla, id tempus leo fringilla ac. Curabitur pharetra nulla libero, quis placerat leo hendrerit ut. Aliquam pulvinar, est et hendrerit ultricies, diam sem congue massa, nec dictum risus mi a purus. Aenean hendrerit elementum lectus, vitae rutrum purus tincidunt eget. Praesent finibus non elit sit amet fermentum.</p>
             </div>
             <div class="col-md-4">
                 <div class="row">
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <br>
-                <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>
+                <p>Donec maximus ligula nisl, eu rutrum quam luctus et. Ut ullamcorper, tortor et suscipit placerat, mauris felis aliquam lectus, a molestie massa tortor id nisi. Maecenas dignissim eros eget malesuada aliquam. Cras aliquet diam ac quam facilisis consectetur. Mauris laoreet orci mauris, in laoreet orci efficitur eget. Fusce massa turpis, hendrerit ac mattis non, eleifend vel sem. Nam quam eros, posuere id pellentesque sed, porta quis tellus.</p>
             </div>
         </div>
 @stop

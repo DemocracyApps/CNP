@@ -51,11 +51,11 @@
                         },
                         {
                             "name":"The Business",
-                            "url":"/demo?stage=cnp1"
+                            "url":"/demo?stage=business1"
                         },
                         {
                             "name":"Next Steps",
-                            "url":"/demo?stage=cnp1"
+                            "url":"/demo?stage=next1"
                         }
                     ]
                 },

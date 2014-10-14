@@ -509,7 +509,12 @@ class Composer extends \Eloquent {
 
             }
         }
-        $composition->title = $topElement->content;
+        if (array_key_exists('compositionTitle', $data)) {
+            $composition->title = $data['compositionTitle'];
+        }
+        else {
+            $composition->title = $topElement->content;
+        }
         $composition->top = $topElement->id;
         $composition->save();
 
@@ -520,6 +525,7 @@ class Composer extends \Eloquent {
         $values = $this->inputDriver['runDriver']['map'];
 
         if (! $map) return "No map!";
+        $data = array();
 
         $elementsIn = array();
         $relationsIn = array();
@@ -566,6 +572,10 @@ class Composer extends \Eloquent {
                             $rel['relation'] = $val;
                             $relationsIn[] = $rel;
                         }
+                        else if ($item['use'] == 'compositionTitle' && $val['value']) {
+                            $data['compositionTitle'] = $val['value'];
+                            \Log::info("Set the composition title to " . $val['value']);
+                        }
                     }
                 }
                 else if ($isRef) {
@@ -578,7 +588,6 @@ class Composer extends \Eloquent {
             }
         }
 
-        $data = array();
         $data['elementsIn'] = $elementsIn;
         $data['relationsIn'] = $relationsIn;
         $this->commonProcessInput($composition, $data, $this->elementsSpec, $this->relationsSpec, $this->project);

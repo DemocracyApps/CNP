@@ -8,8 +8,9 @@ The Connected Story
 @stop
 @section('content')
 <div class="presentation container">
+    <p> 9,233 Elements &nbsp;&nbsp; - &nbsp;&nbsp; 54,118 Relations</p>
     <div class="col-sm-12">
-    <img align="middle" src="/img/net2.png"  height="554" width="632" alt="Story Network"/>
+    <img align="middle" src="/img/kumu3.png"  height="554" width="632" alt="Story Network"/>
   </div>
 </div>
 
