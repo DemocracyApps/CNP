@@ -8,7 +8,7 @@ Next Steps
 @stop
 @section('content')
 <div class="presentation container">
-    <p><em>We are looking for projects, connections, resources and advice.</em></p>
+    <p><em>We are looking for people, projects, connections, resources and advice.</em></p>
 
 Current next steps:
     <ul>

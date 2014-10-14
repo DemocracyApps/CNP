@@ -142,7 +142,7 @@
 <br>
   <div class="row">
     <div class="col-xs-6">
-      <h3>Input & Output Templates</h3>
+      <h3>Input & Output Composers</h3>
     </div>
     <div class="col-xs-6">
       <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/composers/create?project={{$project->id}}'">New</button>

@@ -22,7 +22,7 @@ Likely potential users (project creators):
 
 Current thinking:
     <ul>
-        <li>Revenue potential:
+        <li>Revenue potential*:
             <ul>
                 <li>Probably has to be free for 2</li>
                 <li>We can charge for 1, 3 and 4, but unlikely to sustain the business at the scale we hope</li>
@@ -34,6 +34,7 @@ Current thinking:
         <li>Long-term: Commercial spin-out for #6 that licenses the technology</li>
     </ul>
 
+    <p>*Code is open-source (<a href="https://github.com/DemocracyApps/CNP">github.com/DemocracyApps/CNP</a>). Platform would be sold as a service.</p>
 </div>
 
 @stop

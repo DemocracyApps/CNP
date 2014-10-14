@@ -28,7 +28,7 @@ Easy In, Easy Out
         </li>
         <li>Presenting stories
             <ul>
-                <li> Rudimentary output system for now, but already follows key principles:<br>reasonable output with no effort and decent output with minimal effort. </li>
+                <li> Rudimentary output system for now, but already follows key principles:<br>reasonable output with no effort and nice output with minimal effort. </li>
             </ul>
         </li>
         <li>Stories of stories
