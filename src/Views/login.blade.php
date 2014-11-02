@@ -10,6 +10,6 @@
 </p>
 
 <p>
-	<a class="button" href="{{url('logincheat')}}">Login by Cheating</a>
+	<a class="button" href="{{url('logincheat')}}">Demo Login</a>
 </p>
 @stop
