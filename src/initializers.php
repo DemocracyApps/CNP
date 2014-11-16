@@ -27,6 +27,8 @@ if (Schema::hasTable('app_state')) {
 		if (! $userInit) {
             $user = new \DemocracyApps\CNP\Entities\Eloquent\User;
             $user->name = "Demo User";
+            $user->superuser = false;
+            $user->projectcreator=true;
             $user->save();
             \Log::info("Created demo user with id " . $user->getId());
             $person = new \DemocracyApps\CNP\Entities\Person($user->name, $user->getId());

@@ -2,6 +2,9 @@
 
 namespace DemocracyApps\CNP\Controllers;
 
+use \DemocracyApps\CNP\Entities\Eloquent\AppState;
+
+
 class LoginController extends BaseController {
 
     public function login() {
@@ -16,9 +19,20 @@ class LoginController extends BaseController {
     {
         $socialProfile = \DemocracyApps\CNP\Entities\Eloquent\Social::whereSocialid($socialId)->first();
         if (empty($socialProfile)) { // We must create a new user
-            
+            $superuserInitialized = AppState::where('name','=','superuserInitialized')->get()->first();
+
             $user = new \DemocracyApps\CNP\Entities\Eloquent\User;
             $user->name = $userName;
+            $user->superuser = false;
+            $user->projectcreator=false;
+            if (! $superuserInitialized) {
+                $user->superuser = true;
+                $user->projectcreator=true;
+                $suInit = new \DemocracyApps\CNP\Entities\Eloquent\AppState;
+                $suInit->name = 'superuserInitialized';
+                $suInit->value = '1';
+                $suInit->save();
+            }
             $user->save();
             \Log::info("Got a user id of " . $user->getId());
             $person = new \DemocracyApps\CNP\Entities\Person($userName, $user->getId());
