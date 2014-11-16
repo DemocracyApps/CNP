@@ -1,64 +1,9 @@
 {
     "version":"0.01",
     "menus": {
-        "demo": {
-            "title": "Demo Navigation",
-            "items": [
-                {
-                    "name":"3. Catalyze the Unexpected",
-                    "url":"/demo?stage=catalyze?mode=demo",
-                    "tag":"unexpected",
-                    "items": [
-                        {
-                            "name":"Simulation",
-                            "url":"/demo?stage=catalyze_simulation&mode=demo"
-                        }
-                    ]
-                }
-            ]
-        },
         "app": {
             "title": "Command Panel",
             "items": [
-                {
-                    "name":"Demo Slides",
-                    "url":"/welcome?mode=app",
-                    "tag":"welcome",
-                    "items": [
-                        {
-                            "name":"Value of Engagement",
-                            "url":"/demo?stage=value&mode=app"
-                        },
-                        {
-                            "name":"Power of Story",
-                            "url":"/demo?stage=story1"
-                        },
-                        {
-                            "name":"What is the CNP?",
-                            "url":"/demo?stage=cnp1"
-                        },
-                        {
-                            "name":"Demo Data",
-                            "url":"/demo?stage=data1"
-                        },
-                        {
-                            "name":"The Connected Story",
-                            "url":"/demo?stage=connected1"
-                        },
-                        {
-                            "name":"Easy In, Easy Out",
-                            "url":"/demo?stage=easy1"
-                        },
-                        {
-                            "name":"The Business",
-                            "url":"/demo?stage=business1"
-                        },
-                        {
-                            "name":"Next Steps",
-                            "url":"/demo?stage=next1"
-                        }
-                    ]
-                },
                 {
                     "name":"Projects",
                     "url":"/projects?mode=app",
@@ -94,6 +39,22 @@
                         {
                             "name":"Relation Types",
                             "url":"/relationtypes?mode=app"
+                        }
+                    ]
+                }
+            ]
+        },
+        "other": {
+            "title": "Demo Navigation",
+            "items": [
+                {
+                    "name":"3. Catalyze the Unexpected",
+                    "url":"/demo?stage=catalyze?mode=demo",
+                    "tag":"unexpected",
+                    "items": [
+                        {
+                            "name":"Simulation",
+                            "url":"/demo?stage=catalyze_simulation&mode=demo"
                         }
                     ]
                 }
