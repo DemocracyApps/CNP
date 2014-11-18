@@ -6,16 +6,16 @@
             "items": [
                 {
                     "name":"Projects",
-                    "url":"/projects?mode=app",
+                    "url":"/projects",
                     "tag":"projects",
                     "items": [
                         {
                             "name":"My Projects",
-                            "url":"/projects?mode=app"
+                            "url":"/projects"
                         },
                         {
                             "name":"My Composers",
-                            "url":"/composers?mode=app"
+                            "url":"/composers"
                         },
                         {
                             "name":"My Collections",
@@ -30,15 +30,15 @@
                     "items": [
                         {
                             "name":"Account Page",
-                            "url":"/account?mode=app"
+                            "url":"/account"
                         },
                         {
                             "name":"Notifications",
-                            "url":"/notifications?mode=app"
+                            "url":"/notifications"
                         },
                         {
                             "name":"Relation Types",
-                            "url":"/relationtypes?mode=app"
+                            "url":"/relationtypes"
                         }
                     ]
                 }
@@ -49,12 +49,12 @@
             "items": [
                 {
                     "name":"3. Catalyze the Unexpected",
-                    "url":"/demo?stage=catalyze?mode=demo",
+                    "url":"/demo?stage=catalyze",
                     "tag":"unexpected",
                     "items": [
                         {
                             "name":"Simulation",
-                            "url":"/demo?stage=catalyze_simulation&mode=demo"
+                            "url":"/demo?stage=catalyze_simulation"
                         }
                     ]
                 }
