@@ -39,6 +39,20 @@
             <h1>Community Narratives Platform</h1>
           </div>
           <div class="col-md-3 hdr-right">
+            <ul class="nav nav-pills">
+              <li role="presentation"><a href="/">Home</a></li>
+              <li role = "presentation" class="dropdown">
+                <a class="dropdown-Toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                  Admin <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                  <li role="presentation" ><a href="#">Profile</a></li>
+                  <li role="presentation" ><a href="#">Projects</a></li>
+                  <li role="presentation" ><a href="#">System</a></li>
+                  <li role="presentation" ><a href="#">Logout</a></li>
+                  <li role="presentation" class="disabled" style="display:none;"><a href="#">Disabled link</a></li>
+                </ul>
+            </ul>
           </div>
         </div>
       </div>
