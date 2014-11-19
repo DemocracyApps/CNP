@@ -1,4 +1,4 @@
-@extends('layouts.detail')
+@extends('layouts.detail_ext')
 
 @section('title')
 Account Page

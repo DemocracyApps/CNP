@@ -46,10 +46,22 @@
                   Admin <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                  <li role="presentation" ><a href="#">Profile</a></li>
-                  <li role="presentation" ><a href="#">Projects</a></li>
-                  <li role="presentation" ><a href="#">System</a></li>
-                  <li role="presentation" ><a href="#">Logout</a></li>
+                  <li role="presentation" ><a href="/account">Profile</a></li>
+                  @if   (Auth::guest()) 
+                    <li role="presentation" ><a href="/login">Log In</a></li>
+                  @else
+                    <?php
+                      $user = Auth::user();
+                    ?>
+                    @if ($user->projectcreator)
+                      <li role="presentation" ><a href="/admin/projects">Projects</a></li>
+                    @endif
+                    @if ($user->superuser)
+                      <li role="presentation" ><a href="#">System</a></li>
+                    @endif
+                    <li role="presentation" ><a href="/logout">Log Out</a></li>
+                  @endif
+
                   <li role="presentation" class="disabled" style="display:none;"><a href="#">Disabled link</a></li>
                 </ul>
             </ul>

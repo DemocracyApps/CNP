@@ -41,33 +41,32 @@
             <h1>Community Narratives Platform</h1>
           </div>
           <div class="col-md-3 hdr-right">
-            <!--
-            <div class="btn-group" data-toggle="buttons">
-              <?php
-                $mode = \Session::get('cnpMode');
-                $appClass = "btn btn-default mode-toggle";
-                $demoClass = "btn btn-default mode-toggle";
-                $appChecked = "";
-                $demoChecked = "";
-                if ($mode == 'app') {
-                  $appClass .= " active";
-                  $appChecked = 'checked';
-                }
-                else {
-                  $demoClass .= " active";
-                  $demoChecked = 'checked';
-                }
-                \Log::info("Operating mode is " . $mode);
-              ?>
-              <label class="{{$appClass}}">
-                <input type="radio" name='mode' id='app' {{$appChecked}}> Application
-              </label>
-              <label class="{{$demoClass}}">
-                <input type="radio" name='mode' id='demo' {{$demoChecked}}> Demo
-              </label>
+            <ul class="nav nav-pills">
+              <li role="presentation"><a href="/">Home</a></li>
+              <li role = "presentation" class="dropdown">
+                <a class="dropdown-Toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                  Admin <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                  <li role="presentation" ><a href="/account">Profile</a></li>
+                  @if   (Auth::guest()) 
+                    <li role="presentation" ><a href="/login">Log In</a></li>
+                  @else
+                    <?php
+                      $user = Auth::user();
+                    ?>
+                    @if ($user->projectcreator)
+                      <li role="presentation" ><a href="/admin/projects">Projects</a></li>
+                    @endif
+                    @if ($user->superuser)
+                      <li role="presentation" ><a href="#">System</a></li>
+                    @endif
+                    <li role="presentation" ><a href="/logout">Log Out</a></li>
+                  @endif
 
-            </div>
-          -->
+                  <li role="presentation" class="disabled" style="display:none;"><a href="#">Disabled link</a></li>
+                </ul>
+            </ul>
           </div>
         </div>
       </div>
@@ -75,53 +74,10 @@
 
     <div class="container app-container">
       <div class="row">
-        <!-- Navigation Panel -->
-        <div class="col-md-3 app-navigation">
-          <?php
-            $menu = \DemocracyApps\CNP\Views\menus\MenuGenerator::generateMenu(0);
-          ?>
-          <br>
-          <br>
-          <br>
-          <br>
-          <!-- <h2>{{$menu['title']}}</h2> -->
-          <!-- Top of the menu -->
-          <div class="panel-group" id="accordion">
-            <?php
-              $first = true;
-            ?>
-
-            @foreach ($menu['items'] as $section)
-              <div class="panel panel-default"> <!-- Begin Section -->
-                <div class="panel-heading"> <!-- Begin Section Heading -->
-                  <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#{{$section['tag']}}">
-                      {{$section['name']}}
-                    </a>
-                  </h4>
-                </div> <!-- End Section Heading -->
-                <?php
-                  $sectionClass = "panel-collapse collapse";
-                  if ($first) { $sectionClass .= " in"; $first = false; }
-                ?>
-                <div id="{{$section['tag']}}" class="{{$sectionClass}}">
-                  <div class="panel-body">
-                    <ul class="nav cnp-sidenav">
-                      @foreach ($section['items'] as $item)
-                        <li><a href="{{$item['url']}}">{{$item['name']}}</a></li>
-                      @endforeach
-                    </ul> 
-                  </div>
-                </div>
-              </div> <!-- End Section -->
-            @endforeach
-
-          </div> <!-- accordion end -->
-          <!-- Bottom of the menu -->
-        </div> <!-- End of the app-navigation DIV -->
-
         <div class="col-md-9 app-content">
             @yield('content')
+        </div>
+        <div class="col-md-3 app-content">
         </div>
       </div>
     <br>
