@@ -6,7 +6,7 @@
 
 @section('buttons')
     <div class="col-xs-6">
-      <button style="float:right;" class="btn btn-success btn-sm" onclick="window.location.href='/projects/create'">New Project</button>
+      <button style="float:right;" class="btn btn-success btn-sm" onclick="window.location.href='/admin/projects/create'">New Project</button>
     </div>
 @stop
 
@@ -23,7 +23,7 @@
     @foreach ($projects as $project)
       <tr>
         <td> {{ $project->id}} </td>
-        <th> {{ link_to("projects/".$project->id, $project->name) }} </th>
+        <th> {{ link_to("admin/projects/".$project->id, $project->name) }} </th>
         <td> {{ $project->getProperty('access')}} </td>
         <td> <a class="label label-info" style="position:relative; top:5px;"
                 href="/compositions?project={{$project->id}}">View Stories</a></td>

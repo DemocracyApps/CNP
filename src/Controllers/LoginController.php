@@ -78,7 +78,7 @@ class LoginController extends BaseController {
             $user = $this->loadOrCreateUser($result['id'], $result['name'], $result['screen_name'],
                                             "twitter", $token->getAccessToken());
             \Auth::login($user);
-            return \Redirect::to('projects');
+            return \Redirect::to('admin/projects');
         }
         // if not ask for permission first
         else {
@@ -113,7 +113,7 @@ class LoginController extends BaseController {
             $user = $this->loadOrCreateUser($result['id'], $result['name'], $result['name'],
                                             "facebook", $token->getAccessToken());
             \Auth::login($user);
-            return \Redirect::intended('projects');
+            return \Redirect::intended('admin/projects');
         }
         // if not ask for permission first
         else {
@@ -128,7 +128,7 @@ class LoginController extends BaseController {
     {
         $user = \DemocracyApps\CNP\Entities\Eloquent\User::findOrFail(1)->first();
         \Auth::login($user);
-        return \Redirect::intended('projects');
+        return \Redirect::intended('admin/projects');
     }
 }
 

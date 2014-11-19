@@ -16,7 +16,7 @@
     @endforeach
   </table>
   <br/>
-  {{ Form::open(['route' => 'relationtypes.create', 'method' => 'get']) }}
+  {{ Form::open(['route' => 'system.relationtypes.create', 'method' => 'get']) }}
      <div>
        {{ Form::submit('Add a Relation Type') }}
      </div>

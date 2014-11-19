@@ -11,11 +11,11 @@
                     "items": [
                         {
                             "name":"My Projects",
-                            "url":"/projects"
+                            "url":"/admin/projects"
                         },
                         {
                             "name":"My Composers",
-                            "url":"/composers"
+                            "url":"/admin/composers"
                         },
                         {
                             "name":"My Collections",
@@ -34,11 +34,11 @@
                         },
                         {
                             "name":"Notifications",
-                            "url":"/notifications"
+                            "url":"/admin/notifications"
                         },
                         {
                             "name":"Relation Types",
-                            "url":"/relationtypes"
+                            "url":"/system/relationtypes"
                         }
                     ]
                 }

@@ -3,7 +3,7 @@
 @section('content')
 <h1>Create New Relation</h1>
 
-{{ Form::open(['route' => 'relationtypes.store']) }}
+{{ Form::open(['route' => 'system.relationtypes.store']) }}
    <div>
       {{ Form::label('name', 'Name of the Relation: ') }}
       {{ Form::input('text', 'name') }}

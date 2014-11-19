@@ -52,7 +52,7 @@ class RelationTypesController extends BaseController
             $this->mainType->save();
         }
 
-        return \Redirect::route('relationtypes.index');
+        return \Redirect::route('system.relationtypes.index');
 	}
 
 	/**

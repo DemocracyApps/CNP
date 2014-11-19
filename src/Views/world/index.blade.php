@@ -29,6 +29,6 @@ All Contributions to {{$project->name}}
 
 @section('footer_right')
     @if ($owner)
-        <a href="/projects/{{$project->id}}"> Project Page </a>
+        <a href="/admin/projects/{{$project->id}}"> Project Page </a>
     @endif
 @stop

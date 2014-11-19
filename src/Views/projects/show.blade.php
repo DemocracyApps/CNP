@@ -21,13 +21,13 @@
 {{ Form::close() }}
 
 <!-- Edit Project Button -->
-{{ Form::open(array('route' => array('projects.edit', $project->id), 'method' => 'get', 
+{{ Form::open(array('route' => array('admin.projects.edit', $project->id), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
-  <button style="display:inline-block;" type="submit" href="{{ URL::route('projects.edit', $project->id) }}" class="btn btn-info btn-sm"><b>Edit</b></button>
+  <button style="display:inline-block;" type="submit" href="{{ URL::route('admin.projects.edit', $project->id) }}" class="btn btn-info btn-sm"><b>Edit</b></button>
 {{ Form::close() }}
 
 <!-- Delete Project Button -->
-{{ Form::open(array('route' => array('projects.destroy', $project->id), 'method' => 'delete',
+{{ Form::open(array('route' => array('admin.projects.destroy', $project->id), 'method' => 'delete',
                                             'style' => 'display:inline-block')) }}
   <button type="submit" class="btn btn-danger btn-sm"><b>Delete</b></button>
 {{ Form::close() }}
