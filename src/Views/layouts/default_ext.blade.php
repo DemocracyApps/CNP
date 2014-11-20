@@ -57,7 +57,7 @@
                       <li role="presentation" ><a href="/admin/projects">Projects</a></li>
                     @endif
                     @if ($user->superuser)
-                      <li role="presentation" ><a href="#">System</a></li>
+                      <li role="presentation" ><a href="/system/settings">System</a></li>
                     @endif
                     <li role="presentation" ><a href="/logout">Log Out</a></li>
                   @endif

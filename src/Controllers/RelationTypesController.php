@@ -23,7 +23,7 @@ class RelationTypesController extends BaseController
     public function index()
     {
         $relationtypes = \DemocracyApps\CNP\Entities\Eloquent\RelationType::all()->sortBy('id');
-        return \View::make('relationtypes.index')->with('relationtypes',$relationtypes);
+        return \View::make('system.relationtypes.index')->with('relationtypes',$relationtypes);
     }
 
 	/**
@@ -33,7 +33,7 @@ class RelationTypesController extends BaseController
 	 */
 	public function create()
 	{
-		return \View::make('relationtypes.create');
+		return \View::make('system.relationtypes.create');
 	}
 
 	public function store()
