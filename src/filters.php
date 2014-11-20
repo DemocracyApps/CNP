@@ -14,6 +14,20 @@ Route::filter('cnp.auth', function()
 	}
 });
 
+Route::filter('cnp.admin', function()
+{
+	if (Auth::guest() || !Auth::user()->projectcreator) {
+		return \Redirect::to('/');
+	}
+});
+
+Route::filter('cnp.system', function()
+{
+	if (Auth::guest() || !Auth::user()->superuser) {
+		return \Redirect::to('/');
+	}
+});
+
 Route::filter('api.ssl', function()
 {
 	if ( ! Request::secure() 

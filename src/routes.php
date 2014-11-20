@@ -60,7 +60,7 @@ Route::group(['prefix' => '{projectId}'], function () {
  *************************************************
  *************************************************/
 
-Route::group(['prefix' => 'admin'], function () 
+Route::group(['prefix' => 'admin', 'before' => 'cnp.admin'], function () 
 {
     require __DIR__.'/routes_includes/admin.php';
 });
@@ -71,7 +71,7 @@ Route::group(['prefix' => 'admin'], function ()
  *************************************************
  *************************************************/
 
-Route::group(['prefix' => 'system'], function () 
+Route::group(['prefix' => 'system', 'before' => 'cnp.system'], function () 
 {
     require __DIR__.'/routes_includes/system.php';
 });
