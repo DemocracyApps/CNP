@@ -9,7 +9,7 @@ class CSVInputProcessor
     public function fire($queueJob, $data)
     {
         $userId = $data['userId'];
-        $user = \DemocracyApps\CNP\Entities\Eloquent\User::findOrFail($userId)->first();
+        $user = \DemocracyApps\CNP\Entities\Eloquent\User::findOrFail($userId);
         \Auth::login($user);
 
         $filePath = $data['filePath'];

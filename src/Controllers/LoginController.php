@@ -19,7 +19,7 @@ class LoginController extends BaseController {
     {
         $socialProfile = \DemocracyApps\CNP\Entities\Eloquent\Social::whereSocialid($socialId)->first();
         if (empty($socialProfile)) { // We must create a new user
-            $superuserInitialized = AppState::where('name','=','superuserInitialized')->get()->first();
+            $superuserInitialized = AppState::where('name','=','superuserInitialized')->first();
 
             $user = new \DemocracyApps\CNP\Entities\Eloquent\User;
             $user->name = $userName;
@@ -34,11 +34,9 @@ class LoginController extends BaseController {
                 $suInit->save();
             }
             $user->save();
-            \Log::info("Got a user id of " . $user->getId());
             $person = new \DemocracyApps\CNP\Entities\Person($userName, $user->getId());
             $person->setContent($userName);
             $person->save();
-            \Log::info("Got a person id of " . $person->getId());
 
             $user->elementid = $person->getId();
             $user->save();
@@ -50,7 +48,7 @@ class LoginController extends BaseController {
             $socialProfile->userid = $user->id;
         }
         else {
-            $user = \DemocracyApps\CNP\Entities\Eloquent\User::findOrFail($socialProfile->userid)->first();
+            $user = \DemocracyApps\CNP\Entities\Eloquent\User::findOrFail($socialProfile->userid);
         }
         $socialProfile->access_token = $accessToken;
         $socialProfile->save();
@@ -78,6 +76,7 @@ class LoginController extends BaseController {
             $user = $this->loadOrCreateUser($result['id'], $result['name'], $result['screen_name'],
                                             "twitter", $token->getAccessToken());
             \Auth::login($user);
+            \Log::info("Got a user id of " . $user->getId());
             return \Redirect::to('admin/projects');
         }
         // if not ask for permission first
@@ -113,6 +112,7 @@ class LoginController extends BaseController {
             $user = $this->loadOrCreateUser($result['id'], $result['name'], $result['name'],
                                             "facebook", $token->getAccessToken());
             \Auth::login($user);
+            \Log::info("Got a user id of " . $user->getId());
             return \Redirect::intended('admin/projects');
         }
         // if not ask for permission first
@@ -126,7 +126,7 @@ class LoginController extends BaseController {
     }
     public function cheatLogin()
     {
-        $user = \DemocracyApps\CNP\Entities\Eloquent\User::findOrFail(1)->first();
+        $user = \DemocracyApps\CNP\Entities\Eloquent\User::findOrFail(1);
         \Auth::login($user);
         return \Redirect::intended('admin/projects');
     }

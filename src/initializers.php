@@ -8,7 +8,7 @@ use DemocracyApps\CNP\Entities\Eloquent\AppState;
 if (Schema::hasTable('app_state')) {
 	if (Schema::hasTable('relation_types')) {
 
-		$rtinit = AppState::where('name','=', 'relationTypesInitialized')->get()->first();
+		$rtinit = AppState::where('name','=', 'relationTypesInitialized')->first();
 		if (! $rtinit) {
 			\Log::info("Initializing relationTypes");
 			$fileName = base_path()."/src/Entities/entities.json";
@@ -23,7 +23,7 @@ if (Schema::hasTable('app_state')) {
 		}
 	}
 	if (Schema::hasTable('users')) {
-		$userInit = AppState::where('name','=','usersInitialized')->get()->first();
+		$userInit = AppState::where('name','=','usersInitialized')->first();
 		if (! $userInit) {
             $user = new \DemocracyApps\CNP\Entities\Eloquent\User;
             $user->name = "Demo User";
