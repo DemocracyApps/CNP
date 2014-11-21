@@ -4,7 +4,7 @@
 <h1>{{ $composer->name }} </h1>
 
 <!-- Edit Composer Button -->
-{{ Form::open(array('route' => array('composers.edit', $composer->id), 'method' => 'get', 
+{{ Form::open(array('route' => array('admin.composers.edit', $composer->id), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
   <button type="submit" class="btn btn-info btn-mini">Edit</button>
 {{ Form::close() }}
@@ -17,7 +17,7 @@
 {{ Form::close() }}
 
 <!-- Delete Composer Button -->
-{{ Form::open(array('route' => array('composers.destroy', $composer->id), 'method' => 'delete',
+{{ Form::open(array('route' => array('admin.composers.destroy', $composer->id), 'method' => 'delete',
                                             'style' => 'display:inline-block')) }}
   <button type="submit" class="btn btn-danger btn-mini">Delete</button>
 {{ Form::close() }}

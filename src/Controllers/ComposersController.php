@@ -132,7 +132,7 @@ class ComposersController extends ApiController {
 			$returnURL = \Session::get('CNP_RETURN_URL');
 			\Session::forget('CNP_RETURN_URL');
 			if ( ! $returnURL) $returnURL = '/';
-			return \Redirect::to('/projects/'.$data['project']);
+			return \Redirect::to('/admin/projects/'.$data['project']);
         }
 	}
 
@@ -172,7 +172,7 @@ class ComposersController extends ApiController {
         if ($isAPI) {
         }
         else {
-            return \Redirect::to('/composers/'.$composer->id);
+            return \Redirect::to('/admin/composers/'.$composer->id);
         }
     }
 

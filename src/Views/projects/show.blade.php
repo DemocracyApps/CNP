@@ -145,7 +145,7 @@
       <h3>Input & Output Composers</h3>
     </div>
     <div class="col-xs-6">
-      <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/composers/create?project={{$project->id}}'">New</button>
+      <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/admin/composers/create?project={{$project->id}}'">New</button>
     </div>
   </div>
 
@@ -161,7 +161,7 @@
       <tr>
         <td> <a class="label label-info" href="/compositions/create?composer={{$composer->id}}">Use</a></td>
         <td> {{ $composer->id }} </td>
-        <th> {{ link_to("composers/".$composer->id, $composer->name) }} </th>
+        <th> {{ link_to("admin/composers/".$composer->id, $composer->name) }} </th>
         <td> {{ $composer->contains }}</td>
         <td> {{ $composer->dependson }}</td>
       </tr>    

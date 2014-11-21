@@ -2,7 +2,7 @@
 
 @section('content')
 <h1>Edit Composer</h1>
-{{ Form::open(['route' => array('composers.update', $composer->id), 
+{{ Form::open(['route' => array('admin.composers.update', $composer->id), 
                'method' => 'put', 'files' => true]) }}
    <div class="form-group">
       {{ Form::label('name', 'Name: ') }}
