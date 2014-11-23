@@ -13,6 +13,7 @@
       <span class="error">{{ $errors->first('name') }}</span>
    </div>
    <br>
+   @if ($system)
    <div class="form-group">
       {{ Form::label('projectcreator', "Project Creator?") }}
       {{ Form::select('projectcreator', 
@@ -25,6 +26,7 @@
                       array('1' => 'Yes', '0' => 'No'), $user->superuser?'1':'0') }}
    </div>
    <br>
+   @endif
    <div class="form-group">
 	  {{ Form::submit('Update User', ['class' => 'btn btn-primary']) }}
    </div>

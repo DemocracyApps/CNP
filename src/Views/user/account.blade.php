@@ -24,20 +24,19 @@ Account Page
   <div class="col-sm-6">
   </div>
 </div>
+
 <div class="row">
   <div class="col-sm-4">
-    <p><b>Email:</b></p>
+    <button class="btn btn-info btn-med" onclick="window.location.href='/users/{{$user->id}}/edit'">Edit</button>
   </div>
-  <div class="col-sm-2">
-    <p>{{$user->email}}</p>
-  </div>
-  <div class="col-sm-6">
+  <div class="col-sm-8">
   </div>
 </div>
+<br>
 @stop
 
 @section('detailContent')
-
+@if ($user->projectcreator)
 <div id="api-info">
   <h3>API Access Information</h3>
   <p>Most operations may be performed via the CNP RESTful API - see documentation <a href="api-docs">here</a>. All API access requires the use of SSL and your API key in the Authorization header:</p>
@@ -52,6 +51,7 @@ Account Page
     </div>
   @endif
 </div>
+@endif
 <a href="/logout">Log Out</a>
 </div>
 
