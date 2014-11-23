@@ -18,7 +18,9 @@ Route::pattern('projectId', '[0-9]+');
 
 Route::get('/', function()
 {
-    return Redirect::route('account', \Input::all());
+    $projects = Project::all();
+    return View::make('home', array('projects' => $projects));
+    //return Redirect::route('account', \Input::all());
 });
 
 /*************************************************
