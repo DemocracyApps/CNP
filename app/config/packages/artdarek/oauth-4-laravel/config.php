@@ -22,13 +22,13 @@ return array(
 		 * Facebook - https://developers.facebook.com/apps/330621543771119/settings/
 		 */
         'Facebook' => array(
-            'client_id'     => '330621543771119',
-            'client_secret' => 'd3e39c73146d4277bcfbd76deb153f19',
+            'client_id'     => 'replace-with-FB-client_id',
+            'client_secret' => 'replace-with-FB-client_secret',
             'scope'         => array(),
         ),
         'Twitter' => array(
-            'client_id'     => 'qgOA3IlyHiv6BBqnNUliXZHUj',
-            'client_secret' => 'ZrgzEypOSc5MCMLWfvIwWiOp4qnkAblvobAlsoR4kGydB3NZ8V',
+            'client_id'     => 'replace-with-Twitter-client_id',
+            'client_secret' => 'replace-with-Twitter-client_secret',
             // No scope - oauth1 doesn't need scope
         ),
 
