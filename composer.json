@@ -10,7 +10,9 @@
 	        "laracasts/utilities": "~1.0",
 	        "twbs/bootstrap": "3.2.*@dev",
 			"pda/pheanstalk": "2.1.*",
-			"doctrine/dbal": "2.4.*"
+			"doctrine/dbal": "2.4.*",
+			"graham-campbell/flysystem": "0.7.*@alpha",
+			"aws/aws-sdk-php": "~2.4"
 		},
 	"require-dev": {
 		"fzaninotto/faker": "dev-master"

@@ -19,7 +19,7 @@ Route::get('users', array('as' => 'system.users', function()
 Route::get('users/{userId}/edit', array('as' => 'system.users.edit', function($userId)
 {
     $user = User::find($userId);
-    return View::make('system.useredit', array('user' => $user));
+    return View::make('user.edit', array('user' => $user, 'putUrl'=>'system.users.update'));
 }));
 
 Route::put('users/{userId}', array('as' => 'system.users.update', function($userId)

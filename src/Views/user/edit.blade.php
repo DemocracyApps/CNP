@@ -3,7 +3,7 @@
 @section('content')
 <h1>Edit User</h1>
 
-{{ Form::open(['route' => array('system.users.update', $user->id), 
+{{ Form::open(['route' => array($putUrl, $user->id), 
                'method' => 'put', 'files' => true]) }}
 
    <div class="form-group">
