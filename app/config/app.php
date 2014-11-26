@@ -125,6 +125,7 @@ return array(
         'Artdarek\OAuth\OAuthServiceProvider',
         'Laracasts\Utilities\UtilitiesServiceProvider',
         'DemocracyApps\CNP\ServiceProviders\CnpServiceProvider',
+        'GrahamCampbell\Flysystem\FlysystemServiceProvider',
 	),
 
 	/*
@@ -193,6 +194,7 @@ return array(
 		'View'              => 'Illuminate\Support\Facades\View',
         'OAuth'             => 'Artdarek\OAuth\Facade\OAuth',
         'CNP'               => 'DemocracyApps\CNP\Facades\Cnp',
+        'Flysystem'			=> 'GrahamCampbell\Flysystem\Facades\Flysystem',
 	),
 
 );
