@@ -9,50 +9,50 @@
 	    	"skip": 1,
 	    	"columnMap": [
 	    		{
-	    			"column": 3,
+	    			"column": 1,
 	    			"use":"element",
 	    			"elementId":"Title",
 	    			"columnType": "text"
 	    		},
 	    		{
-	    			"column": 2,
+	    			"column": 0,
 	    			"use":"element",
 	    			"elementId": "Story",
 	    			"columnType": "text",
 	    			"required": true
 	    		},
 	    		{
-	    			"column": 5,
+	    			"column": 3,
 	    			"use":"element",
 	    			"elementId": "Summary",
 	    			"columnType": "text"
 	    		},
 	    		{
-	    			"column": 7,
+	    			"column": 4,
 	    			"use":"element",
 	    			"elementId": "City",
 	    			"columnType": "text"
 	    		},
 	    		{
-	    			"column": 18,
+	    			"column": 7,
 	    			"use":"element",
 	    			"elementId": "Topic",
 	    			"columnType": "text"
 	    		},
 	    		{
-	    			"column": 4,
+	    			"column": 2,
 	    			"use":"element",
 	    			"elementId": "Organization",
 	    			"columnType": "text"
 	    		},
 	    		{
-	    			"column": 12,
+	    			"column": 6,
 	    			"use": "element",
 	    			"elementId": "Benefitees",
 	    			"columnType":"text"
 	    		},
 	            {
-	                "column": 11,
+	                "column": 5,
 	                "use":"relation",
 	                "from":"Storyteller",
 	                "to":"Story",
@@ -66,7 +66,7 @@
                     }
 	            },
 	    		{
-	    			"column": 29,
+	    			"column": 10,
 	    			"use":"element",
 	    			"elementId":"Storyteller",
 	    			"columnType": "text"
