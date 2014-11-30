@@ -1,6 +1,8 @@
 <?php 
 
 use \DemocracyApps\CNP\Entities\Project;
+use \DemocracyApps\CNP\Compositions\Composer;
+use \DemocracyApps\CNP\Compositions\Composition;
 
 /*
  * Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], ...
@@ -8,14 +10,20 @@ use \DemocracyApps\CNP\Entities\Project;
 
 Route::get('/', function($projectId) {
     $project = Project::find($projectId);
-    $owner = ($project->userid == \Auth::user()->getId());
+    $owner = false;
+    if (!\Auth::guest()) {
+        $owner = ($project->userid == \Auth::user()->getId());
+    }
     $composerId = ($project->hasProperty('defaultInputComposer'))?$project->getProperty('defaultInputComposer'):-1;
     return View::make('world.home', array('project' => $project, 'owner' => $owner, 'defaultInputComposer' => $composerId));
 });
 
 Route::get('compositions', function ($projectId) {
     $project = Project::find($projectId);
-    $owner = ($project->userid == \Auth::user()->getId());
+    $owner = false;
+    if (!\Auth::guest()) {
+        $owner = ($project->userid == \Auth::user()->getId());
+    }
     $page = \Input::get('page', 1);
     $pageLimit=\CNP::getConfigurationValue('pageLimit');
     $data = \DemocracyApps\CNP\Compositions\Composition::allProjectCompositionsPaged($project->id, $page, $pageLimit);
@@ -91,7 +99,10 @@ Route::post('compositions', function($projectId) {
 
 Route::get('compositions/{compositionId}', function ($projectId) {
     $project = Project::find($projectId);
-    $owner = ($project->userid == \Auth::user()->getId());
+    $owner = false;
+    if (!\Auth::guest()) {
+        $owner = ($project->userid == \Auth::user()->getId());
+    }
     $composition = Composition::find($compositionId);
 //        $composition = Composition::find(\Request::segment(3));
     $viewMode='normal';

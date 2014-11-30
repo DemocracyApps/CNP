@@ -168,7 +168,7 @@ class Composer extends \Eloquent {
         $spec = json_minify($this->specification);
         $spec = json_decode($spec, true);
         if (array_key_exists('baseSpecificationId', $spec)) {
-            $nextComposer = Composer::find($spec['baseSpecificationId']);
+            $nextComposer = Composer::findOrFail($spec['baseSpecificationId']);
             $tmpspec = $nextComposer->resolveFullSpecification($spec['baseSpecificationId']);
             if ( ! array_key_exists('input', $spec) && array_key_exists('input', $tmpspec)) {
                 $spec['input'] = $tmpspec['input'];

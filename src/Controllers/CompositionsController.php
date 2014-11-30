@@ -137,7 +137,6 @@ class CompositionsController extends ApiController {
 
         $composer = Composer::find(\Input::get('composer'));
         if ( ! $composer ) throw new \Exception("Composer ".\Input::get('composer'). " not found.");
-
         if ( ! $composer->validForInput()) throw new \Exception("Composer ".\Input::get('composer') . " not valid for input.");
         $composer->initializeForInput(\Input::all());
 
