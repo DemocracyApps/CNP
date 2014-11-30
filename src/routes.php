@@ -6,6 +6,7 @@ use \DemocracyApps\CNP\Entities\Element;
 use \DemocracyApps\CNP\Entities\Relation;
 use \DemocracyApps\CNP\Compositions\Composition;
 use \DemocracyApps\CNP\Compositions\Composer;
+use GrahamCampbell\Flysystem\Facades\Flysystem;
 
 // Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
 //           " and method " .\Request::server('REQUEST_METHOD'));
@@ -28,6 +29,18 @@ Route::get('/', function()
  * Current routes work area 
  *************************************************
  *************************************************/
+
+Route::get('/rite', array(function()
+{
+    Flysystem::put('hi.txt', 'foo');
+    return ("Writ");
+}));
+
+Route::get('/reed', array(function()
+{
+    return Flysystem::read('hi.txt');
+}));
+
 
 // /compositions/export must be defined before Route::resource('compositions'). Probably need
 // to come up with a different route.
