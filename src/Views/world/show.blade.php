@@ -25,7 +25,6 @@
     }
     else {
       if (ComposerOutputDriver::validForOutput($next)) {
-        \Log::info("Valid for input");
         ComposerOutputDriver::createInputDrivenOutput($topElement, $driver, $next);
          echo("\n");
        }
