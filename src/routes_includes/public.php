@@ -3,6 +3,8 @@
 use \DemocracyApps\CNP\Entities\Project;
 use \DemocracyApps\CNP\Compositions\Composer;
 use \DemocracyApps\CNP\Compositions\Composition;
+use \DemocracyApps\CNP\Entities\Element;
+use \DemocracyApps\CNP\Entities\Relation;
 
 /*
  * Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], ...
@@ -97,7 +99,7 @@ Route::post('compositions', function($projectId) {
     return \Redirect::to('/'.$composer->project.'/compositions');
 });
 
-Route::get('compositions/{compositionId}', function ($projectId) {
+Route::get('compositions/{compositionId}', function ($projectId, $compositionId) {
     $project = Project::find($projectId);
     $owner = false;
     if (!\Auth::guest()) {

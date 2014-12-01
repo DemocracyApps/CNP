@@ -37,7 +37,6 @@ class ComposerOutputDriver extends \Eloquent {
     public function initialize(Composer $composer, $input, $elementsMap) 
     {
         $this->composer = $composer;
-        $this->userid = \Auth::user()->getId();
         $this->expires = date('Y-m-d H:i:s', time() + 24 * 60 * 60);
         $start = null;
         if (array_key_exists('start', $input)) $start = $input['start'];

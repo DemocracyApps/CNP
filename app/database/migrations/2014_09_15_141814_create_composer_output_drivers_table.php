@@ -15,7 +15,6 @@ class CreateComposerOutputDriversTable extends Migration {
 		Schema::create('composer_output_drivers', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('userid');
 			$table->dateTime('expires');
 			$table->text('driver')->nullable();
 			$table->timestamps();
