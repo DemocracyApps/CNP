@@ -106,7 +106,23 @@ class ComposerOutputDriver extends \Eloquent {
         else if ($desc['use'] == 'element') {
             $elements = $driver->getElements($desc['elementId']);
             foreach($elements as $den) {
-                Html::createElement('p', $den->getContent(), array('id'=>$den->id, 'class' => 'span6'));
+                if ($den->type == \CNP::getElementTypeId('Picture')) {
+                    $tmp = explode('&', $den->getContent());
+                    if ($tmp[0] == 'S3') {
+                        /*
+                         * This is mostly hacky and not even really being used.
+                         */
+                        $nm = $tmp[2];
+                    }
+                    else {
+                        $nm = $tmp[0];
+                    }
+                    Html::createNcElement('img', null, array('src'=>'https://s3.amazonaws.com/cnptest/'.$nm,
+                        'alt'=>$nm));
+                }
+                else {
+                    Html::createElement('p', $den->getContent(), array('id'=>$den->id, 'class' => 'span6'));
+                }
                 Html::createSelfClosingElement('br');
             }
         }

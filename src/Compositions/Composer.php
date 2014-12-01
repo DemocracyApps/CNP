@@ -574,7 +574,6 @@ class Composer extends \Eloquent {
                         }
                         else if ($item['use'] == 'compositionTitle' && $val['value']) {
                             $data['compositionTitle'] = $val['value'];
-                            \Log::info("Set the composition title to " . $val['value']);
                         }
                     }
                 }

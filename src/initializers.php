@@ -22,6 +22,16 @@ if (Schema::hasTable('app_state')) {
 			$rtinit->save();
 		}
 	}
+
+    $picStorage = AppState::where('name', '=', 'pictureStorage')->first();
+    if (! $picStorage) {
+        \Log::info("Initializing picture storage");
+        $picStorage = new DemocracyApps\CNP\Entities\Eloquent\AppState;
+        $picStorage->name = 'pictureStorage';
+        $picStorage->value = 'S3&cnptest';
+        $picStorage->save();
+    }
+
 	if (Schema::hasTable('users')) {
 		$userInit = AppState::where('name','=','usersInitialized')->first();
 		if (! $userInit) {
@@ -57,6 +67,7 @@ DemocracyApps\CNP\Entities\Organization::initialize();
 DemocracyApps\CNP\Entities\StoryElement::initialize();
 DemocracyApps\CNP\Entities\Group::initialize();
 DemocracyApps\CNP\Entities\Place::initialize();
+DemocracyApps\CNP\Entities\Picture::initialize();
 
 $mode = Input::get('mode');
 if ($mode) {

@@ -56,6 +56,26 @@ class Html {
         echo "\n";
     }
 
+    /**
+     * Non-closing element (e.g., <img>)
+     */
+    static public function createNcElement($type, $content, $properties, $spaces=5)
+    {
+        echo Self::spaces($spaces) . "<".$type;
+        foreach ($properties as $key => $value) {
+         echo " ". $key . "=\"".$value."\"";
+        }
+        if ($content) {
+            echo ">";
+            echo $content;
+            echo "</".$type.">"; // Weird to be here, but just in case.
+        }
+        else {
+            echo ">";
+        }
+        echo "\n";
+    }
+
     static public function startElement($type, $properties, $spaces=5)
     {
         echo Self::spaces($spaces) . "<".$type;

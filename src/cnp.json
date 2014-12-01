@@ -16,7 +16,8 @@
         {"name":"StoryElement",   "id":"8"},
         {"name":"CnpCollection",  "id":"9"},
         {"name":"Organization",   "id":"10"},
-        {"name":"Group",          "id":"11"}
+        {"name":"Group",          "id":"11"},
+        {"name":"Picture",        "id":"12"}
     ],
     "apiRequiresSSL": "false",
     "pageLimit": "15"

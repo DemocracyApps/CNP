@@ -3,7 +3,7 @@
 @section('content')
 <h1>Tell Your New Story</h1>
 
-{{ Form::open(['route' => 'compositions.store']) }}
+{{ Form::open(['route' => 'compositions.store', 'files'=>true]) }}
    <input type="hidden" name="driver" value="{{$composer->getDriver()->id}}"/>
    <input type="hidden" name="composition" value="{{$composition->id}}"/>
    @if ($composer->getReferentId())

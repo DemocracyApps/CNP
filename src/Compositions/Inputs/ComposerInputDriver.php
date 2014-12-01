@@ -90,6 +90,10 @@ class ComposerInputDriver extends \Eloquent {
             Html::createElement('input', null, 
                 array( 'class' => 'form-control auto-person', 'name' => $desc['id'], 'type'=>'text'));
         }
+        elseif ($desc['inputType'] == 'picture') {
+            Html::createElement('input', null, array('name' => $desc['id'],
+                       'type'=>'file'));
+        }
         elseif ($desc['inputType'] == 'pickElement') {
             $type = \CNP::getElementTypeId($desc['pickType']);
             $elements = Element::allUserElements(\Auth::user()->getId(), $type);
