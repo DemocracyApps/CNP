@@ -36,16 +36,8 @@ class Composition extends \Eloquent {
                     ->orderBy($sort, $desc?'desc':'asc')
                     ->skip(($page-1)*$limit)
                     ->take($limit)
-                    ->select('compositions.title', 'compositions.created_at', 'users.name')
+                    ->select('compositions.id', 'compositions.title', 'compositions.created_at', 'users.name')
                     ->get();
-/*
-        $result = self::where('project', '=', $project)
-                        ->whereNotNull('top') // Skip the batch compositions
-                        ->orderBy('id')
-                        ->skip(($page-1)*$limit)
-                        ->take($limit)
-                        ->get();
-*/
 
         $data = array();
         $data['total'] = $total;
