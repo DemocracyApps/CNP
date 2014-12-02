@@ -13,13 +13,16 @@ All Contributions to {{$project->name}}
     <br>
     <div class="row">
          <table class="table table-striped">
-         @foreach($stories as $story)
-         <tr>
-         <td style="width:20%;"> {{ $story->id }} </td>
-         <td style="width:70%;"> <a href="/{{$project->id}}/compositions/{{$story->id}}">{{ $story->title}} </a></td>
-         <td> {{$story->created_at}} </td>
-         </tr>
-         @endforeach
+            <th>Title</th>
+            <th>Author</th>
+            <th>Date</th>
+             @foreach($stories as $story)
+                 <tr>
+                     <td style="width:60%;"> <a href="/{{$project->id}}/compositions/{{$story->id}}">{{ $story->title}} </a></td>
+                     <td style="width:20%;"> {{ $story->creator }} </td>
+                     <td> {{$story->created_at}} </td>
+                 </tr>
+             @endforeach
          </table>
          <br/>
          {{$stories->appends(\Request::except('page'))->links()}}

@@ -3,6 +3,7 @@
 use \DemocracyApps\CNP\Entities\Project;
 use \DemocracyApps\CNP\Compositions\Composer;
 use \DemocracyApps\CNP\Compositions\Composition;
+use \DemocracyApps\CNP\Entities\Eloquent\User;
 use \DemocracyApps\CNP\Entities\Element;
 use \DemocracyApps\CNP\Entities\Relation;
 
@@ -29,7 +30,18 @@ Route::get('compositions', function ($projectId) {
     $page = \Input::get('page', 1);
     $pageLimit=\CNP::getConfigurationValue('pageLimit');
     $data = \DemocracyApps\CNP\Compositions\Composition::allProjectCompositionsPaged($project->id, $page, $pageLimit);
-    $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
+    $list = [];
+
+    foreach ($data['items'] as $ditem) {
+        $item = new stdClass();
+        $item->id = $ditem->id;
+        $item->title = $ditem->title;
+        $item->created_at = date('M d, Y - h:i A', strtotime($ditem->created_at));
+        $user = User::find($ditem->userid);
+        $item->creator= $user->name;
+        $list[] = $item;
+    }
+    $stories = \Paginator::make($list, $data['total'], $pageLimit);
     return \View::make('world.index', array('stories' => $stories, 'project' => $project, 'owner' => $owner));
 });
 
