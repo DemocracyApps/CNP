@@ -25,7 +25,7 @@ class CompositionsController extends ApiController {
             return \View::make('compositions.index', array('stories' => $stories, 'project' => $project));
         }
         else {
-            return \Redirect::to('/projects');
+            return \Redirect::to('/');
         }
     }
 

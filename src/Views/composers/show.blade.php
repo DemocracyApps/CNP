@@ -22,7 +22,7 @@
   <button type="submit" class="btn btn-danger btn-mini">Delete</button>
 {{ Form::close() }}
 
-{{ link_to("projects/".$composer->project, "Return to Project Page") }}
+{{ link_to("admin/projects/".$composer->project, "Return to Project Page") }}
 <br/>
 
 <div>
