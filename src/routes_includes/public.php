@@ -22,6 +22,15 @@ Route::get('/', function($projectId) {
 });
 
 Route::get('compositions', function ($projectId) {
+    $sort = 'date';
+    $desc  = true;
+    if (\Input::has('sort')) {
+        $sort = \Input::get('sort');
+    }
+    if (\Input::has('desc')) {
+        $val = \Input::get('desc');
+        if ($val == 'false') $desc=false;
+    }
     $project = Project::find($projectId);
     $owner = false;
     if (!\Auth::guest()) {
@@ -29,20 +38,22 @@ Route::get('compositions', function ($projectId) {
     }
     $page = \Input::get('page', 1);
     $pageLimit=\CNP::getConfigurationValue('pageLimit');
-    $data = \DemocracyApps\CNP\Compositions\Composition::allProjectCompositionsPaged($project->id, $page, $pageLimit);
-    $list = [];
+//    $data = \DemocracyApps\CNP\Compositions\Composition::allProjectCompositionsPaged($project->id, $page, $pageLimit);
+    $data = Composition::allProjectCompositionsPaged($sort, $desc, $project->id, $page, $pageLimit);
+    // $list = [];
 
-    foreach ($data['items'] as $ditem) {
-        $item = new stdClass();
-        $item->id = $ditem->id;
-        $item->title = $ditem->title;
-        $item->created_at = date('M d, Y - h:i A', strtotime($ditem->created_at));
-        $user = User::find($ditem->userid);
-        $item->creator= $user->name;
-        $list[] = $item;
-    }
-    $stories = \Paginator::make($list, $data['total'], $pageLimit);
-    return \View::make('world.index', array('stories' => $stories, 'project' => $project, 'owner' => $owner));
+    // foreach ($data['items'] as $ditem) {
+    //     $item = new stdClass();
+    //     $item->id = $ditem->id;
+    //     $item->title = $ditem->title;
+    //     $item->created_at = date('M d, Y - h:i A', strtotime($ditem->created_at));
+    //     $user = User::find($ditem->userid);
+    //     $item->creator= $user->name;
+    //     $list[] = $item;
+    // }
+    $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
+    return \View::make('world.index', array('stories' => $stories, 'project' => $project, 
+                                            'owner' => $owner, 'sort' => $sort, 'desc' => $desc));
 });
 
 Route::get('compositions/create', function ($projectId) {

@@ -13,13 +13,29 @@ All Contributions to {{$project->name}}
     <br>
     <div class="row">
          <table class="table table-striped">
-            <th>Title</th>
-            <th>Author</th>
-            <th>Date</th>
+            <?php
+                // Title
+                if ($sort == 'title') $ndesc = !$desc;
+                else $ndesc = false;
+                $titleSort = $ndesc?'true':'false';
+                // Author
+                if ($sort == 'user') $ndesc = !$desc;
+                else $ndesc = false;
+                $userSort = $ndesc?'true':'false';
+                // Date
+                if ($sort == 'date') $ndesc = !$desc;
+                else $ndesc = true;
+                $dateSort = $ndesc?'true':'false';
+
+            ?>
+
+            <th><a href="/{{$project->id}}/compositions?sort=title&desc={{$titleSort}}">Title</a></th>
+            <th><a href="/{{$project->id}}/compositions?sort=user&desc={{$userSort}}">User</a></th>
+            <th><a href="/{{$project->id}}/compositions?sort=date&desc={{$dateSort}}">Date</a></th>
              @foreach($stories as $story)
                  <tr>
                      <td style="width:60%;"> <a href="/{{$project->id}}/compositions/{{$story->id}}">{{ $story->title}} </a></td>
-                     <td style="width:20%;"> {{ $story->creator }} </td>
+                     <td style="width:20%;"> {{ $story->name }} </td>
                      <td> {{$story->created_at}} </td>
                  </tr>
              @endforeach
