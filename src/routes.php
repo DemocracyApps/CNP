@@ -16,6 +16,7 @@ use GrahamCampbell\Flysystem\Facades\Flysystem;
  * Patterns for use in routes
  */
 Route::pattern('projectId', '[0-9]+');
+Route::when('*', 'csrf', array('post', 'put', 'delete'));
 
 Route::get('/', function()
 {
