@@ -348,8 +348,8 @@ class Composer extends \Eloquent {
             $data['composerId'] = $this->id;
             $data['compositionId'] = $composition->id;
             $name = uniqid('upload');
-            $file->move('/vagrant/cnp/public/downloads', $name);
-            $data['filePath'] = '/vagrant/cnp/public/downloads/' . $name;
+            $file->move('/var/www/cnp/public/downloads', $name);
+            $data['filePath'] = '/var/www/cnp/public/downloads/' . $name;
             $notification = new \DemocracyApps\CNP\Utility\Notification;
             $notification->user_id = $data['userId'];
             $notification->status = 'Running';
