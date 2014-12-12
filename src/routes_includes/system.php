@@ -1,5 +1,6 @@
 <?php 
 use \DemocracyApps\CNP\Entities\Eloquent\User;
+use \DemocracyApps\CNP\Entities\Project;
 
 
 Route::when('relationtypes*', 'cnp.auth');
@@ -21,6 +22,11 @@ Route::get('users/{userId}/edit', array('as' => 'system.users.edit', function($u
     $user = User::find($userId);
     return View::make('user.edit', array('user' => $user, 'putUrl'=>'system.users.update',
                                          'system' => true));
+}));
+
+Route::get('projects', array ('as' => 'system.projects', function() {
+    $projects = Project::all();
+    return View::make('system.projects', array('projects' => $projects));
 }));
 
 Route::put('users/{userId}', array('as' => 'system.users.update', function($userId)
