@@ -12,44 +12,51 @@
 	    			"column": 1,
 	    			"use":"element",
 	    			"elementId":"Title",
-	    			"columnType": "text"
+	    			"columnType": "text",
+                	"outputPrompt":"Title"
 	    		},
 	    		{
 	    			"column": 0,
 	    			"use":"element",
 	    			"elementId": "Story",
 	    			"columnType": "text",
-	    			"required": true
+	    			"required": true,
+	    			"outputPrompt":"Story of a time when a person or an organization tried to help someone or change something in my community"
 	    		},
 	    		{
 	    			"column": 3,
 	    			"use":"element",
 	    			"elementId": "Summary",
-	    			"columnType": "text"
+	    			"columnType": "text",
+                	"outputPrompt":"What the story is about"
 	    		},
 	    		{
 	    			"column": 4,
 	    			"use":"element",
 	    			"elementId": "City",
-	    			"columnType": "text"
+	    			"columnType": "text",
+                	"outputPrompt":"City or district where the story took place"
 	    		},
 	    		{
 	    			"column": 7,
 	    			"use":"element",
 	    			"elementId": "Topic",
-	    			"columnType": "text"
+	    			"columnType": "text",
+                	"outputPrompt":"What this story relates to"
 	    		},
 	    		{
 	    			"column": 2,
 	    			"use":"element",
 	    			"elementId": "Organization",
-	    			"columnType": "text"
+	    			"columnType": "text",
+                	"outputPrompt":"Organization or group most involved in what happened"
 	    		},
 	    		{
 	    			"column": 6,
 	    			"use": "element",
 	    			"elementId": "Benefitees",
-	    			"columnType":"text"
+	    			"columnType":"text",
+                	"outputPrompt":"Who benefitted from what happened"
 	    		},
 	            {
 	                "column": 5,
@@ -57,6 +64,7 @@
 	                "from":"Storyteller",
 	                "to":"Story",
 	    			"columnType": "text",
+                	"outputPrompt":"My connection to what happened",
 	                "relationMap": {
 						"Helped make it happen":"helped",
 	                    "Was affected by what happened":"was-affected-by",
@@ -69,7 +77,8 @@
 	    			"column": 10,
 	    			"use":"element",
 	    			"elementId":"Storyteller",
-	    			"columnType": "text"
+	    			"columnType": "text",
+                	"outputPrompt":"Storyteller ID"
 	    		}
 	    	]
 	    }
