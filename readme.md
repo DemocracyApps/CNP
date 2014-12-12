@@ -9,3 +9,5 @@ The Community Narratives Platform is open-sourced software licensed under the [G
 ### Environment Setup
 
 The CNP uses the Laravel framework. The easiest way to set up a development environment is to follow the instructions at https://github.com/DemocracyApps/CNP-Dev-Env.
+
+
