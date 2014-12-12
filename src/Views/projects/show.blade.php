@@ -14,9 +14,8 @@
 {{ Form::close() }}
 
 <!-- View Stories Button -->
-{{ Form::open(array('route' => array('compositions.index'), 'method' => 'get', 
+{{ Form::open(array('url' => array($project->id), 'method' => 'get', 
                                             'style' => 'display:inline-block')) }}
-  <input type="hidden" name="project" value="{{$project->id}}"/>
   <button type="submit" class="btn btn-info btn-sm"><b>View Stories</b></button>
 {{ Form::close() }}
 

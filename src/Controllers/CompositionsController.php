@@ -14,47 +14,6 @@ class CompositionsController extends ApiController {
         dd($params);
         dd(\Input::all());
     }
-    public function index()
-    {
-        if (\Input::has('project')) {
-            $project = Project::find(\Input::get('project'));
-            $page = \Input::get('page', 1);
-            $pageLimit=\CNP::getConfigurationValue('pageLimit');
-            $data = Composition::allProjectCompositionsPaged($project->id, $page, $pageLimit);
-            $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
-            return \View::make('compositions.index', array('stories' => $stories, 'project' => $project));
-        }
-        else {
-            return \Redirect::to('/');
-        }
-    }
-
-    public function explore()
-    {
-        if (\Input::has('project')) {
-            $projectId = \Input::get('project');
-            $project = Project::find($projectId);
-            $compositions = Composition::where('project', '=', $projectId)->get();
-            $elements = Element::getProjectElements($projectId);
-            $types = array();
-            foreach ($elements as $element) {
-                if (array_key_exists($element->name, $types)) {
-                    ++$types[$element->name];
-                }
-                else {
-                    $types[$element->name] = 1;
-                }
-            }
-            return \View::make('compositions.explore', array('compositions' => $compositions, 
-                                                             'count' => count($compositions),
-                                                             'types' => $types,
-                                                             'project' => $project
-                                                             ));
-        }
-        else {
-            \Redirect::to('/projects');
-        }
-    }
 
     public function show($id)
     {
@@ -191,7 +150,7 @@ class CompositionsController extends ApiController {
                 return \View::make('compositions.autoinput', array('composer' => $composer, 'composition' => $composition));
             }
         }
-        return \Redirect::to('/compositions?project='.$composer->project);
+        return \Redirect::to('/'.$composer->project);
     }
 
 }

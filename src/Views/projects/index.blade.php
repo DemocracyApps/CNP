@@ -18,7 +18,6 @@
       <th> Name </th>
       <th> Access </th>
       <th>  </th>
-      <th>  </th>
     </tr>
     @foreach ($projects as $project)
       <tr>
@@ -26,9 +25,7 @@
         <th> {{ link_to("admin/projects/".$project->id, $project->name) }} </th>
         <td> {{ $project->getProperty('access')}} </td>
         <td> <a class="label label-info" style="position:relative; top:5px;"
-                href="/compositions?project={{$project->id}}">View Stories</a></td>
-        <td> <a class="label label-info" style="position:relative; top:5px;"
-                href="/compositions/explore?project={{$project->id}}">Curate</a></td>
+                href="/{{$project->id}}">View Stories</a></td>
       </tr>    
     @endforeach
   </table>
