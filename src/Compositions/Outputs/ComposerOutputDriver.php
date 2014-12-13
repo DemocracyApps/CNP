@@ -97,9 +97,11 @@ class ComposerOutputDriver extends \Eloquent {
         Html::createElement("h3", $prompt, array('id' => $desc['id']));
 
         if ($desc['use'] == 'title') {
+            // Is this dead?
             Html::createElement('p', $anchor->getName(), array('id' => $anchor->id));
         }
         else if ($desc['use'] == 'summary') {
+            // Is this dead?
             Html::createElement('p', $anchor->getContent(), array('id' => $anchor->id));
         }
         else if ($desc['use'] == 'element') {
@@ -120,6 +122,7 @@ class ComposerOutputDriver extends \Eloquent {
                         'alt'=>$nm));
                 }
                 else {
+                    Html::createElement("h4", $den->type, array());
                     Html::createElement('p', $den->getContent(), array('id'=>$den->id, 'class' => 'span6'));
                 }
                 Html::createSelfClosingElement('br');

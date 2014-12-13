@@ -10,7 +10,8 @@
         },
         {
             "id":"Story",
-            "type":"Story"
+            "type":"Story",
+            "match":true
         },
         {
             "id":"Storyteller",
@@ -19,11 +20,13 @@
         },
         {
             "id":"Summary",
-            "type":"Tag"
+            "type":"Tag",
+            "transform":"lc:ucfirst"
         },
         {
             "id":"Organization",
-            "type":"Organization"
+            "type":"Organization",
+            "match":false
         },
         {
             "id":"City",

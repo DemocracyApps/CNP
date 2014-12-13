@@ -386,13 +386,6 @@ class Composer extends \Eloquent {
 
         $anchorId = $this->getAnchorId(); // This is the 'Composition' element
         if (!$anchorId) throw new Exception("Spec lacks anchor id");
-        // if (array_key_exists('anchor', $this->inputSpec)) {
-        //     $anchorId = $this->inputSpec['anchor'];
-        // }
-        // else {
-        //     $anchorId = $this->elementsSpec[0]['id'];
-        // }
-        // dd($this->elementsSpec);
         $topElement = null;
         // So now we create output elements
         foreach ($elementsSpec as $espec) {
@@ -400,7 +393,7 @@ class Composer extends \Eloquent {
             if (array_key_exists($id, $elementsIn)) {
                 $properties = null;
                 if (array_key_exists('properties', $elementsIn[$id])) $properties = $elementsIn[$id]['properties'];
-                $createdElements = ElementGenerator::generateElement($espec['type'], $id, 
+                $createdElements = ElementGenerator::generateElement($espec, $id, 
                                                                      $elementsIn[$id], $properties, $project);
                 if ($anchorId == $espec['id']) {
                     if (count($createdElements) > 1) throw new \Exception("Cannot set multiple elements as anchors " . count($createdElements));

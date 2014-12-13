@@ -112,6 +112,7 @@ Route::post('compositions', function($projectId) {
     return \Redirect::to('/'.$composer->project.'/compositions');
 });
 
+
 Route::get('compositions/{compositionId}', function ($projectId, $compositionId) {
     $project = Project::find($projectId);
     $owner = false;
@@ -167,7 +168,7 @@ Route::get('compositions/{compositionId}', function ($projectId, $compositionId)
             }
         }
         else {
-          return \Redirect::to('/'.$composer->project.'/compositions?project='.$composer->project);
+          return \Redirect::to('/'.$composer->project.'/compositions');
         }
     }
     else if ($viewMode == 'structure') {
