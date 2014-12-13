@@ -84,6 +84,10 @@ class ComposerOutputDriver extends \Eloquent {
     static public function createInputDrivenOutput($anchor, $driver, $desc)
     {
         Html::startElement("div", array('class' => 'span6'));
+
+        /*
+         * Title/prompt section
+         */        
         $prompt = "Unknown prompt";
         if (array_key_exists('outputPrompt', $desc)) {
             $prompt = $desc['outputPrompt'];
@@ -96,15 +100,10 @@ class ComposerOutputDriver extends \Eloquent {
         }
         Html::createElement("h3", $prompt, array('id' => $desc['id']));
 
-        if ($desc['use'] == 'title') {
-            // Is this dead?
-            Html::createElement('p', $anchor->getName(), array('id' => $anchor->id));
-        }
-        else if ($desc['use'] == 'summary') {
-            // Is this dead?
-            Html::createElement('p', $anchor->getContent(), array('id' => $anchor->id));
-        }
-        else if ($desc['use'] == 'element') {
+        /*
+         * Content section
+         */
+        if ($desc['use'] == 'element') {
             $elements = $driver->getElements($desc['elementId']);
             foreach($elements as $den) {
                 if ($den->type == \CNP::getElementTypeId('Picture')) {
@@ -122,7 +121,6 @@ class ComposerOutputDriver extends \Eloquent {
                         'alt'=>$nm));
                 }
                 else {
-                    Html::createElement("h4", $den->type, array());
                     Html::createElement('p', $den->getContent(), array('id'=>$den->id, 'class' => 'span6'));
                 }
                 Html::createSelfClosingElement('br');
@@ -132,8 +130,15 @@ class ComposerOutputDriver extends \Eloquent {
             Html::createElement('p', "Not an element - used to create a relation", array('class'=>'whoknows'));
         }
         else {
-            Html::createElement('p', "Still TBD", array('class'=>'whoknows'));
+            Html::createElement('p', "ComposerOutputDriver::createInputDriverOutput: Unknown input use type " . $desc['use'], array('class'=>'whoknows'));
         }
+
+        /*
+         * Context/links section
+         */
+        
+
+
         Html::endElement("div");
     }
     
