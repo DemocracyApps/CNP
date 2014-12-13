@@ -14,7 +14,6 @@ class ElementGenerator
         $elementType = $elementSpec['type'];
 
         $createdElements = null;
-        \Log::info("\nWorking on element type: " . $elementType);
         if (array_key_exists($elementType, self::$fcts) && self::$fcts[$elementType]) {
             $createdElements = call_user_func(self::$fcts[$elementType], $elementSpec, $name, $elementType, $content, $properties);
         }
@@ -51,7 +50,6 @@ class ElementGenerator
     {
         // Transform the content
         if (array_key_exists('transform', $elementSpec)) {
-            \Log::info("   Transforming the element from " . $value);
             $transforms = explode(':', $elementSpec['transform']);
             foreach ($transforms as $transform) {
                 switch($transform) {
@@ -71,7 +69,6 @@ class ElementGenerator
                         break; // Nothing
                 }
             }
-            \Log::info("       to " . $value);
         }
         if ($match && ! $d) {
             $method = new \ReflectionMethod($className, 'findByContent');
