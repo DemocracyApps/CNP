@@ -5,6 +5,7 @@ use \DemocracyApps\CNP\Compositions\Composer;
 use \DemocracyApps\CNP\Compositions\ComposerProgram;
 use \DemocracyApps\CNP\Utility\Html;
 use \DemocracyApps\CNP\Entities\Relation;
+use \DemocracyApps\CNP\Entities\Element;
 
 class ComposerOutputDriver extends \Eloquent {
     protected $table = 'composer_output_drivers';
@@ -81,7 +82,7 @@ class ComposerOutputDriver extends \Eloquent {
         return (array_key_exists('prompt', $next) || array_key_exists('column', $next));
     }
 
-    static public function createInputDrivenOutput($anchor, $driver, $desc)
+    static public function createInputDrivenOutput($compositionId, $anchor, $driver, $desc)
     {
         Html::startElement("div", array('class' => 'span6'));
 
@@ -105,7 +106,15 @@ class ComposerOutputDriver extends \Eloquent {
          */
         if ($desc['use'] == 'element') {
             $elements = $driver->getElements($desc['elementId']);
+            Html::startElement('table', array('width' => '90%'), 5);
+            $count = 0;
             foreach($elements as $den) {
+                Html::startElement('tr', array(), 10);
+                
+                /*
+                 * Content
+                 */                
+                Html::startElement('td', array(), 15);
                 if ($den->type == \CNP::getElementTypeId('Picture')) {
                     $tmp = explode('&', $den->getContent());
                     if ($tmp[0] == 'S3') {
@@ -122,9 +131,30 @@ class ComposerOutputDriver extends \Eloquent {
                 }
                 else {
                     Html::createElement('p', $den->getContent(), array('id'=>$den->id, 'class' => 'span6'));
+                }   
+                Html::endElement('td', 15);
+                /*
+                 * Related content
+                 */
+                if ($count ==0) 
+                    $colProps = array('style'=>'width:20%;');
+                else
+                    $colProps = array();
+                ++$count;
+                Html::startElement('td', $colProps, 15);
+                // See if there are related elements
+                $related = Element::countRelatedCompositions($compositionId, $den->id);
+
+                if ($related > 0) {
+                    Html::createElement('a', $related . " Related", array('href'=>'#'));
                 }
+
+                Html::endElement('td', 15);
+                
+                Html::endElement('tr', 10);
                 Html::createSelfClosingElement('br');
             }
+            Html::endElement('table', 5);
         }
         else if ($desc['use'] == 'relation') {
             Html::createElement('p', "Not an element - used to create a relation", array('class'=>'whoknows'));

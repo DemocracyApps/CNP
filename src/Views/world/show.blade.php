@@ -6,12 +6,6 @@
 
 @section('content')
 <h1> <em>{{ $composition->title }} </em></h1>
-<div class="row">
-  <div class="col-md-8"></div>
-  <div class="col-md-4">
-    <p><a href="/{{$composer->project}}/compositions/{{$composition->id}}?view=structure">Structure View</a></p>
-  </div>
-</div>
 
 <?php
   use \DemocracyApps\CNP\Compositions\Outputs\ComposerOutputDriver;
@@ -20,12 +14,11 @@
   while (! $done ) {
     $next = $driver->getNext();
     if (! $next) {
-      \Log::info("We are done");
       $done = true;
     }
     else {
       if (ComposerOutputDriver::validForOutput($next)) {
-        ComposerOutputDriver::createInputDrivenOutput($topElement, $driver, $next);
+        ComposerOutputDriver::createInputDrivenOutput($composition->id, $topElement, $driver, $next);
          echo("\n");
        }
        else {

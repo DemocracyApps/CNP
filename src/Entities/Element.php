@@ -244,6 +244,33 @@ class Element
         return $result;        
     }
 
+    public static function countRelatedCompositions ($compositionId, $fromId) 
+    {
+        $count = DB::table('relations')
+                    ->join('elements', 'relations.toid', '=', 'elements.id')
+                    ->where('relations.fromid', '=', $fromId)
+                    ->where('relations.compositionid', '<>', $compositionId)
+                    ->where('elements.type', '=', '0')
+                    ->select('relations.compositionid')
+                    ->distinct()
+                    ->count();
+        return $count;     
+    }
+
+    public static function getRelatedCompositions ($compositionId, $fromId) 
+    {
+        $records = DB::table('relations')
+                    ->join('elements', 'relations.toid', '=', 'elements.id')
+                    ->where('relations.fromid', '=', $fromId)
+                    ->where('relations.compositionid', '<>', $compositionId)
+                    ->where('elements.type', '=', '0')
+                    ->orderBy('relations.compositionid')
+                    ->select('relations.compositionid')
+                    ->distinct()
+                    ->get();
+        return sizeof($records);     
+    }
+
     public static function allProjectElements ($id, $types = null)
     {
         if ($types) {
