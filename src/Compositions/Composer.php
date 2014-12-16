@@ -300,27 +300,6 @@ class Composer extends \Eloquent {
             return $this->outputDriver;
     }
 
-    /*
-     *  Graph Generation
-     */
-    
-    public function generateGraph()
-    {
-        $graph = new \DemocracyApps\CNP\Graph\Graph;
-
-        foreach ($this->elementsSpec as $element) {
-            $graph->addNode($element['id'], null);
-        }
-
-        foreach ($this->relationsSpec as $relation) {
-            $graph->addEdge($relation['from'], $relation['to'], $relation['type']);
-            $graph->addEdge($relation['to'], $relation['from'], 
-                            Relation::getInverseRelationName($relation['type']));
-        }
-
-        return $graph;
-    }
-
 
     /*************************************************************************************
      *************************************************************************************
