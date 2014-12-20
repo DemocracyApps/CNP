@@ -31,6 +31,15 @@ Route::get('compositions', function ($projectId) {
         $val = \Input::get('desc');
         if ($val == 'false') $desc=false;
     }
+    $filter = false;
+    $target = null;
+    if (\Input::has('filter')) {
+        $filter = true;
+        $filterType = \Input::get('filter');
+        if ($filterType == 'element') {
+            $target = \Input::get('element');
+        }
+    }
     $project = Project::find($projectId);
     $owner = false;
     if (!\Auth::guest()) {
@@ -39,7 +48,17 @@ Route::get('compositions', function ($projectId) {
     $page = \Input::get('page', 1);
     $pageLimit=\CNP::getConfigurationValue('pageLimit');
 
-    $data = Composition::allProjectCompositionsPaged($sort, $desc, $project->id, $page, $pageLimit);
+    // Need to:
+    // 1. Get the filter stuff related to target
+    // 2. Change output to say it is filtered.
+    // 3. Add a "back" button to show that takes you back to current view.
+
+    if ($filter) {
+
+    }
+    else {
+        $data = Composition::allProjectCompositionsPaged($sort, $desc, $project->id, $page, $pageLimit);
+    }
 
     $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
     return \View::make('world.index', array('stories' => $stories, 'project' => $project, 

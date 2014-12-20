@@ -18,7 +18,7 @@
     }
     else {
       if (ComposerOutputDriver::validForOutput($next)) {
-        ComposerOutputDriver::createInputDrivenOutput($composition->id, $topElement, $driver, $next);
+        ComposerOutputDriver::createInputDrivenOutput($composer->project, $composition->id, $topElement, $driver, $next);
          echo("\n");
        }
        else {

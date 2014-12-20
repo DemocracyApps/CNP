@@ -82,7 +82,7 @@ class ComposerOutputDriver extends \Eloquent {
         return (array_key_exists('prompt', $next) || array_key_exists('column', $next));
     }
 
-    static public function createInputDrivenOutput($compositionId, $anchor, $driver, $desc)
+    static public function createInputDrivenOutput($project, $compositionId, $anchor, $driver, $desc)
     {
         Html::startElement("div", array('class' => 'span6'));
 
@@ -142,11 +142,11 @@ class ComposerOutputDriver extends \Eloquent {
                     $colProps = array();
                 ++$count;
                 Html::startElement('td', $colProps, 15);
-                // See if there are related elements
-                $related = Element::countRelatedCompositions($compositionId, $den->id);
+
+                $related = Element::countRelatedCompositions($project, $compositionId, $den->id);
 
                 if ($related > 0) {
-                    Html::createElement('a', $related . " Related", array('href'=>'#'));
+                    Html::createElement('a', $related . " Related", array('href'=>'/'.$project.'/compositions?filter=related&element='.$den->id));
                 }
 
                 Html::endElement('td', 15);

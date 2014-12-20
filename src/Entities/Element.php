@@ -244,11 +244,12 @@ class Element
         return $result;        
     }
 
-    public static function countRelatedCompositions ($compositionId, $fromId) 
+    public static function countRelatedCompositions ($project, $compositionId, $fromId) 
     {
         $count = DB::table('relations')
                     ->join('elements', 'relations.toid', '=', 'elements.id')
                     ->where('relations.fromid', '=', $fromId)
+                    ->where('relations.project', '=', $project)
                     ->where('relations.compositionid', '<>', $compositionId)
                     ->where('elements.type', '=', '0')
                     ->select('relations.compositionid')
@@ -257,11 +258,12 @@ class Element
         return $count;     
     }
 
-    public static function getRelatedCompositions ($compositionId, $fromId) 
+    public static function getRelatedCompositions ($project, $compositionId, $fromId) 
     {
         $records = DB::table('relations')
                     ->join('elements', 'relations.toid', '=', 'elements.id')
                     ->where('relations.fromid', '=', $fromId)
+                    ->where('relations.project', '=', $project)
                     ->where('relations.compositionid', '<>', $compositionId)
                     ->where('elements.type', '=', '0')
                     ->orderBy('relations.compositionid')
