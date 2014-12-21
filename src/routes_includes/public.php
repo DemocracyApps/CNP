@@ -35,10 +35,6 @@ Route::get('compositions', function ($projectId) {
     $target = null;
     if (\Input::has('filter')) {
         $filter = true;
-        $filterType = \Input::get('filter');
-        if ($filterType == 'element') {
-            $target = \Input::get('element');
-        }
     }
     $project = Project::find($projectId);
     $owner = false;
@@ -49,12 +45,19 @@ Route::get('compositions', function ($projectId) {
     $pageLimit=\CNP::getConfigurationValue('pageLimit');
 
     // Need to:
-    // 1. Get the filter stuff related to target
     // 2. Change output to say it is filtered.
     // 3. Add a "back" button to show that takes you back to current view.
 
+    $filterDescription = null;
     if ($filter) {
-
+        $filterType = \Input::get('filter');
+        if ($filterType == 'related') {
+            $target = \Input::get('element');
+            $element = Element::find($target);
+            // We want all compositions that refer to this target element
+            $data = Composition::projectCompositionsByReferentPaged($target, $sort, $desc, $project->id, $page, $pageLimit);
+            $filterDescription = "Contributions related to " . $element->getContent();
+        }
     }
     else {
         $data = Composition::allProjectCompositionsPaged($sort, $desc, $project->id, $page, $pageLimit);
@@ -62,7 +65,8 @@ Route::get('compositions', function ($projectId) {
 
     $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
     return \View::make('world.index', array('stories' => $stories, 'project' => $project, 
-                                            'owner' => $owner, 'sort' => $sort, 'desc' => $desc));
+                                            'owner' => $owner, 'sort' => $sort, 'desc' => $desc,
+                                            'filterDescription' => $filterDescription));
 });
 
 Route::get('compositions/create', function ($projectId) {

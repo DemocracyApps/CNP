@@ -1,6 +1,7 @@
 <?php namespace DemocracyApps\CNP\Compositions;
 
-class Composition extends \Eloquent {
+class Composition extends \Eloquent
+{
 
     public function createChildComposition($title)
     {
@@ -12,6 +13,38 @@ class Composition extends \Eloquent {
         $child->title = $title;
         $child->save();
         return $child;
+    }
+
+    public static function projectCompositionsByReferentPaged($referentId, $sort, $desc, $project, $page = 1, $limit = 10) {
+
+        if ($sort == 'title') {
+            $sort = 'compositions.title';
+        }
+        elseif ($sort == 'date') {
+            $sort = 'compositions.created_at';
+        }
+        elseif ($sort == 'user') {
+            $sort = 'users.name';
+        }
+        else {
+            $sort = 'compositions.id';
+        }
+
+        $result = self::where('compositions.project', '=', $project)
+            ->join('relations', 'relations.compositionid', '=', 'compositions.id')
+            ->join('users', 'users.id', '=', 'compositions.userid')
+            ->where('relations.toid', '=', $referentId)
+            ->whereNotNull('top')
+            ->select('compositions.id', 'compositions.title', 'compositions.created_at', 'users.name')
+            ->distinct()
+            ->orderBy($sort, $desc?'desc':'asc')
+            ->skip(($page-1)*$limit)
+            ->take($limit)
+            ->get();
+        $data = array();
+        $data['items'] = $result->all();
+        $data['total'] = sizeof($data['items']);
+        return $data;
     }
 
     public static function allProjectCompositionsPaged ($sort, $desc, $project, $page=1, $limit=10) 

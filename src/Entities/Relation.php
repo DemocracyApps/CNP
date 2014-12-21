@@ -22,6 +22,11 @@ class Relation
         $this->project = $project;
     }
 
+    public static function getTableName()
+    {
+        return $tableName;
+    }
+
     protected static function fill ($instance, $data) 
     {
         $instance->{'id'} = $data->id;

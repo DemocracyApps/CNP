@@ -2,11 +2,18 @@
 @extends('layouts.default_ext')
 
 @section('title')
-All Contributions to {{$project->name}}
+    @if ($filterDescription != null)
+        {{$filterDescription. " in " . $project->name}}
+    @else
+        All Contributions in {{$project->name}}
+    @endif
 @stop
 
 @section('buttons')
-    <button class="btn btn-warning" style="width:100px;" onclick="window.location.href='/{{$project->id}}'">Home</button>
+    @if ($filterDescription != null)
+        <button class="btn btn-warning" style="width:100px;" onclick="window.location.href='/{{$project->id}}/compositions'">All Stories</button>
+    @endif
+    <button class="btn btn-warning" style="width:100px;" onclick="window.location.href='/{{$project->id}}'">Project Home</button>
 @stop
 
 @section('content')
