@@ -12,6 +12,7 @@ class Relation
     public $toId = null;
     public $relationId = null;
     public $compositionid = null;
+    public $content = null;
     public $modifier = null;
     public $project = null;
 
@@ -27,7 +28,52 @@ class Relation
         return $tableName;
     }
 
-    protected static function fill ($instance, $data) 
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+
+    public function save() {
+        if ($this->id == null) {
+            $this->id = DB::table(self::$tableName)->insertGetId(
+                array(
+                    'fromid'     => $this->fromId,
+                    'toid'       => $this->toId,
+                    'relationid' => $this->relationId,
+                    'project'    => $this->project,
+                    'properties' => json_encode($this->properties),
+                    'content' => $this->content,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                    'compositionid' => $this->compositionid
+                )
+            );
+        }
+        else {
+            DB::table(self::$tableName)
+                ->where('id',$id)
+                ->update(
+                    array(
+                        'fromid'     => $this->fromId,
+                        'toid'       => $this->toId,
+                        'relationid' => $this->relationId,
+                        'project'    => $this->project,
+                        'properties' => json_encode($this->properties),
+                        'content' => $this->content,
+                        'updated_at' => date('Y-m-d H:i:s'),
+                        'compositionid' => $this->compositionid
+                    )
+                );
+        }
+    }
+
+    protected static function fill ($instance, $data)
     {
         $instance->{'id'} = $data->id;
         $instance->{'fromId'} = $data->fromid;
@@ -38,6 +84,9 @@ class Relation
         }
         if (property_exists($data, 'properties'))
             $instance->{'properties'} = (array) json_decode($data->properties);
+        if (property_exists($data, 'content')) {
+            $instance->{'content'} = $data->content;
+        }
         if (property_exists($data, 'compositionid'))
             $instance->{'compositionid'} = $data->compositionid;
     }
@@ -137,37 +186,5 @@ class Relation
 
     public function getId() {
         return $this->id;
-    }
-
-    public function save() {
-        if ($this->id == null) {
-            $this->id = DB::table(self::$tableName)->insertGetId(
-                array(
-                    'fromid'     => $this->fromId,
-                    'toid'       => $this->toId,
-                    'relationid' => $this->relationId,
-                    'project'    => $this->project,
-                    'properties' => json_encode($this->properties),
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                    'compositionid' => $this->compositionid
-                )
-            );
-        }
-        else {
-            DB::table(self::$tableName)
-                ->where('id',$id)
-                ->update(
-                    array(
-                        'fromid'     => $this->fromId,
-                        'toid'       => $this->toId,
-                        'relationid' => $this->relationId,
-                        'project'    => $this->project,
-                        'properties' => json_encode($this->properties),
-                        'updated_at' => date('Y-m-d H:i:s'),
-                        'compositionid' => $this->compositionid
-                    )
-                );
-        }
     }
 }

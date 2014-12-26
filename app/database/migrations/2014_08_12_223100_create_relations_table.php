@@ -21,6 +21,7 @@ class CreateRelationsTable extends Migration {
             $table->foreign('toid')->references('id')->on('denizens');
             $table->integer('relationid');
             $table->foreign('relationid')->references('id')->on('relation_types');
+			$table->text('content')->nullable();
             $table->text('properties')->nullable();
 			$table->timestamps();
 		});
