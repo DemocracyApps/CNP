@@ -55,7 +55,6 @@ Route::get('/compositions/explore',
                   'uses' => 'DemocracyApps\CNP\Controllers\CompositionsController@explore'));
 
 
-Route::resource('collections', 'DemocracyApps\CNP\Controllers\CollectionsController');
 Route::resource('compositions', 'DemocracyApps\CNP\Controllers\CompositionsController');
 
 /*************************************************

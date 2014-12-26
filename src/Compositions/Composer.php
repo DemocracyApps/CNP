@@ -388,6 +388,7 @@ class Composer extends \Eloquent {
                 }
             }
         }
+
         foreach($elements as $eid => $elementList) {
             foreach ($elementList as $element) {
                 $element->save();
