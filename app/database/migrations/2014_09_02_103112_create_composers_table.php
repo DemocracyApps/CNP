@@ -18,11 +18,13 @@ class CreateComposersTable extends Migration {
 			$table->string('name');
 			$table->string('description')->nullable();
 			$table->text('specification')->nullable();
-			$table->bigInteger('scape');
-			$table->foreign('scape')->references('id')->on('denizens');
+			$table->bigInteger('project');
+			$table->foreign('project')->references('id')->on('projects');
             $table->integer('dependson')->nullable();
             $table->foreign('dependson')->references('id')->on('composers');
             $table->string('contains')->nullable();
+			$table->integer('output')->nullable();
+			$table->foreign('output')->references('id')->on('composers');
 			$table->timestamps();
 		});
 	}

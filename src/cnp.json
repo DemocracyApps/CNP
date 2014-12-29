@@ -17,7 +17,8 @@
         {"name":"CnpCollection",  "id":"9"},
         {"name":"Organization",   "id":"10"},
         {"name":"Group",          "id":"11"},
-        {"name":"Picture",        "id":"12"}
+        {"name":"Picture",        "id":"12"},
+        {"name":"Measure",        "id":"13"}
     ],
     "apiRequiresSSL": "false",
     "pageLimit": "15"

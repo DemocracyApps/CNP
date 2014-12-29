@@ -16,9 +16,9 @@ class CreateRelationsTable extends Migration {
 		{
 			$table->increments('id');
             $table->bigInteger('fromid');
-            $table->foreign('fromid')->references('id')->on('denizens');
+            $table->foreign('fromid')->references('id')->on('elements');
             $table->bigInteger('toid');
-            $table->foreign('toid')->references('id')->on('denizens');
+            $table->foreign('toid')->references('id')->on('elements');
             $table->integer('relationid');
             $table->foreign('relationid')->references('id')->on('relation_types');
 			$table->text('content')->nullable();

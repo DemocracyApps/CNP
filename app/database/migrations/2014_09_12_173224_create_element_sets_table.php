@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDenizenSetsTable extends Migration {
+class CreateElementSetsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateDenizenSetsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('denizen_sets', function(Blueprint $table)
+		Schema::create('element_sets', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->integer('userid');
@@ -30,7 +30,7 @@ class CreateDenizenSetsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('denizen_sets');
+		Schema::drop('element_sets');
 	}
 
 }

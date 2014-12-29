@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTitleAndUseridColumnsToCompositions extends Migration {
+class AddUseridToElements extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,13 +12,10 @@ class AddTitleAndUseridColumnsToCompositions extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('compositions', function(Blueprint $table)
+		Schema::table('elements', function(Blueprint $table)
 		{
-			$table->string('title');
             $table->integer('userid');
             $table->foreign('userid')->references('id')->on('users');
-            $table->integer('project');
-            $table->foreign('project')->references('id')->on('projects');
 		});
 	}
 
@@ -29,11 +26,9 @@ class AddTitleAndUseridColumnsToCompositions extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('compositions', function(Blueprint $table)
+		Schema::table('elements', function(Blueprint $table)
 		{
-			$table->dropColumn('title');
 			$table->dropColumn('userid');
-			$table->dropColumn('project');
 		});
 	}
 

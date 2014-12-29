@@ -16,10 +16,13 @@ class CreateUsersTable extends Migration {
 		{
 			$table->increments('id');
             $table->string('name', 255);
-            $table->bigInteger('denizenid')->unsigned()->unique()->nullable();
-            $table->foreign('denizenid')->references('id')->on('denizens');
+            $table->bigInteger('elementid')->unsigned()->unique()->nullable();
+            $table->foreign('elementid')->references('id')->on('elements');
             $table->string('email', 255)->nullable()->unique();
+			$table->boolean('superuser');
+			$table->boolean('projectcreator');
             $table->string('apikey', 255)->nullable()->unique();
+			$table->string('remember_token', 100)->nullable();
 			$table->timestamps();
 		});
 	}

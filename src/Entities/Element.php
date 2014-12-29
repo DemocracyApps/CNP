@@ -10,7 +10,6 @@ class Element
     static $tableName = 'elements';
     protected $elementType = null;
     public $id = null;
-    public $projectId = -1;
     public $name = null;
     public $content = null;
     public $userid = null;
@@ -65,7 +64,6 @@ class Element
             $this->id = DB::table(self::$tableName)->insertGetId(
                 array(
                     'name' => $this->name,
-                    'project'=> $this->projectId,
                     'type' => $this->elementType,
                     'content' => $this->content,
                     'properties' => json_encode($this->properties), // How do I move this to ImplementsProperties trait?
@@ -81,7 +79,6 @@ class Element
                 ->update(
                     array(
                         'name' => $this->name,
-                        'project'=> $this->projectId,
                         'type' => $this->elementType,
                         'content' => $this->content,
                         'properties' => json_encode($this->properties),
@@ -100,12 +97,6 @@ class Element
             $instance->{'userid'} = $data->userid;
         }
         $instance->{'name'} = $data->name;
-        if (property_exists($data, 'projectId')) {
-            $instance->{'projectId'} = $data->project;
-        }
-        else {
-            $instance->{'projectId'} = $projectId;
-        }
         if (property_exists($data, 'content')) {
             $instance->{'content'} = $data->content;
         }
@@ -167,7 +158,7 @@ class Element
                     ->join('relations', 'relations.fromid', '=', 'elements.id')
                     ->where('relations.compositionid', '=', $compositionId)
                     ->orderBy('elements.id')
-                    ->select('elements.id', 'elements.type', 'elements.project', 'elements.name', 'elements.content',
+                    ->select('elements.id', 'elements.type', 'relations.project', 'elements.name', 'elements.content',
                              'relations.properties as rprops')
                     ->distinct()
                     ->get();
@@ -220,7 +211,7 @@ class Element
                         ->where('relations.fromid', $fromId)
                         ->andWhere('relationid', '=', $relId)
                         ->orderBy('elements.id')
-                        ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'elements.userid', 'elements.project')
+                        ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'elements.userid', 'relations.project')
                         ->distinct()
                         ->get();
         }
@@ -229,7 +220,7 @@ class Element
                         ->join('relations', 'relations.toid', '=', 'elements.id')
                         ->where('relations.fromid', $fromId)
                         ->orderBy('elements.id')
-                        ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'elements.userid', 'elements.project')
+                        ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'elements.userid', 'relations.project')
                         ->distinct()
                         ->get();
         }
