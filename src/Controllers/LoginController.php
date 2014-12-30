@@ -34,7 +34,7 @@ class LoginController extends BaseController {
                 $suInit->save();
             }
             $user->save();
-            $person = new \DemocracyApps\CNP\Entities\Person($userName, $user->getId());
+            $person = new \DemocracyApps\CNP\Entities\Element($userName, \CNP::getElementTypeId("Person"));
             $person->setContent($userName);
             $person->save();
 

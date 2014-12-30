@@ -8,10 +8,9 @@ use DemocracyApps\CNP\Entities\Eloquent\AppState;
 
 
 if (Schema::hasTable('app_state')) {
-	\Log::info("Here we are!!");
+
 	if (Schema::hasTable('element_types')) {
 		$etInit = AppState::where('name', '=', 'elementTypesInitialized')->first();
-		\Log::info("Next 1!!");
 		if (! $etInit) {
 			\Log::info("Initializing element types");
 			$cfig=\CNP::getConfiguration();
@@ -21,26 +20,7 @@ if (Schema::hasTable('app_state')) {
 			$etInit->value = '1';
 			$etInit->save();
 		}
-		\Log::info("Next 2!!");
-		// We need to do some initializations on all the Element types
-		$types = DemocracyApps\CNP\Entities\Eloquent\ElementType::all();
-		foreach ($types as $type) {
-			$cname = "DemocracyApps\CNP\Entities\\".$type->name;
-			\Log::info("Trying " . $type->name);
-			if (class_exists($cname)) {
-				\Log::info("Class " . $type->name . " does exist.");
-			}
-		}
-		DemocracyApps\CNP\Entities\CnpComposition::initialize();
-		DemocracyApps\CNP\Entities\Person::initialize();
-		DemocracyApps\CNP\Entities\Story::initialize();
-		DemocracyApps\CNP\Entities\Tag::initialize();
-		DemocracyApps\CNP\Entities\Organization::initialize();
-		DemocracyApps\CNP\Entities\StoryElement::initialize();
-		DemocracyApps\CNP\Entities\Group::initialize();
-		DemocracyApps\CNP\Entities\Place::initialize();
-		DemocracyApps\CNP\Entities\Picture::initialize();
-
+		DemocracyApps\CNP\Entities\Element::initialize();
 	}
 
 
@@ -76,7 +56,7 @@ if (Schema::hasTable('app_state')) {
             $user->projectcreator=true;
             $user->save();
             \Log::info("Created demo user with id " . $user->getId());
-            $person = new \DemocracyApps\CNP\Entities\Person($user->name, $user->getId());
+            $person = new \DemocracyApps\CNP\Entities\Element($user->name, \CNP::getElementTypeId("Person"));
             $person->setContent($user->name);
             $person->save();
             \Log::info("Set person id of Demo User to" . $person->getId());

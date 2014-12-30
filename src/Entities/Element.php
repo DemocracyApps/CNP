@@ -8,25 +8,26 @@ class Element
 
     static    $classElementType = -1;
     static $tableName = 'elements';
+    static $cnpCompositionId = null;
     protected $elementType = null;
     public $id = null;
     public $name = null;
     public $content = null;
-    public $userid = null;
 
-    public function __construct($nm, $userid, $dtype=0) {
+    public function __construct($nm, $dtype) {
         $this->name = $nm;
-        $this->userid = $userid;
         $this->elementType = $dtype;
     }
 
     public static function getTableName() {
-        return $tableName;
+        return self::$tableName;
     }
 
     static public function initialize()
     {
-        
+        if (self::$cnpCompositionId == null) {
+            self::$cnpCompositionId = \CNP::getElementTypeId("CnpComposition");
+        }
     }
 
     public function getId()
@@ -54,10 +55,6 @@ class Element
         return $this->content;
     }
 
-    public function setUserId($uid) 
-    {
-        $this->userid = $uid;
-    }
     public function save()
     {
         if ($this->id == null) {
@@ -68,8 +65,7 @@ class Element
                     'content' => $this->content,
                     'properties' => json_encode($this->properties), // How do I move this to ImplementsProperties trait?
                     'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s'),
-                    'userid'     => $this->userid
+                    'updated_at' => date('Y-m-d H:i:s')
                 )
             );
         }
@@ -82,20 +78,16 @@ class Element
                         'type' => $this->elementType,
                         'content' => $this->content,
                         'properties' => json_encode($this->properties),
-                        'updated_at' => date('Y-m-d H:i:s'),
-                        'userid'     => $this->userid
+                        'updated_at' => date('Y-m-d H:i:s')
                     )
                 );
         }
     }
     
-    protected static function fill ($instance, $data, $projectId = -1) 
+    protected static function fill ($instance, $data)
     {
         $instance->{'id'} = $data->id;
         $instance->{'type'} = $data->type;
-        if (property_exists($data, 'userid')) {
-            $instance->{'userid'} = $data->userid;
-        }
         $instance->{'name'} = $data->name;
         if (property_exists($data, 'content')) {
             $instance->{'content'} = $data->content;
@@ -117,27 +109,21 @@ class Element
                   ->where('id', $id)->first();
         $result = null;
         if ($data != null) {
-            $result = new static($data->name, $data->userid);
+            $result = new static($data->name, $data->type);
             self::fill($result, $data);
         }
         return $result;
     }
 
-    static public function findByContent($nm, $ignoreType = false)
+    static public function findByContent($nm, $elementType)
     {
-        if ($ignoreType) {
-            $data = DB::table(self::$tableName)
-                      ->where('content', '=', $nm)->first();
-        }
-        else {
-            $data = DB::table(self::$tableName)
+        $data = DB::table(self::$tableName)
                       ->where('content', '=', $nm)
-                      ->where('type', '=', static::$classElementType)
-                      ->first();            
-        }
+                      ->where('type', '=', $elementType)
+                      ->first();
         $result = null;
         if ($data != null) {
-            $result = new static($data->name, $data->userid);
+            $result = new static($data->name, $data->type);
             self::fill($result, $data);
         }
         return $result;
@@ -155,13 +141,13 @@ class Element
     public static function getCompositionElements ($compositionId, &$resultArray)
     {
         $records = DB::table(self::$tableName)
-                    ->join('relations', 'relations.fromid', '=', 'elements.id')
-                    ->where('relations.compositionid', '=', $compositionId)
-                    ->orderBy('elements.id')
-                    ->select('elements.id', 'elements.type', 'relations.project', 'elements.name', 'elements.content',
-                             'relations.properties as rprops')
-                    ->distinct()
-                    ->get();
+            ->join('relations', 'relations.fromid', '=', 'elements.id')
+            ->where('relations.compositionid', '=', $compositionId)
+            ->orderBy('elements.id')
+            ->select('elements.id', 'elements.type', 'relations.project', 'elements.name', 'elements.content',
+                'relations.properties as rprops')
+            ->distinct()
+            ->get();
 
         foreach ($records as $record) {
             $item = new static($record->name, null);
@@ -186,13 +172,13 @@ class Element
                     ->join('relations', 'relations.fromid', '=', 'elements.id')
                     ->where('relations.project', '=', $project)
                     ->orderBy('elements.id')
-                    ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'elements.userid')
+                    ->select('elements.id', 'elements.type', 'elements.name', 'elements.content')
                     ->distinct()
                     ->get();
         $result = array();
 
         foreach ($records as $record) {
-            $item = new static($record->name, $record->userid);
+            $item = new static($record->name, $record->type);
             self::fill($item,$record, $project);
             $result[] = $item;
         }
@@ -211,7 +197,7 @@ class Element
                         ->where('relations.fromid', $fromId)
                         ->andWhere('relationid', '=', $relId)
                         ->orderBy('elements.id')
-                        ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'elements.userid', 'relations.project')
+                        ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'relations.project')
                         ->distinct()
                         ->get();
         }
@@ -220,7 +206,7 @@ class Element
                         ->join('relations', 'relations.toid', '=', 'elements.id')
                         ->where('relations.fromid', $fromId)
                         ->orderBy('elements.id')
-                        ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'elements.userid', 'relations.project')
+                        ->select('elements.id', 'elements.type', 'elements.name', 'elements.content', 'relations.project')
                         ->distinct()
                         ->get();
         }
@@ -228,7 +214,7 @@ class Element
         $result = array();
 
         foreach ($records as $record) {
-            $item = new static($record->name, $record->userid);
+            $item = new static($record->name, $record->type);
             self::fill($item,$record, $record->project);
             $result[] = $item;
         }
@@ -242,7 +228,7 @@ class Element
                     ->where('relations.fromid', '=', $fromId)
                     ->where('relations.project', '=', $project)
                     ->where('relations.compositionid', '<>', $compositionId)
-                    ->where('elements.type', '=', '0')
+                    ->where('elements.type', '=', self::$cnpCompositionId)
                     ->select('relations.compositionid')
                     ->distinct()
                     ->count();
@@ -256,7 +242,7 @@ class Element
                     ->where('relations.fromid', '=', $fromId)
                     ->where('relations.project', '=', $project)
                     ->where('relations.compositionid', '<>', $compositionId)
-                    ->where('elements.type', '=', '0')
+                    ->where('elements.type', '=', self::$cnpCompositionId)
                     ->orderBy('relations.compositionid')
                     ->select('relations.compositionid')
                     ->distinct()
@@ -283,7 +269,7 @@ class Element
         $result = array();
 
         foreach ($d as $data) {
-            $item = new static($data->name, $data->userid);
+            $item = new static($data->name, $data->type);
             self::fill($item,$data);
             $result[] = $item;
         }
@@ -309,7 +295,7 @@ class Element
         $result = array();
 
         foreach ($d as $data) {
-            $item = new static($data->name, $data->userid);
+            $item = new static($data->name, $data->type);
             self::fill($item,$data);
             $result[] = $item;
         }
@@ -318,25 +304,10 @@ class Element
 
     public static function allUserElements ($id, $type = null) 
     {
-        if (static::$classElementType <= 0 && $type == null) { // All Elements
-            $d = DB::table(self::$tableName)->where('userid', '=', $id)->orderBy('id')->get();
-        }
-        else { // Specific Element Type
-            if ($type == null) $type = static::$classElementType;
-            $d = DB::table(self::$tableName)->where('userid', '=', $id)
-                                            ->where('type', '=', $type)
-                                            ->orderBy('id')
-                                            ->get();
-        }
-
+        throw new Exception("Element.allUserElements: Need to find a new way to do this");
         $result = array();
 
-        foreach ($d as $data) {
-            $item = new static($data->name, $data->userid);
-            self::fill($item,$data);
-            $result[] = $item;
-        }
-        return $result;        
+        return $result;
     }
 
     /**
@@ -357,7 +328,7 @@ class Element
         $result = array();
 
         foreach ($d as $data) {
-            $item = new static($data->name, $data->userid);
+            $item = new static($data->name, $data->type);
             self::fill($item,$data);
             $result[] = $item;
         }
@@ -378,7 +349,7 @@ class Element
         $result = array();
 
         foreach ($d as $data) {
-            $item = new static($data->name, $data->userid);
+            $item = new static($data->name, $data->type);
             self::fill($item,$data);
             $result[] = $item;
         }

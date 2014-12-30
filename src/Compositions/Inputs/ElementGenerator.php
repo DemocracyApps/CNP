@@ -18,35 +18,31 @@ class ElementGenerator
             $createdElements = call_user_func(self::$fcts[$elementType], $elementSpec, $name, $elementType, $content, $properties);
         }
         else {
-            $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
-            if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
             if ($content['isRef']) {
                 $d = DAEntity\Element::find($content['value']);
             }
             else {
-                $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
-                if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
 
+                /*
+                 * $match indicates whether we should try to create shared references
+                 * to elements with identical content, or should create unique instances.
+                 */
                 $match = true; // Need to do lookup by type here.
                 if ($elementType == 'CnpComposition') $match = false;
                 if (array_key_exists('match', $elementSpec)) {
                     $match = $elementSpec['match'];
                 }
 
-                $d = self::generateIt ($className, null, $match, $elementSpec, $name, $content['value'], $properties);
+                $d = self::generateIt ($elementType, null, $match, $elementSpec, $name, $content['value'], $properties);
 
             }
             $createdElements = array($d);
         }
-        if ($createdElements) {
-            foreach ($createdElements as $d) {
-                $d->projectId = $projectId;
-            }
-        }
+
         return $createdElements;
     }
 
-    static private function generateIt($className, $d, $match, $elementSpec, $name, $value, $properties)
+    static private function generateIt($elementType, $d, $match, $elementSpec, $name, $value, $properties)
     {
         // Transform the content
         if (array_key_exists('transform', $elementSpec)) {
@@ -70,12 +66,13 @@ class ElementGenerator
                 }
             }
         }
+        $elementTypeId = \CNP::getElementTypeId($elementType);
+
         if ($match && ! $d) {
-            $method = new \ReflectionMethod($className, 'findByContent');
-            $d = $method->invoke(null, $value);
+            $d = \DemocracyApps\CNP\Entities\Element::findByContent($value, $elementTypeId);
         }
         if (! $d) {
-            $d = new $className($name, \Auth::user()->getId());
+            $d = new \DemocracyApps\CNP\Entities\Element($name, $elementTypeId);
             $d->content = $value;
         }
         
@@ -98,14 +95,11 @@ class ElementGenerator
         if ($content) {
             $d = null;
             if ($content['isRef']) {
-                $d = DAEntity\Person::find($content['id']);
+                $d = DAEntity\Element::find($content['id']);
             }
             else {
-                $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
-                if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
-
-                $d = new $className($name, \Auth::user()->getId());
-                $d = self::generateIt ($className, $d, true, $elementSpec, $name, $content['value'], $properties);
+                $d = new DAEntity\Element($name, CNP::getElementTypeId("Person"));
+                $d = self::generateIt ($elementType, $d, true, $elementSpec, $name, $content['value'], $properties);
 
             }
             $createdElements = array($d);
@@ -123,14 +117,12 @@ class ElementGenerator
             if ($s) $tags = explode(",", $s);
 
             if ($tags && count($tags) > 0) {
-                $className = '\\DemocracyApps\\CNP\Entities\\'.$elementType;
-                if (!class_exists($className)) throw new \Exception("Cannot find element class " . $className);
                 $createdElements = array();
                 foreach ($tags as $tag) {
                     $tag = trim($tag);
 
                     if ($tag && strlen($tag) > 0) {
-                        $d = self::generateIt ($className, null, true, $elementSpec, $name, $tag, $properties);
+                        $d = self::generateIt ($elementType, null, true, $elementSpec, $name, $tag, $properties);
                     }
                     $createdElements[] = $d;
                 }
