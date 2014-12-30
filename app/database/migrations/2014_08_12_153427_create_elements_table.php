@@ -16,6 +16,7 @@ class CreateElementsTable extends Migration {
 		{
             $table->bigIncrements('id');
             $table->integer('type');
+			$table->foreign('type')->references('id')->on('element_types');
             $table->string('name');
             $table->text('content')->nullable();
             $table->text('properties')->nullable();

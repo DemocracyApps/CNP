@@ -5,16 +5,40 @@ use DemocracyApps\CNP\Entities\Eloquent\AppState;
 // Assumes that providers.php has already been called.
 
 // Check whether we need any DB initializations
+
+
 if (Schema::hasTable('app_state')) {
+	if (Schema::hasTable('element_types')) {
+		$etInit = AppState::where('name', '=', 'elementTypesInitialized')->first();
+		if (! $etInit) {
+			\Log::info("Initializing element types");
+			$cfig=\CNP::getConfiguration();
+			DemocracyApps\CNP\Entities\Eloquent\ElementType::initDB($cfig);
+			$etInit = new DemocracyApps\CNP\Entities\Eloquent\AppState;
+			$etInit->name = 'elementTypesInitialized';
+			$etInit->value = '1';
+			$etInit->save();
+		}
+		// We need to do some intializations on all the Element types
+		DemocracyApps\CNP\Entities\CnpComposition::initialize();
+		DemocracyApps\CNP\Entities\Person::initialize();
+		DemocracyApps\CNP\Entities\Story::initialize();
+		DemocracyApps\CNP\Entities\Tag::initialize();
+		DemocracyApps\CNP\Entities\Organization::initialize();
+		DemocracyApps\CNP\Entities\StoryElement::initialize();
+		DemocracyApps\CNP\Entities\Group::initialize();
+		DemocracyApps\CNP\Entities\Place::initialize();
+		DemocracyApps\CNP\Entities\Picture::initialize();
+
+	}
+
+
 	if (Schema::hasTable('relation_types')) {
 
 		$rtinit = AppState::where('name','=', 'relationTypesInitialized')->first();
 		if (! $rtinit) {
 			\Log::info("Initializing relationTypes");
-			$fileName = base_path()."/src/Entities/entities.json";
-			$str = file_get_contents($fileName);
-			$str = json_minify($str);
-			$cfig = json_decode($str, true);
+			$cfig = \CNP::getConfiguration();
 			DemocracyApps\CNP\Entities\Eloquent\RelationType::initDB($cfig);
 			$rtinit = new DemocracyApps\CNP\Entities\Eloquent\AppState;
 			$rtinit->name = 'relationTypesInitialized';
@@ -57,17 +81,6 @@ if (Schema::hasTable('app_state')) {
 	}
 
 }
-
-// We need to do some intializations on all the Element types
-DemocracyApps\CNP\Entities\CnpComposition::initialize();
-DemocracyApps\CNP\Entities\Person::initialize();
-DemocracyApps\CNP\Entities\Story::initialize();
-DemocracyApps\CNP\Entities\Tag::initialize();
-DemocracyApps\CNP\Entities\Organization::initialize();
-DemocracyApps\CNP\Entities\StoryElement::initialize();
-DemocracyApps\CNP\Entities\Group::initialize();
-DemocracyApps\CNP\Entities\Place::initialize();
-DemocracyApps\CNP\Entities\Picture::initialize();
 
 $mode = Input::get('mode');
 if ($mode) {

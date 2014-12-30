@@ -38,7 +38,6 @@ class RelationType extends \Eloquent {
     {
         $allRelationTypes = array();
         $rtArray = $config['relationTypes'];
-        $counter = 101;
         foreach ($rtArray as $rtSpec) {
             $rt = new RelationType;
             $rt->name = $rtSpec['name'];
@@ -60,6 +59,7 @@ class RelationType extends \Eloquent {
                 }
                 $rt->allowedto = $from;
             }
+
             $rt->save();
             $inverse = null;
             if (array_key_exists('inverse', $rtSpec)) {
@@ -67,6 +67,7 @@ class RelationType extends \Eloquent {
             }
             $allRelationTypes[$rt->name] = array('object' => $rt, 'inverse' => $inverse);
         }
+
         foreach ($allRelationTypes as $item) {
             if ($item['inverse']) {
                 $rt = $item['object'];

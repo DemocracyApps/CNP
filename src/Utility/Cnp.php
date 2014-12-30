@@ -7,8 +7,8 @@ use Illuminate\Container\Container;
 class Cnp {
     private $configuration = null;
 
-    protected $elementTypesByName = array();
-    protected $elementTypesById = array();
+    protected $elementTypesByName = null;
+    protected $elementTypesById = null;
 
     /**
      * Container instance used to resolve classes.
@@ -41,12 +41,16 @@ class Cnp {
         $this->configuration = $cfg;
 
         // Load information on ElementTypes
-        $arr = $cfg['elementTypes'];
-        foreach ($arr as $elementTypeSpec) {
-            $elementType = new Cnpm\ElementType ($elementTypeSpec['id'], $elementTypeSpec['name']);
-            $this->elementTypesByName[strtolower($elementType->getName())] = $elementType;
-            $this->elementTypesById[$elementType->getId()] = $elementType;
-        }
+//        $arr = $cfg['elementTypes'];
+//        foreach ($arr as $elementTypeSpec) {
+//            $elementType = new Cnpm\ElementType ($elementTypeSpec['id'], $elementTypeSpec['name']);
+//            $this->elementTypesByName[strtolower($elementType->getName())] = $elementType;
+//            $this->elementTypesById[$elementType->getId()] = $elementType;
+//        }
+    }
+
+    public function getConfiguration() {
+        return $this->configuration;
     }
 
     /**
@@ -54,8 +58,23 @@ class Cnp {
      * ElementType-related functions
      *
      */
+
+    private function initializeElementTypes() {
+            $this->elementTypesById = array();
+            $this->elementTypesByName = array();
+            $et = Cnpm\Eloquent\ElementType::all();
+            foreach ($et as $eItem) {
+                $this->elementTypesByName[$eItem->name] = $eItem;
+                $this->elementTypesById[$eItem->id] = $eItem;
+            }
+    }
     public function getElementTypeId ($name) {
-        $nm = strtolower($name);
+        if ($this->elementTypesByName === null) {
+            $this->initializeElementTypes();
+        }
+//        dd($this->elementTypesByName);
+//        $nm = strtolower($name);
+        $nm= $name;
         if (array_key_exists($nm, $this->elementTypesByName)) {
             return $this->elementTypesByName[$nm]->getId();
         }
@@ -63,6 +82,10 @@ class Cnp {
     }
 
     public function getElementTypeName ($id) {
+        if ($this->elementTypesByName === null) {
+            $this->initializeElementTypes();
+        }
+
         if (array_key_exists($id, $this->elementTypesById)) {
             return $this->elementTypesById[$id]->getName();
         }
@@ -71,6 +94,9 @@ class Cnp {
 
     public function getElementTypes ($asHash)
     {
+        if ($this->elementTypesByName === null) {
+            $this->initializeElementTypes();
+        }
         $result = array();
         foreach ($this->elementTypesById as $type) {
             if ($asHash) {

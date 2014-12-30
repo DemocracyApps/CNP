@@ -1,5 +1,7 @@
 <?php
 
+// This precedes initializers
+
 use DemocracyApps\CNP\Entities as Cnpm;
 
 $fileName = base_path()."/src/cnp.json";
