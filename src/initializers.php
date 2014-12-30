@@ -8,8 +8,10 @@ use DemocracyApps\CNP\Entities\Eloquent\AppState;
 
 
 if (Schema::hasTable('app_state')) {
+	\Log::info("Here we are!!");
 	if (Schema::hasTable('element_types')) {
 		$etInit = AppState::where('name', '=', 'elementTypesInitialized')->first();
+		\Log::info("Next 1!!");
 		if (! $etInit) {
 			\Log::info("Initializing element types");
 			$cfig=\CNP::getConfiguration();
@@ -19,7 +21,16 @@ if (Schema::hasTable('app_state')) {
 			$etInit->value = '1';
 			$etInit->save();
 		}
-		// We need to do some intializations on all the Element types
+		\Log::info("Next 2!!");
+		// We need to do some initializations on all the Element types
+		$types = DemocracyApps\CNP\Entities\Eloquent\ElementType::all();
+		foreach ($types as $type) {
+			$cname = "DemocracyApps\CNP\Entities\\".$type->name;
+			\Log::info("Trying " . $type->name);
+			if (class_exists($cname)) {
+				\Log::info("Class " . $type->name . " does exist.");
+			}
+		}
 		DemocracyApps\CNP\Entities\CnpComposition::initialize();
 		DemocracyApps\CNP\Entities\Person::initialize();
 		DemocracyApps\CNP\Entities\Story::initialize();
