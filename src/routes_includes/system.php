@@ -5,6 +5,8 @@ use \DemocracyApps\CNP\Entities\Project;
 
 Route::when('relationtypes*', 'cnp.auth');
 Route::resource('relationtypes','DemocracyApps\CNP\Controllers\RelationTypesController');
+Route::when('elementtypes*', 'cnp.auth');
+Route::resource('elementtypes','DemocracyApps\CNP\Controllers\ElementTypesController');
 
 Route::get('settings', array('as' => 'system.settings', function()
 {

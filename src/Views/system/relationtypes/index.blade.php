@@ -4,6 +4,7 @@
 <ul class="nav nav-tabs">
   <li role="presentation"><a href="/system/settings">Settings</a></li>
   <li role="presentation"><a href="/system/users">Users</a></li>
+  <li role="presentation"><a href="/system/elementtypes">Element Types</a></li>
   <li role="presentation" class="active"><a href="/system/relationtypes">Relation Types</a></li>
   <li role="presentation"><a href="/system/projects">Projects</a></li>
 </ul>
