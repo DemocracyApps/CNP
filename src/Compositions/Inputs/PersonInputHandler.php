@@ -29,7 +29,6 @@ abstract class PersonInputHandler extends InputHandler {
         else 
             $val['value'] = null;
         return $inputMapItem['value']; // See above
-        //return $val;
     }
 
 }
