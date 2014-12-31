@@ -159,6 +159,9 @@ class ComposerOutputDriver extends \Eloquent {
         else if ($desc['use'] == 'relation') {
             Html::createElement('p', "Not an element - used to create a relation", array('class'=>'whoknows'));
         }
+        else if ($desc['use'] == 'presentation') {
+            // nothing
+        }
         else {
             Html::createElement('p', "ComposerOutputDriver::createInputDriverOutput: Unknown input use type " . $desc['use'], array('class'=>'whoknows'));
         }

@@ -52,9 +52,11 @@ class ComposerInputDriver extends \Eloquent {
              * We get a processor associated with the particular input type.
              */
             $base = ucfirst($cElem['inputType']);
-            $inputControllerClassName = '\DemocracyApps\CNP\Compositions\Inputs\\'.$base."InputHandler";
-            $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'extractValue');
-            $reflectionMethod->invokeArgs(null, array($id, $input, &$cElem));
+            if ($base != "None") {
+                $inputControllerClassName = '\DemocracyApps\CNP\Compositions\Inputs\\' . $base . "InputHandler";
+                $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'extractValue');
+                $reflectionMethod->invokeArgs(null, array($id, $input, &$cElem));
+            }
         }
     }
 
@@ -75,10 +77,15 @@ class ComposerInputDriver extends \Eloquent {
 
     static public function createInput($desc)
     {
-        Html::createElement('input', null, array('class' => 'form-control', 'id' => $desc['id'].'_param', 'name' => $desc['id']."_param", 'type'=>'hidden'));
-        Html::startElement("div", array('class' => 'form-group'));
-        Html::createElement("label", $desc['prompt'], array('for' => $desc['id']));
-
+        if ($desc['inputType'] == "none") {
+            Html::startElement("div", array('class' => 'form-group'));
+            Html::createElement("p", $desc['prompt'], array());
+        }
+        else {
+            Html::createElement('input', null, array('class' => 'form-control', 'id' => $desc['id'] . '_param', 'name' => $desc['id'] . "_param", 'type' => 'hidden'));
+            Html::startElement("div", array('class' => 'form-group'));
+            Html::createElement("label", $desc['prompt'], array('for' => $desc['id']));
+        }
         if ($desc['inputType'] == 'text') {
             Html::createElement('input', null, array('class' => 'form-control', 'name' => $desc['id'], 'type'=>'text'));
         }

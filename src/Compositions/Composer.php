@@ -504,6 +504,7 @@ class Composer extends \Eloquent {
         $relationsIn = array();
         foreach ($map as $item) {
             // If no id, then it wasn't used to get input (e.g., page breaks).
+            if (array_key_exists('use', $item) && $item['use'] == "presentation") continue;
             if (array_key_exists('use', $item) && array_key_exists('id', $item)) {
                 $id = $item['id'];
                 $isRef = false;

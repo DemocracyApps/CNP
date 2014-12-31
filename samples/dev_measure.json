@@ -34,6 +34,16 @@
         "prompt":"Name the organization or group most involved in what happened."
       },
       {
+        "id":"intro",
+        "use":"presentation",
+        "inputType":"none",
+        "prompt":
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque iaculis sem eros,
+        in lacinia nunc vestibulum vel. Pellentesque viverra ullamcorper elit eu fringilla. Etiam id ligula nunc. Etiam elementum facilisis lectus, eu malesuada enim dapibus at. Aliquam erat volutpat. Aliquam tincidunt, leo sed interdum luctus, ipsum odio sollicitudin libero, id finibus sapien tortor at dolor. Duis interdum quam sed metus gravida pretium. Nam a velit at dolor facilisis laoreet vel nec nibh.
+
+        Integer dapibus, orci sed eleifend imperdiet, massa diam sodales mi, eu finibus erat nibh quis metus. Donec semper, felis ac malesuada vestibulum, odio tortor ultrices dolor, sit amet feugiat magna dolor eu odio. Sed rhoncus a erat porta varius. Suspendisse congue dapibus enim et gravida. Pellentesque pellentesque in nunc sed laoreet. Praesent in eros purus. Suspendisse in tortor quis sapien sagittis faucibus. Cras sed semper mi, a pretium nibh. Maecenas tincidunt, lectus non aliquam auctor, libero nisi sodales urna, a interdum turpis ipsum sit amet leo. Vestibulum dapibus eros felis, sit amet consectetur lacus porta a."
+      },
+      {
         "id":"measure",
         "use":"element",
         "inputType":"slider",
