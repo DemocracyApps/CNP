@@ -1,0 +1,86 @@
+{
+  "name": "Global Giving Composer Specification",
+  "version": "0.01",
+  // The ID here is used by input specs to refer to these elements. IDs must be unique within this file.
+  "input": {
+    "inputType": "auto-interactive",
+    "map": [
+      {
+        "id":"story",
+        "use":"element",
+        "elementId":"Story",
+        "inputType":"textarea",
+        "prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community."
+      },
+      {
+        "id":"title",
+        "use":"element",
+        "inputType":"text",
+        "elementId":"Title",
+        "prompt":"Give your story a title"
+      },
+      {
+        "id":"user",
+        "use":"element",
+        "elementId":"Storyteller",
+        "inputType":"auto",
+        "inputValue":"!user"
+      },
+      {
+        "id":"org",
+        "use":"element",
+        "inputType":"text",
+        "elementId":"Organization",
+        "prompt":"Name the organization or group most involved in what happened."
+      },
+      {
+        "id":"measure",
+        "use":"element",
+        "inputType":"slider",
+        "elementId":"TestMeasure",
+        "scaleMin":"1",
+        "scaleMax":"10",
+        "prompt":"Enter a number between -1 and 10."
+      }
+    ]
+  },
+  "elements": [
+    {
+      "id":"Title",
+      "required": true,
+      "type":"CnpComposition"
+    },
+    {
+      "id":"Story",
+      "type":"Story",
+      "match":false
+    },
+    {
+      "id":"Storyteller",
+      "required": true,
+      "type":"Person"
+    },
+    {
+      "id":"Organization",
+      "type":"Organization",
+      "match":false
+    },
+    {
+      "id":"TestMeasure",
+      "type":"Measure",
+      "match":false
+    }
+  ],
+  "relations": [
+    {
+      "type": "causes",
+      "from": "Organization",
+      "to":   "Story"
+    },
+    {
+      "type": "is-creator-of",
+      "from": "Storyteller",
+      "to":   "Title"
+    }
+  ]
+}

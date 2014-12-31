@@ -41,6 +41,10 @@
 @stop
 @section('scripts')
     <script type="text/javascript">
+       function sliderChange (target) {
+          var value = $("#"+target+"-control").val();
+          $("#"+target+"-display").html(value);
+       }
 //autocomplete
       $(function() {
          $(".auto-person").autocomplete({

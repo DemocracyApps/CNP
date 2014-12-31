@@ -94,6 +94,24 @@ class ComposerInputDriver extends \Eloquent {
             Html::createElement('input', null, array('name' => $desc['id'],
                        'type'=>'file'));
         }
+        elseif ($desc['inputType'] == 'slider') {
+            $min = "0.0";
+            $max = "1.0";
+            if (array_key_exists('scaleMin', $desc)) $min = $desc['scaleMin'];
+            if (array_key_exists('scaleMax', $desc)) $max = $desc['scaleMax'];
+            $sliderId = "slider-" . $desc['id'];
+            $sliderDisplayId = $sliderId . "-display";
+            $sliderControlId = $sliderId . "-control";
+            $call = "sliderChange('" . $sliderId . "')";
+            Html::createElement('input', null, array('name' => $desc['id'], 'type' => 'range', 'id'=>$sliderControlId,
+                'min'=>$min, 'max'=>$max, 'value' => "1", 'step'=> ".5", 'style'=>'width:50%;', 'onchange' => $call));
+
+            Html::startElement('div', array('style'=>'width:50%;'));
+            Html::createElement('b', $min, array('style'=>"float:left;"));
+            Html::createElement('b', $max, array('style'=>"float:right;"));
+            Html::endElement('div');
+            Html::createElement('div', '<b id="'.$sliderDisplayId.'">--</b>', array('style'=>'display:table; margin:0 auto; '));
+        }
         elseif ($desc['inputType'] == 'pickElement') {
             $type = \CNP::getElementTypeId($desc['pickType']);
             $elements = Element::allUserElements(\Auth::user()->getId(), $type);
