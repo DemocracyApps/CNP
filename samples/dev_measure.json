@@ -6,6 +6,28 @@
     "inputType": "auto-interactive",
     "map": [
       {
+        "id":"launcher1",
+        "use":"output",
+        "condition":"!owner",
+        "outputType":"launch",
+        "prompt":"Do you want to tell a story?",
+        "launchText":"Tell your own damn story!",
+        "composer":"2",
+        "referentId":"Story",
+        "relation":"branches-to"
+      },
+      {
+        "id":"launcher2",
+        "use":"output",
+        "condition":"owner",
+        "outputType":"launch",
+        "prompt":"Do you want to supplement your story?",
+        "launchText":"Yes!",
+        "composer":"2",
+        "referentId":"Story",
+        "relation":"branches-to"
+      },
+      {
         "id":"story",
         "use":"element",
         "elementId":"Story",

@@ -100,7 +100,7 @@ class CompositionsController extends ApiController {
         $composer->initializeForInput(\Input::all());
 
         if (\Input::get('referent')) {
-            $composer->setReferentByElementId(\Input::get('referent'));
+            $composer->setReferentByElementId(\Input::get('referent'), \Input::get('referentRelation'));
         }
 
         $composition = new \DemocracyApps\CNP\Compositions\Composition;
@@ -133,13 +133,14 @@ class CompositionsController extends ApiController {
             return \Redirect::to('/login');         
         }
         $input = \Input::all();
+
         $composition = Composition::find(\Input::get('composition'));
         $composer = Composer::find($composition->input_composer_id);
         if ( ! $composer->validateInput($input)) {
             return \Redirect::back()->withInput()->withErrors($composer->messages());
         }
         if (\Input::get('referentId')) {
-            $composer->setReferentByReferentId(\Input::get('referentId'));
+            $composer->setReferentByReferentId(\Input::get('referentId'), \Input::get('referentRelation'));
         }
         $inputType = $composer->getInputType();
 

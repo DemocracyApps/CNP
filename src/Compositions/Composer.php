@@ -478,7 +478,10 @@ class Composer extends \Eloquent {
             foreach($referents as $ref) {
                 $relations = DAEntity\Relation::createRelationPair($ref->id, 
                                                                    $topElement->id, $this->referentRelation, $project);
-                foreach ($relations as $relation) { $relation->save(); }
+                foreach ($relations as $relation) {
+                    $relation->setCompositionId($composition->id);
+                    $relation->save();
+                }
 
             }
         }
@@ -504,7 +507,10 @@ class Composer extends \Eloquent {
         $relationsIn = array();
         foreach ($map as $item) {
             // If no id, then it wasn't used to get input (e.g., page breaks).
-            if (array_key_exists('use', $item) && $item['use'] == "presentation") continue;
+            if (array_key_exists('use', $item)) {
+                if ($item['use'] == 'output' || $item['use'] == "presentation")
+                    continue;
+            }
             if (array_key_exists('use', $item) && array_key_exists('id', $item)) {
                 $id = $item['id'];
                 $isRef = false;
@@ -599,6 +605,7 @@ class Composer extends \Eloquent {
                 $valid = true;
                 foreach ($columnMap as $column) {
                     $use = $column['use'];
+                    if ($use == 'presentation' || $use == 'output') continue;
                     $required =  false;
                     if (array_key_exists('required', $column)) {
                         $required = $column['required'];

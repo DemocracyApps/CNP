@@ -89,12 +89,27 @@ class ComposerOutputDriver extends \Eloquent {
                 return;
             }
         }
+        if (array_key_exists('condition', $desc)) {
+            $condition = trim($desc['condition']);
+            $negate = false;
+            if (substr($condition,0,1) == '!') {
+                $negate = true;
+                $condition = substr($condition, 1);
+            }
+            $doit = true;
+            if ($condition == 'owner') {
+                $composition = \DemocracyApps\CNP\Compositions\Composition::find($compositionId);
+                $isOwner = ($composition->userid == \Auth::user()->id);
+                if (($isOwner && $negate) || (! $negate && ! $isOwner)) $doit = false;
+            }
+            if (!$doit) return;
+        }
         Html::startElement("div", array('class' => 'span6'));
 
         /*
          * Title/prompt section
          */        
-        $prompt = "Unknown prompt";
+        $prompt = null;
         if (array_key_exists('outputPrompt', $desc)) {
             $prompt = $desc['outputPrompt'];
         }
@@ -104,7 +119,9 @@ class ComposerOutputDriver extends \Eloquent {
         else if (array_key_exists('column', $desc)) {
             $prompt = 'Column ' . $desc['column'];
         }
-        Html::createElement("h3", $prompt, array('id' => $desc['id']));
+        if ($prompt != null) {
+            Html::createElement("h3", $prompt, array('id' => $desc['id']));
+        }
 
         /*
          * Content section
@@ -149,7 +166,6 @@ class ComposerOutputDriver extends \Eloquent {
                 Html::startElement('td', $colProps, 15);
 
                 $related = Element::countRelatedCompositions($project, $compositionId, $den->id);
-
                 if ($related > 0) {
                     Html::createElement('a', $related . " Related", array('href'=>'/'.$project.'/compositions?filter=related&element='.$den->id));
                 }
@@ -167,14 +183,32 @@ class ComposerOutputDriver extends \Eloquent {
         else if ($desc['use'] == 'presentation') {
             // nothing
         }
+        else if ($desc['use'] == 'output') {
+            if ($desc['outputType'] == 'launch') {
+                $launchText = "Start";
+                if (array_key_exists('launchText', $desc)) $launchText = $desc['launchText'];
+
+                $link = "/compositions/create?composer=".$desc['composer']."&referent=";
+                $elements = $driver->getElements($desc['referentId']);
+
+                if ($elements && sizeof($elements) > 0) {
+                    $link .= array_shift($elements)->id;
+                    while (sizeof($elements) > 0) {
+                        $link .= ',' . array_shift($elements)->id;
+                    }
+                }
+                $link .= "&referentRelation=";
+                $link .= $desc['relation'];
+//                $link = link_to($link, $item['text'], array());
+//                Html::createElement('p', $link, array(), $spaces);
+
+                Html::createElement('a', $launchText, array('href'=>$link));
+            }
+        }
         else {
             Html::createElement('p', "ComposerOutputDriver::createInputDriverOutput: Unknown input use type " . $desc['use'], array('class'=>'whoknows'));
         }
 
-        /*
-         * Context/links section
-         */
-        
 
 
         Html::endElement("div");

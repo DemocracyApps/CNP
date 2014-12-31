@@ -48,6 +48,7 @@ class ComposerInputDriver extends \Eloquent {
         $expectedIds = $this->program->getExpectedIds();
         foreach ($expectedIds as $id) {
             $cElem = &$this->program->getExpectedCompositionElement($id);
+            if (array_key_exists('use', $cElem) && $cElem['use'] == 'output') continue;
             /*
              * We get a processor associated with the particular input type.
              */
