@@ -48,7 +48,7 @@ class ComposerOutputDriver extends \Eloquent {
             $this->usingInputSpec = true;
         }
         $this->program = new ComposerProgram;
-        $this->program->compile($this->outputSpec, $start);
+        $this->program->compile($this->outputSpec, false, $start);
         $this->elementsMap = $elementsMap;
     }
 
@@ -74,7 +74,7 @@ class ComposerOutputDriver extends \Eloquent {
 
     public function getNext()
     {
-        return $this->program->getNext();
+        return $this->program->getNext(false);
     }
 
     public static function validForOutput($next)
@@ -84,6 +84,11 @@ class ComposerOutputDriver extends \Eloquent {
 
     static public function createInputDrivenOutput($project, $compositionId, $anchor, $driver, $desc)
     {
+        if (array_key_exists('suppress', $desc)) {
+            if ($desc['suppress'] == 'output') {
+                return;
+            }
+        }
         Html::startElement("div", array('class' => 'span6'));
 
         /*

@@ -61,7 +61,8 @@
                 ]
             },
             {
-                "use":"pagebreak"
+                "use":"pagebreak",
+                "suppress":"output"
             },
             {
                 "id":"org",

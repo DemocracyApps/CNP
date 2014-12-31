@@ -13,7 +13,7 @@ class ComposerProgram {
         // No idea what to do with start here, actually.
     }
 
-    public function compile($program, $start = null) 
+    public function compile($program, $doingInput, $start = null)
     {
         $this->program = $program; // Just in case.
         $this->runnable = array();
@@ -39,7 +39,12 @@ class ComposerProgram {
             if (array_key_exists('use', $item)) {
                 if ($item['use'] == 'break' || $item['use'] == 'pagebreak') {
                     if ($item['use'] == 'pagebreak') {
-                        if ($previous) $previous['pagebreak'] = true;
+                        $doit = true;
+                        if (array_key_exists('suppress', $item)) {
+                            if ($doingInput && $item['suppress'] == 'input') $doit = false;
+                            if (! $doingInput && $item['suppress'] == 'output') $doit = false;
+                        }
+                        if ($doit && $previous) $previous['pagebreak'] = true;
                     }
                     elseif ($item['use'] == 'break') {
                         if ($this->runnable['start'] != null) { // We just ignore stop elements at the beginning.
@@ -118,7 +123,7 @@ class ComposerProgram {
         }
     }
 
-    public function getNext()
+    public function getNext($doingInput = true)
     {
         /*
          * At the top of the routine, $current is the page we were most recently on. We don't advance
@@ -167,7 +172,9 @@ class ComposerProgram {
                 $result = null;
             }
         }
-        if ($result != null && $result['pagebreak']) $this->pageBreak = true;
+        if ($result != null && $result['pagebreak']) {
+            $this->pageBreak = true;
+        }
         return $result;
     }
 }

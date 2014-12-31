@@ -29,7 +29,7 @@ class ComposerInputDriver extends \Eloquent {
         $this->expires = date('Y-m-d H:i:s', time() + 24 * 60 * 60);
 
         $this->program = new ComposerProgram;
-        $this->program->compile($inputSpec);
+        $this->program->compile($inputSpec, true);
     }
 
     public function done ()
@@ -77,6 +77,7 @@ class ComposerInputDriver extends \Eloquent {
 
     static public function createInput($desc)
     {
+        if (array_key_exists('suppress', $desc) && $desc['suppress']=='input') return;
         if ($desc['inputType'] == "none") {
             Html::startElement("div", array('class' => 'form-group'));
             Html::createElement("p", $desc['prompt'], array());

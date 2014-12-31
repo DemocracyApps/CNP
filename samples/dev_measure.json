@@ -37,6 +37,7 @@
         "id":"intro",
         "use":"presentation",
         "inputType":"none",
+        "suppress":"output",
         "prompt":
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque iaculis sem eros,
         in lacinia nunc vestibulum vel. Pellentesque viverra ullamcorper elit eu fringilla. Etiam id ligula nunc. Etiam elementum facilisis lectus, eu malesuada enim dapibus at. Aliquam erat volutpat. Aliquam tincidunt, leo sed interdum luctus, ipsum odio sollicitudin libero, id finibus sapien tortor at dolor. Duis interdum quam sed metus gravida pretium. Nam a velit at dolor facilisis laoreet vel nec nibh.
