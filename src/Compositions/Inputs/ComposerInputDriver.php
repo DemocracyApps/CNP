@@ -78,7 +78,9 @@ class ComposerInputDriver extends \Eloquent {
 
     static public function createInput($desc)
     {
+
         if (array_key_exists('suppress', $desc) && $desc['suppress']=='input') return;
+        if (array_key_exists('use', $desc) && $desc['use'] == 'output') return;
         if ($desc['inputType'] == "none") {
             Html::startElement("div", array('class' => 'form-group'));
             Html::createElement("p", $desc['prompt'], array());
@@ -113,7 +115,7 @@ class ComposerInputDriver extends \Eloquent {
             $sliderControlId = $sliderId . "-control";
             $call = "sliderChange('" . $sliderId . "')";
             Html::createElement('input', null, array('name' => $desc['id'], 'type' => 'range', 'id'=>$sliderControlId,
-                'min'=>$min, 'max'=>$max, 'value' => "1", 'step'=> ".5", 'style'=>'width:50%;', 'onchange' => $call));
+                'min'=>$min, 'max'=>$max, 'step'=> ".5", 'style'=>'width:50%;', 'onchange' => $call));
 
             Html::startElement('div', array('style'=>'width:50%;'));
             Html::createElement('b', $min, array('style'=>"float:left;"));
