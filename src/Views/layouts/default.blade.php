@@ -48,7 +48,7 @@
                   Admin <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                  <li role="presentation" ><a href="/account">Profile</a></li>
+                  <li role="presentation" ><a href="/user/profile">My Stuff</a></li>
                   @if   (Auth::guest()) 
                     <li role="presentation" ><a href="/login">Log In</a></li>
                   @else

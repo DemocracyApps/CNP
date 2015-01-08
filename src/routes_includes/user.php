@@ -1,18 +1,45 @@
 <?php 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Entities\Eloquent\User;
+use \DemocracyApps\CNP\Compositions\Composition;
 
 
-Route::get('account', array('as' => 'account', 'before' => 'cnp.auth', function()
+Route::get('user/profile', array('as' => 'user.profile', 'before' => 'cnp.auth', function()
 {
     $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
     $person = DAEntity\Element::find($user->getElementId());
     $projects = DAEntity\Project::where('userid', '=', $user->getId())->get();
-    return View::make('user.account', array('user' => $user, 'person' => $person, 
-                      'projects' => $projects));
+    return View::make('user.account', array('user' => $user, 'person' => $person,
+        'projects' => $projects));
 }));
 
-Route::get('users/{userId}/edit', array('as' => 'system.users.edit', function($userId)
+Route::get('user/contributions', array('as' => 'user.contributions', 'before' => 'cnp.auth', function()
+{
+    $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
+    $person = DAEntity\Element::find($user->getElementId());
+    $projects = DAEntity\Project::where('userid', '=', $user->getId())->get();
+
+    $sort = 'date';
+    $desc  = true;
+    if (\Input::has('sort')) {
+        $sort = \Input::get('sort');
+    }
+    if (\Input::has('desc')) {
+        $val = \Input::get('desc');
+        if ($val == 'false') $desc=false;
+    }
+    $page = \Input::get('page', 1);
+    $pageLimit=\CNP::getConfigurationValue('pageLimit');
+
+    $data = Composition::allUserCompositionsPaged($user->id, $sort, $desc, $page, $pageLimit);
+
+    $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
+
+    return View::make('user.contributions', array('stories' => $stories, 'sort' => $sort, 'desc' => $desc, 'user' => $user, 'person' => $person,
+        'projects' => $projects));
+}));
+
+Route::get('user/{userId}/edit', array('as' => 'system.user.edit', function($userId)
 {
     $user = User::find($userId);
     return View::make('user.edit', array('user' => $user, 'putUrl'=>'account.update',
@@ -25,7 +52,7 @@ Route::put('account/update/{userId}', array('as' => 'account.update', function($
     $user = User::find($userId);
     $user->name = $data['name'];
     $user->save();
-    return \Redirect::to('/account');
+    return \Redirect::to('/user/profile');
 }));
 
 /********************************

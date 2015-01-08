@@ -47,7 +47,7 @@ class Composition extends \Eloquent
         return $data;
     }
 
-    public static function allProjectCompositionsPaged ($sort, $desc, $project, $page=1, $limit=10) 
+    public static function allProjectCompositionsPaged ($sort, $desc, $project, $page=1, $limit=10)
     {
         $total = self::where('project', '=', $project)->count();
         if ($sort == 'title') {
@@ -64,18 +64,49 @@ class Composition extends \Eloquent
         }
 
         $result = self::where('project', '=', $project)
-                    ->join('users', 'users.id', '=', 'compositions.userid')
-                    ->whereNotNull('top') // Skip the batch compositions
-                    ->orderBy($sort, $desc?'desc':'asc')
-                    ->skip(($page-1)*$limit)
-                    ->take($limit)
-                    ->select('compositions.id', 'compositions.title', 'compositions.created_at', 'users.name')
-                    ->get();
+            ->join('users', 'users.id', '=', 'compositions.userid')
+            ->whereNotNull('top') // Skip the batch compositions
+            ->orderBy($sort, $desc?'desc':'asc')
+            ->skip(($page-1)*$limit)
+            ->take($limit)
+            ->select('compositions.id', 'compositions.title', 'compositions.created_at', 'users.name')
+            ->get();
 
         $data = array();
         $data['total'] = $total;
         $data['items'] = $result->all();
-        return $data;    
+        return $data;
+    }
+
+    public static function allUserCompositionsPaged ($user, $sort, $desc, $page=1, $limit=10)
+    {
+        $total = self::where('compositions.userid', '=', $user)->count();
+        if ($sort == 'title') {
+            $sort = 'compositions.title';
+        }
+        elseif ($sort == 'date') {
+            $sort = 'compositions.created_at';
+        }
+        elseif ($sort == 'project') {
+            $sort = 'compositions.project';
+        }
+        else {
+            $sort = 'compositions.id';
+        }
+
+        $result = self::where('compositions.userid', '=', $user)
+            ->join('projects', 'projects.id', '=', 'compositions.project')
+            ->whereNotNull('top') // Skip the batch compositions
+            ->orderBy($sort, $desc?'desc':'asc')
+            ->skip(($page-1)*$limit)
+            ->take($limit)
+            ->select('compositions.id', 'compositions.title', 'compositions.project', 'compositions.created_at', 'projects.name as projectName')
+            ->get();
+
+        $data = array();
+        $data['total'] = $total;
+        $data['items'] = $result->all();
+        return $data;
     }
 
 }
