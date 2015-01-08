@@ -188,7 +188,7 @@ class ComposerOutputDriver extends \Eloquent {
                 $launchText = "Start";
                 if (array_key_exists('launchText', $desc)) $launchText = $desc['launchText'];
 
-                $link = "/compositions/create?composer=".$desc['composer']."&referent=";
+                $link = "/" . $project . "/compositions/create?composer=".$desc['composer']."&referent=";
                 $elements = $driver->getElements($desc['referentId']);
 
                 if ($elements && sizeof($elements) > 0) {

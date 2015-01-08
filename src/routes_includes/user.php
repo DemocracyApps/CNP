@@ -6,7 +6,7 @@ use \DemocracyApps\CNP\Entities\Eloquent\User;
 Route::get('account', array('as' => 'account', 'before' => 'cnp.auth', function()
 {
     $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
-    $person = DAEntity\Person::find($user->getElementId());
+    $person = DAEntity\Element::find($user->getElementId());
     $projects = DAEntity\Project::where('userid', '=', $user->getId())->get();
     return View::make('user.account', array('user' => $user, 'person' => $person, 
                       'projects' => $projects));

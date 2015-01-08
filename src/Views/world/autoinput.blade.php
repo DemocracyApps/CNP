@@ -1,14 +1,17 @@
 @extends('layouts.default_ext')
 
 @section('content')
-<h1>Tell Your New Story</h1>
+<h1>Tell Your Story</h1>
 
-<form method="POST" action="http://cnp.dev/{{$composer->project}}/compositions" accept-charset="UTF-8">
+<form method="POST" action="http://cnp.dev/{{$composer->project}}/compositions"
+      accept-charset="UTF-8" enctype="multipart/form-data">
    {{Form::token();}}
    <input type="hidden" name="driver" value="{{$composer->getDriver()->id}}"/>
    <input type="hidden" name="composition" value="{{$composition->id}}"/>
    @if ($composer->getReferentId())
       <input type="hidden" name="referentId" value="{{$composer->getReferentId()}}"/>
+   @endif
+   @if($composer->getReferentRelation())
       <input type="hidden" name="referentRelation" value="{{$composer->getReferentRelation()}}"/>
    @endif
    <?php
@@ -43,6 +46,10 @@
 @stop
 @section('scripts')
     <script type="text/javascript">
+       function sliderChange (target) {
+          var value = $("#"+target+"-control").val();
+          $("#"+target+"-display").html(value);
+       }
 //autocomplete
       $(function() {
          $(".auto-person").autocomplete({
