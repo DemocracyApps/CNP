@@ -12,6 +12,12 @@ use GrahamCampbell\Flysystem\Facades\Flysystem;
 //           " and method " .\Request::server('REQUEST_METHOD'));
 // $environment = App::environment();
 
+//$pu = new \DemocracyApps\CNP\Entities\ProjectUser();
+//$pu->project = 2;
+//$pu->user = 2;
+//$pu->access = 3;
+//$pu->save();
+
 /*
  * Patterns for use in routes
  */

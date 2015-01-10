@@ -1,6 +1,7 @@
-<?php 
+<?php
 
 use \DemocracyApps\CNP\Entities\Project;
+use \DemocracyApps\CNP\Entities\ProjectUser;
 use \DemocracyApps\CNP\Compositions\Composer;
 use \DemocracyApps\CNP\Compositions\Composition;
 use \DemocracyApps\CNP\Entities\Eloquent\User;
@@ -15,7 +16,8 @@ Route::get('/', function($projectId) {
     $project = Project::find($projectId);
     $owner = false;
     if (!\Auth::guest()) {
-        $owner = ($project->userid == \Auth::user()->getId());
+        $owner = (ProjectUser::projectAccess($project->id, \Auth::id()) == 3);
+        //$owner = ($project->userid == \Auth::user()->getId());
     }
     $composerId = ($project->hasProperty('defaultInputComposer'))?$project->getProperty('defaultInputComposer'):-1;
     return View::make('world.home', array('project' => $project, 'owner' => $owner, 'defaultInputComposer' => $composerId));
@@ -39,7 +41,8 @@ Route::get('compositions', function ($projectId) {
     $project = Project::find($projectId);
     $owner = false;
     if (!\Auth::guest()) {
-        $owner = ($project->userid == \Auth::user()->getId());
+        $owner = (ProjectUser::projectAccess($project->id, \Auth::id()) == 3);
+        //$owner = ($project->userid == \Auth::user()->getId());
     }
     $page = \Input::get('page', 1);
     $pageLimit=\CNP::getConfigurationValue('pageLimit');
@@ -140,7 +143,8 @@ Route::get('compositions/{compositionId}', function ($projectId, $compositionId)
     $project = Project::find($projectId);
     $owner = false;
     if (!\Auth::guest()) {
-        $owner = ($project->userid == \Auth::user()->getId());
+        $owner = (ProjectUser::projectAccess($project->id, \Auth::id()) == 3);
+//        $owner = ($project->userid == \Auth::user()->getId());
     }
     $composition = Composition::find($compositionId);
 
@@ -193,7 +197,8 @@ Route::get('compositions/{compositionId}', function ($projectId, $compositionId)
 
 Route::get('sos_start', function ($projectId) {
     $project = Project::find($projectId);
-    $owner = ($project->userid == \Auth::user()->getId());
+    $owner = (ProjectUser::projectAccess($project->id, \Auth::id()) == 3);
+//    $owner = ($project->userid == \Auth::user()->getId());
     return \View::make('world.sos_start', array('project' => $project, 'owner' => $owner));
 });
 

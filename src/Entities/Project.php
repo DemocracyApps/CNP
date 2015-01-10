@@ -2,6 +2,8 @@
 
 namespace DemocracyApps\CNP\Entities;
 
+use Illuminate\Support\Facades\DB;
+
 /**
  * 
  */
@@ -65,10 +67,21 @@ class Project extends \Eloquent
         return $propValue;
     }    
 
-    public static function allUserProjects($user)
-    {
-        return self::where('userid', '=', $user)->get();
+//    public static function allUserProjects($user)
+//    {
+//        return self::where('userid', '=', $user)->get();
+//    }
+
+    public static function allUserProjects ($user) {
+        $data = self::join('project_users', 'project_users.project', '=', 'projects.id')
+            ->where ('project_users.user', '=', $user)
+            ->where ('project_users.access', '=', 3)
+            ->select('projects.*')
+            ->get();
+
+        return $data;
     }
+
 }
 
 

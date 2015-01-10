@@ -2,6 +2,7 @@
 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Entities\Project;
+use \DemocracyApps\CNP\Entities\ProjectUser;
 use \DemocracyApps\CNP\Utility\Api as Api;
 use \DemocracyApps\CNP\Compositions\Composer as Composer;
 
@@ -23,31 +24,38 @@ class ProjectsController extends ApiController {
 	{
 		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
     	$projects = DAEntity\Project::allUserProjects(\Auth::id());
+
+		//$projects = DAEntity\ProjectUser::allUserProjects(\Auth::id());
+
     	if ($isAPI) {
 	    	$data = $this->projectTransformer->transformCollection($projects);
 			return $this->respondIndex('List of API user projects', $data);
 		}
 		else {
+			//TODO: Could later add projects on which user is authorized
 			return \View::make('projects.index', array('projects'=>$projects));
 		}
 	}
 
 	public function show ($id)
 	{
-		$project = DAEntity\Project::find($id);
-		$composers = Composer::where('project', '=', $id)->get();
-		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
-		if ($isAPI) {
-			if (!$project) {
-				return $this->respondNotFound('Project '.$id.' does not exist');
-			}
-			else {
-				$data = $this->projectTransformer->transform($project);
-				return $this->respondIndex('Requested project', $data);
+		if (ProjectUser::projectAccess($id, \Auth::id()) == 3) {
+			$project = DAEntity\Project::find($id);
+			$composers = Composer::where('project', '=', $id)->get();
+			$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
+			if ($isAPI) {
+				if (!$project) {
+					return $this->respondNotFound('Project ' . $id . ' does not exist');
+				} else {
+					$data = $this->projectTransformer->transform($project);
+					return $this->respondIndex('Requested project', $data);
+				}
+			} else {
+				return \View::make('projects.show', array('project' => $project, 'composers' => $composers));
 			}
 		}
 		else {
-			return \View::make('projects.show', array('project' => $project, 'composers' => $composers));
+			return \Redirect::to('/');
 		}
 	}
 
@@ -94,6 +102,12 @@ class ProjectsController extends ApiController {
 	        if ($data['content']) $this->project->description = $data['content'];
 	        $this->project->userid = $user->getId();
 	        $this->project->save();
+
+			$pu = new \DemocracyApps\CNP\Entities\ProjectUser();
+			$pu->project = $this->project->id;
+			$pu->user = $this->project->userid;
+			$pu->access = 3;
+			$pu->save();
 
 	        // Now let's create the relations with the creator Person
 	        // $person = DAEntity\Person::find($user->getElementId());
