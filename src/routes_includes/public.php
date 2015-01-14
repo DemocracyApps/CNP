@@ -12,18 +12,34 @@ use \DemocracyApps\CNP\Entities\Relation;
  * Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], ...
  */
 
+//
+//Route::get('authorize',
+//    array('uses' => 'DemocracyApps\CNP\Controllers\ProjectsController@authorize', array('projectId' => $projectId)));
+
+Route::get('authorize', function ($projectId) {
+    $app = app();
+    $controller = $app->make('DemocracyApps\CNP\Controllers\ProjectsController');
+    return $controller->callAction('authorize', $parameters = array('id'=> $projectId));
+});
+
 Route::get('/', function($projectId) {
     $project = Project::find($projectId);
+    if (! $project->isViewAuthorized(\Auth::id())) {
+        return \Redirect::to('/'.$projectId.'/authorize');
+    }
     $owner = false;
     if (!\Auth::guest()) {
-        $owner = (ProjectUser::projectAccess($project->id, \Auth::id()) == 3);
-        //$owner = ($project->userid == \Auth::user()->getId());
+        $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
     }
     $composerId = ($project->hasProperty('defaultInputComposer'))?$project->getProperty('defaultInputComposer'):-1;
     return View::make('world.home', array('project' => $project, 'owner' => $owner, 'defaultInputComposer' => $composerId));
 });
 
 Route::get('compositions', function ($projectId) {
+    $project = Project::find($projectId);
+    if (! $project->isViewAuthorized(\Auth::id())) {
+        return \Redirect::to('/'.$projectId.'/authorize');
+    }
     $sort = 'date';
     $desc  = true;
     if (\Input::has('sort')) {
@@ -38,10 +54,10 @@ Route::get('compositions', function ($projectId) {
     if (\Input::has('filter')) {
         $filter = true;
     }
-    $project = Project::find($projectId);
+
     $owner = false;
     if (!\Auth::guest()) {
-        $owner = (ProjectUser::projectAccess($project->id, \Auth::id()) == 3);
+        $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
         //$owner = ($project->userid == \Auth::user()->getId());
     }
     $page = \Input::get('page', 1);
@@ -77,7 +93,10 @@ Route::get('compositions/create', function ($projectId) {
         return \Redirect::to('/login');         
     }
 
-    $project = Project::find($projectId); 
+    $project = Project::find($projectId);
+    if (! $project->isPostAuthorized(\Auth::id())) {
+        return \Redirect::to('/'.$projectId.'/authorize');
+    }
 
     if ( ! \Input::has('composer')) throw new \Exception("No composer id specified.");
 
@@ -117,6 +136,9 @@ Route::post('compositions', function($projectId) {
         return \Redirect::to('/login');         
     }
     $project = Project::find($projectId);
+    if (! $project->isPostAuthorized(\Auth::id())) {
+        return \Redirect::to('/'.$projectId.'/authorize');
+    }
     $input = \Input::all();
     $composition = Composition::find(\Input::get('composition'));
     $composer = Composer::find($composition->input_composer_id);
@@ -141,9 +163,12 @@ Route::post('compositions', function($projectId) {
 
 Route::get('compositions/{compositionId}', function ($projectId, $compositionId) {
     $project = Project::find($projectId);
+    if (! $project->isViewAuthorized(\Auth::id())) {
+        return \Redirect::to('/'.$projectId.'/authorize');
+    }
     $owner = false;
     if (!\Auth::guest()) {
-        $owner = (ProjectUser::projectAccess($project->id, \Auth::id()) == 3);
+        $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
 //        $owner = ($project->userid == \Auth::user()->getId());
     }
     $composition = Composition::find($compositionId);
@@ -197,7 +222,10 @@ Route::get('compositions/{compositionId}', function ($projectId, $compositionId)
 
 Route::get('sos_start', function ($projectId) {
     $project = Project::find($projectId);
-    $owner = (ProjectUser::projectAccess($project->id, \Auth::id()) == 3);
+    if (! $project->isViewAuthorized(\Auth::id())) {
+        return \Redirect::to('/'.$projectId.'/authorize');
+    }
+    $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
 //    $owner = ($project->userid == \Auth::user()->getId());
     return \View::make('world.sos_start', array('project' => $project, 'owner' => $owner));
 });

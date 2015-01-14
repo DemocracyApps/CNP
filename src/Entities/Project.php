@@ -3,6 +3,7 @@
 namespace DemocracyApps\CNP\Entities;
 
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * 
@@ -65,12 +66,63 @@ class Project extends \Eloquent
             $propValue = $this->properties[$propName];
         }
         return $propValue;
-    }    
+    }
 
-//    public static function allUserProjects($user)
-//    {
-//        return self::where('userid', '=', $user)->get();
-//    }
+    public function isViewAuthorized ($user) {
+        $access = true;
+        $projectAccess = $this->getProperty("access");
+        if ( $projectAccess == 'Private') {
+            $access = ProjectUser::projectViewAccess($this->id, $user);
+        }
+        return $access;
+    }
+
+    public function isPostAuthorized ($user) {
+        $access = false;
+        if ($this->getProperty("access") == "Open") { // Just requires a verified user
+
+        }
+        else {
+            $access = ProjectUser::projectViewAccess($this->id, $user);
+        }
+        return $access;
+    }
+
+    public function isAdminAuthorized ($user) {
+        $access = true;
+        if ($this->getProperty("access") != "Open") {
+            $access = ProjectUser::projectViewAccess($this->id, $user);
+        }
+        return $access;
+    }
+
+    public static function checkViewAuthorized ($projectId, $user) {
+        $project = Project::find($projectId);
+        if ($project != null) {
+            return $project->isViewAuthorized($user);
+        }
+        else {
+            throw new NotFoundHttpException("Unknown project");
+        }
+    }
+    public static function checkPostAuthorized ($projectId, $user) {
+        $project = Project::find($projectId);
+        if ($project != null) {
+            return $project->isPostAuthorized($user);
+        }
+        else {
+            throw new NotFoundHttpException("Unknown project");
+        }
+    }
+    public static function checkAdminAuthorized ($projectId, $user) {
+        $project = Project::find($projectId);
+        if ($project != null) {
+            return $project->isAdminAuthorized($user);
+        }
+        else {
+            throw new NotFoundHttpException("Unknown project");
+        }
+    }
 
     public static function allUserProjects ($user) {
         $data = self::join('project_users', 'project_users.project', '=', 'projects.id')

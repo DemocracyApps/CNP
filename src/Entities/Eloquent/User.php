@@ -69,6 +69,19 @@ class User extends \Eloquent implements UserInterface, RemindableInterface {
         return $this->apikey;
     }
 
+    public function isVerified ()
+    {
+        return $this->verified;
+    }
+
+    public static function checkVerified($userId)
+    {
+        $verified = false;
+        $user = self::find($userId);
+        if ($user != null && $user->verified == true) $verified = true;
+        return $verified;
+    }
+
     public static function getApiUser($key) 
     {
         $kArray = explode('.', $key);

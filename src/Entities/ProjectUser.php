@@ -65,7 +65,7 @@ class ProjectUser {
         return $result;
     }
 
-    public static function projectAccess ($project, $user) {
+    private static function projectAccess ($project, $user) {
         $access = 0;
         $data = DB::table(self::$tableName) -> where ('project', $project) -> where ('user', '=', $user) -> first();
         if ($data != null) {
@@ -74,4 +74,18 @@ class ProjectUser {
         return $access;
     }
 
+    public static function projectAdminAccess ($project, $user) {
+        $access = self::projectAccess($project, $user);
+        return ($access == 3);
+    }
+
+    public static function projectPostAccess ($project, $user) {
+        $access = self::projectAccess($project, $user);
+        return ($access >= 2);
+    }
+
+    public static function projectViewAccess ($project, $user) {
+        $access = self::projectAccess($project, $user);
+        return ($access >= 1);
+    }
 }

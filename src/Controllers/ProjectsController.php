@@ -16,6 +16,12 @@ class ProjectsController extends ApiController {
 		$this->project 			= $project;
 		$this->projectTransformer = $projectTransformer;
 	}
+
+	public function authorize($id)
+	{
+		return "Hello. You should probably write an authorize page.";
+	}
+
 	/**
 	 * List all projects
 	 * @return [] [description]
@@ -24,8 +30,6 @@ class ProjectsController extends ApiController {
 	{
 		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
     	$projects = DAEntity\Project::allUserProjects(\Auth::id());
-
-		//$projects = DAEntity\ProjectUser::allUserProjects(\Auth::id());
 
     	if ($isAPI) {
 	    	$data = $this->projectTransformer->transformCollection($projects);
@@ -39,7 +43,7 @@ class ProjectsController extends ApiController {
 
 	public function show ($id)
 	{
-		if (ProjectUser::projectAccess($id, \Auth::id()) == 3) {
+		if (ProjectUser::projectAdminAccess($id, \Auth::id())) {
 			$project = DAEntity\Project::find($id);
 			$composers = Composer::where('project', '=', $id)->get();
 			$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
@@ -100,6 +104,11 @@ class ProjectsController extends ApiController {
 	        $this->project->name = $data['name'];
 	        $this->project->setProperty('access', $data['access']);
 	        if ($data['content']) $this->project->description = $data['content'];
+			if ($data['access'] != 'Open') {
+				if ($data['secret']) {
+					$this->project->setProperty('secret', $data['secret']);
+				}
+			}
 	        $this->project->userid = $user->getId();
 	        $this->project->save();
 
@@ -108,14 +117,6 @@ class ProjectsController extends ApiController {
 			$pu->user = $this->project->userid;
 			$pu->access = 3;
 			$pu->save();
-
-	        // Now let's create the relations with the creator Person
-	        // $person = DAEntity\Person::find($user->getElementId());
-	        // $relations = DAEntity\Relation::createRelationPair($person->getId(), $this->project->getId(),
-	        //                                                   "is-creator-of");
-	        // foreach($relations as $relation) {
-	        //     $relation->save();
-	        // }
 
 	        if ($isAPI) {
 				$data = $this->projectTransformer->transform($this->project);
