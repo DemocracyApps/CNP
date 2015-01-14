@@ -12,7 +12,8 @@
 			"pda/pheanstalk": "2.1.*",
 			"doctrine/dbal": "2.4.*",
 			"graham-campbell/flysystem": "0.7.*@alpha",
-			"aws/aws-sdk-php": "~2.4"
+			"aws/aws-sdk-php": "~2.4",
+	  		"erusev/parsedown": "dev-master"
 		},
 	"require-dev": {
 		"fzaninotto/faker": "dev-master"
