@@ -168,6 +168,34 @@
     @endforeach
   </table>
 
+
+  @if ($project->getProperty('access') != 'Open')
+    @if ($project->hasProperty('secret') && $project->getProperty('secret') != null)
+      <br>
+      <h3>Project Secret</h3>
+      <p>{{ $project->getProperty('secret') }}</p>
+    @endif
+    @if ($project->terms != null)
+      <br>
+      <div>
+        <h3>Project Terms & Conditions</h3>
+        <br/>
+        <?php
+              $pd = new Parsedown();
+              echo $pd->text($project->terms);
+        ?>
+        <!--
+        <pre>
+          <code>
+            {{$project->terms}}
+          </code>
+        </pre>
+        -->
+      </div>
+    @endif
+  @endif
+
+
 @stop
 
 @section('footer_right')

@@ -5,6 +5,8 @@ use \DemocracyApps\CNP\Entities\Project;
 use \DemocracyApps\CNP\Entities\ProjectUser;
 use \DemocracyApps\CNP\Utility\Api as Api;
 use \DemocracyApps\CNP\Compositions\Composer as Composer;
+use \DemocracyApps\CNP\Utility\Html;
+
 
 class ProjectsController extends ApiController {
 	protected $project;
@@ -101,14 +103,23 @@ class ProjectsController extends ApiController {
 	        // Validation OK, let's create the project
 	        $user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
 
-	        $this->project->name = $data['name'];
-	        $this->project->setProperty('access', $data['access']);
-	        if ($data['content']) $this->project->description = $data['content'];
+	        $this->project->name = Html::cleanInput($data['name']);
+	        $this->project->setProperty('access', Html::cleanInput($data['access']));
+	        if ($data['content']) $this->project->description = Html::cleanInput($data['content']);
 			if ($data['access'] != 'Open') {
 				if ($data['secret']) {
-					$this->project->setProperty('secret', $data['secret']);
+					$this->project->setProperty('secret', Html::cleanInput($data['secret']));
+				}
+				if (\Input::hasFile('terms')) {
+					$file = \Input::file('terms');
+					$terms = \File::get($file->getRealPath());
+					$this->project->terms = Html::cleanInput($terms);
+					if ($this->project->terms == null) {
+						return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'Error reading terms file'));
+					}
 				}
 			}
+
 	        $this->project->userid = $user->getId();
 	        $this->project->save();
 

@@ -3,7 +3,7 @@
 @section('content')
 <h1>Create New Project</h1>
 
-{{ Form::open(['route' => 'admin.projects.store']) }}
+{{ Form::open(['route' => 'admin.projects.store', 'files' => true]) }}
    <div class="form-group">
       {{ Form::label('name', 'Name: ') }}
       {{ Form::text('name', null, ['class' => 'form-control']) }}
@@ -20,6 +20,13 @@
           <option value="Private">Private</option>
       </select>
    </div>
+   <br>
+   <div id="termsDiv" class="form-group" style="display:none;">
+      {{ Form::label('terms', 'Terms & Conditions (optional)')}}
+      {{ Form::file('terms')}}
+      <span class="error">{{ $errors->first('fileerror') }}</span>
+   </div>
+
    <br/>
    <div id="secretDiv" class="form-group" style="display:none;">
 
@@ -30,7 +37,7 @@
    <br/>
 
    <div class="form-group">
-      {{ Form::label('content', 'Notes: ') }}
+      {{ Form::label('content', 'Description: ') }}
       {{ Form::textarea('content', null, ['class' => 'form-control']) }}
       <br/>
    </div>
@@ -43,15 +50,21 @@
 
 @section('scripts')
 <script type="text/javascript">
-   function toggleSecret() {
+   $(document).ready(function () { // Make sure the visibility matches the value, even on reload.
+      toggleSecret();
+   });
 
+   function toggleSecret() {
       var value = $("#access").val();
-      var div = document.getElementById("secretDiv");
+      var div1 = document.getElementById("secretDiv");
+      var div2 = document.getElementById("termsDiv");
       if (value == "Open") {
-         div.style.display='none';
+         div1.style.display='none';
+         div2.style.display='none';
       }
       else {
-         div.style.display = 'block';
+         div1.style.display = 'block';
+         div2.style.display = 'block';
       }
    }
 </script>
