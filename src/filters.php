@@ -10,7 +10,7 @@ use DemocracyApps\CNP\Entities\Eloquent\User as User;
 Route::filter('cnp.auth', function()
 {
 	if (Auth::guest()) {
-		return \Redirect::to('/login');
+		return \Redirect::guest('/login');
 	}
 });
 
