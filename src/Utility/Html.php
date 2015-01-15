@@ -94,4 +94,9 @@ class Html {
     {
         echo Self::spaces($spaces) . "</".$type.">\n";
     }
+
+    static public function cleanInput ($input)
+    {
+        return strip_tags($input);
+    }
 }
