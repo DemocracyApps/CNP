@@ -16,7 +16,27 @@ use \DemocracyApps\CNP\Entities\Relation;
 //Route::get('authorize',
 //    array('uses' => 'DemocracyApps\CNP\Controllers\ProjectsController@authorize', array('projectId' => $projectId)));
 
+Route::get('authorized', function ($projectId) {
+    if (\Auth::guest()) {
+        return Redirect::guest('/login');
+    }
+    return Redirect::intended('/'.$projectId);
+});
+
+
 Route::get('authorize', function ($projectId) {
+    if (\Auth::guest()) {
+        return Redirect::guest('/login');
+    }
+    $app = app();
+    $controller = $app->make('DemocracyApps\CNP\Controllers\ProjectsController');
+    return $controller->callAction('authorize', $parameters = array('id'=> $projectId));
+});
+
+Route::post('authorize', function ($projectId) {
+    if (\Auth::guest()) {
+        return Redirect::guest('/login');
+    }
     $app = app();
     $controller = $app->make('DemocracyApps\CNP\Controllers\ProjectsController');
     return $controller->callAction('authorize', $parameters = array('id'=> $projectId));

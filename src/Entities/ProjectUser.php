@@ -65,9 +65,15 @@ class ProjectUser {
         return $result;
     }
 
+    public static function lookup($project, $user)
+    {
+        return DB::table(self::$tableName)
+            ->where ('project', $project) -> where('user', '=', $user)-> first();
+    }
+
     private static function projectAccess ($project, $user) {
         $access = 0;
-        $data = DB::table(self::$tableName) -> where ('project', $project) -> where ('user', '=', $user) -> first();
+        $data = ProjectUser::lookup($project, $user);
         if ($data != null) {
             $access = $data->access;
         }
@@ -88,4 +94,20 @@ class ProjectUser {
         $access = self::projectAccess($project, $user);
         return ($access >= 1);
     }
+
+    public static function authorizePostAccess($project, $user)
+    {
+        $record = ProjectUser::lookup($project, $user);
+        if ($record != null) {
+            if ($record->access < 2) $record->access = 2;
+        }
+        else {
+            $record = new ProjectUser();
+            $record->project = $project;
+            $record->user = $user;
+            $record->access = 2;
+            $record->save();
+        }
+    }
+
 }
