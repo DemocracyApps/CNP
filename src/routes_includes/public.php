@@ -20,7 +20,9 @@ Route::get('authorized', function ($projectId) {
     if (\Auth::guest()) {
         return Redirect::guest('/login');
     }
-    return Redirect::intended('/'.$projectId);
+    return Redirect::intended('/'.$projectId); // This doesn't seem to actually work.
+    // It's ok if they just share from main project page because it takes them back there, but not good
+    // if they're coming from elsewhere. hmmm.
 });
 
 
