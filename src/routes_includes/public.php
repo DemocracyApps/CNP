@@ -20,9 +20,7 @@ Route::get('authorized', function ($projectId) {
     if (\Auth::guest()) {
         return Redirect::guest('/login');
     }
-    return Redirect::intended('/'.$projectId); // This doesn't seem to actually work.
-    // It's ok if they just share from main project page because it takes them back there, but not good
-    // if they're coming from elsewhere. hmmm.
+    return Redirect::intended('/'.$projectId);
 });
 
 
@@ -30,6 +28,7 @@ Route::get('authorize', function ($projectId) {
     if (\Auth::guest()) {
         return Redirect::guest('/login');
     }
+    //$intended = \Session::pull('url.intended', '/abc');
     $app = app();
     $controller = $app->make('DemocracyApps\CNP\Controllers\ProjectsController');
     return $controller->callAction('authorize', $parameters = array('id'=> $projectId));
@@ -112,12 +111,12 @@ Route::get('compositions', function ($projectId) {
 
 Route::get('compositions/create', function ($projectId) {
     if (\Auth::guest()) {
-        return \Redirect::to('/login');         
+        return \Redirect::guest('/login');
     }
 
     $project = Project::find($projectId);
     if (! $project->isPostAuthorized(\Auth::id())) {
-        return \Redirect::to('/'.$projectId.'/authorize');
+        return \Redirect::guest('/'.$projectId.'/authorize');
     }
 
     if ( ! \Input::has('composer')) throw new \Exception("No composer id specified.");
