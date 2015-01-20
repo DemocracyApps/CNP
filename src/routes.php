@@ -8,8 +8,8 @@ use \DemocracyApps\CNP\Compositions\Composition;
 use \DemocracyApps\CNP\Compositions\Composer;
 use GrahamCampbell\Flysystem\Facades\Flysystem;
 
-// Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
-//           " and method " .\Request::server('REQUEST_METHOD'));
+ Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
+           " and method " .\Request::server('REQUEST_METHOD'));
 // $environment = App::environment();
 
 //$pu = new \DemocracyApps\CNP\Entities\ProjectUser();
@@ -36,6 +36,10 @@ Route::get('/', function()
  * Current routes work area 
  *************************************************
  *************************************************/
+Route::get('/mail', array(function()
+{
+
+}));
 
 Route::get('/rite', array(function()
 {

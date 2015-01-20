@@ -58,9 +58,9 @@ Route::put('account/update/{userId}', array('as' => 'account.update', function($
 /********************************
  ** Login/Logout
  ********************************/
-Route::get('/login', function() {
+Route::get('/login', array('as' => 'login', function() {
     return View::make('user.login');
-});
+}));
 
 Route::get('/logout', function() {
     Auth::logout();
@@ -70,3 +70,44 @@ Route::get('/logout', function() {
 Route::get('/loginfb', 'DemocracyApps\CNP\Controllers\LoginController@fbLogin');
 Route::get('/logintw', 'DemocracyApps\CNP\Controllers\LoginController@twitLogin');
 Route::get('/logincheat', 'DemocracyApps\CNP\Controllers\LoginController@cheatLogin');
+
+Route::get('/signup', array('as' => 'signup', function () {
+    return View::make('user.signup', array());
+}));
+
+Route::post('/login', array(function () {
+    \Log::info("In post login");
+
+    $app = app();
+    $controller = $app->make('DemocracyApps\CNP\Controllers\LoginController');
+    if (\Input::get('PW')) {
+        return $controller->callAction('loginpw', $parameters = array());
+    }
+    else if (\Input::get('FB')) {
+        return \Redirect::to('/loginfb');
+    }
+    else if (\Input::get('TW')) {
+        return \Redirect::to('/logintw');
+    }
+    else {
+        \Redirect::to('/');
+    }
+}));
+
+Route::post('/signup', array(function () {
+
+    $app = app();
+    $controller = $app->make('DemocracyApps\CNP\Controllers\LoginController');
+    if (\Input::get('PW')) {
+        return $controller->callAction('signuppw', $parameters = array());
+    }
+    else if (\Input::get('FB')) {
+        return \Redirect::to('/loginfb');
+    }
+    else if (\Input::get('TW')) {
+        return \Redirect::to('/logintw');
+    }
+    else {
+        \Redirect::to('/');
+    }
+}));

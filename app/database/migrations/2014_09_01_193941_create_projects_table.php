@@ -20,6 +20,7 @@ class CreateProjectsTable extends Migration {
             $table->text('json_properties')->nullable();
             $table->integer('userid');
             $table->foreign('userid')->references('id')->on('users');
+			$table->text('terms')->nullable();
 			$table->timestamps();
 		});
 	}

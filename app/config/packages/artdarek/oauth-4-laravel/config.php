@@ -24,7 +24,7 @@ return array(
         'Facebook' => array(
             'client_id'     => '330621543771119',
             'client_secret' => 'd3e39c73146d4277bcfbd76deb153f19',
-            'scope'         => array(),
+            'scope'         => array('email'),
         ),
         'Twitter' => array(
             'client_id'     => 'qgOA3IlyHiv6BBqnNUliXZHUj',

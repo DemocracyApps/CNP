@@ -46,7 +46,7 @@ Route::post('authorize', function ($projectId) {
 Route::get('/', function($projectId) {
     $project = Project::find($projectId);
     if (! $project->isViewAuthorized(\Auth::id())) {
-        return \Redirect::to('/'.$projectId.'/authorize');
+        return \Redirect::guest('/'.$projectId.'/authorize');
     }
     $owner = false;
     if (!\Auth::guest()) {
@@ -59,7 +59,7 @@ Route::get('/', function($projectId) {
 Route::get('compositions', function ($projectId) {
     $project = Project::find($projectId);
     if (! $project->isViewAuthorized(\Auth::id())) {
-        return \Redirect::to('/'.$projectId.'/authorize');
+        return \Redirect::guest('/'.$projectId.'/authorize');
     }
     $sort = 'date';
     $desc  = true;
@@ -154,11 +154,11 @@ Route::get('compositions/create', function ($projectId) {
 /* Store */
 Route::post('compositions', function($projectId) {
     if (\Auth::guest()) {
-        return \Redirect::to('/login');         
+        return \Redirect::guest('/login');
     }
     $project = Project::find($projectId);
     if (! $project->isPostAuthorized(\Auth::id())) {
-        return \Redirect::to('/'.$projectId.'/authorize');
+        return \Redirect::guest('/'.$projectId.'/authorize');
     }
     $input = \Input::all();
     $composition = Composition::find(\Input::get('composition'));
@@ -185,7 +185,7 @@ Route::post('compositions', function($projectId) {
 Route::get('compositions/{compositionId}', function ($projectId, $compositionId) {
     $project = Project::find($projectId);
     if (! $project->isViewAuthorized(\Auth::id())) {
-        return \Redirect::to('/'.$projectId.'/authorize');
+        return \Redirect::guest('/'.$projectId.'/authorize');
     }
     $owner = false;
     if (!\Auth::guest()) {
@@ -244,7 +244,7 @@ Route::get('compositions/{compositionId}', function ($projectId, $compositionId)
 Route::get('sos_start', function ($projectId) {
     $project = Project::find($projectId);
     if (! $project->isViewAuthorized(\Auth::id())) {
-        return \Redirect::to('/'.$projectId.'/authorize');
+        return \Redirect::guest('/'.$projectId.'/authorize');
     }
     $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
 //    $owner = ($project->userid == \Auth::user()->getId());

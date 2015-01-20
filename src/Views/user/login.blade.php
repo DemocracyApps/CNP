@@ -2,14 +2,56 @@
 
 @section('content')
 <h1>Log In</h1>
-<p>
-  <a class="button" href="{{url('loginfb')}}"><i class="icon-facebook"></i> Login with Facebook</a>
-</p>
-<p>
-  <a class="button" href="{{url('logintw')}}"><i class="icon-facebook"></i> Login with Twitter</a>
-</p>
+<br>
+{{ Form::open(['route' => array('login'),
+               'method' => 'post']) }}
 
-<p>
-	<a class="button" href="{{url('logincheat')}}">Demo Login</a>
-</p>
+<div class="row">
+  <div class="col-lg-5" style="margin-right: 30px; padding-right: 50px; border-right:thin solid #000000;">
+
+    <div class="form-group">
+      {{ Form::label('email', 'Email: ') }}
+      {{ Form::text('email', null, ['class' => 'form-control']) }}
+      <br>
+      <span class="error">{{ $errors->first('email') }}</span>
+    </div>
+    <div class="form-group">
+      {{ Form::label('password', 'Password: ') }}
+      {{ Form::password('password', ['class' => 'form-control']) }}
+      <br>
+      <span class="error">{{ $errors->first('password') }}</span>
+    </div>
+    <br>
+    <div class="form-group">
+      <input name="PW" type="submit" style="width:200px;" class='btn btn-primary' value="Email Sign In">
+    </div>
+  </div>
+
+  <div class="col-lg-2"></div>
+  <div class="col-lg-5">
+    <p>
+      <input name="FB" type="submit" style="width:200px;" class='btn btn-primary' value="Facebook Sign In">
+    </p>
+    <br>
+    <p>
+      <input name="TW" type="submit" style="width:200px;" class='btn btn-primary' disabled value="Twitter Sign In">
+    </p>
+    <br>
+    <p>
+      <a class='btn btn-primary' style="width:200px;" href="{{url('logincheat')}}">Demo Sign In</a>
+    </p>
+
+  </div>
+
+</div>
+{{ Form::close() }}
+
+<br>
+<br>
+
+
+<hr>
+
+
+  <p> No account? <a href={{url('signup')}}>Sign up here</a></p>
 @stop

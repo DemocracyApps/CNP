@@ -6,17 +6,20 @@ use \DemocracyApps\CNP\Entities\ProjectUser;
 use \DemocracyApps\CNP\Utility\Api as Api;
 use \DemocracyApps\CNP\Compositions\Composer as Composer;
 use \DemocracyApps\CNP\Utility\Html;
-
+use \DemocracyApps\CNP\Mailers\Mailer;
 
 class ProjectsController extends ApiController {
 	protected $project;
 	protected $projectTransformer;
+	protected $mailer;
 
 	function __construct (DAEntity\Project $project, 
-						  \DemocracyApps\CNP\Transformers\ProjectTransformer $projectTransformer) 
+						  \DemocracyApps\CNP\Transformers\ProjectTransformer $projectTransformer,
+						  Mailer $mailer)
 	{
 		$this->project 			= $project;
 		$this->projectTransformer = $projectTransformer;
+		$this->mailer = $mailer;
 	}
 
 	public function authorize($id)
