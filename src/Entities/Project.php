@@ -4,6 +4,7 @@ namespace DemocracyApps\CNP\Entities;
 
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use \DemocracyApps\CNP\Entities\Eloquent\User;
 
 /**
  * 
@@ -68,32 +69,76 @@ class Project extends \Eloquent
         return $propValue;
     }
 
-    public function isViewAuthorized ($user) {
-        $access = true;
+    public function viewAuthorization ($user) {
+        $access = new \stdClass();
+        $access->allowed = true;
+        $access->reason = "";
         $projectAccess = $this->getProperty("access");
         if ( $projectAccess == 'Private') {
-            $access = ProjectUser::projectViewAccess($this->id, $user);
+            if (! User::checkVerified($user)) {
+                $access->allowed = false;
+                $access->reason = "verification";
+            }
+            else {
+                $access->allowed = ProjectUser::projectViewAccess($this->id, $user);
+                if (! $access->allowed) {
+                    $access->reason = "authorization";
+                }
+            }
         }
         return $access;
+
+    }
+
+    public function postAuthorization ($user) {
+        $access = new \stdClass();
+        $access->allowed = false;
+        $access->reason = "";
+        if ( ! User::checkVerified($user)) { // All projects require at least this
+            $access->reason = "verification";
+        }
+        else {
+            if ($this->getProperty("access") != "Open") { // Just requires a verified user
+                $access->allowed = ProjectUser::projectPostAccess($this->id, $user);
+                if (!$access->allowed) {
+                    $access->reason = "authorization";
+                }
+            }
+        }
+        return $access;
+    }
+
+    public function adminAuthorization ($user) {
+        $access = new \stdClass();
+        $access->allowed = false;
+        $access->reason = "";
+        if ( ! User::checkVerified($user)) { // All projects require at least this
+            $access->reason = "verification";
+        }
+        else {
+            if ($this->getProperty("access") != "Open") { // Just requires a verified user
+                $access->allowed = ProjectUser::projectAdminAccess($this->id, $user);
+                if (!$access->allowed) {
+                    $access->reason = "administration";
+                }
+            }
+        }
+        return $access;
+    }
+
+    public function isViewAuthorized ($user) {
+        $access = $this->viewAuthorization($user);
+        return $access->allowed;
     }
 
     public function isPostAuthorized ($user) {
-        $access = false;
-        if ($this->getProperty("access") == "Open") { // Just requires a verified user
-
-        }
-        else {
-            $access = ProjectUser::projectViewAccess($this->id, $user);
-        }
-        return $access;
+        $access = $this->postAuthorization($user);
+        return $access->allowed;
     }
 
     public function isAdminAuthorized ($user) {
-        $access = true;
-        if ($this->getProperty("access") != "Open") {
-            $access = ProjectUser::projectViewAccess($this->id, $user);
-        }
-        return $access;
+        $access = $this->adminAuthorization($user);
+        return $access->allowed;
     }
 
     public static function checkViewAuthorized ($projectId, $user) {

@@ -112,6 +112,13 @@ Route::get('confirm/failed', array ('as' => 'confirm.failed', function() {
     return \View::make('user.confirm_failed', array());
 }));
 
+Route::get('/user/noconfirm', array(function() {
+    return \View::make('user.noconfirm', array());
+}));
+Route::get('/confirm/resend', array(function() {
+    return "Need to implement confirmation email resend.";
+}));
+
 Route::get('confirm', array(function() {
     $failed = true;
     if (\Input::has('code')) {

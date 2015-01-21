@@ -45,9 +45,16 @@ Route::post('authorize', function ($projectId) {
 
 Route::get('/', function($projectId) {
     $project = Project::find($projectId);
-    if (! $project->isViewAuthorized(\Auth::id())) {
-        return \Redirect::guest('/'.$projectId.'/authorize');
+    $access = $project->viewAuthorization(\Auth::id());
+    if (! $access->allowed) {
+        if ($access->reason == 'authorization') {
+            return \Redirect::guest('/'.$projectId.'/authorize');
+        }
+        else {
+            return \Redirect::guest('user/noconfirm');
+        }
     }
+
     $owner = false;
     if (!\Auth::guest()) {
         $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
@@ -58,6 +65,16 @@ Route::get('/', function($projectId) {
 
 Route::get('compositions', function ($projectId) {
     $project = Project::find($projectId);
+    $access = $project->viewAuthorization(\Auth::id());
+    if (! $access->allowed) {
+        if ($access->reason == 'authorization') {
+            return \Redirect::guest('/'.$projectId.'/authorize');
+        }
+        else {
+            return \Redirect::guest('user/noconfirm');
+        }
+    }
+
     if (! $project->isViewAuthorized(\Auth::id())) {
         return \Redirect::guest('/'.$projectId.'/authorize');
     }
@@ -115,8 +132,14 @@ Route::get('compositions/create', function ($projectId) {
     }
 
     $project = Project::find($projectId);
-    if (! $project->isPostAuthorized(\Auth::id())) {
-        return \Redirect::guest('/'.$projectId.'/authorize');
+    $access = $project->postAuthorization(\Auth::id());
+    if (! $access->allowed) {
+        if ($access->reason == 'authorization') {
+            return \Redirect::guest('/'.$projectId.'/authorize');
+        }
+        else {
+            return \Redirect::guest('user/noconfirm');
+        }
     }
 
     if ( ! \Input::has('composer')) throw new \Exception("No composer id specified.");
@@ -157,9 +180,16 @@ Route::post('compositions', function($projectId) {
         return \Redirect::guest('/login');
     }
     $project = Project::find($projectId);
-    if (! $project->isPostAuthorized(\Auth::id())) {
-        return \Redirect::guest('/'.$projectId.'/authorize');
+    $access = $project->postAuthorization(\Auth::id());
+    if (! $access->allowed) {
+        if ($access->reason == 'authorization') {
+            return \Redirect::guest('/'.$projectId.'/authorize');
+        }
+        else {
+            return \Redirect::guest('user/noconfirm');
+        }
     }
+
     $input = \Input::all();
     $composition = Composition::find(\Input::get('composition'));
     $composer = Composer::find($composition->input_composer_id);
@@ -184,9 +214,16 @@ Route::post('compositions', function($projectId) {
 
 Route::get('compositions/{compositionId}', function ($projectId, $compositionId) {
     $project = Project::find($projectId);
-    if (! $project->isViewAuthorized(\Auth::id())) {
-        return \Redirect::guest('/'.$projectId.'/authorize');
+    $access = $project->viewAuthorization(\Auth::id());
+    if (! $access->allowed) {
+        if ($access->reason == 'authorization') {
+            return \Redirect::guest('/'.$projectId.'/authorize');
+        }
+        else {
+            return \Redirect::guest('user/noconfirm');
+        }
     }
+
     $owner = false;
     if (!\Auth::guest()) {
         $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
@@ -243,8 +280,14 @@ Route::get('compositions/{compositionId}', function ($projectId, $compositionId)
 
 Route::get('sos_start', function ($projectId) {
     $project = Project::find($projectId);
-    if (! $project->isViewAuthorized(\Auth::id())) {
-        return \Redirect::guest('/'.$projectId.'/authorize');
+    $access = $project->viewAuthorization(\Auth::id());
+    if (! $access->allowed) {
+        if ($access->reason == 'authorization') {
+            return \Redirect::guest('/'.$projectId.'/authorize');
+        }
+        else {
+            return \Redirect::guest('user/noconfirm');
+        }
     }
     $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
 //    $owner = ($project->userid == \Auth::user()->getId());
