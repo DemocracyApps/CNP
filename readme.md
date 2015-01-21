@@ -10,4 +10,8 @@ The Community Narratives Platform is open-sourced software licensed under the [G
 
 The CNP uses the Laravel framework. The easiest way to set up a development environment is to follow the instructions at https://github.com/DemocracyApps/CNP-Dev-Env.
 
-
+You will need to add passwords, API keys, etc. in various 
+files (app/config/mail.php and app/config/packages/artdarek/oauth-4-laravel/config.php). Make the changes 
+and be sure to run the following on each such file
+    git update-index --assume-unchanged <filename>
+    
