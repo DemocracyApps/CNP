@@ -16,3 +16,8 @@ and be sure to run the following on each such file
 
     git update-index --assume-unchanged _filename_
     
+Email confirmations and CSV uploads require that the queuing system be up and running. You may need to run 
+
+    sudo service supervisor start
+    
+to get it started.
