@@ -13,5 +13,6 @@ The CNP uses the Laravel framework. The easiest way to set up a development envi
 You will need to add passwords, API keys, etc. in various 
 files (app/config/mail.php and app/config/packages/artdarek/oauth-4-laravel/config.php). Make the changes 
 and be sure to run the following on each such file
-    git update-index --assume-unchanged <filename>
+
+    git update-index --assume-unchanged _filename_
     
