@@ -1,6 +1,7 @@
 <?php 
 use \DemocracyApps\CNP\Entities as DAEntity;
 use \DemocracyApps\CNP\Entities\Eloquent\User;
+use \DemocracyApps\CNP\Entities\Eloquent\UserConfirmation;
 use \DemocracyApps\CNP\Compositions\Composition;
 
 
@@ -75,6 +76,14 @@ Route::get('/signup', array('as' => 'signup', function () {
     return View::make('user.signup', array());
 }));
 
+Route::get('signup/thanks', array ('as' => 'signup.thanks', function () {
+    return View::make('user.signup_thanks', array());
+}));
+
+Route::post('signup/thanks', array ('as' => 'signup.thanks', function () {
+    return \Redirect::intended('/');
+}));
+
 Route::post('/login', array(function () {
     \Log::info("In post login");
 
@@ -84,6 +93,7 @@ Route::post('/login', array(function () {
         return $controller->callAction('loginpw', $parameters = array());
     }
     else if (\Input::get('FB')) {
+        \Log::info("In /login - redirecting to /loginfb");
         return \Redirect::to('/loginfb');
     }
     else if (\Input::get('TW')) {
@@ -91,6 +101,41 @@ Route::post('/login', array(function () {
     }
     else {
         \Redirect::to('/');
+    }
+}));
+
+Route::get('confirm/ok', array ('as' => 'confirm.ok', function() {
+    return \View::make('user.confirm_ok', array());
+}));
+
+Route::get('confirm/failed', array ('as' => 'confirm.failed', function() {
+    return \View::make('user.confirm_failed', array());
+}));
+
+Route::get('confirm', array(function() {
+    $failed = true;
+    if (\Input::has('code')) {
+        $code = \Input::get('code');
+        $uconfirm = UserConfirmation::where('code', '=', $code)->first();
+        if ($uconfirm != null) {
+            if ($uconfirm->checkCode($code)) {
+                if ($uconfirm->type == 'em') {
+                    $user = User::find($uconfirm->user);
+                    $user->verified = true;
+                    $user->save();
+                    $uconfirm->done = true;
+                    $uconfirm->save();
+//                    UserConfirmation::remove($uconfirm->id);
+                    $failed = false;
+                }
+            }
+        }
+    }
+    if ($failed) {
+        return \Redirect::to('confirm/failed');
+    }
+    else {
+        return \Redirect::to('confirm/ok');
     }
 }));
 

@@ -13,7 +13,8 @@
 			"doctrine/dbal": "2.4.*",
 			"graham-campbell/flysystem": "0.7.*@alpha",
 			"aws/aws-sdk-php": "~2.4",
-	  		"erusev/parsedown": "dev-master"
+	  		"erusev/parsedown": "dev-master",
+		"guzzlehttp/guzzle": "~5.0"
 		},
 	"require-dev": {
 		"fzaninotto/faker": "dev-master"

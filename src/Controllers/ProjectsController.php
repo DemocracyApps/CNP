@@ -11,15 +11,12 @@ use \DemocracyApps\CNP\Mailers\Mailer;
 class ProjectsController extends ApiController {
 	protected $project;
 	protected $projectTransformer;
-	protected $mailer;
 
 	function __construct (DAEntity\Project $project, 
-						  \DemocracyApps\CNP\Transformers\ProjectTransformer $projectTransformer,
-						  Mailer $mailer)
+						  \DemocracyApps\CNP\Transformers\ProjectTransformer $projectTransformer)
 	{
 		$this->project 			= $project;
 		$this->projectTransformer = $projectTransformer;
-		$this->mailer = $mailer;
 	}
 
 	public function authorize($id)

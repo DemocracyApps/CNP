@@ -3,50 +3,67 @@
 namespace DemocracyApps\CNP\Controllers;
 
 use \DemocracyApps\CNP\Entities\Eloquent\AppState;
-
+use \DemocracyApps\CNP\Mailers\UserMailer;
+use \DemocracyApps\CNP\Entities\Element;
+use \DemocracyApps\CNP\Entities\Eloquent\User;
+use \DemocracyApps\CNP\Entities\Eloquent\Social;
 
 class LoginController extends BaseController {
+
+    private $userCreated = false;
 
     public function home() {
         return \View::make('home');
     }
 
+    private function createUser ($userName, $email, $password) {
+        $superuserInitialized = AppState::where('name', '=', 'superuserInitialized')->first();
+        $this->userCreated = true;
+
+        $user = new User;
+        $user->name = $userName;
+        $user->email = $email;
+        if ($password != null) $user->password = \Hash::make($password);
+        $user->superuser = false;
+        $user->projectcreator = false;
+        if (!$superuserInitialized) {
+            $user->superuser = true;
+            $user->projectcreator = true;
+            $suInit = new AppState;
+            $suInit->name = 'superuserInitialized';
+            $suInit->value = '1';
+            $suInit->save();
+        }
+        $user->save();
+        $person = new Element($userName, \CNP::getElementTypeId("Person"));
+        $person->setContent($userName);
+        $person->save();
+
+        $user->elementid = $person->getId();
+        $user->save();
+
+
+
+        $mailer = new UserMailer();
+        $mailer->confirmEmail($user);
+        return $user;
+
+    }
     private function loadOrCreateUser ($email, $password, $socialId, $userName, $socialName, $socialNetwork, $accessToken)
     {
-        \Log::info("In create user with email = " . $email);
+        $this->userCreated = false;
+
         if ($socialId != null) {
-            $socialProfile = \DemocracyApps\CNP\Entities\Eloquent\Social::whereSocialid($socialId)->first();
+            $socialProfile = Social::whereSocialid($socialId)->first();
             if (empty($socialProfile)) { // We must create a new user
-                $superuserInitialized = AppState::where('name', '=', 'superuserInitialized')->first();
-
-                $user = new \DemocracyApps\CNP\Entities\Eloquent\User;
-                $user->name = $userName;
-                $user->email = $email;
-                $user->superuser = false;
-                $user->projectcreator = false;
-                if (!$superuserInitialized) {
-                    $user->superuser = true;
-                    $user->projectcreator = true;
-                    $suInit = new \DemocracyApps\CNP\Entities\Eloquent\AppState;
-                    $suInit->name = 'superuserInitialized';
-                    $suInit->value = '1';
-                    $suInit->save();
-                }
-                $user->save();
-                $person = new \DemocracyApps\CNP\Entities\Element($userName, \CNP::getElementTypeId("Person"));
-                $person->setContent($userName);
-                $person->save();
-
-                $user->elementid = $person->getId();
-                $user->save();
-
-                $socialProfile = new \DemocracyApps\CNP\Entities\Eloquent\Social();
+                $user = $this->createUser($userName, $email, $password);
+                $socialProfile = new Social();
                 $socialProfile->socialid = $socialId;
                 $socialProfile->type = $socialNetwork;
                 $socialProfile->username = $socialName;
                 $socialProfile->userid = $user->id;
             } else {
-                $user = \DemocracyApps\CNP\Entities\Eloquent\User::findOrFail($socialProfile->userid);
+                $user = User::findOrFail($socialProfile->userid);
             }
             $socialProfile->access_token = $accessToken;
             $socialProfile->save();
@@ -54,29 +71,7 @@ class LoginController extends BaseController {
         else if ($email != null && $password != null) {
             $user = \DemocracyApps\CNP\Entities\Eloquent\User::where('email', $email)->first();
             if ($user == null) { // new user
-                $superuserInitialized = AppState::where('name', '=', 'superuserInitialized')->first();
-
-                $user = new \DemocracyApps\CNP\Entities\Eloquent\User;
-                $user->name = $userName;
-                $user->email = $email;
-                $user->password = \Hash::make($password);
-                $user->superuser = false;
-                $user->projectcreator = false;
-                if (!$superuserInitialized) {
-                    $user->superuser = true;
-                    $user->projectcreator = true;
-                    $suInit = new \DemocracyApps\CNP\Entities\Eloquent\AppState;
-                    $suInit->name = 'superuserInitialized';
-                    $suInit->value = '1';
-                    $suInit->save();
-                }
-                $user->save();
-                $person = new \DemocracyApps\CNP\Entities\Element($userName, \CNP::getElementTypeId("Person"));
-                $person->setContent($userName);
-                $person->save();
-
-                $user->elementid = $person->getId();
-                $user->save();
+                $user = $this->createUser($userName, $email, $password);
             }
             else { // Existing user - check the password
                 if (! \Hash::check($password, $user->password)) {
@@ -108,12 +103,16 @@ class LoginController extends BaseController {
 
             // Send a request with it
             $result = json_decode( $tw->request( 'account/verify_credentials.json' ), true );
-            throw new Exception("Attempt to log in or sign up with Twitter - see LoginController.twitLogin");
+            if (true) throw new Exception("Attempt to log in or sign up with Twitter - see LoginController.twitLogin");
             $user = $this->loadOrCreateUser(null, null, $result['id'], $result['name'], $result['screen_name'],
                                             "twitter", $token->getAccessToken());
             \Auth::login($user);
-            \Log::info("Got a user id of " . $user->getId());
-            return \Redirect::to('admin/projects');
+            if ($this->userCreated) {
+                return \Redirect::to('signup/thanks');
+            }
+            else {
+                return \Redirect::intended('admin/projects');
+            }
         }
         // if not ask for permission first
         else {
@@ -135,27 +134,29 @@ class LoginController extends BaseController {
         // get fb service
         $fb = \OAuth::consumer( 'Facebook' );
 
-        \Log::info("check code");
         // check if code is valid
 
         // if code is provided get user data and sign in
         if ( !empty( $code ) ) {
-            \Log::info("Got the code");
             // This was a callback request from facebook, get the token
             $token = $fb->requestAccessToken( $code );
 
             // Send a request with it
             $result = json_decode( $fb->request( '/me' ), true );
-
             $user = $this->loadOrCreateUser($result['email'], null, $result['id'], $result['name'], $result['name'],
                                             "facebook", $token->getAccessToken());
 
             \Auth::login($user);
-            return \Redirect::intended('admin/projects');
+            if ($this->userCreated) {
+                return \Redirect::to('signup/thanks');
+            }
+            else {
+                return \Redirect::intended('admin/projects');
+            }
+
         }
         // if not ask for permission first
         else {
-            \Log::info("Get the authorization");
             // get fb authorization
             $url = $fb->getAuthorizationUri();
 
@@ -165,7 +166,7 @@ class LoginController extends BaseController {
     }
     public function cheatLogin()
     {
-        $user = \DemocracyApps\CNP\Entities\Eloquent\User::findOrFail(1);
+        $user = User::findOrFail(1);
         \Auth::login($user);
         return \Redirect::intended('admin/projects');
     }
@@ -176,13 +177,10 @@ class LoginController extends BaseController {
         if ($validator->fails()) {
             return \Redirect::back()->withInput()->withErrors($validator->messages());
         }
-        \Log::info("Attempting login");
         $user = $this->loadOrCreateUser(\Input::get('email'), \Input::get('password'), null,null, null,
             null, null);
-        \Log::info("Got the user: " . json_encode($user));
         if ($user != null) {
             \Auth::login($user);
-            \Log::info("Logged in a user id of " . $user->getId());
         }
         else {
             return \Redirect::back()->withInput()->withErrors(array('password' => 'Password is invalid'));
@@ -200,9 +198,11 @@ class LoginController extends BaseController {
             null, null);
         if ($user != null) {
             \Auth::login($user);
-            \Log::info("Got a user id of " . $user->getId());
+            return \Redirect::to('signup/thanks');
         }
-        return \Redirect::intended('/');
+        else {
+            \Redirect::to("/signup/problem");//
+        }
     }
 }
 
