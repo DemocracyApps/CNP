@@ -99,6 +99,13 @@ class ProjectsController extends ApiController {
     	return \View::make('projects.create');
 	}
 
+	public function edit($id)
+	{
+		$project = Project::find($id);
+		return \View::make('projects.edit', array('project' => $project,
+			'fileerror' => null));
+	}
+
 	public function store()
 	{
 		$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
@@ -171,6 +178,47 @@ class ProjectsController extends ApiController {
 		else {
 			throw new \Exception("Projects multi store not yet implemented");
 		}
+	}
+
+	public function update($id)
+	{
+		$data = \Input::all();
+
+		$rules = ['name'=>'required', 'access'=>'required'];
+		$validator = \Validator::make($data, $rules);
+		if ($validator->fails()) {
+			return \Redirect::back()->withInput()->withErrors($validator->messages());
+		}
+		// Validation OK, let's create the project
+		$user = DAEntity\Eloquent\User::find(\Auth::user()->getId());
+
+		$project = Project::find($id);
+
+		$project->name = Html::cleanInput($data['name']);
+		$project->setProperty('access', Html::cleanInput($data['access']));
+		if ($data['content']) $project->description = Html::cleanInput($data['content']);
+		if ($data['access'] != 'Open') {
+			if ($data['secret']) {
+				$project->setProperty('secret', Html::cleanInput($data['secret']));
+			}
+			if (\Input::hasFile('terms')) {
+				$file = \Input::file('terms');
+				$terms = \File::get($file->getRealPath());
+				$project->terms = Html::cleanInput($terms);
+				if ($project->terms == null) {
+					return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'Error reading terms file'));
+				}
+			}
+		}
+		else {
+			if ($project->hasProperty('secret')) $project->deleteProperty('secret');
+			$project->terms = "";
+		}
+
+		$project->save();
+
+		return \Redirect::to('/admin/projects/'.$id);
+
 	}
 
 	/*
