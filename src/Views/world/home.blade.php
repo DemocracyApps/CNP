@@ -4,7 +4,7 @@
 @section('content')
     <div class="row">
         <h1>Welcome to {{$project->name}}!</h1>
-        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in tortor ullamcorper, sodales enim quis, vehicula dui. Nulla faucibus dolor sit amet enim rhoncus rutrum. Aenean iaculis volutpat tellus, eget vulputate erat dictum ut. Nunc facilisis nisl erat, sed ornare libero lobortis at. Vestibulum eu elementum sem, nec ornare augue. Curabitur sagittis tellus at ante congue ultrices. Sed vel sagittis metus. Sed convallis, sapien eu fermentum eleifend, tortor enim consequat orci, a sagittis diam magna eu ligula. Sed dapibus facilisis nulla at tincidunt. Nulla blandit feugiat purus, a pulvinar ante. Vestibulum mollis elit ut risus facilisis, mattis venenatis metus iaculis. Fusce sed cursus sem, nec ornare erat. </p>
+        <p> {{$project->description}} </p>
         <br>
     </div>
         <div class="row">
