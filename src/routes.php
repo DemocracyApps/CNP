@@ -8,8 +8,8 @@ use \DemocracyApps\CNP\Compositions\Composition;
 use \DemocracyApps\CNP\Compositions\Composer;
 use GrahamCampbell\Flysystem\Facades\Flysystem;
 
- //Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
- //          " and method " .\Request::server('REQUEST_METHOD'));
+// Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
+//           " and method " .\Request::server('REQUEST_METHOD'));
 // $environment = App::environment();
 
 //$pu = new \DemocracyApps\CNP\Entities\ProjectUser();
@@ -69,7 +69,11 @@ Route::resource('compositions', 'DemocracyApps\CNP\Controllers\CompositionsContr
  *************************************************
  *************************************************/
 
-Route::group(['prefix' => '{projectId}'], function () {
+Route::get('/project404', array (function () {
+    return View::make('projects.project404', array('project' => \Input::get('project')));
+}));
+
+Route::group(['prefix' => '{projectId}', 'before' => 'cnp.project'], function () {
 
     require __DIR__.'/routes_includes/public.php';
 

@@ -1,5 +1,6 @@
-<?php 
+<?php
 use DemocracyApps\CNP\Entities\Eloquent\User as User;
+use DemocracyApps\CNP\Entities\Project;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,15 @@ Route::filter('cnp.system', function()
 {
 	if (Auth::guest() || !Auth::user()->superuser) {
 		return \Redirect::to('/');
+	}
+});
+
+Route::filter('cnp.project', function($route, $request)
+{
+	$projectId = $request->segment(1);
+	$project = Project::find($projectId);
+	if ($project == null) {
+		return \Redirect::to('/project404?project=' . $projectId);
 	}
 });
 
