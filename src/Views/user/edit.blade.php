@@ -13,6 +13,13 @@
       <span class="error">{{ $errors->first('name') }}</span>
    </div>
    <br>
+   <div class="form-group">
+      {{ Form::label('email', 'Email: ') }}
+      {{ Form::text('email', $user->email, ['class' => 'form-control']) }}
+      <br>
+      <span class="error">{{ $errors->first('email') }}</span>
+   </div>
+   <br>
    @if ($system)
    <div class="form-group">
       {{ Form::label('projectcreator', "Project Creator?") }}

@@ -49,11 +49,9 @@ Route::get('user/{userId}/edit', array('as' => 'system.user.edit', function($use
 
 Route::put('account/update/{userId}', array('as' => 'account.update', function($userId)
 {
-    $data = \Input::all();
-    $user = User::find($userId);
-    $user->name = $data['name'];
-    $user->save();
-    return \Redirect::to('/user/profile');
+    $app = app();
+    $controller = $app->make('DemocracyApps\CNP\Controllers\LoginController');
+    return $controller->callAction('updateUserAccount', $parameters = array('userId' => $userId));
 }));
 
 /********************************
@@ -80,12 +78,15 @@ Route::get('signup/thanks', array ('as' => 'signup.thanks', function () {
     return View::make('user.signup_thanks', array());
 }));
 
+Route::get('email_changed', array ('as' => 'email_changed', function () {
+    return View::make('user.email_changed', array());
+}));
+
 Route::post('signup/thanks', array ('as' => 'signup.thanks', function () {
     return \Redirect::intended('/');
 }));
 
 Route::post('/login', array(function () {
-    \Log::info("In post login");
 
     $app = app();
     $controller = $app->make('DemocracyApps\CNP\Controllers\LoginController');
@@ -93,7 +94,6 @@ Route::post('/login', array(function () {
         return $controller->callAction('loginpw', $parameters = array());
     }
     else if (\Input::get('FB')) {
-        \Log::info("In /login - redirecting to /loginfb");
         return \Redirect::to('/loginfb');
     }
     else if (\Input::get('TW')) {

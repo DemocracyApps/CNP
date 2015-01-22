@@ -15,14 +15,6 @@ My Profile
   <div class="col-sm-6">
     <div class="row">
       <div class="col-sm-4">
-        <p><b>User Name</b></p>
-      </div>
-      <div class="col-sm-8">
-        <p>{{$user->name}}</p>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-sm-4">
         <p><b>User ID:</b></p>
       </div>
       <div class="col-sm-2">
@@ -31,10 +23,28 @@ My Profile
       <div class="col-sm-6">
       </div>
     </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <p><b>User Name</b></p>
+      </div>
+      <div class="col-sm-8">
+        <p>{{$user->name}}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <p><b>Email:</b></p>
+      </div>
+      <div class="col-sm-2">
+        <p>{{$user->email}}</p>
+      </div>
+      <div class="col-sm-6">
+      </div>
+    </div>
 
     <div class="row">
       <div class="col-sm-4">
-        <button class="btn btn-info btn-med" onclick="window.location.href='/users/{{$user->id}}/edit'">Edit</button>
+        <button class="btn btn-info btn-med" onclick="window.location.href='/user/{{$user->id}}/edit'">Edit</button>
       </div>
       <div class="col-sm-8">
       </div>

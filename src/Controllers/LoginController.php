@@ -42,13 +42,47 @@ class LoginController extends BaseController {
         $user->elementid = $person->getId();
         $user->save();
 
-
-
         $mailer = new UserMailer();
         $mailer->confirmEmail($user);
         return $user;
 
     }
+
+    public function updateUserAccount($userId)
+    {
+        $rules = ['name' => 'required', 'email'=>'required|email'];
+        $validator = \Validator::make(\Input::all(), $rules);
+        if ($validator->fails()) {
+            return \Redirect::back()->withInput()->withErrors($validator->messages());
+        }
+
+        $data = \Input::all();
+        $user = User::find($userId);
+        $user->name = $data['name'];
+
+        $email = $data['email'];
+        if ($email != $user->email) {
+            //Check that nobody else has the email.
+            $others = User::where('email', '=', $email)->first();
+            if ($others != null) {
+                return \Redirect::back()->withInput()->withErrors(array('email' => 'Another account with this email already exists'));
+            }
+            $user->email = $email;
+            $user->verified = false;
+            $user->save();
+            $mailer = new UserMailer();
+            $mailer->confirmEmail($user);
+
+            \Session::put('url.intended', '/user/profile');
+            return \Redirect::to('email_changed');
+        }
+        else {
+            $user->save();
+        }
+
+        return \Redirect::to('/user/profile');
+    }
+
     private function loadOrCreateUser ($email, $password, $socialId, $userName, $socialName, $socialNetwork, $accessToken)
     {
         $this->userCreated = false;
