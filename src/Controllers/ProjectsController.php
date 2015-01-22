@@ -21,40 +21,29 @@ class ProjectsController extends ApiController {
 
 	public function authorize($id)
 	{
-		\Log::info("I am now in authorize with id = " . $id);
 		if (\Auth::guest()) {
 			return \Redirect::to('/login');
 		}
 		$project = Project::find($id);
 		if (\Request::method() == 'GET') {
-			\Log::info("Have a get method");
 			if (!Project::checkPostAuthorized($project->id, \Auth::id())) {
 				return \View::make('projects.authorize', array('project' => $project));
 			}
 			else {
-				\Log::info("No need");
-				return "no need";
-				\Redirect::intended('/' . $id);
+				return \Redirect::intended('/' . $id);
 			}
 		}
 		else {
-			\Log::info("Have a post method " . \Request::method());
 			$authorized = true;
 			if ($project->hasProperty('secret')) {
 				if ($project->getProperty('secret') != null) {
-					\Log::info("checking the secret");
-					\Log::info("Actual = /" . $project->getProperty('secret'));
-					\Log::info("Input  = /" . \Input::get('secret'));
 					if ($project->getProperty('secret') != \Input::get('secret')) $authorized = false;
 				}
 			}
-			\Log::info("OK, authorized is " . $authorized);
 			if ($authorized) {
-				\Log::info("Authorizing post access");
 				ProjectUser::authorizePostAccess($project->id, \Auth::id());
 				// TODO - we should set a flash message here or something.
 				$dest = '/'.$id.'/authorized';
-				\Log::info("Now redirect to " . $dest);
 				return \View::make('projects.authorize_success', array('project' => $project));
 			}
 			else {
