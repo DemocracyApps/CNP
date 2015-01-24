@@ -137,6 +137,7 @@
 
 
 @section('detailContent')
+  <!-- Composers -->
 <hr/>
 <br>
   <div class="row">
@@ -165,6 +166,33 @@
         <td> {{ $composer->contains }}</td>
         <td> {{ $composer->dependson }}</td>
       </tr>    
+    @endforeach
+  </table>
+
+  <!-- Analyses -->
+  <hr/>
+  <br>
+  <div class="row">
+    <div class="col-xs-6">
+      <h3>Analysis Tasks</h3>
+    </div>
+    <div class="col-xs-6">
+      <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/admin/analysis/create?project={{$project->id}}'">New</button>
+    </div>
+  </div>
+
+  <table class="table">
+    <tr>
+      <td> ID </td>
+      <td> Name </td>
+      <td> Notes</td>
+    </tr>
+    @foreach ($analyses as $analysis)
+      <tr>
+        <td> {{ $analysis->id }} </td>
+        <th> {{ link_to("admin/analysis/".$analysis->id, $analysis->name) }} </th>
+        <td> {{ $analysis->notes }}</td>
+      </tr>
     @endforeach
   </table>
 

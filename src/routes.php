@@ -8,9 +8,8 @@ use \DemocracyApps\CNP\Compositions\Composition;
 use \DemocracyApps\CNP\Compositions\Composer;
 use GrahamCampbell\Flysystem\Facades\Flysystem;
 
-// Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
-//           " and method " .\Request::server('REQUEST_METHOD'));
-// $environment = App::environment();
+//Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
+//          " and method " .\Request::server('REQUEST_METHOD'));
 
 //$pu = new \DemocracyApps\CNP\Entities\ProjectUser();
 //$pu->project = 2;

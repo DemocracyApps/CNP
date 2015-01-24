@@ -1,0 +1,17 @@
+// Example of take specification
+{
+  "take": [
+    {
+      "object": "element",
+      "type": "Tag",
+      "role":"Topic",
+      "id":"17"
+    },
+    {
+      "object": "relation",
+      "type": "causes",
+
+    }
+  ]
+
+}

@@ -6,6 +6,7 @@ use \DemocracyApps\CNP\Entities\ProjectUser;
 use \DemocracyApps\CNP\Utility\Api as Api;
 use \DemocracyApps\CNP\Compositions\Composer as Composer;
 use \DemocracyApps\CNP\Utility\Html;
+use \DemocracyApps\CNP\Analysis\Analysis;
 use \DemocracyApps\CNP\Mailers\Mailer;
 
 class ProjectsController extends ApiController {
@@ -76,6 +77,8 @@ class ProjectsController extends ApiController {
 		if (ProjectUser::projectAdminAccess($id, \Auth::id())) {
 			$project = DAEntity\Project::find($id);
 			$composers = Composer::where('project', '=', $id)->get();
+
+			$analyses = Analysis::whereColumn('project', '=', $id);
 			$isAPI = Api::isApiCall(\Request::server('REQUEST_URI'));
 			if ($isAPI) {
 				if (!$project) {
@@ -85,7 +88,7 @@ class ProjectsController extends ApiController {
 					return $this->respondIndex('Requested project', $data);
 				}
 			} else {
-				return \View::make('projects.show', array('project' => $project, 'composers' => $composers));
+				return \View::make('projects.show', array('project' => $project, 'composers' => $composers, 'analyses' => $analyses));
 			}
 		}
 		else {
