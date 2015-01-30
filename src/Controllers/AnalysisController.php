@@ -44,6 +44,7 @@ class AnalysisController extends ApiController {
                 return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
             }
         }
+        $this->analysis->last = date('Y-m-d H:i:s', time() - 24 * 60 * 60); // We only care that it's strictly before updated time.
         $this->analysis->save();
 
         return \Redirect::to('/admin/projects/'.$data['project']);
