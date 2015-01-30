@@ -9,7 +9,7 @@ Route::get('/kumu', array('as' => 'kumu', function ()
     $line = "Label,Type,Description\n";
     fwrite($fptr,$line);
     \Log::info("All project elements");
-    $elements = DAEntity\Element::allProjectElements($project);
+    $elements = DAEntity\Element::getProjectElements($project);
     \Log::info("Now write");
     foreach($elements as $d) {
         $line = $d->id . "," . CNP::getElementTypeName($d->type) . ",\"" . $d->name . "\"\n";
