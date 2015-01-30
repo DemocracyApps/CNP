@@ -99,8 +99,7 @@ class Relation
     public static function getProjectRelations ($project)
     {
         $records = DB::table(self::$tableName)
-                    ->join('elements', 'elements.id', '=', 'relations.fromid')
-                    ->where('elements.project', '=', $project)
+                    ->where('project', '=', $project)
                     ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
                              'relations.properties', 'relations.compositionid')
                     ->get();
@@ -116,8 +115,7 @@ class Relation
     public static function getProjectRelationsPaged ($project, $start, $count)
     {
         $records = DB::table(self::$tableName)
-                    ->join('elements', 'elements.id', '=', 'relations.fromid')
-                    ->where('elements.project', '=', $project)
+                    ->where('project', '=', $project)
                     ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
                              'relations.properties', 'relations.compositionid')
                     ->skip($start)
@@ -135,8 +133,7 @@ class Relation
     public static function countProjectRelations ($project)
     {
         $count = DB::table(self::$tableName)
-                    ->join('elements', 'elements.id', '=', 'relations.fromid')
-                    ->where('elements.project', '=', $project)
+                    ->where('project', '=', $project)
                     ->select('relations.id', 'relations.fromid', 'relations.toid', 'relations.relationid', 
                              'relations.properties', 'relations.compositionid')
                     ->count();
