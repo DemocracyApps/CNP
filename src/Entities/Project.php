@@ -104,6 +104,9 @@ class Project extends \Eloquent
                     $access->reason = "authorization";
                 }
             }
+            else {
+                $access->allowed = true;
+            }
         }
         return $access;
     }
