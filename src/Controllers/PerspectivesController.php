@@ -31,7 +31,7 @@ class PerspectivesController extends ApiController {
 
         $this->perspective->name       = $data['name'];
         $this->perspective->project    = $data['project'];
-        $this->perspective->type       = "None";
+        $this->perspective->type       = "Unknown";
         $this->perspective->requires_analysis = false;
 
         if ($data['notes']) $this->perspective->notes = $data['notes'];
@@ -47,11 +47,9 @@ class PerspectivesController extends ApiController {
             }
 
             /*
-             * Now get the type
+             * Now configure the type
              */
-            $type = $cfig['type'];
-            $perspectives = \CNP::getConfigurationValue('perspectives');
-            dd($perspectives);
+            $this->configurePerspectiveType($cfig['type'], $this->perspective);
         }
         $this->perspective->last = date('Y-m-d H:i:s', time() - 24 * 60 * 60); // We only care that it's strictly before updated time.
         $this->perspective->save();
@@ -91,16 +89,33 @@ class PerspectivesController extends ApiController {
                 return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
             }
             /*
-             * Now get the type
+             * Now configure the type
              */
-            $type = $cfig['type'];
+            $this->configurePerspectiveType($cfig['type'], $this->perspective);
 
-            dd($type);
         }
         $this->perspective->save();
 
-        return \Redirect::to('/admin/perspective/'.$this->perspective->id);
+        return \Redirect::to('/admin/perspectives/'.$this->perspective->id);
 
+    }
+
+    private function configurePerspectiveType ($type, $perspective) {
+
+        $perspectives = \CNP::getConfigurationValue('perspectives');
+        $found = false;
+        for ($i = 0; $i < sizeof($perspectives) && !$found; ++$i) {
+            $p = $perspectives[$i];
+            if ($p['name'] == $type) {
+                $found = true;
+                $perspective->type = $type;
+                $perspective->requires_analysis = $p['requiresAnalysis'];
+            }
+        }
+        if (! $found) {
+            $perspective->type = "Unknown";
+            $perspective->requires_analysis = false;
+        }
     }
 
     public function destroy($id)

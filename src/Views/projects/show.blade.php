@@ -174,7 +174,7 @@
   <br>
   <div class="row">
     <div class="col-xs-6">
-      <h3>Analysis Tasks</h3>
+      <h3>Perspectives</h3>
     </div>
     <div class="col-xs-6">
       <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/admin/perspectives/create?project={{$project->id}}'">New</button>
@@ -185,12 +185,16 @@
     <tr>
       <td> ID </td>
       <td> Name </td>
+      <td> Type </td>
+      <td> Analysis Required?</td>
       <td> Notes</td>
     </tr>
     @foreach ($perspectives as $perspective)
       <tr>
         <td> {{ $perspective->id }} </td>
         <th> {{ link_to("admin/perspectives/".$perspective->id, $perspective->name) }} </th>
+        <td> {{ $perspective->type }} </td>
+        <td> {{ $perspective->requires_analysis?"Yes":"No" }} </td>
         <td> {{ $perspective->notes }}</td>
       </tr>
     @endforeach

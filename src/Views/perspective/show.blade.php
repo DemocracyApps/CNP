@@ -23,7 +23,13 @@
         <h2>General Information</h2>
         <table class="table">
             <tr>
-                <th>Analysis Name:</th>  <td>{{$perspective->name}}</td>
+                <th>Perspective Name:</th>  <td>{{$perspective->name}}</td>
+            </tr>
+            <tr>
+                <th>Perspective Type:</th>  <td>{{$perspective->type}}</td>
+            </tr>
+            <tr>
+                <th>Requires Analysis?</th>  <td>{{$perspective->requires_analysis?'Yes':'No'}}</td>
             </tr>
             <tr>
                 <th>Project:</th>  <td>{{$perspective->project}}</td>
