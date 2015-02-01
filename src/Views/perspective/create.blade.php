@@ -2,10 +2,10 @@
 
 @section('content')
 
-    {{ Form::open(['route' => perspective, 'files' => true]) }}
+    {{ Form::open(['route' => 'admin.perspectives.store', 'files' => true]) }}
         {{ Form::hidden('project', $project)}}
 
-        <h1>New Analysis</h1>
+        <h1>New Perspective</h1>
 
         <br>
         <div class="form-group">

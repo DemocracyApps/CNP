@@ -15,8 +15,8 @@ class CreateAnalysisOutputsTable extends Migration {
 		Schema::create('analysis_outputs', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer('analysis')->nullable();
-			$table->foreign('analysis')->references('id')->on('analyses');
+			$table->integer('perspective')->nullable();
+			$table->foreign('perspective')->references('id')->on('perspectives');
 			$table->integer('project')->nullable();
 			$table->foreign('project')->references('id')->on('projects');
 			$table->text('output')->nullable();

@@ -24,7 +24,7 @@
                     <div class="col-xs-1">
                     </div>
                     <div class="col-xs-11">
-                        <button class="btn btn-warning" style="width:200px;" onclick="window.location.href='/{{$project->id}}/compositions'">Explore All Stories</button>
+                        <button class="btn btn-warning" style="width:200px;" onclick="window.location.href='/{{$project->id}}/compositions'">List of Stories</button>
                     </div>
                 </div>
                 <br>
@@ -35,7 +35,7 @@
                     <div class="col-xs-1">
                     </div>
                     <div class="col-xs-11">
-                        <button class="btn btn-warning" style="width:200px;" onclick="window.location.href='{{$project->id}}/sos_start'">Create a Story of Stories</button>
+                        <button class="btn btn-warning" style="width:200px;" onclick="window.location.href='{{$project->id}}/sos_start'">Perspectives</button>
                     </div>
                 </div>
                 <br>

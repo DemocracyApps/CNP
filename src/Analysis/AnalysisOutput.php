@@ -11,10 +11,10 @@ namespace Analysis;
 
 class AnalysisOutput extends TableBackedObject {
     static protected $tableName = 'analysis_outputs';
-    static protected $tableFields = array('id', 'analysis', 'project', 'output', 'created_at', 'updated_at');
+    static protected $tableFields = array('id', 'perspective', 'project', 'output', 'created_at', 'updated_at');
 
     public $id;
-    public $analysis;
+    public $perspective;
     public $project;
     public $output;
     public $created_at;

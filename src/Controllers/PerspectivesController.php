@@ -5,19 +5,19 @@ use \DemocracyApps\CNP\Analysis\Perspective;
 class PerspectivesController extends ApiController {
     protected $perspective;
 
-    function __construct (Perspective $analysis)
+    function __construct (Perspective $perspective)
     {
-        $this->perspective	= $analysis;
+        $this->perspective	= $perspective;
     }
 
     public function show($id) {
-        $analysis = Perspective::find($id);
-        return \View::make('analysis.show', array('analysis' => $analysis));
+        $perspective = Perspective::find($id);
+        return \View::make('perspective.show', array('perspective' => $perspective));
     }
 
     public function create()
     {
-        return \View::make('analysis.create', array('project' => \Input::get('project')));
+        return \View::make('perspective.create', array('project' => \Input::get('project')));
     }
 
     public function store()
@@ -32,6 +32,7 @@ class PerspectivesController extends ApiController {
         $this->perspective->name       = $data['name'];
         $this->perspective->project    = $data['project'];
         $this->perspective->type       = "None";
+        $this->perspective->requires_analysis = false;
 
         if ($data['notes']) $this->perspective->notes = $data['notes'];
 
@@ -44,6 +45,13 @@ class PerspectivesController extends ApiController {
             if ( ! $cfig) {
                 return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
             }
+
+            /*
+             * Now get the type
+             */
+            $type = $cfig['type'];
+            $perspectives = \CNP::getConfigurationValue('perspectives');
+            dd($perspectives);
         }
         $this->perspective->last = date('Y-m-d H:i:s', time() - 24 * 60 * 60); // We only care that it's strictly before updated time.
         $this->perspective->save();
@@ -54,8 +62,8 @@ class PerspectivesController extends ApiController {
 
     public function edit($id)
     {
-        $analysis = Perspective::find($id);
-        return \View::make('analysis.edit', array('analysis' => $analysis, 'fileerror' => null));
+        $perspective = Perspective::find($id);
+        return \View::make('perspective.edit', array('perspective' => $perspective, 'fileerror' => null));
     }
 
     public function update($id)
@@ -82,10 +90,16 @@ class PerspectivesController extends ApiController {
             if ( ! $cfig) {
                 return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
             }
+            /*
+             * Now get the type
+             */
+            $type = $cfig['type'];
+
+            dd($type);
         }
         $this->perspective->save();
 
-        return \Redirect::to('/admin/analysis/'.$this->perspective->id);
+        return \Redirect::to('/admin/perspective/'.$this->perspective->id);
 
     }
 

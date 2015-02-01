@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAnalysesTable extends Migration {
+class CreatePerspectivesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,14 +12,16 @@ class CreateAnalysesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('analyses', function(Blueprint $table)
+		Schema::create('perspectives', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('name');
+			$table->string('type');
 			$table->integer('project');
 			$table->foreign('project')->references('id')->on('projects');
 			$table->text('specification')->nullable();
 			$table->text('notes')->nullable();
+			$table->boolean('requires_analysis')->default(false);
 			$table->timestamp('last')->nullable();
 			$table->timestamps();
 		});
@@ -32,7 +34,7 @@ class CreateAnalysesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('analyses');
+		Schema::drop('perspectives');
 	}
 
 }

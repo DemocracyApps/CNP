@@ -2,7 +2,7 @@
 @extends('layouts.default_ext')
 
 @section('title')
-Create a Story of Stories!
+Perspectives
 @stop
 
 @section('buttons')
@@ -11,7 +11,7 @@ Create a Story of Stories!
 
 @section('content')
     <div class="row">
-        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in tortor ullamcorper, sodales enim quis, vehicula dui. Nulla faucibus dolor sit amet enim rhoncus rutrum. Aenean iaculis volutpat tellus, eget vulputate erat dictum ut. Nunc facilisis nisl erat, sed ornare libero lobortis at. Vestibulum eu elementum sem, nec ornare augue. Curabitur sagittis tellus at ante congue ultrices. Sed vel sagittis metus. Sed convallis, sapien eu fermentum eleifend, tortor enim consequat orci, a sagittis diam magna eu ligula. Sed dapibus facilisis nulla at tincidunt. Nulla blandit feugiat purus, a pulvinar ante. Vestibulum mollis elit ut risus facilisis, mattis venenatis metus iaculis. Fusce sed cursus sem, nec ornare erat. </p>
+        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in tortor ullamcorper, sodales enim quis, vehicula dui. Nulla faucibus dolor sit amet enim rhoncus rutrum. Aenean iaculis volutpat tellus, eget vulputate erat dictum ut. Vestibulum mollis elit ut risus facilisis, mattis venenatis metus iaculis. Fusce sed cursus sem, nec ornare erat. </p>
         <br>
     </div>
         <div class="row">
@@ -22,7 +22,7 @@ Create a Story of Stories!
                     <div class="col-xs-1">
                     </div>
                     <div class="col-xs-11">
-                        <button class="btn btn-warning" style="width:200px;" onclick="window.location.href='/{{$project->id}}/compositions'">Explore All Stories</button>
+                        <button class="btn btn-warning" style="width:200px;" onclick="window.location.href='/{{$project->id}}/compositions'">Top Tags</button>
                     </div>
                 </div>
                 <br>
@@ -48,6 +48,6 @@ Create a Story of Stories!
 
 @section('footer_right')
     @if ($owner)
-        <a href="/projects/{{$project->id}}"> Project Page </a>
+        <a href="/admin/projects/{{$project->id}}"> Project Page </a>
     @endif
 @stop

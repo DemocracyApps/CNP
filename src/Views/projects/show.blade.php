@@ -169,7 +169,7 @@
     @endforeach
   </table>
 
-  <!-- Analyses -->
+  <!-- Perspectives -->
   <hr/>
   <br>
   <div class="row">
@@ -177,7 +177,7 @@
       <h3>Analysis Tasks</h3>
     </div>
     <div class="col-xs-6">
-      <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/admin/analysis/create?project={{$project->id}}'">New</button>
+      <button style="float:right; position:relative; right:50px; bottom:-20px;" class="btn btn-success btn-sm" onclick="window.location.href='/admin/perspectives/create?project={{$project->id}}'">New</button>
     </div>
   </div>
 
@@ -187,11 +187,11 @@
       <td> Name </td>
       <td> Notes</td>
     </tr>
-    @foreach ($analyses as $analysis)
+    @foreach ($perspectives as $perspective)
       <tr>
-        <td> {{ $analysis->id }} </td>
-        <th> {{ link_to("admin/analysis/".$analysis->id, $analysis->name) }} </th>
-        <td> {{ $analysis->notes }}</td>
+        <td> {{ $perspective->id }} </td>
+        <th> {{ link_to("admin/perspectives/".$perspective->id, $perspective->name) }} </th>
+        <td> {{ $perspective->notes }}</td>
       </tr>
     @endforeach
   </table>
@@ -240,6 +240,8 @@
       }).fail(function(r) {
         alert("Error saving default input composer: "+r.responseJSON.error.message);
       });
+      var currentYear = new Date().getFullYear();
+      alert("Current year = " + currentYear);
     }
 
     function setDefaultOutputComposer(event, ui)

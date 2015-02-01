@@ -2,16 +2,16 @@
 
 @section('content')
 
-    {{ Form::open(['route' => array(perspective, $analysis->id),
+    {{ Form::open(['route' => array('admin.perspectives.update', $perspective->id),
                     'method' => 'put', 'files' => true]) }}
-        {{ Form::hidden('project', $analysis->project)}}
+        {{ Form::hidden('project', $perspective->project)}}
 
         <h1>New Analysis</h1>
 
         <br>
         <div class="form-group">
             {{ Form::label('name', 'Name: ') }}
-            {{ Form::text('name', $analysis->name, ['class' => 'form-control']) }}
+            {{ Form::text('name', $perspective->name, ['class' => 'form-control']) }}
             <br>
             <span class="error">{{ $errors->first('name') }}</span>
             <br>
@@ -27,7 +27,7 @@
 
         <div class="form-group">
             {{ Form::label('notes', 'Notes: ') }}
-            {{ Form::textarea('notes', $analysis->notes, ['class' => 'form-control']) }}
+            {{ Form::textarea('notes', $perspective->notes, ['class' => 'form-control']) }}
             <br>
         </div>
 

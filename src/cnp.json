@@ -50,6 +50,10 @@
 
         // NOTE: FORWARD AND INVERSE MUST BOTH BE EXPLICITLY ENTERED!
     ],
+    "perspectives": [
+        {"name":"Random", "requiresAnalysis":false},
+        {"name":"TopTags", "requiresAnalysis":true}
+    ],
     "apiRequiresSSL": "false",
     "pageLimit": "15"
 }
