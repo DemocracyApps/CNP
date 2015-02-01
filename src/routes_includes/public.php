@@ -4,9 +4,7 @@ use \DemocracyApps\CNP\Entities\Project;
 use \DemocracyApps\CNP\Entities\ProjectUser;
 use \DemocracyApps\CNP\Compositions\Composer;
 use \DemocracyApps\CNP\Compositions\Composition;
-use \DemocracyApps\CNP\Entities\Eloquent\User;
 use \DemocracyApps\CNP\Entities\Element;
-use \DemocracyApps\CNP\Entities\Relation;
 
 /*
  * Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], ...

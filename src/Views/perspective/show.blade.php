@@ -4,14 +4,14 @@
     <h1>{{ $analysis->name }} </h1>
 
     <!-- Edit Composer Button -->
-    {{ Form::open(array('route' => array('admin.analysis.edit', $analysis->id), 'method' => 'get',
+    {{ Form::open(array('route' => array(perspective, $analysis->id), 'method' => 'get',
                                                 'style' => 'display:inline-block')) }}
     <button type="submit" class="btn btn-info btn-mini">Edit</button>
     {{ Form::close() }}
 
 
     <!-- Delete Composer Button -->
-    {{ Form::open(array('route' => array('admin.analysis.destroy', $analysis->id), 'method' => 'delete',
+    {{ Form::open(array('route' => array(perspective, $analysis->id), 'method' => 'delete',
                                                 'style' => 'display:inline-block')) }}
     <button type="submit" class="btn btn-danger btn-mini">Delete</button>
     {{ Form::close() }}

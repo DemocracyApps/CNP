@@ -1,17 +1,17 @@
 <?php namespace DemocracyApps\CNP\Controllers;
 
-use \DemocracyApps\CNP\Analysis\Analysis;
+use \DemocracyApps\CNP\Analysis\Perspective;
 
-class AnalysisController extends ApiController {
-    protected $analysis;
+class PerspectivesController extends ApiController {
+    protected $perspective;
 
-    function __construct (Analysis $analysis)
+    function __construct (Perspective $analysis)
     {
-        $this->analysis	= $analysis;
+        $this->perspective	= $analysis;
     }
 
     public function show($id) {
-        $analysis = Analysis::find($id);
+        $analysis = Perspective::find($id);
         return \View::make('analysis.show', array('analysis' => $analysis));
     }
 
@@ -29,23 +29,24 @@ class AnalysisController extends ApiController {
             return \Redirect::back()->withInput()->withErrors($validator->messages());
         }
 
-        $this->analysis->name       = $data['name'];
-        $this->analysis->project    = $data['project'];
+        $this->perspective->name       = $data['name'];
+        $this->perspective->project    = $data['project'];
+        $this->perspective->type       = "None";
 
-        if ($data['notes']) $this->analysis->notes = $data['notes'];
+        if ($data['notes']) $this->perspective->notes = $data['notes'];
 
         // Now load in the file
         if (\Input::hasFile('specification')) {
             $file = \Input::file('specification');
-            $this->analysis->specification = \File::get($file->getRealPath());
-            $str = json_minify($this->analysis->specification);
+            $this->perspective->specification = \File::get($file->getRealPath());
+            $str = json_minify($this->perspective->specification);
             $cfig = json_decode($str, true);
             if ( ! $cfig) {
                 return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
             }
         }
-        $this->analysis->last = date('Y-m-d H:i:s', time() - 24 * 60 * 60); // We only care that it's strictly before updated time.
-        $this->analysis->save();
+        $this->perspective->last = date('Y-m-d H:i:s', time() - 24 * 60 * 60); // We only care that it's strictly before updated time.
+        $this->perspective->save();
 
         return \Redirect::to('/admin/projects/'.$data['project']);
 
@@ -53,7 +54,7 @@ class AnalysisController extends ApiController {
 
     public function edit($id)
     {
-        $analysis = Analysis::find($id);
+        $analysis = Perspective::find($id);
         return \View::make('analysis.edit', array('analysis' => $analysis, 'fileerror' => null));
     }
 
@@ -66,33 +67,33 @@ class AnalysisController extends ApiController {
             return \Redirect::back()->withInput()->withErrors($validator->messages());
         }
 
-        $this->analysis = Analysis::find($id);
-        $this->analysis->name       = $data['name'];
-        $this->analysis->project    = $data['project'];
+        $this->perspective = Perspective::find($id);
+        $this->perspective->name       = $data['name'];
+        $this->perspective->project    = $data['project'];
 
-        if ($data['notes']) $this->analysis->notes = $data['notes'];
+        if ($data['notes']) $this->perspective->notes = $data['notes'];
 
         // Now load in the file
         if (\Input::hasFile('specification')) {
             $file = \Input::file('specification');
-            $this->analysis->specification = \File::get($file->getRealPath());
-            $str = json_minify($this->analysis->specification);
+            $this->perspective->specification = \File::get($file->getRealPath());
+            $str = json_minify($this->perspective->specification);
             $cfig = json_decode($str, true);
             if ( ! $cfig) {
                 return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
             }
         }
-        $this->analysis->save();
+        $this->perspective->save();
 
-        return \Redirect::to('/admin/analysis/'.$this->analysis->id);
+        return \Redirect::to('/admin/analysis/'.$this->perspective->id);
 
     }
 
     public function destroy($id)
     {
-        $analysis = Analysis::find($id);
+        $analysis = Perspective::find($id);
         $projectId = $analysis->project;
-        Analysis::delete($id);
+        Perspective::delete($id);
         return \Redirect::to('/admin/projects/'.$projectId);
     }
 

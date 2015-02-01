@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\DB;
 use \DemocracyApps\CNP\Database\TableBackedObject;
 
-class Analysis extends TableBackedObject {
+class Perspective extends TableBackedObject {
     static protected $tableName = 'analyses';
     static protected $tableFields = array('name', 'project', 'specification', 'notes',
                                           'last', 'created_at', 'updated_at');
