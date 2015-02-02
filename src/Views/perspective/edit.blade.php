@@ -27,7 +27,7 @@
 
         <div class="form-group">
             {{ Form::label('description', 'Description: ') }}
-            {{ Form::textarea('description', $perspective->notes, ['class' => 'form-control']) }}
+            {{ Form::textarea('description', $perspective->description, ['class' => 'form-control']) }}
             <br>
         </div>
 
