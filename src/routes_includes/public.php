@@ -105,6 +105,13 @@ Route::get('compositions', function ($projectId) {
     // 3. Add a "back" button to show that takes you back to current view.
 
     $filterDescription = null;
+    $advancedView = false;
+    $advancedViewMessage = null;
+    $structureView = false;
+    if (\Input::has('structureView')) {
+        if (\Input::get('structureView') == 1) $structureView = true;
+    }
+
     if ($filter) {
         $filterType = \Input::get('filter');
         if ($filterType == 'related') {
@@ -113,6 +120,16 @@ Route::get('compositions', function ($projectId) {
             // We want all compositions that refer to this target element
             $data = Composition::projectCompositionsByReferentPaged($target, $sort, $desc, $project->id, $page, $pageLimit);
             $filterDescription = "Contributions related to " . $element->getContent();
+
+            if (\Input::has('advancedView')) {
+                if (\Input::get('advancedView') == 1) {
+                    $advancedView = true;
+                    $href = "/$project->id/compositions?filter=related&element=$element->id&structureView=1";
+                    $advancedViewMessage = "This is a list of stories and contributions that refer to " . $element->getContent() . ".";
+                    $advancedViewMessage .= " Click <a href='" . $href . "'>here</a> to see the internal structure of the references.";
+
+                }
+            }
         }
     }
     else {
@@ -120,9 +137,17 @@ Route::get('compositions', function ($projectId) {
     }
 
     $stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
-    return \View::make('world.index', array('stories' => $stories, 'project' => $project, 
-                                            'owner' => $owner, 'sort' => $sort, 'desc' => $desc,
-                                            'filterDescription' => $filterDescription));
+
+    if ($structureView) {
+        return "Structure view not implemented";
+    }
+    else {
+        return \View::make('world.index', array('stories' => $stories, 'project' => $project,
+            'owner' => $owner, 'sort' => $sort, 'desc' => $desc,
+            'filterDescription' => $filterDescription,
+            'advancedView' => $advancedView,
+            'advancedViewMessage' => $advancedViewMessage));
+    }
 });
 
 Route::get('compositions/create', function ($projectId) {

@@ -2,22 +2,20 @@
 
 namespace DemocracyApps\CNP\Analysis\Presentation;
 
-use DemocracyApps\CNP\Analysis\Perspective;
 use DemocracyApps\CNP\Compositions\Composition;
 
 class RandomPresentation extends PerspectivePresentation {
 
     public static function getContent($perspective, $specification, $last)
     {
-        $str = json_minify($specification);
-        $cfig = json_decode($str, true);
-        if (! array_key_exists('count',$cfig)) throw new \Exception("Random perspective requires count parameter");
+        if (! array_key_exists('count',$specification)) throw new \Exception("Random perspective requires count parameter");
 
         $composers = null;
-        if (array_key_exists('composers', $cfig)) {
-            $composers = $cfig['composers'];
+        if (array_key_exists('composers', $specification)) {
+            $composers = $specification['composers'];
+            if (sizeof($composers) == 0) $composers = null;
         }
-        $compositions = Composition::randomCompositions($perspective->project, $composers, $cfig['count']);
+        $compositions = Composition::randomCompositions($perspective->project, $composers, $specification['count']);
 
         $output = "<ul class='perspective-composition-list'>";
         foreach ($compositions as $compositionId) {

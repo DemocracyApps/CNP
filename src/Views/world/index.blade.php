@@ -18,6 +18,10 @@
 
 @section('content')
     <br>
+    @if ($advancedView)
+        <p>{{$advancedViewMessage}}</p>
+        <br>
+    @endif
     <div class="row">
          <table class="table table-striped">
             <?php

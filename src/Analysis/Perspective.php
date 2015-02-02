@@ -25,8 +25,13 @@ class Perspective extends TableBackedObject {
         $presentationClassName = '\DemocracyApps\CNP\Analysis\Presentation\\' . $this->type . "Presentation";
 
         if (class_exists($presentationClassName)) {
+            $cfig = null;
+            if ($this->specification != null) {
+                $str = json_minify($this->specification);
+                $cfig = json_decode($str, true);
+            }
             $reflectionMethod = new \ReflectionMethod($presentationClassName, 'getContent');
-            $output .= $reflectionMethod->invokeArgs(null, array($this, $this->specification, $this->last));
+            $output .= $reflectionMethod->invokeArgs(null, array($this, $cfig, $this->last));
         }
         else {
             throw new Exception("No presentation class defined for perspective " . $this->type);
