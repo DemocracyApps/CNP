@@ -7,7 +7,6 @@ use \DemocracyApps\CNP\Utility\Api as Api;
 use \DemocracyApps\CNP\Compositions\Composer as Composer;
 use \DemocracyApps\CNP\Utility\Html;
 use \DemocracyApps\CNP\Analysis\Perspective;
-use \DemocracyApps\CNP\Mailers\Mailer;
 
 class ProjectsController extends ApiController {
 	protected $project;
