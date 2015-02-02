@@ -1,5 +1,8 @@
 <?php namespace DemocracyApps\CNP\Controllers;
 
+use \DemocracyApps\CNP\Analysis\AnalysisOutput;
+use \DemocracyApps\CNP\Analysis\AnalysisSet;
+use \DemocracyApps\CNP\Analysis\AnalysisSetItem;
 use \DemocracyApps\CNP\Analysis\Perspective;
 
 class PerspectivesController extends ApiController {
@@ -120,8 +123,22 @@ class PerspectivesController extends ApiController {
 
     public function destroy($id)
     {
-        $analysis = Perspective::find($id);
-        $projectId = $analysis->project;
+        $perspective = Perspective::find($id);
+        $projectId = $perspective->project;
+
+        $analysisOutputs = AnalysisOutput::whereColumn('perspective', '=', $id);
+        foreach ($analysisOutputs as $output) {
+            $analysisSets = AnalysisSet::whereColumn('analysis_output', '=', $output->id);
+            foreach($analysisSets as $set) {
+                $items = AnalysisSetItem::whereColumn('analysis_set', '=', $set->id);
+                foreach($items as $item) {
+                    AnalysisSetItem::delete($item->id);
+                }
+                AnalysisSet::delete($set->id);
+            }
+            AnalysisOutput::delete($output->id);
+        }
+
         Perspective::delete($id);
         return \Redirect::to('/admin/projects/'.$projectId);
     }

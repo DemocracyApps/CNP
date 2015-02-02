@@ -1,6 +1,5 @@
 <?php namespace DemocracyApps\CNP\Analysis;
 
-use Illuminate\Support\Facades\DB;
 use \DemocracyApps\CNP\Database\TableBackedObject;
 
 class Perspective extends TableBackedObject {

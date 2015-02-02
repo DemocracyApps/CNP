@@ -6,8 +6,9 @@
  * Time: 2:33 PM
  */
 
-namespace Analysis;
+namespace DemocracyApps\CNP\Analysis;
 
+use \DemocracyApps\CNP\Database\TableBackedObject;
 
 class AnalysisSet extends TableBackedObject {
     static protected $tableName = 'analysis_sets';
