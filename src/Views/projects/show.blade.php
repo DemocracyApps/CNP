@@ -187,7 +187,7 @@
       <td> Name </td>
       <td> Type </td>
       <td> Analysis Required?</td>
-      <td> Notes</td>
+      <td> Description</td>
     </tr>
     @foreach ($perspectives as $perspective)
       <tr>
@@ -195,7 +195,7 @@
         <th> {{ link_to("admin/perspectives/".$perspective->id, $perspective->name) }} </th>
         <td> {{ $perspective->type }} </td>
         <td> {{ $perspective->requires_analysis?"Yes":"No" }} </td>
-        <td> {{ $perspective->notes }}</td>
+        <td> {{ $perspective->description }}</td>
       </tr>
     @endforeach
   </table>

@@ -37,7 +37,7 @@ class PerspectivesController extends ApiController {
         $this->perspective->type       = "Unknown";
         $this->perspective->requires_analysis = false;
 
-        if ($data['notes']) $this->perspective->notes = $data['notes'];
+        if ($data['description']) $this->perspective->description = $data['description'];
 
         // Now load in the file
         if (\Input::hasFile('specification')) {
@@ -80,7 +80,7 @@ class PerspectivesController extends ApiController {
         $this->perspective->name       = $data['name'];
         $this->perspective->project    = $data['project'];
 
-        if ($data['notes']) $this->perspective->notes = $data['notes'];
+        if ($data['description']) $this->perspective->description = $data['description'];
 
         // Now load in the file
         if (\Input::hasFile('specification')) {

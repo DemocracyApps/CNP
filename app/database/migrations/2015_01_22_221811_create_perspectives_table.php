@@ -20,7 +20,7 @@ class CreatePerspectivesTable extends Migration {
 			$table->integer('project');
 			$table->foreign('project')->references('id')->on('projects');
 			$table->text('specification')->nullable();
-			$table->text('notes')->nullable();
+			$table->text('description')->nullable();
 			$table->boolean('requires_analysis')->default(false);
 			$table->timestamp('last')->nullable();
 			$table->timestamps();

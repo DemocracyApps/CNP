@@ -35,7 +35,7 @@
                     <div class="col-xs-1">
                     </div>
                     <div class="col-xs-11">
-                        <button class="btn btn-warning" style="width:200px;" onclick="window.location.href='{{$project->id}}/sos_start'">Perspectives</button>
+                        <button class="btn btn-warning" style="width:200px;" onclick="window.location.href='{{$project->id}}/perspectives'">Perspectives</button>
                     </div>
                 </div>
                 <br>

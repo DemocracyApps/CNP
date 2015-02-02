@@ -35,7 +35,7 @@
                 <th>Project:</th>  <td>{{$perspective->project}}</td>
             </tr>
             <tr>
-                <th>Notes:</th>  <td>{{$perspective->notes}}</td
+                <th>Description:</th>  <td>{{$perspective->description}}</td
             </tr>
         </table>
     </div>

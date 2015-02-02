@@ -5,6 +5,7 @@ use \DemocracyApps\CNP\Entities\ProjectUser;
 use \DemocracyApps\CNP\Compositions\Composer;
 use \DemocracyApps\CNP\Compositions\Composition;
 use \DemocracyApps\CNP\Entities\Element;
+use \DemocracyApps\CNP\Analysis\Perspective;
 
 /*
  * Route::group(['prefix' => '{projectId}', 'before' => 'cnp.ext'], ...
@@ -288,8 +289,26 @@ Route::get('sos_start', function ($projectId) {
         }
     }
     $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
-//    $owner = ($project->userid == \Auth::user()->getId());
+
     return \View::make('world.sos_start', array('project' => $project, 'owner' => $owner));
+});
+
+Route::get('perspectives', function ($projectId) {
+    $project = Project::find($projectId);
+    $access = $project->viewAuthorization(\Auth::id());
+    if (! $access->allowed) {
+        if ($access->reason == 'authorization') {
+            return \Redirect::guest('/'.$projectId.'/authorize');
+        }
+        else {
+            return \Redirect::guest('user/noconfirm');
+        }
+    }
+    $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
+
+    $perspectives = Perspective::whereColumn('project', '=', $projectId);
+
+    return \View::make('world.perspectives', array('project' => $project, 'perspectives' => $perspectives, 'owner' => $owner));
 });
 
 Route::get('stories/{another}', array('as' => 'ext.stories',

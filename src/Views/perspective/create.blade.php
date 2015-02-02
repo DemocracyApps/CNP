@@ -25,8 +25,8 @@
         </div>
 
         <div class="form-group">
-            {{ Form::label('notes', 'Notes: ') }}
-            {{ Form::textarea('notes', null, ['class' => 'form-control']) }}
+            {{ Form::label('description', 'Description: ') }}
+            {{ Form::textarea('description', null, ['class' => 'form-control']) }}
             <br>
         </div>
 
