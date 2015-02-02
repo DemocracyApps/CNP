@@ -109,4 +109,38 @@ class Composition extends \Eloquent
         return $data;
     }
 
+    public static function randomCompositions($project, $composers, $max) {
+        if ($composers != null) {
+            $composers = implode(", ", $composers);
+            $query = "SELECT id FROM compositions WHERE project = $project AND input_composer_id IN (" . $composers . ")";
+        }
+        else {
+            $query = "select id from compositions where project=$project ;";
+        }
+
+        $items = \DB::select($query);
+        $count = sizeof($items);
+        $results = array();
+
+        if ($count <= $max) {
+            foreach ($items as $item) {
+                $results[] = $item->id;
+            }
+        }
+        else {
+            $done = false;
+            $n = 0;
+            while (! $done) {
+                $r = mt_rand (0, $count-1);
+                if ($items[$r] != null) {
+                    $results[] = $items[$r]->id;
+                    $items[$r] = null;
+                    ++$n;
+                    if ($n >= $max) $done = true;
+                }
+            }
+        }
+
+        return $results;
+    }
 }

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ericjackson
- * Date: 1/30/15
- * Time: 2:33 PM
- */
 
 namespace DemocracyApps\CNP\Analysis;
 

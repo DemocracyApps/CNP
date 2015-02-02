@@ -1,5 +1,6 @@
 <?php namespace DemocracyApps\CNP\Analysis;
 
+use Aws\CloudFront\Exception\Exception;
 use \DemocracyApps\CNP\Database\TableBackedObject;
 
 class Perspective extends TableBackedObject {
@@ -20,8 +21,25 @@ class Perspective extends TableBackedObject {
 
     public function getContent ()
     {
-        return "<p><br> <b>This is it!!!</b></p>";
+        $output = "<div class='perspective-main-div'>";
+        $presentationClassName = '\DemocracyApps\CNP\Analysis\Presentation\\' . $this->type . "Presentation";
 
+        if (class_exists($presentationClassName)) {
+            $reflectionMethod = new \ReflectionMethod($presentationClassName, 'getContent');
+            $output .= $reflectionMethod->invokeArgs(null, array($this, $this->specification, $this->last));
+        }
+        else {
+            throw new Exception("No presentation class defined for perspective " . $this->type);
+        }
+
+        $output .= "</div>";
+        //dd($output);
+        return $output;
+
+    }
+
+    public function getAnalysis() {
+        return AnalysisOutput::whereColumn('perspective', '=', $this->id);
     }
 
 }
