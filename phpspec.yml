@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: DemocracyApps\CNP
+        psr4_prefix: DemocracyApps\CNP
+        src_path: app

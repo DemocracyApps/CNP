@@ -1,2 +1,0 @@
-<div class="datarider"></div>
-
