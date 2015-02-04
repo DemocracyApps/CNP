@@ -61,7 +61,7 @@ abstract class TableBackedObject {
     public static function whereColumn($columnName, $compare, $value)
     {
         $records =  DB::table(static::$tableName)
-            ->where ($columnName, $compare, $value)-> get();
+            ->where ($columnName, $compare, $value)-> orderBy ('id') -> get();
         $result = array();
 
         foreach ($records as $record) {
