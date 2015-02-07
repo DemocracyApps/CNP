@@ -4,13 +4,16 @@ use DemocracyApps\CNP\Graph\Element;
 use DemocracyApps\CNP\Http\Controllers\Controller;
 use DemocracyApps\CNP\Users\Social;
 use DemocracyApps\CNP\Users\User;
+use DemocracyApps\CNP\Users\UserConfirmation;
 use DemocracyApps\CNP\Utility\AppState;
+use DemocracyApps\CNP\Utility\Mailers\UserMailer;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
 use PhpSpec\Exception\Exception;
 
-class AuthController extends Controller {
+class AuthController extends Controller
+{
 
 	/*
 	|--------------------------------------------------------------------------
@@ -50,10 +53,9 @@ class AuthController extends Controller {
 	{
 		if (\Request::method() == 'GET') {
 			return view('auth.login');
-		}
-		else { // Login submission
+		} else { // Login submission
 			if (\Input::get('PW')) { // We can just do it.
-				$rules = ['email'=>'required|email|exists:users,email', 'password' => 'required'];
+				$rules = ['email' => 'required|email|exists:users,email', 'password' => 'required'];
 				$this->validate($request, $rules);
 				$user = $this->loadOrCreateUser(\Input::get('email'), \Input::get('password'), null, null, null,
 					null, null);
@@ -61,20 +63,16 @@ class AuthController extends Controller {
 					\Auth::login($user);
 					return redirect()->intended('/');
 				}
-			}
-			else if (\Input::get('FB')) {
+			} else if (\Input::get('FB')) {
 				return redirect('auth/loginfb');
-			}
-			else if (\Input::get('TW')) {
+			} else if (\Input::get('TW')) {
 				throw new Exception("Twitter Login Not Available");
 				return redirect('auth/logintw');
-			}
-			else {
+			} else {
 				return redirect('/');
 			}
 		}
 	}
-
 
 	/**
 	 * @param Request $request
@@ -85,22 +83,19 @@ class AuthController extends Controller {
 	{
 		if ($request->method() == 'GET') {
 			return view('auth.register');
-		}
-		else {
+		} else {
 			if (\Input::get('PW')) {
-				$rules = ['name' => 'required', 'email'=>'required|email|unique:users,email', 'password' => 'required'];
+				$rules = ['name' => 'required', 'email' => 'required|email|unique:users,email', 'password' => 'required'];
 				$this->validate($request, $rules);
 				$user = $this->loadOrCreateUser(\Input::get('email'), \Input::get('password'), null, \Input::get('name'), null,
 					null, null);
 				if ($user != null) {
 					\Auth::login($user);
 					return redirect('auth/thanks');
-				}
-				else {
+				} else {
 					throw new Exception("Unknown problem registering as a new user");
 				}
-			}
-			else if (\Input::get('FB')) {
+			} else if (\Input::get('FB')) {
 				return redirect('auth/loginfb');
 			}
 			redirect('/');
@@ -112,13 +107,12 @@ class AuthController extends Controller {
 		if ($request->has('code')) {
 			$fbUser = \Socialize::with('facebook')->user();
 			$user = $this->loadOrCreateUser($fbUser->email, null, $fbUser->id, $fbUser->name,
-											$fbUser->name, "facebook", $fbUser->token);
+				$fbUser->name, "facebook", $fbUser->token);
 			if ($user != null) {
 				\Auth::login($user);
 			}
 			return redirect()->intended('/');
-		}
-		else {
+		} else {
 			return \Socialize::with('facebook')->scopes(['email'])->redirect();
 		}
 	}
@@ -129,15 +123,52 @@ class AuthController extends Controller {
 		return redirect('/');
 	}
 
-	public function thanks(Request $request) {
+	public function thanks(Request $request)
+	{
 		if ($request->method() == 'GET') {
 			return view('auth.signup_thanks');
-		}
-		else if ($request->method() == 'POST') {
+		} else if ($request->method() == 'POST') {
 			return redirect()->intended('/');
 		}
 		return redirect('/');
 	}
+
+	public function confirm(Request $request)
+	{
+		$failed = true;
+		if ($request->has('code')) {
+			$code = $request->get('code');
+			$uconfirm = UserConfirmation::whereColumnFirst('code', '=', $code);
+			if ($uconfirm != null) {
+				if ($uconfirm->checkCode($code)) {
+					if ($uconfirm->type == 'em') {
+						$user = User::find($uconfirm->user);
+						$user->verified = true;
+						$user->save();
+						$uconfirm->done = true;
+						$uconfirm->save();
+						$failed = false;
+					}
+				}
+			}
+		}
+		if ($failed) {
+			return redirect('auth/confirm/failed');
+		} else {
+			return redirect('auth/confirm/ok');
+		}
+	}
+
+	public function confirmResponse($result)
+	{
+		if ($result == 'ok') {
+			return view('auth.confirm_ok');
+		}
+		else {
+			return view('auth.confirm_failed');
+		}
+	}
+
 	/*
 	 * Utility functions
 	 */
@@ -205,8 +236,8 @@ class AuthController extends Controller {
 		$user->elementid = $person->getId();
 		$user->save();
 
-		//$mailer = new UserMailer();
-		//$mailer->confirmEmail($user);
+		$mailer = new UserMailer();
+		$mailer->confirmEmail($user);
 		return $user;
 	}
 

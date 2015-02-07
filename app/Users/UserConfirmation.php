@@ -25,6 +25,7 @@ class UserConfirmation extends TableBackedObject {
         $this->type = $type;
         $this->expires = date('Y-m-d H:i:s', time() + $hours * 60 * 60);
         $this->code = uniqid($type . ".", true);
+        $this->done = false;
         $this->save();
     }
 

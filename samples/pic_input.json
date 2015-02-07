@@ -1,0 +1,38 @@
+{
+    "name": "Global Giving Auto-Interactive Input Composer",
+    "version": "0.01",
+    "baseSpecificationId": 1,
+    "input": {
+	    "inputType": "auto-interactive",
+	    "map": [
+            {
+                "id":"title",
+                "use":"element",
+                "inputType":"text",
+                "elementId":"Title",
+                "prompt":"Give your story a title"
+            },
+            {
+                "id":"user",
+                "use":"element",
+                "elementId":"Storyteller",
+                "inputType":"auto",
+                "inputValue":"!user"
+            },
+            {
+                "id":"org",
+                "use":"element",
+                "inputType":"text",
+                "elementId":"Organization",
+                "prompt":"Name the organization or group most involved in what happened."
+            },
+            {
+                "id":"pic",
+                "use":"element",
+                "inputType":"picture",
+                "elementId":"Pic",
+                "prompt":"Upload a picture"
+            }
+	   ]
+    }
+}

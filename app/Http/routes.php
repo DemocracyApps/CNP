@@ -22,8 +22,12 @@ Route::get('auth/logintw', 'Auth\AuthController@logintw');
 
 Route::get('auth/register', 'Auth\AuthController@register');
 Route::post('auth/register', 'Auth\AuthController@register');
-Route::any('auth/thanks', 'Auth\AuthController@thanks');
 Route::get('auth/logout', 'Auth\AuthController@logout');
+
+Route::any('auth/thanks', 'Auth\AuthController@thanks');
+Route::get('auth/confirm', 'Auth\AuthController@confirm');
+Route::get('auth/confirm/{status}', 'Auth\AuthController@confirmResponse');
+
 
 Route::controllers([
 	'password' => 'Auth\PasswordController',

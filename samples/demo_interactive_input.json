@@ -1,0 +1,144 @@
+{
+    "name": "Global Giving Auto-Interactive Input Composer",
+    "version": "0.01",
+    "baseSpecificationId": 1,
+    "input": {
+	    "inputType": "auto-interactive",
+	    "map": [
+            {
+    			"id":"story",
+    			"use":"element",
+    			"elementId":"Story",
+    			"inputType":"textarea",
+    			"prompt":"Please tell a story about a time when a person or an organization tried to help someone or change something in your community."
+    		},
+            {
+                "id":"title",
+                "use":"element",
+                "inputType":"text",
+                "elementId":"Title",
+                "prompt":"Give your story a title"
+            },
+            {
+                "id":"user",
+                "use":"element",
+                "elementId":"Storyteller",
+                "inputType":"auto",
+                "inputValue":"!user"
+            },
+            {
+                "id": "connexionselector",
+                "use":"relation",
+                "from":"Storyteller",
+                "to":"Story",
+                "inputType":"select",
+                "prompt":"What is your connection to what happened in the story?",
+                "options": [
+                    {
+                        "display":"---",
+                        "value":null                        
+                    },
+                    {
+                        "display":"Helped make it happen",
+                        "value":"helped"                        
+                    },
+                    {
+                        "display":"Was affected by what happened",
+                        "value":"was-affected-by"                        
+                    },
+                    {
+                        "display":"Saw it happen",
+                        "value":"saw"                        
+                    },
+                    {
+                        "display":"Heard about it happening",
+                        "value":"heard-about"                        
+                    },
+                    {
+                        "display":"Unknown",
+                        "value":"unknown-relation-to"                        
+                    }
+                ]
+            },
+            {
+                "use":"pagebreak",
+                "suppress":"output"
+            },
+            {
+                "id":"org",
+                "use":"element",
+                "inputType":"text",
+                "elementId":"Organization",
+                "prompt":"Name the organization or group most involved in what happened."
+            },
+            {
+                "id":"location",
+                "use":"element",
+                "inputType":"text",
+                "elementId":"City",
+                "prompt":"Where did this story take place? (city or district)"
+            },
+            {
+                "id":"summary",
+                "use":"element",
+                "inputType":"text",
+                "elementId":"Summary",
+                "prompt":"What is this story about?"
+            },
+            {
+                "id":"topic",
+                "use":"element",
+                "inputType":"multiselect",
+                "elementId":"Topic",
+                "prompt":"Which of these relate to your story?",
+                "options": [
+                    {
+                        "display":"Food & Shelter",
+                        "value":"Food & Shelter"                        
+                    },
+                    {
+                        "display":"Security",
+                        "value":"Security"
+                    },
+                    {
+                        "display":"Knowledge",
+                        "value":"Knowledge"
+                    },
+                    {
+                        "display":"Self-Esteem",
+                        "value":"Self-Esteem"
+                    },
+                    {
+                        "display":"Family & Friends",
+                        "value":"Family & Friends"
+                    },
+                    {
+                        "display":"Freedom",
+                        "value":"Freedom"
+                    },
+                    {
+                        "display":"Respect",
+                        "value":"Respect"
+                    }
+                ]
+            },
+            {
+                "id": "benefitee",
+                "use":"element",
+                "elementId":"Benefitees",
+                "inputType":"select",
+                "prompt":"Who benefitted from what happened in the story?",
+                "options": [
+                    {
+                        "display":"The right people",
+                        "value":"Right People"                        
+                    },
+                    {
+                        "display":"The wrong people",
+                        "value":"Wrong People"
+                    }
+                ]
+            }
+	   ]
+    }
+}

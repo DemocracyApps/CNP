@@ -10,7 +10,7 @@ class UserMailer extends Mailer {
 
         $confirmation = new UserConfirmation();
         $confirmation->initialize($user, 'em', 24);
-        $data = array ('code' => $confirmation->getCode());
+        $data = array ('url' => url('auth/confirm'), 'code' => $confirmation->getCode());
         $this->sendTo($user, "Confirm your email at Community Narratives Platform", 'emails.confirmEmail', $data);
     }
 
