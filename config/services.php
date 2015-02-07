@@ -34,9 +34,9 @@ return [
 		'secret' => '',
 	],
 	'facebook' => [
-			'client_id'     => '330621543771119',
-            'client_secret' => 'd3e39c73146d4277bcfbd76deb153f19',
-            'redirect'      => 'http://cnp.dev/auth/loginfb',
+			'client_id'     => env('FACEBOOK_CLIENT_ID', 'none'),
+            'client_secret' => env('FACEBOOK_CLIENT_SECRET', 'none'),
+            'redirect'      => env('FACEBOOK_REDIRECT', 'none'),
 	],
 
 ];
