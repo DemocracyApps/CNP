@@ -53,7 +53,7 @@ return [
 	| used globally for all e-mails that are sent by your application.
 	|
 	*/
-	'from' => array('address' => 'eric@democracyapps.us', 'name' => 'Eric Jackson'),
+	'from' => array('address' => env('EMAIL_DISPLAY_ADDRESS', 'none@none.com'), 'name' => env('EMAIL_DISPLAY_NAME', 'Nobody')),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -79,7 +79,7 @@ return [
 	|
 	*/
 
-	'username' => 'eric.jackson@democracyapps.us',
+	'username' => env('EMAIL_USER_NAME', 'none'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -92,7 +92,7 @@ return [
 	|
 	*/
 
-	'password' => 'keGli5782',
+	'password' => env('EMAIL_PASSWORD', 'password'),
 
 	/*
 	|--------------------------------------------------------------------------
