@@ -1,4 +1,7 @@
-<?php namespace DemocracyApps\CNP;
+<?php
+
+namespace DemocracyApps\CNP\Users;
+
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;

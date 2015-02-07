@@ -13,6 +13,8 @@ class ProjectUser extends TableBackedObject {
     public  $project = -1;
     public  $user = -1;
     public  $access = -1;
+    public $created_at = null;
+    public $updated_at = null;
 
     public static function lookup($project, $user)
     {

@@ -1,6 +1,7 @@
 <?php
 namespace DemocracyApps\CNP\Graph;
 
+use DemocracyApps\CNP\Utility\AppState;
 use DemocracyApps\CNP\Utility\TableBackedObject;
 
 class RelationType extends TableBackedObject {
@@ -21,8 +22,8 @@ class RelationType extends TableBackedObject {
      *
      */
 
-    protected $tableName = 'relation_types';
-    protected $tableFields = array('name', 'allowedfrom', 'allowedto', 'inverse',
+    static protected $tableName = 'relation_types';
+    static protected $tableFields = array('name', 'allowedfrom', 'allowedto', 'inverse',
         'created_at', 'updated_at');
     public $name = null;
     public $allowedfrom = null;
@@ -46,6 +47,9 @@ class RelationType extends TableBackedObject {
      */
     public static function initDB($config) 
     {
+        $relationTypesInitialized = AppState::whereColumnFirst('name', '=', 'relation_types');
+        if ($relationTypesInitialized != null) return;
+
         $allRelationTypes = array();
         $rtArray = $config['relationTypes'];
         foreach ($rtArray as $rtSpec) {
@@ -84,10 +88,14 @@ class RelationType extends TableBackedObject {
                 $inverse = $item['inverse'];
                 $inv = $allRelationTypes[$inverse]['object'];
                 $rt->inverse = $inv->id;
-                $inv->inverse = $rt->$id;
+                $inv->inverse = $rt->id;
                 $rt->save();
             }
         }
+        $rtInit = new AppState;
+        $rtInit->name = 'relation_types';
+        $rtInit->value = '1';
+        $rtInit->save();
     }
 
     public function getName() {

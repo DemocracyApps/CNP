@@ -27,7 +27,8 @@ class AppServiceProvider extends ServiceProvider {
 	{
 		$this->app->bind(
 			'Illuminate\Contracts\Auth\Registrar',
-			'DemocracyApps\CNP\Services\Registrar'
+			'DemocracyApps\CNP\Services\Registrar',
+			'DemocracyApps\CNP\Services\JsonProcessor'
 		);
 	}
 

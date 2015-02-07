@@ -28,7 +28,7 @@ return [
 	|
 	*/
 
-	'model' => 'DemocracyApps\CNP\User',
+	'model' => 'DemocracyApps\CNP\Users\User',
 
 	/*
 	|--------------------------------------------------------------------------

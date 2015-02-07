@@ -334,6 +334,11 @@ class Element
         return $result;
     }
 
+    /**
+     * @param int $page
+     * @param int $limit
+     * @return array
+     */
     public static function allPaged ($page=1, $limit=10) 
     {
         if (static::$classElementType <= 0) { // All Elements

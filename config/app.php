@@ -135,6 +135,8 @@ return [
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
+		'Illuminate\Html\HtmlServiceProvider',
+		'Laravel\Socialite\SocialiteServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -144,6 +146,8 @@ return [
 		'DemocracyApps\CNP\Providers\ConfigServiceProvider',
 		'DemocracyApps\CNP\Providers\EventServiceProvider',
 		'DemocracyApps\CNP\Providers\RouteServiceProvider',
+
+		'DemocracyApps\CNP\Providers\CNPServiceProvider',
 
 	],
 
@@ -192,7 +196,10 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
-
+		'Form'      => 'Illuminate\Html\FormFacade',
+		'Html'      => 'Illuminate\Html\HtmlFacade',
+		'Socialize' => 'Laravel\Socialite\Facades\Socialite',
+		'CNP'		=> 'DemocracyApps\CNP\Facades\Cnp',
 	],
 
 ];

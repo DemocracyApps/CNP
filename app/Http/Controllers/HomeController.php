@@ -1,5 +1,7 @@
 <?php namespace DemocracyApps\CNP\Http\Controllers;
 
+use DemocracyApps\CNP\Project\Project;
+
 class HomeController extends Controller {
 
 	/*
@@ -20,7 +22,7 @@ class HomeController extends Controller {
 	 */
 	public function __construct()
 	{
-		$this->middleware('auth');
+		//$this->middleware('auth');
 	}
 
 	/**
@@ -30,7 +32,8 @@ class HomeController extends Controller {
 	 */
 	public function index()
 	{
-		return view('home');
+		$projects = Project::all();
+		return view('home', array('projects' => $projects));
 	}
 
 }

@@ -33,5 +33,10 @@ return [
 		'model'  => 'User',
 		'secret' => '',
 	],
+	'facebook' => [
+			'client_id'     => '330621543771119',
+            'client_secret' => 'd3e39c73146d4277bcfbd76deb153f19',
+            'redirect'      => 'http://cnp.dev/auth/loginfb',
+	],
 
 ];

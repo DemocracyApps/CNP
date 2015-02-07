@@ -3,6 +3,7 @@
 namespace DemocracyApps\CNP\Graph;
 
 
+use DemocracyApps\CNP\Utility\AppState;
 use DemocracyApps\CNP\Utility\TableBackedObject;
 
 class ElementType extends TableBackedObject {
@@ -30,12 +31,20 @@ class ElementType extends TableBackedObject {
      */
     public static function initDB($config)
     {
+        $elementTypesInitialized = AppState::whereColumnFirst('name', '=', 'element_types');
+        if ($elementTypesInitialized != null) return;
+
         $etArray = $config['elementTypes'];
+
         foreach ($etArray as $etSpec) {
             $et = new ElementType;
             $et->name = $etSpec['name'];
             $et->save();
         }
+        $etInit = new AppState;
+        $etInit->name = 'element_types';
+        $etInit->value = '1';
+        $etInit->save();
     }
 
     public function getName() {

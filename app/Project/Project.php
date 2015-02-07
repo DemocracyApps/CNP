@@ -4,7 +4,7 @@ namespace DemocracyApps\CNP\Project;
 
 use DemocracyApps\CNP\Utility\TableBackedObject;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use \DemocracyApps\CNP\User;
+use \DemocracyApps\CNP\Users\User;
 
 /**
  * 

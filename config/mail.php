@@ -28,7 +28,7 @@ return [
 	|
 	*/
 
-	'host' => 'smtp.mailgun.org',
+	'host' => 'smtp.gmail.com',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -53,8 +53,7 @@ return [
 	| used globally for all e-mails that are sent by your application.
 	|
 	*/
-
-	'from' => ['address' => null, 'name' => null],
+	'from' => array('address' => 'eric@democracyapps.us', 'name' => 'Eric Jackson'),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -80,7 +79,7 @@ return [
 	|
 	*/
 
-	'username' => null,
+	'username' => 'eric.jackson@democracyapps.us',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,7 +92,7 @@ return [
 	|
 	*/
 
-	'password' => null,
+	'password' => 'keGli5782',
 
 	/*
 	|--------------------------------------------------------------------------

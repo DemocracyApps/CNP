@@ -11,11 +11,20 @@
 |
 */
 
-Route::get('/', 'WelcomeController@index');
+Route::get('/', 'HomeController@index');
 
 Route::get('home', 'HomeController@index');
 
+Route::get('auth/login', 'Auth\AuthController@login');
+Route::post('auth/login', 'Auth\AuthController@login');
+Route::get('auth/loginfb', 'Auth\AuthController@loginfb');
+Route::get('auth/logintw', 'Auth\AuthController@logintw');
+
+Route::get('auth/register', 'Auth\AuthController@register');
+Route::post('auth/register', 'Auth\AuthController@register');
+Route::any('auth/thanks', 'Auth\AuthController@thanks');
+Route::get('auth/logout', 'Auth\AuthController@logout');
+
 Route::controllers([
-	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);

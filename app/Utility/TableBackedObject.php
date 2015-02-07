@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\DB;
 
 abstract class TableBackedObject {
+    public $id = null;
     public static function getTableName() {
         return self::$tableName;
     }
@@ -21,6 +22,19 @@ abstract class TableBackedObject {
         if ($data != null) {
             $result = new static();
             self::fill($result, $data);
+        }
+        return $result;
+    }
+
+    public static function all()
+    {
+        $records = DB::table(static::$tableName)->orderBy('id')->get();
+        $result = array();
+
+        foreach ($records as $record) {
+            $item = new static();
+            self::fill($item,$record);
+            $result[] = $item;
         }
         return $result;
     }
@@ -70,6 +84,18 @@ abstract class TableBackedObject {
             $result[] = $item;
         }
         return $result;
+    }
+    public static function whereColumnFirst($columnName, $compare, $value)
+    {
+        $records =  DB::table(static::$tableName)
+            ->where ($columnName, $compare, $value)-> orderBy ('id') -> get();
+        $item = null;
+        if ($records != null && sizeof($records > 0)) {
+            $record = $records[0];
+            $item = new static();
+            self::fill($item, $record);
+        }
+        return $item;
     }
 
 }

@@ -1,6 +1,6 @@
 <?php namespace DemocracyApps\CNP\Services;
 
-use DemocracyApps\CNP\User;
+use DemocracyApps\CNP\Users\User;
 use Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
 
