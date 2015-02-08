@@ -69,20 +69,21 @@
         </div>
       </div>
     </div>
-<div class="container">
-  <div class="row">
-    <div class="col-sm-6">
-      <h1>
-        @yield('title')
-      </h1>
-    </div>
-    <div class="col-sm-3" style="float:right;">
-      <div style="float:right;">
-        @yield('buttons')
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-7">
+          <h1>
+            @yield('title')
+          </h1>
+        </div>
+        <div class="col-sm-5" style="float:right;">
+          <div style="float:right;">
+            @yield('buttons')
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
     <div class="container app-container">
         @yield('content')

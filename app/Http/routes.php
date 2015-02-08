@@ -10,40 +10,55 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
+          " and method " .\Request::server('REQUEST_METHOD'));
 
 Route::get('/', 'HomeController@index');
 
 Route::get('home', 'HomeController@index');
 
-Route::get('auth/login', 'Auth\AuthController@login');
-Route::post('auth/login', 'Auth\AuthController@login');
-Route::get('auth/loginfb', 'Auth\AuthController@loginfb');
-Route::get('auth/logintw', 'Auth\AuthController@logintw');
-
-Route::get('auth/register', 'Auth\AuthController@register');
-Route::post('auth/register', 'Auth\AuthController@register');
-Route::get('auth/logout', 'Auth\AuthController@logout');
-
-Route::any('auth/thanks', 'Auth\AuthController@thanks');
-Route::get('auth/confirm', 'Auth\AuthController@confirm');
-Route::get('auth/confirm/{status}', 'Auth\AuthController@confirmResponse');
-Route::get('user/profile', ['middleware' => 'cnp.auth', function () {
-	$id = Auth::user()->id;
-	$controller = app()->make('DemocracyApps\CNP\Http\Controllers\UserController');
-	return $controller->callAction('show', $parameters=array('id'=>$id));
-}]);
-
-Route::get('user/email_changed', function() {
-	return view('user.email_changed');
+Route::get('compositions/export', function() {
+	return "Not implemented";
 });
-Route::post('user/email_changed', function() {
-	return redirect()->intended('/');
+/*************************************************
+ *************************************************
+ * Sign-up & login pages
+ *************************************************
+ *************************************************/
+require app_path().'/Http/Routes/auth.php';
+
+/*************************************************
+ *************************************************
+ * Profile functions for users
+ *************************************************
+ *************************************************/
+require app_path().'/Http/Routes/user.php';
+
+/*************************************************
+ *************************************************
+ * Administrative pages for project admins
+ *************************************************
+ *************************************************/
+Route::group(['prefix' => 'admin', 'middleware' => 'cnp.admin'], function ()
+{
+	require __DIR__.'/Routes/admin.php';
 });
 
-// The {id} routes need to follow routes above
-Route::get('user/{id}/edit', 'UserController@edit');
-Route::get('user/{id}', 'UserController@show');
-Route::put('user/{id}', 'UserController@update');
+/*************************************************
+ *************************************************
+ * Public-facing project pages
+ *************************************************
+ *************************************************/
+
+Route::get('/project404', array (function () {
+	return View::make('projects.project404', array('project' => \Input::get('project')));
+}));
+
+Route::group(['prefix' => '{projectId}', 'middleware' => 'cnp.project'], function () {
+
+	require __DIR__.'/Routes/project.php';
+
+});
 
 
 Route::resource('photo', 'PhotoController');

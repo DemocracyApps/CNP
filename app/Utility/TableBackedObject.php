@@ -8,10 +8,14 @@ abstract class TableBackedObject {
         return self::$tableName;
     }
 
-    public static function delete ($id) {
+    public static function deleteById ($id) {
         DB::table(static::$tableName)->where('id', '=', $id)->delete();
     }
 
+    public function delete()
+    {
+        DB::table(static::$tableName)->where('id', '=', $this->id)->delete();
+    }
     /**
      * Find a element by its primary key
      */
@@ -85,6 +89,7 @@ abstract class TableBackedObject {
         }
         return $result;
     }
+
     public static function whereColumnFirst($columnName, $compare, $value)
     {
         $records =  DB::table(static::$tableName)
@@ -98,4 +103,14 @@ abstract class TableBackedObject {
         return $item;
     }
 
+    protected static function fillArray ($records)
+    {
+        $result = array();
+        foreach ($records as $record) {
+            $item = new static();
+            self::fill($item,$record);
+            $result[] = $item;
+        }
+        return $result;
+    }
 }

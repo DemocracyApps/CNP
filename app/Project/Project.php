@@ -23,7 +23,6 @@ class Project extends TableBackedObject
     public $created_at = null;
     public $updated_at = null;
 
-
     protected $properties = null;
 
     public function save()
@@ -34,7 +33,18 @@ class Project extends TableBackedObject
         else {
             $this->json_properties = null;
         }
-        parent::save($options);
+        parent::save();
+    }
+
+    public static function allUserProjects ($user) {
+        $data = \DB::table('projects')
+            ->join('project_users', 'project_users.project', '=', 'projects.id')
+            ->where ('project_users.user', '=', $user)
+            ->where ('project_users.access', '=', 3)
+            ->select('projects.*')
+            ->get();
+        $result = self::fillArray($data);
+        return $result;
     }
 
     protected function checkProperties() 
@@ -182,17 +192,6 @@ class Project extends TableBackedObject
             throw new NotFoundHttpException("Unknown project");
         }
     }
-
-    public static function allUserProjects ($user) {
-        $data = self::join('project_users', 'project_users.project', '=', 'projects.id')
-            ->where ('project_users.user', '=', $user)
-            ->where ('project_users.access', '=', 3)
-            ->select('projects.*')
-            ->get();
-
-        return $data;
-    }
-
 }
 
 
