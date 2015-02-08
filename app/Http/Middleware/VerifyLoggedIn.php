@@ -15,7 +15,7 @@ class VerifyLoggedIn {
 	{
 
 		if (\Auth::guest()) {
-			redirect('auth/login');
+			return redirect('auth/login');
 		}
 		return $next($request);
 	}
