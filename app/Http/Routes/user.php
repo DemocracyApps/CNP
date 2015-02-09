@@ -15,6 +15,14 @@ Route::post('user/email_changed', function() {
     return redirect()->intended('/');
 });
 
+
+Route::get('/user/noconfirm', function() {
+    return view('user.noconfirm', array());
+});
+Route::get('/confirm/resend', function() {
+    return "Need to implement confirmation email resend.";
+});
+
 // The {id} routes need to follow routes above
 Route::get('user/{id}/edit', 'UserController@edit');
 Route::get('user/{id}', 'UserController@show');

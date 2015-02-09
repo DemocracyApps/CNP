@@ -12,7 +12,7 @@ class CreateProjectsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('projects', function(Blueprint $table)
+		Schema::create('admin', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('name');
@@ -32,7 +32,7 @@ class CreateProjectsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('projects');
+		Schema::drop('admin');
 	}
 
 }

@@ -6,7 +6,7 @@
 
 @section('buttons')
     <div class="col-xs-6">
-      <button style="float:right;" class="btn btn-success btn-sm" onclick="window.location.href='/admin/projects/create'">New Project</button>
+      <button style="float:right;" class="btn btn-success btn-sm" onclick="window.location.href='/admin/admin/create'">New Project</button>
     </div>
 @stop
 

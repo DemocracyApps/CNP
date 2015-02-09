@@ -25,7 +25,7 @@ class CreateCompositionsTable extends Migration {
 			$table->integer('userid');
 			$table->foreign('userid')->references('id')->on('users');
 			$table->integer('project');
-			$table->foreign('project')->references('id')->on('projects');
+			$table->foreign('project')->references('id')->on('admin');
 			$table->timestamps();
 		});
 	}

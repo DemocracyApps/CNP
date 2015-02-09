@@ -234,7 +234,7 @@
 @section('scripts')
   <?php
   JavaScript::put([
-          'ajaxPath' => Util::ajaxPath('projects', 'show'),
+          'ajaxPath' => Util::ajaxPath('admin', 'show'),
           'project' => $project->id
   ]);
 

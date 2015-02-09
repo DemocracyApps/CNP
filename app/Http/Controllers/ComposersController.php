@@ -134,7 +134,7 @@ class ComposersController extends Controller {
 		$composer = Composer::find($id);
 		$project = $composer->project;
 		$composer->delete();
-		return redirect('/admin/projects/' . $project);
+		return redirect('/admin/admin/' . $project);
 	}
 
 }

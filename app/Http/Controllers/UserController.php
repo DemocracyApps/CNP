@@ -52,7 +52,7 @@ class UserController extends Controller {
 		$user = User::find($id);
 		$person = Element::find($user->elementid);
 		$projects = Project::whereColumn('userid', '=', $id);
-		return view('user.profile', array('user' => $user, 'person' => $person, 'projects' => $projects));
+		return view('user.profile', array('user' => $user, 'person' => $person, 'admin' => $projects));
 	}
 
 	/**

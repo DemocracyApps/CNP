@@ -53,11 +53,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'cnp.admin'], function ()
  *************************************************/
 
 Route::get('/project404', array (function () {
-	return View::make('projects.project404', array('project' => \Input::get('project')));
+	return View::make('admin.project404', array('project' => \Input::get('project')));
 }));
 
-Route::group(['prefix' => '{projectId}', 'middleware' => 'cnp.project'], function () {
-
+Route::group(['prefix' => '{projectId}', 'middleware' => 'cnp.project'], function ($projectId) {
 	require __DIR__.'/Routes/project.php';
 
 });

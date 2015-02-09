@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use DemocracyApps\CNP\Http\Requests;
 use DemocracyApps\CNP\Project\Project;
 
-class ProjectsController extends Controller {
+class ProjectAdminController extends Controller {
 
 	protected $project = null;
 
@@ -27,8 +27,8 @@ class ProjectsController extends Controller {
 	{
 		$projects = Project::allUserProjects(\Auth::id());
 
-		//TODO: Could later add projects on which user is authorized
-		return view('projects.index', array('projects'=>$projects));
+		//TODO: Could later add admin on which user is authorized
+		return view('admin.index', array('projects'=>$projects));
 	}
 
 	/**
@@ -39,7 +39,7 @@ class ProjectsController extends Controller {
 	public function create()
 	{
 		\Session::put('CNP_RETURN_URL', \Request::server('HTTP_REFERER'));
-		return view('projects.create');
+		return view('admin.create');
 	}
 
 	/**
@@ -104,7 +104,7 @@ class ProjectsController extends Controller {
 
 			$perspectives = Perspective::whereColumn('project', '=', $id);
 
-			return view('projects.show', array('project' => $project, 'composers' => $composers, 'perspectives' => $perspectives));
+			return view('admin.show', array('project' => $project, 'composers' => $composers, 'perspectives' => $perspectives));
 		}
 		else {
 			return redirect('/');
@@ -120,7 +120,7 @@ class ProjectsController extends Controller {
 	public function edit($id)
 	{
 		$project = Project::find($id);
-		return view('projects.edit', array('project' => $project,
+		return view('admin.edit', array('project' => $project,
 			'fileerror' => null));
 	}
 
@@ -175,5 +175,6 @@ class ProjectsController extends Controller {
 	{
 		//
 	}
+
 
 }

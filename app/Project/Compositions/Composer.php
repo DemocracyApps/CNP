@@ -72,10 +72,10 @@ class Composer extends  TableBackedObject {
     public static function getUserComposers ($userId)
     {
         $records = \DB::table(self::$tableName)
-                    ->join('projects', 'composers.project', '=', 'projects.id')
-                    ->where('projects.userid', '=', $userId)
+                    ->join('admin', 'composers.project', '=', 'admin.id')
+                    ->where('admin.userid', '=', $userId)
                     ->select('composers.id', 'composers.name', 'composers.project', 'composers.description',
-                             'composers.dependson', 'composers.contains', 'projects.userid')
+                             'composers.dependson', 'composers.contains', 'admin.userid')
                     ->orderBy('composers.project', 'composers.id')
                     ->distinct()
                     ->get();
