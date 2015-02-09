@@ -23,7 +23,7 @@ abstract class TableBackedObject {
     {
         $data = DB::table(static::$tableName)->where('id', $id)->first();
         $result = null;
-        if ($data != null) {
+        if ($data != null && sizeof($data) > 0) {
             $result = new static();
             self::fill($result, $data);
         }

@@ -148,6 +148,7 @@ return [
 		'DemocracyApps\CNP\Providers\RouteServiceProvider',
 
 		'DemocracyApps\CNP\Providers\CNPServiceProvider',
+		'Laracasts\Utilities\JavaScript\JavaScriptServiceProvider',
 
 	],
 

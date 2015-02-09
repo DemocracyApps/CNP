@@ -107,4 +107,5 @@ class CnpConfiguration {
         return $result;
     }
 
+
 }

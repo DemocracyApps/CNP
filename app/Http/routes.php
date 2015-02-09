@@ -13,6 +13,8 @@
 Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
           " and method " .\Request::server('REQUEST_METHOD'));
 
+Route::get('ajax/{section}/{page}/{function}', ['uses' => 'AjaxController@main']);
+
 Route::get('/', 'HomeController@index');
 
 Route::get('home', 'HomeController@index');

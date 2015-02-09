@@ -219,12 +219,6 @@
         $pd = new Parsedown();
         echo $pd->text($project->terms);
         ?>
-        <!--
-        <pre>
-          <code>
-            {!! $project->terms !!}
-          </code>
-        </pre>
         -->
       </div>
     @endif
@@ -238,23 +232,30 @@
 @stop
 
 @section('scripts')
+  <?php
+  JavaScript::put([
+          'ajaxPath' => Util::ajaxPath('projects', 'show'),
+          'project' => $project->id
+  ]);
+
+  ?>
+
   <script type="text/javascript">
+
+
     function setDefaultInputComposer(event, ui)
     {
-      var source ="http://cnp.dev/ajax/setProjectDefaultInputComposer?project={!! $project->id !!}&defaultInputComposer="
+      var source =CnpVars.ajaxPath + "/setDefaultInputComposer?project="+CnpVars.project+"&composer="
               + $("select#default-input-composer-select").val();
       $.get( source, function( r ) {
-        //alert("Got r = " + r.message);
       }).fail(function(r) {
         alert("Error saving default input composer: "+r.responseJSON.error.message);
       });
-      var currentYear = new Date().getFullYear();
-      alert("Current year = " + currentYear);
     }
 
     function setDefaultOutputComposer(event, ui)
     {
-      var source ="http://cnp.dev/ajax/setProjectDefaultOutputComposer?project={!! $project->id !!}&defaultOutputComposer="
+      var source =CnpVars.ajaxPath + "/setDefaultOutputComposer?project="+CnpVars.project + "&composer="
               + $("select#default-output-composer-select").val();
       $.get( source, function( r ) {
       }).fail(function(r) {
@@ -265,6 +266,7 @@
     $("select#default-input-composer-select").change (setDefaultInputComposer);
 
     $("select#default-output-composer-select").change (setDefaultOutputComposer);
+
 
 
   </script>

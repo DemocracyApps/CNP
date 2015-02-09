@@ -26,6 +26,9 @@
       </style>
       <!-- END STYLES TO MAKE IT NICER LOOKING -->
   </head>
+  <?php
+          use DemocracyApps\CNP\Helpers as Helpers;
+  ?>
 
   <body>
     @include('templates.datarider')
@@ -106,6 +109,7 @@
     <script src="/js/jquery-ui-1.11.1/jquery-ui.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/jquery.cookie.js"></script>
+
     @yield('scripts')
   </body>
 
