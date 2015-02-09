@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Compositions\Inputs;
+namespace DemocracyApps\CNP\Project\Compositions\Inputs;
 use GrahamCampbell\Flysystem\Facades\Flysystem;
 use DemocracyApps\CNP\Entities\Eloquent\AppState;
 

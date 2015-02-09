@@ -4,17 +4,14 @@ use DemocracyApps\CNP\Http\Requests;
 use DemocracyApps\CNP\Http\Controllers\Controller;
 
 use DemocracyApps\CNP\Project\Compositions\Composer;
-use DemocracyApps\CNP\Services\JsonProcessor;
 use Illuminate\Http\Request;
 
 class ComposersController extends Controller {
 	protected $composer;
-	protected $jsonProcessor = null;
 
-	function __construct (Composer $composer, JsonProcessor $jp)
+	function __construct (Composer $composer)
 	{
 		$this->composer = $composer;
-		$this->jsonProcessor = $jp;
 	}
 
 	/**
@@ -59,7 +56,7 @@ class ComposersController extends Controller {
 
 		// Now load in the file
 		if ($request->hasFile('composer')) {
-			$ok = $this->composer->loadSpecification($request->file('composer'), $this->jsonProcessor);
+			$ok = $this->composer->loadSpecification($request->file('composer'));
 			if ( ! $ok) {
 				return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
 			}

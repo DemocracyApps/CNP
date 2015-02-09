@@ -54,7 +54,6 @@ class Composer extends  TableBackedObject {
 
     protected $doingInput = true;
 
-
     protected function getAnchorId()
     {
         $anchorId = null;
@@ -175,8 +174,9 @@ class Composer extends  TableBackedObject {
 
     protected function resolveFullSpecification ()
     {
-        $spec = json_minify($this->specification);
-        $spec = json_decode($spec, true);
+        $jp = \CNP::getJsonProcessor();
+        $spec = $jp->minifyJson($this->specification);
+        $spec = $jp->decodeJson($spec, true);
         if (array_key_exists('baseSpecificationId', $spec)) {
             $nextComposer = Composer::findOrFail($spec['baseSpecificationId']);
             $tmpspec = $nextComposer->resolveFullSpecification($spec['baseSpecificationId']);
@@ -199,8 +199,10 @@ class Composer extends  TableBackedObject {
     	return $this->fullSpecification;
 	}
 
-    public function loadSpecification($file, JsonProcessor $jp)
+    public function loadSpecification($file)
     {
+        $jp = \CNP::getJsonProcessor();
+
         $this->specification = \File::get($file->getRealPath());
         $str = $jp->minifyJson($this->specification);
         $cfig = $jp->decodeJson($str, true);
@@ -386,7 +388,7 @@ class Composer extends  TableBackedObject {
             $notification->type = 'CVSUpload';
             $notification->save();
             $data['notificationId'] = $notification->id;
-            \Queue::push('\DemocracyApps\CNP\Compositions\Inputs\CSVInputProcessor', $data);
+            \Queue::push('\DemocracyApps\CNP\Project\Compositions\Inputs\CSVInputProcessor', $data);
         }
         else if ($this->inputType == 'auto-interactive') {
             $this->inputDriver->extractSubmittedValues($input); // Import latest batch of form data into inputDriver
@@ -404,7 +406,7 @@ class Composer extends  TableBackedObject {
 
     private static function registerElementProcessors ()
     {
-        //ElementGenerator::registerElementGenerator('Tag', 'DemocracyApps\CNP\Inputs\Composer::tryit');
+        //ElementGenerator::registerElementGenerator('Tag', 'DemocracyApps\CNP\Project\Compositions\Inputs\Composer::tryit');
     }
 
     /**
@@ -590,7 +592,7 @@ class Composer extends  TableBackedObject {
 
                 if ($value) {
                     $base = ucfirst($value['inputType']);
-                    $inputControllerClassName = '\DemocracyApps\CNP\Compositions\Inputs\\'.$base."InputHandler";
+                    $inputControllerClassName = '\DemocracyApps\CNP\Project\Compositions\Inputs\\'.$base."InputHandler";
                     $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'getValue');
                     $val = $reflectionMethod->invoke(null, $value);
                     if ($val['value']) {

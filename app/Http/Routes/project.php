@@ -1,8 +1,14 @@
 <?php
 
-Route::resource('compositions', 'DemocracyApps\CNP\Controllers\CompositionsController');
-
 Route::get('/', 'ProjectController@index');
+
+Route::resource('compositions', 'CompositionsController');
+
+/*************************************************
+ *************************************************
+ * Project access authorization
+ *************************************************
+ *************************************************/
 
 Route::get('/authorize', 'ProjectController@authorize');
 Route::post('/authorize', 'ProjectController@authorize');

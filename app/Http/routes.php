@@ -13,8 +13,20 @@
 Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
           " and method " .\Request::server('REQUEST_METHOD'));
 
+Route::pattern('projectId', '[0-9]+');
+
+/*************************************************
+ *************************************************
+ * Ajax calls
+ *************************************************
+ *************************************************/
 Route::get('ajax/{section}/{page}/{function}', ['uses' => 'AjaxController@main']);
 
+/*************************************************
+ *************************************************
+ * Home and routing sandbox
+ *************************************************
+ *************************************************/
 Route::get('/', 'HomeController@index');
 
 Route::get('home', 'HomeController@index');
@@ -22,6 +34,7 @@ Route::get('home', 'HomeController@index');
 Route::get('compositions/export', function() {
 	return "Not implemented";
 });
+
 /*************************************************
  *************************************************
  * Sign-up & login pages

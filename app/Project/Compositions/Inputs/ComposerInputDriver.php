@@ -1,10 +1,10 @@
 <?php
 namespace DemocracyApps\CNP\Project\Compositions\Inputs;
 
-use \DemocracyApps\CNP\Compositions\Composer;
-use \DemocracyApps\CNP\Compositions\ComposerProgram;
+use \DemocracyApps\CNP\Project\Compositions\Composer;
+use \DemocracyApps\CNP\Project\Compositions\ComposerProgram;
 use \DemocracyApps\CNP\Utility\Html;
-use \DemocracyApps\CNP\Entities\Element;
+use \DemocracyApps\CNP\Graph\Element;
 
 /**
  * This class is generated from an 'auto-interactive' input
@@ -25,7 +25,7 @@ class ComposerInputDriver extends \Eloquent {
     public function initialize(Composer $composer) 
     {
         $inputSpec = $composer->getInputSpec();
-        $this->userid = \Auth::user()->getId();
+        $this->userid = \Auth::user()->id;
         $this->expires = date('Y-m-d H:i:s', time() + 24 * 60 * 60);
 
         $this->program = new ComposerProgram;
@@ -54,7 +54,7 @@ class ComposerInputDriver extends \Eloquent {
              */
             $base = ucfirst($cElem['inputType']);
             if ($base != "None") {
-                $inputControllerClassName = '\DemocracyApps\CNP\Compositions\Inputs\\' . $base . "InputHandler";
+                $inputControllerClassName = '\DemocracyApps\CNP\Project\Compositions\Inputs\\' . $base . "InputHandler";
                 $reflectionMethod = new \ReflectionMethod($inputControllerClassName, 'extractValue');
                 $reflectionMethod->invokeArgs(null, array($id, $input, &$cElem));
             }

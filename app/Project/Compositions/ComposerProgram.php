@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Compositions;
+namespace DemocracyApps\CNP\Project\Compositions;
 
 class ComposerProgram {
     protected $runnable = null;

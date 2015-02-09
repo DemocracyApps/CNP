@@ -55,23 +55,7 @@ My Profile
   </div>
 </div>
 
-
-@if ($user->projectcreator)
-<div id="api-info">
-  <h3>API Access Information</h3>
-  <p>Most operations may be performed via the CNP RESTful API - see documentation <a href="api-docs">here</a>. All API access requires the use of SSL and your API key in the Authorization header:</p>
-
-  @if ($apikey = $user->getApiKey(true))
-    <div id="api-key">
-      <p>{!! $apikey !!}</p>
-    </div>
-  @else
-    <div id="api-key"><input type="button" value="Get API Key"/>
-
-    </div>
-  @endif
-</div>
-@endif
+<br>
 <a href="/logout">Log Out</a>
 </div>
 

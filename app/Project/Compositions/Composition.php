@@ -1,4 +1,4 @@
-<?php namespace DemocracyApps\CNP\Compositions;
+<?php namespace DemocracyApps\CNP\Project\Compositions;
 
 class Composition extends \Eloquent
 {

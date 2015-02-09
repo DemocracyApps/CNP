@@ -8,9 +8,15 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller {
 
-	public function index (Request $request)
+	public function index ($projectId, Request $request)
     {
-        return "Hi";
+        $project = Project::find($projectId);
+        $owner = false;
+        if (!\Auth::guest()) {
+            $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
+        }
+        $composerId = ($project->hasProperty('defaultInputComposer'))?$project->getProperty('defaultInputComposer'):-1;
+        return view('project.home', array('project'=>$project, 'owner' => $owner, 'defaultInputComposer' => $composerId));
     }
 
     public function authorize($projectId, Request $request) {

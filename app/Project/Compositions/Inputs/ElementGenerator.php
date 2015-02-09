@@ -1,12 +1,14 @@
 <?php
-namespace DemocracyApps\CNP\Compositions\Inputs;
-use \DemocracyApps\CNP\Entities as DAEntity;
+namespace DemocracyApps\CNP\Project\Compositions\Inputs;
 
-class ElementGenerator 
+
+use DemocracyApps\CNP\Graph\Element;
+
+class ElementGenerator
 {
     static $fcts = array(
-        'Tag' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::tagGenerator',
-        'Person' => '\DemocracyApps\CNP\Compositions\Inputs\ElementGenerator::personGenerator'
+        'Tag' => '\DemocracyApps\CNP\Project\Compositions\Inputs\ElementGenerator::tagGenerator',
+        'Person' => '\DemocracyApps\CNP\Project\Compositions\Inputs\ElementGenerator::personGenerator'
         );
 
     static public function generateElement ($elementSpec, $name, $content, $properties, $projectId)
@@ -19,7 +21,7 @@ class ElementGenerator
         }
         else {
             if ($content['isRef']) {
-                $d = DAEntity\Element::find($content['value']);
+                $d = Element::find($content['value']);
             }
             else {
 
@@ -69,10 +71,10 @@ class ElementGenerator
         $elementTypeId = \CNP::getElementTypeId($elementType);
 
         if ($match && ! $d) {
-            $d = \DemocracyApps\CNP\Entities\Element::findByContent($value, $elementTypeId);
+            $d = Element::findByContent($value, $elementTypeId);
         }
         if (! $d) {
-            $d = new \DemocracyApps\CNP\Entities\Element($name, $elementTypeId);
+            $d = new Element($name, $elementTypeId);
             $d->content = $value;
         }
         
@@ -95,10 +97,10 @@ class ElementGenerator
         if ($content) {
             $d = null;
             if ($content['isRef']) {
-                $d = DAEntity\Element::find($content['id']);
+                $d = Element::find($content['id']);
             }
             else {
-                $d = new DAEntity\Element($name, CNP::getElementTypeId("Person"));
+                $d = new Element($name, CNP::getElementTypeId("Person"));
                 $d = self::generateIt ($elementType, $d, true, $elementSpec, $name, $content['value'], $properties);
 
             }

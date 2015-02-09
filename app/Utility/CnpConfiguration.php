@@ -36,6 +36,10 @@ class CnpConfiguration {
         }
     }
 
+    public function getJsonProcessor() {
+        return $this->jsonProcessor;
+    }
+
     public function getConfigurationValue ($name)
     {
         $value = null;

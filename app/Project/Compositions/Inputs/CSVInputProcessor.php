@@ -1,7 +1,7 @@
-<?php namespace DemocracyApps\CNP\Compositions\Inputs;
-use DemocracyApps\CNP\Compositions\Composer;
-use DemocracyApps\CNP\Compositions\Composition;
-use \DemocracyApps\CNP\Entities as DAEntity;
+<?php namespace DemocracyApps\CNP\Project\Compositions\Inputs;
+use DemocracyApps\CNP\Project\Compositions\Composer;
+use DemocracyApps\CNP\Project\Compositions\Composition;
+use DemocracyApps\CNP\Utility\Notification;
 
 class CSVInputProcessor 
 {
@@ -9,7 +9,7 @@ class CSVInputProcessor
     public function fire($queueJob, $data)
     {
         $userId = $data['userId'];
-        $user = \DemocracyApps\CNP\Entities\Eloquent\User::findOrFail($userId);
+        $user = \DemocracyApps\CNP\Users\User::findOrFail($userId);
         \Auth::login($user);
 
         $filePath = $data['filePath'];
@@ -19,7 +19,7 @@ class CSVInputProcessor
         $composer = Composer::find($composerId);
         $composer->initializeForInput(null);
         \Log::info("Starting processing of " . $filePath);
-        $notification = \DemocracyApps\CNP\Utility\Notification::find($data['notificationId']);
+        $notification = Notification::find($data['notificationId']);
         $notification->messages = $composer->processCsvInput($filePath, $composition);
         $notification->messages = $notification->messages;
         $notification->status = 'Completed';

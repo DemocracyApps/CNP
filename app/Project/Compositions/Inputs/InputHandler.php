@@ -1,5 +1,5 @@
 <?php
-namespace DemocracyApps\CNP\Compositions\Inputs;
+namespace DemocracyApps\CNP\Project\Compositions\Inputs;
 
 abstract class InputHandler {
 
