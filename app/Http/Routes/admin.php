@@ -2,5 +2,6 @@
 
 Route::resource('projects', 'ProjectAdminController');
 Route::resource('composers', 'ComposersController');
-Route::resource('perspectives', 'PerspectivesAdminController');
+\Log::info("About to try the perspectives");
+Route::resource('perspectives', 'PerspectiveAdminController');
 Route::resource('notifications', 'NotificationsController');

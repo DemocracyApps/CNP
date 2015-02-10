@@ -1,24 +1,19 @@
 <?php
 
+use DemocracyApps\CNP\Analysis\Perspective;
+use DemocracyApps\CNP\Project\Project;
+use DemocracyApps\CNP\Project\ProjectUser;
+
 Route::get('/', 'ProjectController@index');
 
 Route::resource('compositions', 'CompositionsController');
 Route::get('perspectives', function ($projectId) {
     $project = Project::find($projectId);
-    $access = $project->viewAuthorization(\Auth::id());
-    if (! $access->allowed) {
-        if ($access->reason == 'authorization') {
-            return \Redirect::guest('/'.$projectId.'/authorize');
-        }
-        else {
-            return \Redirect::guest('user/noconfirm');
-        }
-    }
     $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
 
     $perspectives = Perspective::whereColumn('project', '=', $projectId);
 
-    return \View::make('world.perspectives', array('project' => $project, 'perspectives' => $perspectives, 'owner' => $owner));
+    return view('project.perspectives', array('project' => $project, 'perspectives' => $perspectives, 'owner' => $owner));
 });
 /*************************************************
  *************************************************

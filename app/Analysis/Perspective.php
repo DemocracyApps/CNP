@@ -28,14 +28,16 @@ class Perspective extends TableBackedObject {
         if (class_exists($presentationClassName)) {
             $cfig = null;
             if ($this->specification != null) {
-                $str = json_minify($this->specification);
-                $cfig = json_decode($str, true);
+                $jp = \CNP::getJsonProcessor();
+
+                $str = $jp->minifyJson($this->specification);
+                $cfig = $jp->decodeJson($str, true);
             }
             $reflectionMethod = new \ReflectionMethod($presentationClassName, 'getContent');
             $output .= $reflectionMethod->invokeArgs(null, array($this, $cfig, $this->last));
         }
         else {
-            throw new Exception("No presentation class defined for perspective " . $this->type);
+            throw new \Exception("No presentation class defined for perspective " . $this->type);
         }
 
         $output .= "</div>";

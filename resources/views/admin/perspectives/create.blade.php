@@ -2,37 +2,39 @@
 
 @section('content')
 
-    {{ Form::open(['route' => 'admin.perspectives.store', 'files' => true]) }}
-        {{ Form::hidden('project', $project)}}
+    <form method="POST" action="http://cnp.dev/admin/perspectives"
+          accept-charset="UTF-8" enctype="multipart/form-data">
+        <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+        <input type="hidden" name="project" value="{!! $project !!}">
 
         <h1>New Perspective</h1>
 
         <br>
         <div class="form-group">
-            {{ Form::label('name', 'Name: ') }}
-            {{ Form::text('name', null, ['class' => 'form-control']) }}
+            {!!  Form::label('name', 'Name: ')  !!}
+            {!!  Form::text('name', null, ['class' => 'form-control'])  !!}
             <br>
-            <span class="error">{{ $errors->first('name') }}</span>
-            <br>
-        </div>
-
-        <div class="form-group">
-            {{ Form::label('specification', 'Specification')}}
-            {{ Form::file('specification')}}
-
-            <span class="error">{{ $errors->first('fileerror') }}</span>
+            <span class="error">{!!  $errors->first('name')  !!}</span>
             <br>
         </div>
 
         <div class="form-group">
-            {{ Form::label('description', 'Description: ') }}
-            {{ Form::textarea('description', null, ['class' => 'form-control']) }}
+            {!!  Form::label('specification', 'Specification') !!}
+            {!!  Form::file('specification') !!}
+
+            <span class="error">{!!  $errors->first('fileerror')  !!}</span>
             <br>
         </div>
 
         <div class="form-group">
-            {{ Form::submit('Save', ['class' => 'btn btn-primary']) }}
+            {!!  Form::label('description', 'Description: ')  !!}
+            {!!  Form::textarea('description', null, ['class' => 'form-control'])  !!}
+            <br>
         </div>
-    {{ Form::close() }}
 
+        <div class="form-group">
+            {!!  Form::submit('Save', ['class' => 'btn btn-primary'])  !!}
+        </div>
+
+    </form>
 @stop

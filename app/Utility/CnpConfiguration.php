@@ -28,6 +28,7 @@ class CnpConfiguration {
             $this->configuration = $this->jsonProcessor->decodeJson($str, true);
             $this->initialized = true;
         }
+        return $this->initialized;
     }
 
     public function getConfiguration() {
