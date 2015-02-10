@@ -22,7 +22,7 @@ class ComposersController extends Controller {
 	public function index()
 	{
 		$composers = Composer::getUserComposers(\Auth::id());
-		return view('composers.index', array('composers' => $composers));
+		return view('admin.composers.index', array('composers' => $composers));
 	}
 
 	/**
@@ -32,7 +32,7 @@ class ComposersController extends Controller {
 	 */
 	public function create()
 	{
-		return view('composers.create', array('project' => \Input::get('project')));
+		return view('admin.composers.create', array('project' => \Input::get('project')));
 	}
 
 	/**
@@ -75,7 +75,7 @@ class ComposersController extends Controller {
 	public function show($id)
 	{
 		$composer = Composer::find($id);
-		return view('composers.show', array('composer' => $composer));
+		return view('admin.composers.show', array('composer' => $composer));
 	}
 
 	/**

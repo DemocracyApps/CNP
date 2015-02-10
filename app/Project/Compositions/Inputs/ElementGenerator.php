@@ -100,7 +100,7 @@ class ElementGenerator
                 $d = Element::find($content['id']);
             }
             else {
-                $d = new Element($name, CNP::getElementTypeId("Person"));
+                $d = new Element($name, \CNP::getElementTypeId("Person"));
                 $d = self::generateIt ($elementType, $d, true, $elementSpec, $name, $content['value'], $properties);
 
             }

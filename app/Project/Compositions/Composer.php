@@ -178,7 +178,8 @@ class Composer extends  TableBackedObject {
         $spec = $jp->minifyJson($this->specification);
         $spec = $jp->decodeJson($spec, true);
         if (array_key_exists('baseSpecificationId', $spec)) {
-            $nextComposer = Composer::findOrFail($spec['baseSpecificationId']);
+            $nextComposer = Composer::find($spec['baseSpecificationId']);
+            if ($nextComposer == null) throw new Exception("Unable to find composer " . $spec['baseSpecificationId']);
             $tmpspec = $nextComposer->resolveFullSpecification($spec['baseSpecificationId']);
             if ( ! array_key_exists('input', $spec) && array_key_exists('input', $tmpspec)) {
                 $spec['input'] = $tmpspec['input'];
@@ -376,7 +377,7 @@ class Composer extends  TableBackedObject {
         if ($this->inputType == 'csv-simple') {
             $file = \Input::file('csv');
             $data = array();
-            $data['userId'] = \Auth::user()->getId();
+            $data['userId'] = \Auth::user()->id;
             $data['composerId'] = $this->id;
             $data['compositionId'] = $composition->id;
             $name = uniqid('upload');
