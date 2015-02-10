@@ -19,7 +19,7 @@ class CreateComposersTable extends Migration {
 			$table->string('description')->nullable();
 			$table->text('specification')->nullable();
 			$table->bigInteger('project');
-			$table->foreign('project')->references('id')->on('admin');
+			$table->foreign('project')->references('id')->on('projects');
 			$table->integer('dependson')->nullable();
 			$table->foreign('dependson')->references('id')->on('composers');
 			$table->string('contains')->nullable();

@@ -18,7 +18,7 @@ class CreatePerspectivesTable extends Migration {
 			$table->string('name');
 			$table->string('type');
 			$table->integer('project');
-			$table->foreign('project')->references('id')->on('admin');
+			$table->foreign('project')->references('id')->on('projects');
 			$table->text('specification')->nullable();
 			$table->text('description')->nullable();
 			$table->boolean('requires_analysis')->default(false);

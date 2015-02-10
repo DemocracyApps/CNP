@@ -16,7 +16,7 @@ class CreateProjectUsersTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('project');
-			$table->foreign('project')->references('id')->on('admin');
+			$table->foreign('project')->references('id')->on('projects');
 			$table->integer('user');
 			$table->foreign('user')->references('id')->on('users');
 			$table->integer('access'); // Authorization level

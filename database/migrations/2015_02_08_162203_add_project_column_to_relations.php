@@ -15,7 +15,7 @@ class AddProjectColumnToRelations extends Migration {
 		Schema::table('relations', function(Blueprint $table)
 		{
 			$table->integer('project');
-			$table->foreign('project')->references('id')->on('admin');
+			$table->foreign('project')->references('id')->on('projects');
 		});
 	}
 
