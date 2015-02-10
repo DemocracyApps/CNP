@@ -16,10 +16,15 @@ class CnpConfiguration {
 
     public function __construct (JsonProcessor $jp) {
         $this->jsonProcessor = $jp;
+        \Log::info("Constructing cnpconfig");
     }
 
+    /**
+     * @return bool
+     */
     private function initialize ()
     {
+        \Log::info("In initialize");
         if (! $this->initialized) {
             $fileName = base_path() . "/app/cnp.json";
             $str = file_get_contents($fileName);
@@ -27,6 +32,15 @@ class CnpConfiguration {
             $str = $this->jsonProcessor->minifyJson($str);
             $this->configuration = $this->jsonProcessor->decodeJson($str, true);
             $this->initialized = true;
+
+            $picStorage = AppState::whereColumnFirst('name', '=', 'pictureStorage');
+            if (! $picStorage) {
+                \Log::info("Initializing picture storage");
+                $picStorage = new AppState;
+                $picStorage->name = 'pictureStorage';
+                $picStorage->value = 'S3&cnptest';
+                $picStorage->save();
+            }
         }
         return $this->initialized;
     }

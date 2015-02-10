@@ -10,8 +10,8 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
-          " and method " .\Request::server('REQUEST_METHOD'));
+//Log::info("Top of routes with URI " . \Request::server('REQUEST_URI') .
+//          " and method " .\Request::server('REQUEST_METHOD'));
 
 Route::pattern('projectId', '[0-9]+');
 
@@ -30,10 +30,6 @@ Route::get('ajax/{section}/{page}/{function}', ['uses' => 'AjaxController@main']
 Route::get('/', 'HomeController@index');
 
 Route::get('home', 'HomeController@index');
-
-Route::get('compositions/export', function() {
-	return "Not implemented";
-});
 
 /*************************************************
  *************************************************
@@ -86,8 +82,8 @@ Route::group(['prefix' => '{projectId}', 'middleware' => 'cnp.project'], functio
 });
 
 
-Route::resource('photo', 'PhotoController');
-
 Route::controllers([
 	'password' => 'Auth\PasswordController',
 ]);
+
+require __DIR__.'/Routes/miscellaneous.php';

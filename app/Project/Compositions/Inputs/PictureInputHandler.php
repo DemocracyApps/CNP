@@ -1,7 +1,6 @@
 <?php
 namespace DemocracyApps\CNP\Project\Compositions\Inputs;
-use GrahamCampbell\Flysystem\Facades\Flysystem;
-use DemocracyApps\CNP\Entities\Eloquent\AppState;
+use DemocracyApps\CNP\Utility\AppState;
 
 abstract class PictureInputHandler extends InputHandler {
 
@@ -17,13 +16,14 @@ abstract class PictureInputHandler extends InputHandler {
             }
             $picture = \File::get($file->getRealPath());
             $name = uniqid('pic') . $ext;
-            Flysystem::put($name, $picture);
+            $disk = \Storage::disk('s3');
+            $disk->put($name, $picture);
         }
 
         /*
          * We actually should be doing this lookup above, not just using Flysystem.
          */
-        $picStorage = AppState::where('name', '=', 'pictureStorage')->first();
+        $picStorage = AppState::whereColumnFirst('name', '=', 'pictureStorage');
 
         $inputMapItem['value'] = $picStorage->value . '&' . $name;
     }
