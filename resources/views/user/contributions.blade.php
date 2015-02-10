@@ -8,6 +8,7 @@
     <ul class="nav nav-tabs">
         <li role="presentation"><a href="/user/profile">My Profile</a></li>
         <li role="presentation" class="active"><a href="/user/contributions">My Contributions</a></li>
+        <li role="presentation"><a href="/user/notifications">My Notifications</a></li>
     </ul>
 
     <br>

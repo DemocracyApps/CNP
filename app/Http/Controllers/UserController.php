@@ -65,7 +65,7 @@ class UserController extends Controller {
 	public function edit($id)
 	{
 		$user = User::find($id);
-		return view('user.edit', array('user' => $user, 'putUrl'=>'account.update', 'system' => false));
+		return view('user.edit', array('user' => $user, 'updateUrl'=>url('user'.'/'.$id), 'system' => false));
 	}
 
 	/**

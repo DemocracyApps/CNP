@@ -56,14 +56,4 @@ class ElementType extends TableBackedObject {
         return $this->id;
     }
 
-
-    public function isValid()
-    {
-        $validation=\Validator::make($this->attributes, static::$validationRules);
-        if ($validation->passes()) {
-            return true;
-        }
-        $this->messages = $validation->messages();
-    }
-
 }

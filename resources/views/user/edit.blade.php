@@ -3,7 +3,7 @@
 @section('content')
    <h1>Edit User</h1>
 
-   <form method="POST" action="{!! url('user') . '/' . $user->id !!}">
+   <form method="POST" action="{!! $updateUrl !!}">
       <input name="_method" type="hidden" value="PUT">
       <input type="hidden" name="_token" value="{!! csrf_token() !!}">
 

@@ -1,10 +1,17 @@
-<?php namespace DemocracyApps\CNP\Http\Controllers;
+<?php namespace DemocracyApps\CNP\Http\Controllers\System;
 
-use DemocracyApps\CNP\Utility\Notification;
+use DemocracyApps\CNP\Graph\ElementType;
+use DemocracyApps\CNP\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
 
-class NotificationsController extends Controller {
+class ElementTypesController extends Controller {
+	protected $mainType;
 
+	public function __construct (ElementType $type)
+	{
+		$this->mainType = $type;
+	}
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -12,8 +19,8 @@ class NotificationsController extends Controller {
 	 */
 	public function index()
 	{
-		$notifications = Notification::where('user_id', '=', \Auth::id())->get();
-		return view('user.notifications', array('notifications' => $notifications));
+		$elementTypes = ElementType::all();
+		return view('system.elementtypes.index', array('elementTypes' => $elementTypes));
 	}
 
 	/**
@@ -23,17 +30,26 @@ class NotificationsController extends Controller {
 	 */
 	public function create()
 	{
-		//
+		return view('system.elementtypes.create', array());
 	}
 
 	/**
 	 * Store a newly created resource in storage.
 	 *
+	 * @param Request $request
 	 * @return Response
 	 */
-	public function store()
+	public function store(Request $request)
 	{
-		//
+		$this->mainType->name = $request->get('name');
+
+		$rules = ['name'=>'required'];
+		$this->validate($request, $rules);
+
+		$this->mainType->save();
+
+		return redirect('system/elementtypes');
+
 	}
 
 	/**

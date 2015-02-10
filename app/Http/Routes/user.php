@@ -8,6 +8,8 @@ Route::get('user/profile',
     return $controller->callAction('show', $parameters=array('id'=>$id));
 }]);
 
+Route::resource('user/notifications', 'NotificationsController');
+
 Route::get('user/contributions',
     ['middleware' => 'cnp.auth', 'uses'=>'UserController@contributions']);
 
