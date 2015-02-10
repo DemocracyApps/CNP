@@ -1,13 +1,14 @@
 <?php namespace DemocracyApps\CNP\Http\Controllers;
 
 use DemocracyApps\CNP\Graph\Element;
-use DemocracyApps\CNP\Http\Requests;
 use DemocracyApps\CNP\Http\Controllers\Controller;
 
+use DemocracyApps\CNP\Project\Compositions\Composition;
 use DemocracyApps\CNP\Project\Project;
 use DemocracyApps\CNP\Users\User;
 use DemocracyApps\CNP\Utility\Mailers\UserMailer;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 
 class UserController extends Controller {
 
@@ -112,6 +113,32 @@ class UserController extends Controller {
 	public function destroy($id)
 	{
 		//
+	}
+
+	public function contributions (Request $request)
+	{
+		$id = \Auth::user()->id;
+		$user = User::find($id);
+		$person = Element::find($user->elementid);
+
+		$sort = 'date';
+		$desc  = true;
+		if ($request->has('sort')) {
+			$sort = $request->get('sort');
+		}
+		if ($request->has('desc')) {
+			$val = $request->get('desc');
+			if ($val == 'false') $desc=false;
+		}
+		$page = $request->get('page', 1);
+		$pageLimit=\CNP::getConfigurationValue('pageLimit');
+
+		$data = Composition::allUserCompositionsPaged($user->id, $sort, $desc, $page, $pageLimit);
+
+		//$stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
+		$stories = new Paginator($data['items'], $data['total'], $pageLimit);
+
+		return view('user.contributions', array('stories' => $stories, 'sort' => $sort, 'desc' => $desc, 'user' => $user, 'person' => $person));
 	}
 
 }

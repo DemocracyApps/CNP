@@ -95,12 +95,12 @@ class Composition extends \Eloquent
         }
 
         $result = self::where('compositions.userid', '=', $user)
-            ->join('admin', 'admin.id', '=', 'compositions.project')
+            ->join('projects', 'projects.id', '=', 'compositions.project')
             ->whereNotNull('top') // Skip the batch compositions
             ->orderBy($sort, $desc?'desc':'asc')
             ->skip(($page-1)*$limit)
             ->take($limit)
-            ->select('compositions.id', 'compositions.title', 'compositions.project', 'compositions.created_at', 'admin.name as projectName')
+            ->select('compositions.id', 'compositions.title', 'compositions.project', 'compositions.created_at', 'projects.name as projectName')
             ->get();
 
         $data = array();

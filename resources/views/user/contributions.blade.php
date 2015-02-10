@@ -1,4 +1,4 @@
-@extends('layouts.default_ext')
+@extends('templates.default')
 
 @section('title')
     My Contributions
@@ -29,22 +29,20 @@
 
             ?>
 
-            <th><a href="/user/contributions?sort=title&desc={{$titleSort}}">Title</a></th>
-            <th><a href="/user/contributions?sort=user&desc={{$projectSort}}">Project</a></th>
-            <th><a href="/user/contributions?sort=date&desc={{$dateSort}}">Date</a></th>
+            <th><a href="/user/contributions?sort=title&desc={!! $titleSort !!}">Title</a></th>
+            <th><a href="/user/contributions?sort=user&desc={!! $projectSort !!}">Project</a></th>
+            <th><a href="/user/contributions?sort=date&desc={!! $dateSort !!}">Date</a></th>
             @foreach($stories as $story)
                 <tr>
-                    <td style="width:60%;"> <a href="/{{$story->project}}/compositions/{{$story->id}}">{{ $story->title}} </a></td>
-                    <td style="width:20%;"> <a href="/{{$story->project}}">{{ $story->projectName }} </a></td>
-                    <td> {{$story->created_at}} </td>
+                    <td style="width:60%;"> <a href="/{!! $story->project !!}/compositions/{!! $story->id !!}">{!!  $story->title !!} </a></td>
+                    <td style="width:20%;"> <a href="/{!! $story->project !!}">{!!  $story->projectName  !!} </a></td>
+                    <td> {!! $story->created_at !!} </td>
                 </tr>
             @endforeach
         </table>
         <br/>
-        {{$stories->appends(\Request::except('page'))->links()}}
+        {!! $stories->appends(\Request::except('page'))->render() !!}
     </div>
-
-
-
+    
 @stop
 

@@ -8,6 +8,9 @@ Route::get('user/profile',
     return $controller->callAction('show', $parameters=array('id'=>$id));
 }]);
 
+Route::get('user/contributions',
+    ['middleware' => 'cnp.auth', 'uses'=>'UserController@contributions']);
+
 Route::get('user/email_changed', function() {
     return view('user.email_changed');
 });
