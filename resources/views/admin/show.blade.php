@@ -233,11 +233,10 @@
 
 @section('scripts')
   <?php
-  JavaScript::put([
-          'ajaxPath' => Util::ajaxPath('admin', 'show'),
-          'project' => $project->id
-  ]);
-
+    JavaScript::put([
+            'ajaxPath' => Util::ajaxPath('admin', 'show'),
+            'project' => $project->id
+    ]);
   ?>
 
   <script type="text/javascript">

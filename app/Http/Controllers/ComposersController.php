@@ -87,7 +87,7 @@ class ComposersController extends Controller {
 	public function edit($id)
 	{
 		$composer = Composer::find($id);
-		return view('composers.edit', array('project' => \Input::get('project'),
+		return view('admin.composers.edit', array('project' => \Input::get('project'),
 			'composer' => $composer,
 			'fileerror' => null));
 	}
@@ -111,7 +111,7 @@ class ComposersController extends Controller {
 		}
 		if (\Input::has('description')) $composer->description = $data['description'];
 		if (\Input::hasFile('composer')) {
-			$ok = $this->loadComposerSpecification($composer, \Input::file('composer'));
+			$ok = $composer->loadSpecification(\Input::file('composer'));
 			if ( ! $ok) {
 				return \Redirect::back()->withInput()->withErrors(array('fileerror' => 'JSON not well-formed'));
 			}

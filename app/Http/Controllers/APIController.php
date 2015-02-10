@@ -13,8 +13,13 @@ class APIController extends Controller {
     protected $statusCode = Response::HTTP_OK;
 
     protected function setStatusAndRespond($resp) {
-        $this->setStatusCode($resp['status_code']);
-        return $this->respond($resp);
+        if (is_array($resp) && array_key_exists('status_code',$resp)) {
+            $this->setStatusCode($resp['status_code']);
+            return $this->respond($resp);
+        }
+        else {
+            return $resp;
+        }
     }
 
     public function getStatusCode()

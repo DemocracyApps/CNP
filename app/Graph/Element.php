@@ -275,17 +275,15 @@ class Element
         return $result;        
     }
 
-    public static function getElementsLike ($projectId, $like)
+    public static function getElementsLike ($elementType, $like)
     {
-         if (static::$classElementType <= 0) { // All Elements
-            $d = DB::table(self::$tableName)->where('project', '=', $projectId)
-                                            ->where('content', 'ILIKE', "%".$like."%")
+         if ($elementType <= 0) { // All Elements
+            $d = DB::table(self::$tableName)->where('content', 'ILIKE', "%".$like."%")
                                             ->orderBy('id')
                                             ->get();
         }
         else { // Specific Element Type
-            $d = DB::table(self::$tableName)->where('project', '=', $projectId)
-                                            ->where('type', '=', static::$classElementType)
+            $d = DB::table(self::$tableName)->where('type', '=', $elementType)
                                             ->where('content', 'ILIKE', "%".$like."%")
                                             ->orderBy('id')
                                             ->get();

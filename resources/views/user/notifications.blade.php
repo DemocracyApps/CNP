@@ -1,7 +1,7 @@
 @extends('templates.default')
 
 @section('title')
-    My Notificatoins
+    My Notifications
 @stop
 
 @section('content')

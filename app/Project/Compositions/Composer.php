@@ -205,6 +205,7 @@ class Composer extends  TableBackedObject {
         $jp = \CNP::getJsonProcessor();
 
         $this->specification = \File::get($file->getRealPath());
+
         $str = $jp->minifyJson($this->specification);
         $cfig = $jp->decodeJson($str, true);
         if ( ! $cfig) {

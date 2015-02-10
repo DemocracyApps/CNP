@@ -1,11 +1,8 @@
-<?php
-
-namespace DemocracyApps\CNP\Ajax\Projects;
+<?php namespace DemocracyApps\CNP\Ajax\Admin;
 
 use DemocracyApps\CNP\Project\Compositions\Composer;
 use DemocracyApps\CNP\Project\Project;
 use Illuminate\Http\Request;
-
 
 class ShowHandler extends \DemocracyApps\CNP\Ajax\BaseAjaxHandler {
 
@@ -18,7 +15,7 @@ class ShowHandler extends \DemocracyApps\CNP\Ajax\BaseAjaxHandler {
             return self::setDefaultOutputComposer($request);
         }
         else {
-            return self::notFoundResponse("Ajax function " . $func . " not found in Project.ShowHandler");
+            return self::notFoundResponse("Ajax function " . $func . " not found in Admin.ShowHandler");
         }
 
         return null;

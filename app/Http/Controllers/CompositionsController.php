@@ -230,7 +230,6 @@ class CompositionsController extends Controller {
 		else if ($defaultComposer) { // Second preference if defined
 			$composer = $defaultComposer;
 		}
-
 		$topElement = Element::find($composition->top);
 
 		// Get all the elements associated with this composition.

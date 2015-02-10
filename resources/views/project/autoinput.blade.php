@@ -46,28 +46,20 @@
 
 @stop
 @section('scripts')
-    <script type="text/javascript">
+   <?php
+   JavaScript::put([
+           'ajaxPath' => Util::ajaxPath('project', 'autoinput'),
+           'composer' => $composer->id,
+           'driver' => $composer->getDriver()->id
+   ]);
+   ?>
+
+   <script type="text/javascript">
        function sliderChange (target) {
           var value = $("#"+target+"-control").val();
           $("#"+target+"-display").html(value);
        }
-//autocomplete
-      $(function() {
-         $(".auto-person").autocomplete({
-            source: "http://cnp.dev/ajax/person?composer={!! $composer->id !!}&driver={!! $composer->getDriver()->id !!}",
-            minLength: 1
-         });
-      });
 
-      $( ".auto-person" ).autocomplete({
-         select: function( event, ui ) {
-            console.log(ui.item.value);
-            event.preventDefault();
-            console.log(ui.item);
-            this.value = ui.item.label;
-            $ ("#"+this.name+"_param").val(ui.item.value);
-         }
-});
     </script>
 @stop
 
