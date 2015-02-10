@@ -7,13 +7,6 @@
 
 @section('buttons')
 
-  <!-- Download Stories Button -->
-  {!!  Form::open(array('url' => array('compositions/export'), 'method' => 'get',
-  'style' => 'display:inline-block'))  !!}
-    <input type="hidden" name="project" value="{!! $project->id !!}"/>
-    <button type="submit" class="btn btn-info btn-sm"><b>Export Stories</b></button>
-  {!!  Form::close()  !!}
-
   <!-- View Stories Button -->
   {!!  Form::open(array('url' => array($project->id), 'method' => 'get',
   'style' => 'display:inline-block'))  !!}

@@ -240,7 +240,7 @@ class CompositionsController extends Controller {
 		$composer->initializeForOutput($request->all(), $elements);
 		if ( ! $composer->getDriver()->done()) {
 			if (! $composer->getDriver()->usingInputForOutput()) {
-				return \View::make('project.layoutdriven', array('composer' => $composer,
+				return view('project.layoutdriven', array('composer' => $composer,
 					'topElement' => $topElement,
 					'composition' => $composition,
 					'project' => $project->id));

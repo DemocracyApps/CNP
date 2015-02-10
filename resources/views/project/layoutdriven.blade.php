@@ -14,7 +14,6 @@
 </div>
 
 <?php
-  use \DemocracyApps\CNP\Project\Compositions\Outputs\ComposerOutputDriver;
 
   $driver = $composer->getDriver();
   $driver->getOutputContent($topElement, $composition);
