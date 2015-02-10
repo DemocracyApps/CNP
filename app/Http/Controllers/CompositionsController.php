@@ -1,5 +1,6 @@
 <?php namespace DemocracyApps\CNP\Http\Controllers;
 
+use DemocracyApps\CNP\Graph\Element;
 use DemocracyApps\CNP\Project\Compositions\Composition;
 use DemocracyApps\CNP\Http\Requests;
 
@@ -77,7 +78,6 @@ class CompositionsController extends Controller {
 			$data = Composition::allProjectCompositionsPaged($sort, $desc, $project->id, $page, $pageLimit);
 		}
 
-		//$stories = \Paginator::make($data['items'], $data['total'], $pageLimit);
 		$stories = new Paginator($data['items'], $data['total'], $pageLimit);
 
 		if ($structureView) {
@@ -195,12 +195,65 @@ class CompositionsController extends Controller {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param $projectId
+	 * @param $compositionId
+	 * @param Request $request
 	 * @return Response
+	 * @internal param int $id
 	 */
-	public function show($id)
+	public function show($projectId, $compositionId, Request $request)
 	{
-		//
+		$project = Project::find($projectId);
+
+		// TODO: we're not doing anything owner. Might want to, or might want to do something with AUTHOR
+		$owner = false;
+		if (!\Auth::guest()) {
+			$owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
+		}
+		$composition = Composition::find($compositionId);
+
+		$defaultComposer = null;
+		if ($project->hasProperty('defaultOutputComposer')) {
+			$defaultComposer = Composer::find($project->getProperty('defaultOutputComposer'));
+		}
+		/*
+         * In order of preference:
+         *    1. Preferred output composer defined by input composer
+         *    2. Project-level default output composer
+         *    3. Original input composer
+         */
+		$composer = Composer::find($composition->input_composer_id); // the default if nothing else found
+		if ($composer->output) { // Top preference if defined
+			$ctmp = Composer::find($composer->output);
+			if ($ctmp) $composer = $ctmp;
+		}
+		else if ($defaultComposer) { // Second preference if defined
+			$composer = $defaultComposer;
+		}
+
+		$topElement = Element::find($composition->top);
+
+		// Get all the elements associated with this composition.
+		// We get back a hash by Composer element ID.
+		$elements = array();
+		Element::getCompositionElements($composition->id, $elements);
+
+		$composer->initializeForOutput($request->all(), $elements);
+		if ( ! $composer->getDriver()->done()) {
+			if (! $composer->getDriver()->usingInputForOutput()) {
+				return \View::make('project.layoutdriven', array('composer' => $composer,
+					'topElement' => $topElement,
+					'composition' => $composition,
+					'project' => $project->id));
+			}
+			else {
+				return view('project.show', array('composer' => $composer,
+					'topElement' => $topElement,
+					'composition' => $composition,
+					'project' => $project->id));
+			}
+		}
+		return redirect('/'.$composer->project.'/compositions');
 	}
 
 	/**

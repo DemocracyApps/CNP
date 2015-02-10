@@ -1,11 +1,10 @@
 <?php
 namespace DemocracyApps\CNP\Project\Compositions\Outputs;
 
-use \DemocracyApps\CNP\Compositions\Composer;
-use \DemocracyApps\CNP\Compositions\ComposerProgram;
+use \DemocracyApps\CNP\Project\Compositions\Composer;
+use \DemocracyApps\CNP\Project\Compositions\ComposerProgram;
 use \DemocracyApps\CNP\Utility\Html;
-use \DemocracyApps\CNP\Entities\Relation;
-use \DemocracyApps\CNP\Entities\Element;
+use \DemocracyApps\CNP\Graph\Element;
 
 class ComposerOutputDriver extends \Eloquent {
     protected $table = 'composer_output_drivers';
@@ -98,7 +97,7 @@ class ComposerOutputDriver extends \Eloquent {
             }
             $doit = true;
             if ($condition == 'owner') {
-                $composition = \DemocracyApps\CNP\Compositions\Composition::find($compositionId);
+                $composition = \DemocracyApps\CNP\Project\Compositions\Composition::find($compositionId);
                 $isOwner = ($composition->userid == \Auth::user()->id);
                 if (($isOwner && $negate) || (! $negate && ! $isOwner)) $doit = false;
             }
