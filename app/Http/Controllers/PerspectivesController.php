@@ -1,6 +1,9 @@
 <?php namespace DemocracyApps\CNP\Http\Controllers;
 
+use DemocracyApps\CNP\Analysis\Perspective;
 use DemocracyApps\CNP\Http\Requests;
+use DemocracyApps\CNP\Project\Project;
+use DemocracyApps\CNP\Project\ProjectUser;
 
 class PerspectivesController extends Controller {
 
@@ -9,9 +12,14 @@ class PerspectivesController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index($projectId)
 	{
-		//
+		$project = Project::find($projectId);
+		$owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
+
+		$perspectives = Perspective::whereColumn('project', '=', $projectId);
+
+		return view('project.perspectives.index', array('project' => $project, 'perspectives' => $perspectives, 'owner' => $owner));
 	}
 
 	/**
@@ -40,9 +48,11 @@ class PerspectivesController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function show($projectId, $id)
 	{
-		//
+		$project = Project::find($projectId);
+		$perspective = Perspective::find($id);
+		return view('project.perspectives.show', array('project' => $project, 'perspective' => $perspective));
 	}
 
 	/**

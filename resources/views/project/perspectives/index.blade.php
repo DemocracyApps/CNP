@@ -26,7 +26,7 @@
             @for ($column = 0; $column < $cmax; ++$column)
                 <?php $perspective = $perspectives[$row*3 + $column]; ?>
                 <div class="col-md-4">
-                    <h3>{!! $perspective->name !!}</h3>
+                    <h3><a href="/{!! $project->id !!}/perspectives/{!! $perspective->id !!}">{!! $perspective->name !!}</a></h3>
                     <p>{!! $perspective->description !!}</p>
 
                     {!! $perspective->getContent(); !!}

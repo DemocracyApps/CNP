@@ -7,14 +7,8 @@ use DemocracyApps\CNP\Project\ProjectUser;
 Route::get('/', 'ProjectController@index');
 
 Route::resource('compositions', 'CompositionsController');
-Route::get('perspectives', function ($projectId) {
-    $project = Project::find($projectId);
-    $owner = (ProjectUser::projectAdminAccess($project->id, \Auth::id()));
+Route::resource('perspectives', 'PerspectivesController');
 
-    $perspectives = Perspective::whereColumn('project', '=', $projectId);
-
-    return view('project.perspectives', array('project' => $project, 'perspectives' => $perspectives, 'owner' => $owner));
-});
 /*************************************************
  *************************************************
  * Project access authorization
